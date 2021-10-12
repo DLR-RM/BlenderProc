@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -456,11 +457,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span><span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/scenenet/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><a href="#id1"><span class="problematic" id="id2">`</span></a>examples/datasets/scenenet/main.py: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;PATH_TO_SCENE_NET_OBJ_FILE&gt;</span></code>: path to the used scene net <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file, download via this <span class="xref std std-doc">script</span></li>
 <li><cite>&lt;PATH_TO_TEXTURE_FOLDER&gt;</cite>: path to the downloaded texture files, you can find them [here](<a class="reference external" href="http://tinyurl.com/zpc9ppb">http://tinyurl.com/zpc9ppb</a>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/scenenet/output</span></code>: path to the output directory.</li>
@@ -470,7 +471,7 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
@@ -481,35 +482,17 @@
 <li>Each object gets randomly assigned textures based on its name. Therefore, in each run the objects, will have different textures.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="global">
-<h3>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;main.Initializer&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span><span class="p p-Indicator">,</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The same as in the basic example.</p>
-</div>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="scenenetloader">
 <h3>SceneNetLoader<a class="headerlink" href="#scenenetloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.SceneNetLoader&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;file_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;texture_folder&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the scenenet room and label its objects with category ids based on the nyu mapping</span>
+<span class="n">label_mapping</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">resolve_resource</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;id_mappings&#39;</span><span class="p">,</span> <span class="s1">&#39;nyu_idset.csv&#39;</span><span class="p">)))</span>
+<span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_scenenet</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">scene_net_obj_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">scene_texture_path</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module loads the SceneNet data object, specified via the <code class="docutils literal notranslate"><span class="pre">file_path</span></code>.
-All objects included in this <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file get a randomly selected texture from the <code class="docutils literal notranslate"><span class="pre">texture_folder</span></code>.
+<p>This loads the SceneNet data object, specified via the <code class="docutils literal notranslate"><span class="pre">scene_net_obj_path</span></code>.
+All objects included in this <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file get a randomly selected texture from the <code class="docutils literal notranslate"><span class="pre">scene_texture_path</span></code> folder.
 The <code class="docutils literal notranslate"><span class="pre">category_id</span></code> of each object are set based on their name, check the <span class="xref std std-doc">table</span> for more information on the labels.
 Be aware if the <code class="docutils literal notranslate"><span class="pre">unknown_texture_folder</span></code> value is not set, that the unknown folder will be assumed to be inside of the <code class="docutils literal notranslate"><span class="pre">texture_folder</span></code> with the name <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.
 This folder does <em>not</em> exist after downloading the texture files, it has to be manually generated.
@@ -517,87 +500,56 @@ By selecting random texture and putting them in this <code class="docutils liter
 </div>
 <div class="section" id="surfacelighting">
 <h3>SurfaceLighting<a class="headerlink" href="#surfacelighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*lamp.*&quot;</span>
-          <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;keep_using_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make all lamp objects emit light</span>
+<span class="n">lamps</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;.*[l|L]amp.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_surface</span><span class="p">(</span><span class="n">lamps</span><span class="p">,</span> <span class="n">emission_strength</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The first module call will make the lamps in the scene emit light, while using the assigned material textures.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Ceiling&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.0</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<p>The first function call will make the lamps in the scene emit light, while using the assigned material textures.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Also let all ceiling objects emit a bit of light, so the whole room gets more bright</span>
+<span class="n">ceilings</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;.*[c|C]eiling.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_surface</span><span class="p">(</span><span class="n">ceilings</span><span class="p">,</span> <span class="n">emission_strength</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The second module call will make the ceiling emit light and remove any materials placed on it.
-This can be changed if desired for more information check out the documentation of the module.</p>
+<p>The second function call will make the ceiling emit light and remove any materials placed on it.
+This can be changed if desired for more information check out the documentation of <code class="docutils literal notranslate"><span class="pre">bproc.light_surface()</span></code>.</p>
 </div>
 <div class="section" id="camerasampler">
 <h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="c1"># this tries to maximize the variance of the translations used</span>
-    <span class="c1"># for the cameras</span>
-    <span class="s">&quot;min_var_diff_translation&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5.0</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span> <span class="c1"># amount of camera samples</span>
-      <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.1</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.8</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span>  <span class="c1"># 2 stands for floor</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;check_if_pose_above_object_list&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all floors in the scene, so we can sample locations above them</span>
+<span class="n">floors</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_cp</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="n">label_mapping</span><span class="o">.</span><span class="n">id_from_label</span><span class="p">(</span><span class="s2">&quot;floor&quot;</span><span class="p">))</span>
+<span class="n">poses</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="ow">and</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># Sample point above the floor in height of [1.5m, 1.8m]</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">upper_region</span><span class="p">(</span><span class="n">floors</span><span class="p">,</span> <span class="n">min_height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">max_height</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+    <span class="c1"># Check that there is no object between the sampled point and the floor</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">scene_ray_cast</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">hit_object</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">floors</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Sample rotation (fix around X and Y axis)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">1.2217</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.2217</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation</span><span class="p">)</span>
+
+    <span class="c1"># Check that there is no obstacle in front of the camera closer than 1m</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span> <span class="n">bvh_tree</span><span class="p">):</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Check that the interesting score is not too low</span>
+    <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">scene_coverage_score</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># If all checks were passed, add the camera pose</span>
+    <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+    <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>We sample here five random camera poses, where the location is above the object with the <code class="docutils literal notranslate"><span class="pre">category_id:</span> <span class="pre">2</span></code>, which is the floor.
+<p>We sample here five random camera poses, where the location is above the object floor.
 So all cameras will be sampled above the floor, with a certain height.
-In the end, we perform a check with <code class="docutils literal notranslate"><span class="pre">check_if_pose_above_object_list</span></code> that the sampled pose is directly above a floor and not an object.
-Furthermore, we use a <code class="docutils literal notranslate"><span class="pre">min_interest_score</span></code> here, which tries to increase the amount of objects in a scene.
+In the end, we perform a check that the sampled pose is directly above a floor and not an object.
+Furthermore, we use a <code class="docutils literal notranslate"><span class="pre">bproc_camera_scene_coverage_score()</span></code> here, which tries to increase the amount of objects in a scene.
 All of these steps ensure that the cameras are spread through the scene and are focusing on many objects.</p>
 <p>Be aware that it might be possible, if the values are to high, that the CameraSampler will try for a very long time new poses to fulfill the given conditions.
 Best is always to check with low values and then increasing them until they don’t work anymore.</p>

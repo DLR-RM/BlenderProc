@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -457,7 +458,7 @@ It also uses the <code class="docutils literal notranslate"><span class="pre">Ik
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">resources</span><span class="o">/</span><span class="n">ikea</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">resources</span><span class="o">/</span><span class="n">ikea</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -470,135 +471,36 @@ It also uses the <code class="docutils literal notranslate"><span class="pre">Ik
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_room_constructor</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>At first the <code class="docutils literal notranslate"><span class="pre">CCMaterialLoader</span></code> is used to load the <code class="docutils literal notranslate"><span class="pre">cctextures</span></code>, these can then be used in the <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code>.</li>
-<li>Then the <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code> is called:<ul>
-<li>It first builds up a floor plan, based on the given parameters, for a detailed explanation of the keys see the documentation.</li>
-<li>After that the walls, ceiling and floor are colored with materials from the <code class="docutils literal notranslate"><span class="pre">CCMaterialLoader</span></code>.</li>
-<li>Then the <code class="docutils literal notranslate"><span class="pre">IkeaLoader</span></code> module is called 15 times, to load a variety of different objects, which are then placed collision free in the room.</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="ccmaterialloader">
-<h3>CCMaterialLoader<a class="headerlink" href="#ccmaterialloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;used_assets&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;Bricks&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Wood&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Carpet&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tile&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Marble&quot;</span><span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load materials and objects that can be placed into the room</span>
+<span class="n">materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ccmaterials</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cc_material_path</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Bricks&quot;</span><span class="p">,</span> <span class="s2">&quot;Wood&quot;</span><span class="p">,</span> <span class="s2">&quot;Carpet&quot;</span><span class="p">,</span> <span class="s2">&quot;Tile&quot;</span><span class="p">,</span> <span class="s2">&quot;Marble&quot;</span><span class="p">])</span>
+<span class="n">interior_objects</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+    <span class="n">interior_objects</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ikea</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">ikea_path</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;bed&quot;</span><span class="p">,</span> <span class="s2">&quot;chair&quot;</span><span class="p">,</span> <span class="s2">&quot;desk&quot;</span><span class="p">,</span> <span class="s2">&quot;bookshelf&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
-<p>This module loads the <code class="docutils literal notranslate"><span class="pre">cctextures</span></code> downloaded via the script, here only the assets which have one of the names of the list in their name are used.
-This makes it more realistic as things like <code class="docutils literal notranslate"><span class="pre">&quot;Asphalt&quot;</span></code> are not commonly found inside.</p>
-</div>
-<div class="section" id="randomroomconstructor">
-<h3>RandomRoomConstructor<a class="headerlink" href="#randomroomconstructor" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;constructor.RandomRoomConstructor&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;floor_area&quot;</span><span class="p p-Indicator">:</span> <span class="nv">25</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;amount_of_extrusions&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;used_loader_config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.IKEALoader&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;category&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;bed&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;chair&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;desk&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;bookshelf&quot;</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;amount_of_repetitions&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15</span>
-      <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<p>Loads the <code class="docutils literal notranslate"><span class="pre">cctextures</span></code> downloaded via the script, here only the assets which have one of the names of the list in their name are used. This makes it more realistic as things like <code class="docutils literal notranslate"><span class="pre">&quot;Asphalt&quot;</span></code> are not commonly found inside. Also loads 15 objects from the specified categories of the ikea dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct random room and fill with interior_objects</span>
+<span class="n">objects</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">constructor</span><span class="o">.</span><span class="n">construct_random_room</span><span class="p">(</span><span class="n">used_floor_area</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                                                  <span class="n">interior_objects</span><span class="o">=</span><span class="n">interior_objects</span><span class="p">,</span>
+                                                  <span class="n">materials</span><span class="o">=</span><span class="n">materials</span><span class="p">,</span> <span class="n">amount_of_extrusions</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code> constructs a random floor plane and builds the corresponding wall and ceiling.
+<p><code class="docutils literal notranslate"><span class="pre">construct_random_room</span></code> constructs a random floor plane and builds the corresponding wall and ceiling. It places the loaded ikea objects at random positions and sets cc-texture materials.
 The room will have a floor area of 25 square meters, and it will have at most 5 extrusions.
 An extrusion is a corridor, which stretches away from the basic rectangle in the middle.
 These can be wider or smaller, but never smaller than the minimum <code class="docutils literal notranslate"><span class="pre">corridor_width</span></code>.
 The module will automatically split the 25 square meter over all extrusions.</p>
-<p>After creating the floor plan and the walls, it will repeat the <code class="docutils literal notranslate"><span class="pre">IKEALoader</span></code> for 15 times, these loaded objects must belong to the four defined categories.
-These objects are than randomly placed inside the room.</p>
-</div>
-<div class="section" id="surfacelighting">
-<h3>SurfaceLighting<a class="headerlink" href="#surfacelighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Ceiling&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4.0</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bring light into the room</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_surface</span><span class="p">([</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span> <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;Ceiling&quot;</span><span class="p">],</span> <span class="n">emission_strength</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module will make the ceiling emit light and remove any materials placed on it.
-This can be changed if desired for more information check out the documentation of the module.</p>
-</div>
-<div class="section" id="camerasampler">
-<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.2</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.8</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;index&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floor&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.4217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.4</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;check_if_pose_above_object_list&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floor&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}]</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>We sample here five random camera poses, where the location is above the object with the <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">&quot;Floor&quot;</span></code>, which was constructed by the <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code>.
-So all cameras will be sampled above the floor, with a certain height.
-In the end, we perform a check with <code class="docutils literal notranslate"><span class="pre">check_if_pose_above_object_list</span></code> that the sampled pose is directly above a floor and not an object.
-Furthermore, we use a <code class="docutils literal notranslate"><span class="pre">min_interest_score</span></code> here, which tries to increase the amount of objects in a scene.
-All of these steps ensure that the cameras are spread through the scene and are focusing on many objects.</p>
-<p>Be aware that it might be possible, if the values are too high, that the CameraSampler will try for a very long time new poses to fulfill the given conditions.
-Best is always to check with low values and then increase them until they don’t work anymore.</p>
-</div>
+<p>Let the ceiling emit light and remove any materials placed on it.</p>
 </div>
 </div>
 

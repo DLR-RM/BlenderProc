@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -455,11 +456,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python run.py examples/datasets/blenderkit/config.yaml &lt;PATH_TO_.BLEND_FILE&gt; examples/datasets/blenderkit/output
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>blenderproc run examples/datasets/blenderkit/main.py &lt;PATH_TO_.BLEND_FILE&gt; examples/datasets/blenderkit/output
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/blenderkit/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/blenderkit/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;PATH_TO_.BLEND_FILE&gt;</span></code>: path to the downloaded .blend file, see the <span class="xref std std-doc">scripts folder</span> for the download script.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/blenderkit/output</span></code>: path to the output directory.</li>
 </ul>
@@ -467,61 +468,50 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python scripts/visHdf5Files.py examples/datasets/blenderkit/output/*.hdf5
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>blenderproc vis_hdf5 examples/datasets/blenderkit/output/*.hdf5
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>The BlendLoader loads assets from blend file specified in the config file.</li>
+<li>The BlendLoader loads assets from blend file specified in the main.py file.</li>
+<li>Define a light and set its location and energy level.</li>
+<li>Find point of interest, all cam poses should look towards it: <code class="docutils literal notranslate"><span class="pre">bproc.object.compute_poi()</span></code>.</li>
+<li>Sample random camera location around the objects: <code class="docutils literal notranslate"><span class="pre">bproc.sampler.sphere()</span></code>.</li>
+<li>Adds camera pose to the scene: <code class="docutils literal notranslate"><span class="pre">bproc.camera.add_camera_pose()</span></code>.</li>
+<li>Enables normals and distance (rgb is enabled by default): <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_normals_output()</span></code> <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_distance_output()</span></code>.</li>
+<li>Renders all set camera poses: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.render()</span></code>.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code></li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="blendloader">
 <h3>BlendLoader<a class="headerlink" href="#blendloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BlendLoader&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;cf_merge_objects&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;cf_merged_object_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;merged_object&quot;</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_blend</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module loads a BLEND file resource and needs the relative path of the .blend file model you want to load, which should be specified under <code class="docutils literal notranslate"><span class="pre">path</span></code> attribute in the loader section above. <span class="raw-html-m2r"><br></span>
-Per default this will load all mesh objects from the given .blend file. By using the parameters <code class="docutils literal notranslate"><span class="pre">obj_types</span></code> and <code class="docutils literal notranslate"><span class="pre">datablocks</span></code>, also other data and object types can be loaded.
-Specifying <code class="docutils literal notranslate"><span class="pre">cf_merge_objects:</span> <span class="pre">True</span></code> will result in the creation of an empty object (its name is <code class="docutils literal notranslate"><span class="pre">merged_object</span></code>) which acts as parent for all loaded objects from the .blend file.</p>
+<p>This loads a BLEND file resource and needs the relative path of the .blend file model you want to load, which should be specified under <code class="docutils literal notranslate"><span class="pre">path</span></code> attribute in the loader section above. <span class="raw-html-m2r"><br></span>
+Per default this will load all mesh objects from the given .blend file. By using the parameters <code class="docutils literal notranslate"><span class="pre">obj_types</span></code> and <code class="docutils literal notranslate"><span class="pre">datablocks</span></code>, also other data and object types can be loaded.</p>
 </div>
 <div class="section" id="camerasampler">
 <h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-     <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-     <span class="p p-Indicator">{</span>
-       <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-       <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-         <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.PartSphere&quot;</span><span class="p p-Indicator">,</span>
-         <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-         <span class="s">&quot;radius&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.5</span><span class="p p-Indicator">,</span>
-         <span class="s">&quot;part_sphere_vector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-         <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SURFACE&quot;</span>
-       <span class="p p-Indicator">},</span>
-       <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-         <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-         <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-           <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span>
-         <span class="p p-Indicator">}</span>
-       <span class="p p-Indicator">}</span>
-     <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find point of interest, all cam poses should look towards it</span>
+<span class="n">poi</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">compute_poi</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">all_with_type</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">MeshObject</span><span class="p">))</span>
+
+<span class="c1"># Sample five camera poses</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="c1"># Sample random camera location around the objects</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">part_sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">part_sphere_dir_vector</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;SURFACE&quot;</span><span class="p">)</span>
+    <span class="c1"># Compute rotation based on vector going from location towards poi</span>
+    <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">poi</span> <span class="o">-</span> <span class="n">location</span><span class="p">)</span>
+    <span class="c1"># Add homog cam pose based on location an rotation</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="p">)</span>
+    <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span>
 </pre></div>
 </div>
-<p>For sampling camera poses we used the <code class="docutils literal notranslate"><span class="pre">sampler.PartSphere</span></code> which uses only the upper half of the sphere cut along the x-axis (defined by <code class="docutils literal notranslate"><span class="pre">part_sphere_vector</span></code>).
+<p>For sampling camera poses we used the <code class="docutils literal notranslate"><span class="pre">bproc.sampler.part_sphere</span></code> which uses only the upper half of the sphere cut along the x-axis (defined by <code class="docutils literal notranslate"><span class="pre">part_sphere_vector</span></code>).
 The center of the sphere is moved in z-direction and camera positions are sampled from the upper hemisphere to ensure that their view is not “below” the object, which is specifically important for tables.<span class="raw-html-m2r"><br></span>
 Each camera rotation is computed to look directly at a sampled point of interest <code class="docutils literal notranslate"><span class="pre">POI</span></code> of the object, and the camera faces upwards in Z direction.</p>
 </div>

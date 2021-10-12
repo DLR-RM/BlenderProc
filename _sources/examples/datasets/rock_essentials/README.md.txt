@@ -9,7 +9,7 @@ The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/datasets/rock_essentials/config.yaml <re_dataset> examples/datasets/rock_essentials/output
+blenderpoc run examples/datasets/rock_essentials/config.yaml <re_dataset> examples/datasets/rock_essentials/output
 ``` 
 
 * `examples/datasets/rock_essentials/config.yaml`: path to the configuration file with pipeline configuration.

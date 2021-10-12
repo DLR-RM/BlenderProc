@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ShapeNet &mdash; BlenderProc 1.0.0 documentation</title>
+  <title>Usage &mdash; BlenderProc 1.0.0 documentation</title>
   
 
   
@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -427,7 +428,7 @@
     
       <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
-      <li>ShapeNet</li>
+      <li>Usage</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -446,102 +447,71 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="shapenet">
-<h1>ShapeNet<a class="headerlink" href="#shapenet" title="Permalink to this headline">¶</a></h1>
-<p align="center">
+  <p align="center">
 <img src="../../../images/shapenet_rendering.jpg" alt="Front readme image" width=1000>
-</p><p>The focus of this example is the <code class="docutils literal notranslate"><span class="pre">loader.ShapeNetLoader</span></code>, which can be used to load objects from the ShapeNet dataset.</p>
+</p><p>The focus of this example is the <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_shapenet()</span></code>, which can be used to load objects from the ShapeNet dataset.</p>
 <p>See the <a class="reference external" href="http://www.shapenet.org/">ShapeNet Webpage</a> for downloading the data. We cannot provide the script for downloading the ShapeNet dataset because a user account on the ShapeNet webpage is needed.</p>
 <div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">PATH_TO_ShapeNetCore</span><span class="o">.</span><span class="n">v2</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">PATH_TO_ShapeNetCore</span><span class="o">.</span><span class="n">v2</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/shapenet/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/shapenet/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><cite>&lt;PATH_TO_ShapeNetCore.v2&gt;</cite>: path to the downloaded shape net core v2 dataset, get it [here](<a class="reference external" href="http://www.shapenet.org/">http://www.shapenet.org/</a>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/shapenet/output</span></code>: path to the output directory.</li>
 </ul>
 </div>
 <div class="section" id="visualization">
-<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<h1>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Set the ShapeNet category as specified with <code class="docutils literal notranslate"><span class="pre">synset_id</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ShapeNetLoader</span></code> module.</li>
-<li>Set the ShapeNet category object as specified with <code class="docutils literal notranslate"><span class="pre">source_id</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ShapeNetLoader</span></code> module.</li>
-<li>Sample camera poses: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> module.</li>
-<li>Render RGB, Depth and Normal images: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Write ShapeNet object data: <code class="docutils literal notranslate"><span class="pre">writer.ShapeNetWriter</span></code> module.</li>
-<li>Write Camera Pose and Instrinsics data: <code class="docutils literal notranslate"><span class="pre">writer.CameraStateWriter</span></code> module.</li>
-<li>Write HDF5 file: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>Set the ShapeNet category as specified with <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_shapenet()</span></code>.</li>
+<li>Sample camera poses <code class="docutils literal notranslate"><span class="pre">bproc.camera</span></code>.</li>
+<li>Render RGB, Depth and Normal images <code class="docutils literal notranslate"><span class="pre">bproc.renderer</span></code>.</li>
+<li>Collect the metadata of the ShapeNet object.</li>
+<li>Collect Camera Pose and Instrinsics data.</li>
+<li>Write HDF5 file: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h1>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="global">
-<h3>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;main.Initializer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<h2>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The same as in the basic example.</p>
 </div>
 <div class="section" id="shapenetloader">
-<h3>ShapeNetLoader<a class="headerlink" href="#shapenetloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ShapeNetLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;used_synset_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;02691156&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;used_source_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;10155655850468db78d106ce0a280f87&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<h2>ShapeNetLoader<a class="headerlink" href="#shapenetloader" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">shapenet_obj</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_shapenet</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">shapenet_path</span><span class="p">,</span> <span class="n">used_synset_id</span><span class="o">=</span><span class="s2">&quot;02691156&quot;</span><span class="p">,</span> <span class="n">used_source_id</span><span class="o">=</span><span class="s2">&quot;10155655850468db78d106ce0a280f87&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>This module loads a ShapeNet Object, it only needs the path to the <code class="docutils literal notranslate"><span class="pre">ShapeNetCore.v2</span></code> folder, which is saved in <code class="docutils literal notranslate"><span class="pre">data_path</span></code>.</li>
+<li>This loads a ShapeNet Object, it only needs the path to the <code class="docutils literal notranslate"><span class="pre">ShapeNetCore.v2</span></code> folder, which is saved in <code class="docutils literal notranslate"><span class="pre">args.shapenet_path</span></code>.</li>
 <li>The <code class="docutils literal notranslate"><span class="pre">used_synset_id</span></code> = <code class="docutils literal notranslate"><span class="pre">02691156</span></code> is set to the id of an airplane, and the <code class="docutils literal notranslate"><span class="pre">used_source_id</span></code> = <code class="docutils literal notranslate"><span class="pre">10155655850468db78d106ce0a280f87</span></code> selects one particular object of that category.</li>
 <li>The position will be in the center of the scene.</li>
 <li>By default, the object center will be moved to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane which makes it easier to place them later on. This does not change the <code class="docutils literal notranslate"><span class="pre">.location</span></code> of the object. To disable this behaviour, set the <code class="docutils literal notranslate"><span class="pre">move_object_origin</span></code> flag to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="camerasampler">
-<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Sphere&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;radius&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SURFACE&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<h2>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="c1"># Sample random camera location around the object</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;SURFACE&quot;</span><span class="p">)</span>
+    <span class="c1"># Compute rotation based on vector going from location towards the location of the ShapeNet object</span>
+    <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">shapenet_obj</span><span class="o">.</span><span class="n">get_location</span><span class="p">()</span> <span class="o">-</span> <span class="n">location</span><span class="p">)</span>
+    <span class="c1"># Add homog cam pose based on location an rotation</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="p">)</span>
+    <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We sample here five random camera poses, where the location is on a sphere with a radius of 2 around the object.
@@ -549,36 +519,18 @@ Each cameras rotation is such that it looks directly at the object and the camer
 </div>
 </div>
 <div class="section" id="rgb-renderer">
-<h2>RGB Renderer<a class="headerlink" href="#rgb-renderer" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;renderer.RgbRenderer&quot;,
-&quot;config&quot;: {
-  &quot;transparent_background&quot;: False,
-  &quot;render_normals&quot;: True,
-  &quot;samples&quot;: 350,
-  &quot;render_distance&quot;: True
-}
+<h1>RGB Renderer<a class="headerlink" href="#rgb-renderer" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># activate normal and distance rendering</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_normals_output</span><span class="p">()</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_distance_output</span><span class="p">()</span>
+<span class="c1"># set the amount of samples, which should be used for the color rendering</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">350</span><span class="p">)</span>
+
+<span class="c1"># render the whole pipeline</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>To render with a transparent background, specify <code class="docutils literal notranslate"><span class="pre">transparent_background</span></code> as True. Depth and Normal images will also be produced.</p>
-</div>
-<div class="section" id="hdf5-writer">
-<h2>HDF5 Writer<a class="headerlink" href="#hdf5-writer" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;writer.Hdf5Writer&quot;,
-&quot;config&quot;: {
-  &quot;write_alpha_channel&quot;: False,
-  &quot;postprocessing_modules&quot;: {
-    &quot;distance&quot;: [
-      {
-        &quot;module&quot;: &quot;postprocessing.Dist2Depth&quot;,
-        &quot;config&quot;: {}
-      }
-    ]
-  }
-}
-</pre></div>
-</div>
-<p>To write to a hdf5 file with a transparent image backgound, specify transparent_background as True. As the postprocessing step, <code class="docutils literal notranslate"><span class="pre">postprocessing.Dist2Depth</span></code> is applied in order to convert the distance image to an actual depth image.</p>
-</div>
+<p>To render with a transparent background, add <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_output_format(enable_transparency=True)</span></code>. Depth and Normal images will also be produced.</p>
 </div>
 
 

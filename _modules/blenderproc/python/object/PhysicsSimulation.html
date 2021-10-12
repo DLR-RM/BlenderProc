@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -508,7 +509,10 @@
                 <span class="c1"># Fix pose of object to the one it had at the end of the simulation</span>
                 <span class="n">obj</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">obj_poses_after_sim</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">()][</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">origin_shift</span><span class="p">)</span>
                 <span class="n">obj</span><span class="o">.</span><span class="n">set_rotation_euler</span><span class="p">(</span><span class="n">obj_poses_after_sim</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">()][</span><span class="s1">&#39;rotation&#39;</span><span class="p">])</span>
-    <span class="n">disable_all_rigid_bodies</span><span class="p">()</span></div>
+
+    <span class="c1"># Deactivate the simulation so it does not influence object positions</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">rigidbody_world</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="simulate_physics"><a class="viewcode-back" href="../../../../blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.simulate_physics">[docs]</a><span class="k">def</span> <span class="nf">simulate_physics</span><span class="p">(</span><span class="n">min_simulation_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">max_simulation_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">40.0</span><span class="p">,</span>
@@ -593,6 +597,9 @@
 <span class="sd">        :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation Euler vector that is allowed. such</span>
 <span class="sd">                                                  that an object is still recognized as &#39;stopped moving&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure the RigidBody world is active</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">rigidbody_world</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+
         <span class="c1"># Run simulation</span>
         <span class="n">point_cache</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">rigidbody_world</span><span class="o">.</span><span class="n">point_cache</span>
         <span class="n">point_cache</span><span class="o">.</span><span class="n">frame_start</span> <span class="o">=</span> <span class="mi">1</span>

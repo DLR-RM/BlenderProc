@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -453,11 +454,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cam_pose</span> <span class="n">file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderpoc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cam_pose</span> <span class="n">file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_basic/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_basic/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">cam_pose</span> <span class="pre">file&gt;</span></code>: Should point to a file which describes one camera pose per line (here the output of <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code> from the <code class="docutils literal notranslate"><span class="pre">SUNCGToolbox</span></code> can be used).</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">house.json&gt;</span></code>: Path to the house.json file of the SUNCG scene you want to render.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_basic/output</span></code>: path to the output directory.</li>
@@ -466,44 +467,27 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_basic</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loads a SUNCG scene: <code class="docutils literal notranslate"><span class="pre">loader.SuncgLoader</span></code> module.</li>
-<li>Loads camera positions from a given file: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Automatically adds light sources inside each room: <code class="docutils literal notranslate"><span class="pre">lighting.SuncgLighting</span></code> module.</li>
-<li>Renders semantic segmentation map: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Renders rgb, distance and normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module, by using the alpha mode.</li>
-<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>Loads a SUNCG scene: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_suncg</span></code>.</li>
+<li>Loads camera positions from a given file.</li>
+<li>Automatically adds light sources inside each room.</li>
+<li>Renders semantic segmentation map.</li>
+<li>Renders rgb, distance and normals.</li>
+<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="global-settings">
-<h3>Global settings<a class="headerlink" href="#global-settings" title="Permalink to this headline">¶</a></h3>
-<p>There are set in the main.Initializer</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-  <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>Next to setting the output directory for all modules, we also set the <code class="docutils literal notranslate"><span class="pre">pixel_aspect_x</span></code> parameter for all modules.
-This is necessary to coincide with the aspect ratio assumed by the <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code> script which generated the camera poses.</p>
-</div>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="suncgloader">
 <h3>SuncgLoader<a class="headerlink" href="#suncgloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.SuncgLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">label_mapping</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">resolve_resource</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;id_mappings&#39;</span><span class="p">,</span> <span class="s1">&#39;nyu_idset.csv&#39;</span><span class="p">)))</span>
+<span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_suncg</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">house</span><span class="p">,</span> <span class="n">label_mapping</span><span class="o">=</span><span class="n">label_mapping</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This loader automatically loads a SUNCG scene/house given the corresponding <code class="docutils literal notranslate"><span class="pre">house.json</span></code> file.
@@ -512,37 +496,23 @@ The <code class="docutils literal notranslate"><span class="pre">SuncgLoader</sp
 </div>
 <div class="section" id="cameraloader">
 <h3>CameraLoader<a class="headerlink" href="#cameraloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;file_format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;location</span><span class="nv"> </span><span class="s">rotation/value</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;world_frame_change&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;X&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Z&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Y&quot;</span><span class="p p-Indicator">],</span>
-    <span class="s">&quot;default_cam_param&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;forward_vec&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">change_coordinate_frame_of_point</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">])</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">change_coordinate_frame_of_point</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">])</span>
+        <span class="n">matrix_world</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">rotation</span><span class="p">))</span>
+        <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">matrix_world</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here the cam poses from the given file are loaded.
-This text based file describes one camera pose per line.
-The <code class="docutils literal notranslate"><span class="pre">file_format</span></code> describes how each line should be parsed (Here we use the format used by files created by <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code>; <code class="docutils literal notranslate"><span class="pre">_</span></code> denotes values which should be skipped).</p>
-<p>It’s also necessary here to specify a different <code class="docutils literal notranslate"><span class="pre">world_frame_change</span></code>, as <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code> does not use the same coordinate frame as Blender.</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">default_cam_param</span></code> we set parameters which are the same across all cam poses:
-We change the <code class="docutils literal notranslate"><span class="pre">rotation/format</span></code>. This is necessary as rotations are specified via a forward vector in the camera file.</p>
-<p>In the <code class="docutils literal notranslate"><span class="pre">intrinsics</span></code>, we further set the FOV and pixel aspect ratio to the same values used by <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code>.</p>
+<p>Here the cam poses from the given file are loaded.</p>
 </div>
 <div class="section" id="suncglighting">
 <h3>SuncgLighting<a class="headerlink" href="#suncglighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SuncgLighting&quot;</span><span class="p p-Indicator">,</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_suncg_scene</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This module automatically sets light sources inside the loaded house.
+<p>This automatically sets light sources inside the loaded house.
 Therefore each window, lamp or lampshade gets an emissive material and also the ceiling is made to slowly emit light to make sure even rooms without lights or windows are not completely dark.</p>
 </div>
 </div>

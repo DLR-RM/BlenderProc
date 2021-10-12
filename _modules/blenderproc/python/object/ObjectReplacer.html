@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -451,8 +452,8 @@
 <span class="kn">import</span> <span class="nn">bpy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">check_intersection</span><span class="p">,</span> <span class="n">check_bb_intersection</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span><span class="p">,</span> <span class="n">get_all_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.CollisionUtility</span> <span class="kn">import</span> <span class="n">CollisionUtility</span>
 
 
 <div class="viewcode-block" id="replace_objects"><a class="viewcode-back" href="../../../../blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.replace_objects">[docs]</a><span class="k">def</span> <span class="nf">replace_objects</span><span class="p">(</span><span class="n">objects_to_be_replaced</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">],</span> <span class="n">objects_to_replace_with</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">],</span>
@@ -568,12 +569,7 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
 
         <span class="c1"># Check for collision between the new object and other objects in the scene</span>
-        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">check_collision_with</span><span class="p">:</span>  <span class="c1"># for each object</span>
-            <span class="k">if</span> <span class="n">obj</span> <span class="o">!=</span> <span class="n">obj_to_add</span> <span class="ow">and</span> <span class="n">obj_to_remove</span> <span class="o">!=</span> <span class="n">obj</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">check_bb_intersection</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">,</span> <span class="n">obj_to_add</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">check_intersection</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">,</span> <span class="n">obj_to_add</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span>
-                        <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="kc">True</span></div></div>
+        <span class="k">return</span> <span class="n">CollisionUtility</span><span class="o">.</span><span class="n">check_intersections</span><span class="p">(</span><span class="n">obj_to_add</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">[</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">check_collision_with</span> <span class="k">if</span> <span class="n">obj</span> <span class="o">!=</span> <span class="n">obj_to_add</span> <span class="ow">and</span> <span class="n">obj</span> <span class="o">!=</span> <span class="n">obj_to_remove</span><span class="p">],</span> <span class="p">[])</span></div></div>
 </pre></div>
 
            </div>

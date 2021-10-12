@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -447,7 +448,7 @@
   <h1>Source code for blenderproc.python.tests.TestsPathManager</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">exists</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span><span class="p">,</span> <span class="n">Utility</span>
 
 
 <div class="viewcode-block" id="TestsPathManager"><a class="viewcode-back" href="../../../../blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">[docs]</a><span class="k">class</span> <span class="nc">TestsPathManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -459,7 +460,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">blenderproc_root</span>
 
         <span class="c1"># for the default resource folder, this one should always be available</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">example_resources</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span><span class="p">,</span> <span class="s2">&quot;examples/resources&quot;</span><span class="p">))</span>

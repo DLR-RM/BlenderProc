@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -449,15 +450,15 @@
   <div class="section" id="suncg-scene-with-custom-camera-sampling">
 <h1>SUNCG scene with custom camera sampling<a class="headerlink" href="#suncg-scene-with-custom-camera-sampling" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="../../../images/suncg_with_cam_sampling_output-summary.jpg"><img alt="" src="../../../_images/suncg_with_cam_sampling_output-summary.jpg" /></a>
-<p>In contrast to the SUNCG basic example, we do here not load precomputed camera poses, but sample them using the <code class="docutils literal notranslate"><span class="pre">SuncgCameraSampler</span></code> module.</p>
+<p>In contrast to the SUNCG basic example, we do not load precomputed camera poses here, but sample them.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderpoc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_cam_sampling/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_cam_sampling/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">house.json&gt;</span></code>: Path to the house.json file of the SUNCG scene you want to render.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_cam_sampling/output</span></code>: path to the output directory.</li>
 </ul>
@@ -465,53 +466,48 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_cam_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loads a SUNCG scene: <code class="docutils literal notranslate"><span class="pre">loader.SuncgLoader</span></code> module.</li>
-<li>Sample camera positions inside every room: <code class="docutils literal notranslate"><span class="pre">camera.SuncgCameraSampler</span></code> module.</li>
-<li>Automatically adds light sources inside each room: <code class="docutils literal notranslate"><span class="pre">lighting.SuncgLighting</span></code> module.</li>
-<li>Writes sampled camera poses to file: <code class="docutils literal notranslate"><span class="pre">writer.CameraStateWriter</span></code> module.</li>
-<li>Renders semantic segmentation map: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Renders rgb, distance and normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>Loads a SUNCG scene.</li>
+<li>Sample camera positions inside every room.</li>
+<li>Automatically adds light sources inside each room.</li>
+<li>Writes sampled camera poses to file.</li>
+<li>Renders semantic segmentation map.</li>
+<li>Renders rgb, distance and normals.</li>
+<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="suncgcamerasampler">
 <h3>SuncgCameraSampler<a class="headerlink" href="#suncgcamerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.SuncgCameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.4</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">}]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Init sampler for sampling locations inside the loaded suncg house</span>
+<span class="n">point_sampler</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">SuncgPointInRoomSampler</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+<span class="c1"># Init bvh tree containing all mesh objects</span>
+<span class="n">bvh_tree</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_bvh_tree_multi_objects</span><span class="p">([</span><span class="n">o</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objs</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">o</span><span class="p">,</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">MeshObject</span><span class="p">)])</span>
+<span class="n">poses</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="ow">and</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="c1"># Sample point inside house</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">location</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">point_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+    <span class="c1"># Sample rotation (fix around X and Y axis)</span>
+    <span class="n">euler_rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">1.2217</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.2217</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">6.283185307</span><span class="p">])</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">euler_rotation</span><span class="p">)</span>
+
+    <span class="c1"># Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough</span>
+    <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span> <span class="n">bvh_tree</span><span class="p">)</span> <span class="ow">and</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">scene_coverage_score</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.4</span><span class="p">:</span>
+        <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+        <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">tries</span> <span class="o">+=</span>
 </pre></div>
 </div>
-<p>With this module we want to sample <code class="docutils literal notranslate"><span class="pre">10</span></code> valid camera poses inside the loaded SUNCG rooms.
+<p>With this we want to sample <code class="docutils literal notranslate"><span class="pre">5</span></code> valid camera poses inside the loaded SUNCG rooms.
 The x and y coordinate are hereby automatically sampled uniformly across a random room, while we configure the z coordinate to lie between <code class="docutils literal notranslate"><span class="pre">0.5m</span></code> and <code class="docutils literal notranslate"><span class="pre">2m</span></code> above the ground.
 Regarding the camera rotation we fix the pitch angle to <code class="docutils literal notranslate"><span class="pre">70°</span></code>, the roll angle to <code class="docutils literal notranslate"><span class="pre">0°</span></code> and sample the yaw angle uniformly between <code class="docutils literal notranslate"><span class="pre">0°</span></code> and <code class="docutils literal notranslate"><span class="pre">360°</span></code>.</p>
 <p>After sampling a pose the pose is only accepted if it is valid according to the properties we have specified:</p>

@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -455,11 +456,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">semantic_segmentation</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/basics/semantic_segmentation/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/basics/semantic_segmentation/main.py</span></code>: path to the python file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/camera_positions</span></code>: text file with parameters of camera positions.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/semantic_segmentation/scene.blend</span></code>: path to the blend file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/semantic_segmentation/output</span></code>: path to the output directory.</li>
@@ -467,85 +468,50 @@
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module, each object in this scene already contains a custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code>, which is later used in the <code class="docutils literal notranslate"><span class="pre">SegMapRenderer</span></code>.
-Without this idea it would not be possible to render the correct class.</li>
-<li>Creates a point light: <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Renders rgb and the distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders class segmentation: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes the images into <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="blendloader">
-<h3>BlendLoader<a class="headerlink" href="#blendloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BlendLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="blend-loading">
+<h3>Blend loading<a class="headerlink" href="#blend-loading" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the objects into the scene</span>
+<span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_blend</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This loads the <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file, it extracts hereby only the mesh objects from the file, not all information stored in this <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file.</p>
-</div>
-<div class="section" id="worldmanipulator">
-<h3>WorldManipulator<a class="headerlink" href="#worldmanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.WorldManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cf_set_world_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span>  <span class="c1"># this sets the worlds background category id to 0</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<p>Be aware that in the loaded <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file all objects already have set custom properties for the attribute name <code class="docutils literal notranslate"><span class="pre">&quot;category_id&quot;</span></code>.
+This can be done manually by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module does sets the world background to the <code class="docutils literal notranslate"><span class="pre">category_id</span></code> 0, this is necessary for the <code class="docutils literal notranslate"><span class="pre">SegMapRenderer</span></code>.</p>
 </div>
 <div class="section" id="segmaprenderer">
 <h3>SegMapRenderer<a class="headerlink" href="#segmaprenderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.SegMapRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;map_by&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;class&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;instance&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;name&quot;</span><span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Render segmentation masks (per class and per instance)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render_segmap</span><span class="p">(</span><span class="n">map_by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p>This module can map any kind of object related information to an image or to a list of indices of the objects in the scene.
-So, if you want to map the custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code> to an image, you write <code class="docutils literal notranslate"><span class="pre">&quot;map_by&quot;:</span> <span class="pre">&quot;class&quot;</span></code>.
+So, if you want to map the custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code> to an image, you write <code class="docutils literal notranslate"><span class="pre">map_by=[&quot;class&quot;]</span></code>.
 Then each pixel gets assigned the <code class="docutils literal notranslate"><span class="pre">category_id</span></code> of the object present in that pixel.
 If it is set to <code class="docutils literal notranslate"><span class="pre">instance</span></code> each pixel gets an id for the obj nr in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
 It can also be set to different custom properties or attributes of the object class like: <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;</span></code>, which returns the name of each object.
 This can not be saved in an image, so a csv file is generated, which is attached to the <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> container in the end.
 Where it maps each instance nr to a name.
-If there are keys, which can not be stored in an image, it is necessary to also generate a instance image.
-Furthermore, if an instance image is used all other used keys are stored in the .csv.</p>
-<p>For example it would also be possible to use the key: <code class="docutils literal notranslate"><span class="pre">&quot;location&quot;</span></code>. This would access the location of each object and add it to the csv file.
+If there are keys, which can not be stored in an image, it is necessary to also generate an instance image.
+Furthermore, if an instance image is used all other keys are stored in the .csv.</p>
+<p>For example, it would also be possible to use the key: <code class="docutils literal notranslate"><span class="pre">&quot;location&quot;</span></code>. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no <code class="docutils literal notranslate"><span class="pre">location</span></code> attribute.
-This can be avoided by providing a default value like: <code class="docutils literal notranslate"><span class="pre">default_values:</span> <span class="pre">{&quot;location:</span> <span class="pre">[0,0,0]}</span></code>.</p>
+This can be avoided by providing a default value like: <code class="docutils literal notranslate"><span class="pre">default_values=</span> <span class="pre">{&quot;location:</span> <span class="pre">[0,0,0]}</span></code>.</p>
 </div>
-<div class="section" id="hdf5writer">
-<h3>Hdf5Writer<a class="headerlink" href="#hdf5writer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.Hdf5Writer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;postprocessing_modules&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span><span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.TrimRedundantChannels&quot;</span><span class="p p-Indicator">},</span>
-      <span class="p p-Indicator">{</span><span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.Dist2Depth&quot;</span><span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="hdf5-writing">
+<h3>Hdf5 writing<a class="headerlink" href="#hdf5-writing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert distance to depth</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;depth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">postprocessing</span><span class="o">.</span><span class="n">dist2depth</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">])</span>
+<span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span>
+
+<span class="c1"># write the data to a .hdf5 container</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_hdf5</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This combines as before all rendered images per camera pose into one <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> container.
-Before this happens there are two modules executed on the output of the <code class="docutils literal notranslate"><span class="pre">RgbRenderer</span></code>, which creates a distance image.
-Each pixel corresponding to the Z-Buffer value, this is however not the same as <code class="docutils literal notranslate"><span class="pre">depth</span></code> image.
-We therefore here convert this image into a <code class="docutils literal notranslate"><span class="pre">depth</span></code> image by using the <code class="docutils literal notranslate"><span class="pre">Dist2Depth</span></code> module.
-The <code class="docutils literal notranslate"><span class="pre">TrimRedundantChannels</span></code> decreases the amount of channels in the <code class="docutils literal notranslate"><span class="pre">distance/depth</span></code> image to 1 instead of 3.</p>
+<p>We first map the distance to a depth image and delete the distance image from the data dictionary.
+At the end the rendered images are stored in <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> files.</p>
 </div>
 </div>
 </div>

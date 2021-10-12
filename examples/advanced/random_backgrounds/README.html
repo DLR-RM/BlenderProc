@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -456,11 +457,11 @@ leads to inferior results compared to renderings of objects in actual 3D scenes.
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the Blender-Pipeline main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="nb">object</span><span class="o">.</span><span class="n">ply</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="nb">object</span><span class="o">.</span><span class="n">ply</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/random_backgrounds/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/random_backgrounds/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/random_backgrounds/object.ply</span></code>: path to the object file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/random_backgrounds/output</span></code>: path to the output directory.</li>
 </ul>
@@ -469,214 +470,12 @@ leads to inferior results compared to renderings of objects in actual 3D scenes.
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>The rendered data can be found in the output directory.</p>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">object.ply</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Selects materials based on the condition and changes some parameters of the selected materials: <code class="docutils literal notranslate"><span class="pre">material.MaterialManipulator</span></code> module.</li>
-<li>Samples a point light at a random position with random intensity and light color: <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Samples a camera at a random position looking at the object: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> module.</li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders instance segmentation: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes coco annotations: <code class="docutils literal notranslate"><span class="pre">writer.CocoAnnotationsWriter</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="objectloader">
-<h3>ObjectLoader<a class="headerlink" href="#objectloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ObjectLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;cp_is_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>Render transparent background to overlay the rendering on a random background image in the next step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable transparency so the background becomes transparent</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_output_format</span><span class="p">(</span><span class="n">enable_transparency</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> loads the object and sets its category ID to 1, which is used by the <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code>
-to differentiate the object from the background when creating bounding box and segmentation mask.</p>
-</div>
-<div class="section" id="materialmanipulator">
-<h3>MaterialManipulator<a class="headerlink" href="#materialmanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ply_material&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_specular&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_roughness&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Color&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_metallic&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">manipulators.MaterialManipulator</span></code> selects the generic <code class="docutils literal notranslate"><span class="pre">ply_material</span></code> of the object in <code class="docutils literal notranslate"><span class="pre">PLY</span></code> format and randomizes
-specular, roughness, metallic and color values.</p>
-</div>
-<div class="section" id="lightsampler">
-<h3>LightSampler<a class="headerlink" href="#lightsampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.LightSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;lights&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;cp_is_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">89</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;uniform_elevation&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Color&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;POINT&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;energy&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;int&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">100</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1000</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">lighting.LightSampler</span></code> samples a point light with random intensity at a random position centered on the object
-using the <code class="docutils literal notranslate"><span class="pre">cp_is_object</span></code> custom property added when loading the object as selector.</p>
-</div>
-<div class="section" id="camerasampler">
-<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;check_if_objects_visible&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_is_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;cp_is_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">89</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;uniform_elevation&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.AttributeMerger&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;elements&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-          <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-                <span class="s">&quot;cp_is_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-                <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-              <span class="p p-Indicator">}</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">},</span>
-          <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">-0.5</span><span class="p p-Indicator">,</span> <span class="nv">-0.5</span><span class="p p-Indicator">,</span> <span class="nv">-0.5</span><span class="p p-Indicator">],</span>
-            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">],</span>
-          <span class="p p-Indicator">},</span>
-          <span class="p p-Indicator">],</span>
-          <span class="s">&quot;transform_by&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sum&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;inplane_rot&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">-0.7854</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.7854</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">],</span>
-    <span class="s">&quot;intrinsics&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-
-      <span class="s">&quot;resolution_x&quot;</span><span class="p p-Indicator">:</span> <span class="nv">640</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;resolution_y&quot;</span><span class="p p-Indicator">:</span> <span class="nv">480</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> samples a camera at a random position centered on the object and looking at it but adds a
-random offset vector such that the object is not always centered in the rendered image. This is crucial if the rendered
-data is used for object detection.</p>
-</div>
-<div class="section" id="rgbrenderer">
-<h3>RgbRenderer<a class="headerlink" href="#rgbrenderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.RgbRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;transparent_background&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> renders the object on a transparent background. This is necessary as we want to overlay the
-rendering on a random background image in the next step.</p>
 </div>
 </div>
 <div class="section" id="paste-rendered-images-on-random-backgrounds">

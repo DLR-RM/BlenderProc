@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -457,7 +458,7 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">download_cc_textures</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_on_surface_sampling</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_on_surface_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span>
               <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span>
               <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span>
               <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span>
@@ -466,7 +467,7 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_on_surface_sampling/config.yaml</span></code>: path to the pipeline configuration file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_on_surface_sampling/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;bop_dataset_name&gt;</span></code>: name of BOP dataset for which ground truth should be saved, e.g. lm</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_toolkit&gt;</span></code>: path to a bop_toolkit folder.</li>
@@ -481,238 +482,106 @@
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Load T-LESS BOP models: <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> module.</li>
-<li>Load LM BOP models: <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> module.</li>
-<li>Load <code class="docutils literal notranslate"><span class="pre">&lt;args:1&gt;</span></code> (YCB-V) BOP models: <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> module.</li>
-<li>Sample colors for T-LESS models: <code class="docutils literal notranslate"><span class="pre">manipulators.MaterialManipulator</span></code> module.</li>
-<li>Sample roughness and specular values for all objects: <code class="docutils literal notranslate"><span class="pre">manipulators.MaterialManipulator</span></code> module.</li>
-<li>Construct planes: <code class="docutils literal notranslate"><span class="pre">constructor.BasicMeshInitializer</span></code> module.</li>
-<li>Set custom properties for those planes: <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> module.</li>
-<li>Switch to a light emission shader for the top plane: <code class="docutils literal notranslate"><span class="pre">manipulators.MaterialManipulator</span></code> module.</li>
-<li>Load CCTexture materials: <code class="docutils literal notranslate"><span class="pre">loader.CCMaterialLoader</span></code> module.</li>
-<li>Sample a material for the other planes: <code class="docutils literal notranslate"><span class="pre">manupulators.EntityManipulator</span></code> module.</li>
-<li>Sample upright objects poses on surface: <code class="docutils literal notranslate"><span class="pre">object.OnSurfaceSampler</span></code> module.</li>
-<li>Sample point light source: <code class="docutils literal notranslate"><span class="pre">lighting.LightSampler</span></code> module.</li>
-<li>Sample camera poses: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> module.</li>
-<li>Render RGB and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Write BOP data: <code class="docutils literal notranslate"><span class="pre">writer.BopWriter</span></code> module.</li>
+<li>Load T-LESS BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop()</span></code>.</li>
+<li>Load LM BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop</span></code>.</li>
+<li>Load <code class="docutils literal notranslate"><span class="pre">&lt;args:1&gt;</span></code> (YCB-V) BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop</span></code>.</li>
+<li>Sample colors for T-LESS models: <code class="docutils literal notranslate"><span class="pre">mat.set_principled_shader_value()</span></code>.</li>
+<li>Sample roughness and specular values for all objects: <code class="docutils literal notranslate"><span class="pre">mat.set_principled_shader_value()</span></code>.</li>
+<li>Construct planes: <code class="docutils literal notranslate"><span class="pre">bproc.object.create_primiative()</span></code>.</li>
+<li>Switch to a light emission shader for the top plane.</li>
+<li>Load CCTexture materials: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_ccmaterials()</span></code>.</li>
+<li>Sample a material for the other planes: <code class="docutils literal notranslate"><span class="pre">plane.replace_materials()</span></code>.</li>
+<li>Sample upright objects poses on surface.</li>
+<li>Sample point light source.</li>
+<li>Sample camera poses <code class="docutils literal notranslate"><span class="pre">bproc.add_camera_pose()</span></code>.</li>
+<li>Render RGB and distance: <code class="docutils literal notranslate"><span class="pre">bproc.renderer</span></code>.</li>
+<li>Write BOP data: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_bop</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="bop-loader">
 <h3>BOP Loader<a class="headerlink" href="#bop-loader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BopLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;bop_dataset_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;/tless&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;model_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;cad&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;mm2m&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;sample_objects&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;num_of_objs_to_sample&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load distractor bop objects</span>
+<span class="n">distractor_bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="s1">&#39;tless&#39;</span><span class="p">),</span>
+                                     <span class="n">model_type</span> <span class="o">=</span> <span class="s1">&#39;cad&#39;</span><span class="p">,</span>
+                                     <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+                                     <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BopLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;bop_dataset_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;/lm&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;model_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;mm2m&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;sample_objects&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;num_of_objs_to_sample&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_shading&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SMOOTH&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">distractor_bop_objs</span> <span class="o">+=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">),</span>
+                                      <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+                                      <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BopLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;bop_dataset_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;/&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;model_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;mm2m&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;sample_objects&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;num_of_objs_to_sample&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_shading&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SMOOTH&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load a random sample of bop objects into the scene</span>
+<span class="n">sampled_bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
+                                         <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+                                         <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Here we are sampling BOP objects from 3 different datasets.</li>
-<li>We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by <code class="docutils literal notranslate"><span class="pre">&quot;&lt;args:1&gt;&quot;</span></code> (e.g. ycbv in this case).</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;cf_set_shading&quot;:</span> <span class="pre">&quot;SMOOTH&quot;</span></code> sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.</li>
-<li>Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent <code class="docutils literal notranslate"><span class="pre">BopLoader</span></code> module overwrites these intrinsics. In this example, <code class="docutils literal notranslate"><span class="pre">&quot;&lt;args:1&gt;&quot;</span></code>(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting <code class="docutils literal notranslate"><span class="pre">resolution_x,</span> <span class="pre">resolution_y,</span> <span class="pre">cam_K</span></code> in the camera sampler or global config.</li>
+<li>We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by <code class="docutils literal notranslate"><span class="pre">args.bop_dataset_name</span></code> (e.g. ycbv in this case).</li>
+<li>Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop</span></code> overwrites these intrinsics. In this example, <code class="docutils literal notranslate"><span class="pre">args.bop_dataset_name</span></code>(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting <code class="docutils literal notranslate"><span class="pre">resolution_x,</span> <span class="pre">resolution_y,</span> <span class="pre">cam_K</span></code> in <code class="docutils literal notranslate"><span class="pre">bproc.camera.set_intrinsics_from_K_matrix()</span></code>.</li>
 </ul>
 </div>
 <div class="section" id="material-manipulator">
 <h3>Material Manipulator<a class="headerlink" href="#material-manipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;bop_tless_vertex_col_material.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Color&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;grey&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.25</span><span class="p p-Indicator">,</span> <span class="nv">0.25</span><span class="p p-Indicator">,</span> <span class="nv">0.25</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;bop_tless_vertex_col_material.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;bop_lm_vertex_col_material.*&quot;</span>
-      <span class="p p-Indicator">},</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;bop_&lt;args:1&gt;_vertex_col_material.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_specular&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_roughness&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># set shading and physics properties and randomize PBR materials</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sampled_bop_objs</span> <span class="o">+</span> <span class="n">distractor_bop_objs</span><span class="p">):</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_shading_mode</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_materials</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s2">&quot;bop_dataset_name&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;itodd&#39;</span><span class="p">,</span> <span class="s1">&#39;tless&#39;</span><span class="p">]:</span>
+        <span class="n">grey_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">grey_col</span><span class="p">,</span> <span class="n">grey_col</span><span class="p">,</span> <span class="n">grey_col</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Roughness&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Specular&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Sample grey colors for T-LESS object’s materials using <code class="docutils literal notranslate"><span class="pre">sampler.Color</span></code> Provider.</li>
-<li>Sample <code class="docutils literal notranslate"><span class="pre">specular</span></code> and <code class="docutils literal notranslate"><span class="pre">roughness</span></code> values for object’s materials from all datasets using <code class="docutils literal notranslate"><span class="pre">sampler.Value</span></code> Provider.</li>
+<li>Sample grey colors for T-LESS object’s materials using <code class="docutils literal notranslate"><span class="pre">np.random.uniform(0.3,</span> <span class="pre">0.9)</span></code> function.</li>
+<li>Sample <code class="docutils literal notranslate"><span class="pre">specular</span></code> and <code class="docutils literal notranslate"><span class="pre">roughness</span></code> values for object’s materials from all datasets using <code class="docutils literal notranslate"><span class="pre">np.random.uniform(0,</span> <span class="pre">1.0)</span></code> function.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;obj.set_shading_mode('auto')&quot;</span></code> sets the shading for these corresponding objects to auto smoothing. This looks more realistic for meshes that have both sharp edges and curved surfaces like in YCB-V.</li>
 </ul>
 </div>
 <div class="section" id="basic-mesh-initializer">
 <h3>Basic Mesh Initializer<a class="headerlink" href="#basic-mesh-initializer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;constructor.BasicMeshInitializer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;meshes_to_add&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane0&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane1&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">-2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">-1.570796</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span> <span class="c1"># switch the sign to turn the normals to the outside</span>
-    <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane2&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1.570796</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane4&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">-1.570796</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane5&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">-2</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1.570796</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;light_plane&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">10</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span> <span class="nv">3</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&#39;.*plane.*&#39;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">False</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">333</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create room</span>
+<span class="n">room_planes</span> <span class="o">=</span> <span class="p">[</span><span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+               <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1.570796</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+               <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="p">[</span><span class="mf">1.570796</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+               <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.570796</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+               <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.570796</span><span class="p">,</span> <span class="mi">0</span><span class="p">])]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Construct minimal 2m x 2m x 2m room from 6 planes</li>
-<li>Set <code class="docutils literal notranslate"><span class="pre">&quot;cp_physics&quot;:</span> <span class="pre">False</span></code> to fix the planes during any simulations</li>
+<li>Construct minimal 2m x 2m x 2m room from 5 planes</li>
 </ul>
 </div>
 <div class="section" id="id1">
 <h3>Material Manipulator<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;light_plane_material&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_switch_to_emission_shader&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Color&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;strength&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">6</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># sample light color and strenght from ceiling</span>
+<span class="n">light_plane</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s1">&#39;PLANE&#39;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="n">light_plane</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s1">&#39;light_plane&#39;</span><span class="p">)</span>
+<span class="n">light_plane_material</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;light_material&#39;</span><span class="p">)</span>
+<span class="n">light_plane_material</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">emission_strength</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span>
+                                   <span class="n">emission_color</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]))</span>
+<span class="n">light_plane</span><span class="o">.</span><span class="n">replace_materials</span><span class="p">(</span><span class="n">light_plane_material</span><span class="p">)</span>
+
+<span class="c1"># sample point light on shell</span>
+<span class="n">light_point</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Light</span><span class="p">()</span>
+<span class="n">light_point</span><span class="o">.</span><span class="n">set_energy</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">light_point</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius_min</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">radius_max</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>
+                        <span class="n">elevation_min</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">elevation_max</span> <span class="o">=</span> <span class="mi">89</span><span class="p">,</span> <span class="n">uniform_elevation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -721,12 +590,8 @@
 </div>
 <div class="section" id="ccmaterial-loader">
 <h3>CCMaterial Loader<a class="headerlink" href="#ccmaterial-loader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;folder_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:3&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cc_textures</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ccmaterials</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cc_textures_path</span><span class="p">)</span>
+<span class="n">random_cc_texture</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">cc_textures</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -735,28 +600,10 @@
 </div>
 <div class="section" id="entity-manipulator">
 <h3>Entity Manipulator<a class="headerlink" href="#entity-manipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;once_for_all&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;cf_randomize_materials&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;randomization_level&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;materials_to_replace_with&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;random_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_is_cc_texture&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sample_initial_pose</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">MeshObject</span><span class="p">):</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">upper_region</span><span class="p">(</span><span class="n">objects_to_sample_on</span><span class="o">=</span><span class="n">room_planes</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span>
+                                                <span class="n">min_height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">face_sample_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]))</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_rotation_euler</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -765,181 +612,89 @@
 </div>
 <div class="section" id="on-surface-sampler">
 <h3>On Surface Sampler<a class="headerlink" href="#on-surface-sampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.OnSurfaceSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;objects_to_sample&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;surface&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;index&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane0&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;pos_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;index&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane0&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;face_sample_range&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.4</span><span class="p p-Indicator">,</span> <span class="nv">0.6</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;use_ray_trace_check&quot;</span><span class="p p-Indicator">:</span> <span class="nv">False</span><span class="p p-Indicator">,</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;min_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.01</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;max_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.20</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;rot_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.28</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">placed_objects</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">sample_poses_on_surface</span><span class="p">(</span><span class="n">objects_to_sample</span><span class="o">=</span><span class="n">sampled_bop_objs</span> <span class="o">+</span> <span class="n">distractor_bop_objs</span><span class="p">,</span>
+                                         <span class="n">surface</span><span class="o">=</span><span class="n">room_planes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                         <span class="n">sample_pose_func</span><span class="o">=</span><span class="n">sample_initial_pose</span><span class="p">,</span>
+                                         <span class="n">min_distance</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                         <span class="n">max_distance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Get all objects with <code class="docutils literal notranslate"><span class="pre">&quot;cp_physics&quot;:</span> <span class="pre">True</span></code> and the ground plane <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;:</span> <span class="pre">&quot;ground_plane0&quot;</span></code>. Use the provider <code class="docutils literal notranslate"><span class="pre">&quot;sampler.UpperRegionSampler&quot;</span></code> to sample objects above the plane at specified height (<code class="docutils literal notranslate"><span class="pre">&quot;min_height&quot;,</span> <span class="pre">&quot;max_height&quot;</span></code>), relative position on plane (<code class="docutils literal notranslate"><span class="pre">&quot;face_sample_range&quot;</span></code>) and rotation (<code class="docutils literal notranslate"><span class="pre">&quot;rot_sampler&quot;</span></code>). Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. <code class="docutils literal notranslate"><span class="pre">&quot;object.OnSurfaceSampler&quot;</span></code> then places the objects down to the plane. Check the <span class="xref std std-doc">on_surface_object_sampling</span> example for more details.</li>
+<li>Get all objects and the ground plane <code class="docutils literal notranslate"><span class="pre">&quot;surface&quot;:</span> <span class="pre">&quot;room_plane[0]&quot;</span></code>.</li>
+<li>Use the provider <code class="docutils literal notranslate"><span class="pre">&quot;sample_pose_func&quot;:</span> <span class="pre">sample_initial_pose&quot;</span></code> to sample objects above the plane at specified height (<code class="docutils literal notranslate"><span class="pre">&quot;min_distance&quot;,</span> <span class="pre">&quot;max_distance&quot;</span></code>), relative position on plane and rotation. Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. <code class="docutils literal notranslate"><span class="pre">&quot;bproc.object.sample_poses_on_surface&quot;</span></code> then places the objects down to the plane. Check the <span class="xref std std-doc">on_surface_object_sampling</span> example for more details.</li>
 </ul>
 </div>
 <div class="section" id="light-sampler">
 <h3>Light Sampler<a class="headerlink" href="#light-sampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.LightSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;lights&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">89</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;uniform_elevation&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Color&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;POINT&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;energy&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span>
-    <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">light_point</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Light</span><span class="p">()</span>
+<span class="n">light_point</span><span class="o">.</span><span class="n">set_energy</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">light_point</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius_min</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">radius_max</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span>
+                        <span class="n">elevation_min</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">elevation_max</span> <span class="o">=</span> <span class="mi">89</span><span class="p">,</span> <span class="n">uniform_elevation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">light_point</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Samples an additional point light source (next to ceiling) in a <code class="docutils literal notranslate"><span class="pre">&quot;sampler.Shell&quot;</span></code> around the origin with a <code class="docutils literal notranslate"><span class="pre">&quot;sampler.Color&quot;</span></code> provider.</li>
+<li>Samples an additional point light source (next to ceiling) by the <code class="docutils literal notranslate"><span class="pre">&quot;bproc.sampler.shell&quot;</span></code> function around the origin.</li>
 </ul>
 </div>
 <div class="section" id="camera-sampler">
 <h3>Camera Sampler<a class="headerlink" href="#camera-sampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span>
-      <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.3</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;excluded_objs_in_proximity_check&quot;</span><span class="p p-Indicator">:</span>  <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ground_plane.*&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.61</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.24</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">89</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;uniform_elevation&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;cp_bop_dataset_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-            <span class="p p-Indicator">},</span>
-            <span class="s">&quot;random_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;inplane_rot&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">-0.7854</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.7854</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">poses</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="c1"># Sample location</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                            <span class="n">radius_min</span> <span class="o">=</span> <span class="mf">0.61</span><span class="p">,</span>
+                            <span class="n">radius_max</span> <span class="o">=</span> <span class="mf">1.24</span><span class="p">,</span>
+                            <span class="n">elevation_min</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+                            <span class="n">elevation_max</span> <span class="o">=</span> <span class="mi">89</span><span class="p">,</span>
+                            <span class="n">uniform_elevation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Determine point of interest in scene as the object closest to the mean of a subset of objects</span>
+    <span class="n">poi</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">compute_poi</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">placed_objects</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+    <span class="c1"># Compute rotation based on vector going from location towards poi</span>
+    <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">poi</span> <span class="o">-</span> <span class="n">location</span><span class="p">,</span> <span class="n">inplane_rot</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.7854</span><span class="p">,</span> <span class="mf">0.7854</span><span class="p">))</span>
+    <span class="c1"># Add homog cam pose based on location an rotation</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="p">)</span>
+
+    <span class="c1"># Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough</span>
+    <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span> <span class="n">bop_bvh_tree</span><span class="p">):</span>
+        <span class="c1"># Persist camera pose</span>
+        <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+        <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Samples <code class="docutils literal notranslate"><span class="pre">&quot;number_of_samples&quot;:</span> <span class="pre">10</span></code> camera poses, where the camera location is sampled using a <code class="docutils literal notranslate"><span class="pre">sampler.Shell</span></code> Provider with <code class="docutils literal notranslate"><span class="pre">&quot;uniform_elevation&quot;</span></code> sampling.</li>
-<li>The camera rotation is defined by <code class="docutils literal notranslate"><span class="pre">&quot;look_at&quot;</span></code> a point of interest (<code class="docutils literal notranslate"><span class="pre">&quot;getter.POI&quot;</span></code>) plus a sampled <code class="docutils literal notranslate"><span class="pre">&quot;inplane_rot&quot;</span></code> in the specified range.</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">&quot;getter.POI&quot;</span></code> is defined by the object closest to the mean position of all objects that are returned by the <code class="docutils literal notranslate"><span class="pre">&quot;getter.Entity&quot;</span></code> Provider, i.e. <code class="docutils literal notranslate"><span class="pre">&quot;random_samples&quot;:</span> <span class="pre">10</span></code> objects from the target BOP dataset <code class="docutils literal notranslate"><span class="pre">&quot;cp_bop_dataset_name&quot;:</span> <span class="pre">&quot;&lt;args:1&gt;&quot;</span></code>.</li>
-<li>Camera poses undergo <code class="docutils literal notranslate"><span class="pre">&quot;proximity_checks&quot;</span></code> with respect to all objects besides ground_plane (<code class="docutils literal notranslate"><span class="pre">&quot;excluded_objs_in_proximity_check&quot;</span></code>) to ensure that no objects are closer than <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;:</span> <span class="pre">0.3</span></code> meters.</li>
+<li>Samples <code class="docutils literal notranslate"><span class="pre">&quot;poses&quot;:</span> <span class="pre">10</span></code> camera poses, where the camera location is sampled using a <code class="docutils literal notranslate"><span class="pre">bproc.sampler.shell</span></code> Provider with <code class="docutils literal notranslate"><span class="pre">&quot;uniform_elevation&quot;</span></code> sampling.</li>
+<li>The camera rotation is defined by a point of interest (<code class="docutils literal notranslate"><span class="pre">&quot;poi&quot;</span></code>) plus a sampled <code class="docutils literal notranslate"><span class="pre">&quot;inplane_rot&quot;</span></code> in the specified range.</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">&quot;poi&quot;</span></code> is defined by the object closest to the mean position of all objects that are returned by the <code class="docutils literal notranslate"><span class="pre">&quot;brpoc.object.compute_poi&quot;</span></code> function, i.e. <code class="docutils literal notranslate"><span class="pre">&quot;size&quot;:</span> <span class="pre">10</span></code> objects from the target BOP dataset.</li>
+<li>Camera poses undergo <code class="docutils literal notranslate"><span class="pre">&quot;obstacle_in_view_checks&quot;</span></code> with respect to all objects besides ground_plane (<code class="docutils literal notranslate"><span class="pre">&quot;excluded_objs_in_proximity_check&quot;</span></code>) to ensure that no objects are closer than <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;:</span> <span class="pre">0.3</span></code> meters.</li>
 </ul>
 </div>
 <div class="section" id="rgb-renderer">
 <h3>Rgb Renderer<a class="headerlink" href="#rgb-renderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.RgbRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">50</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;render_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;image_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;JPEG&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_distance_output</span><span class="p">()</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Renders RGB using 50 <code class="docutils literal notranslate"><span class="pre">&quot;samples&quot;</span></code>, and saves them as jpg images with 0.95 quality. Also outputs distance images.</li>
+<li>Renders RGB using 50 <code class="docutils literal notranslate"><span class="pre">&quot;samples&quot;</span></code> and also outputs distance images.</li>
 </ul>
 </div>
 <div class="section" id="bop-writer">
 <h3>Bop Writer<a class="headerlink" href="#bop-writer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.BopWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;dataset&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;append_to_existing_output&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;postprocessing_modules&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.Dist2Depth&quot;</span><span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_bop</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;bop_data&#39;</span><span class="p">),</span>
+                       <span class="n">dataset</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">,</span>
+                       <span class="n">depths</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">postprocessing</span><span class="o">.</span><span class="n">dist2depth</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]),</span>
+                       <span class="n">colors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span>
+                       <span class="n">color_file_format</span> <span class="o">=</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">,</span>
+                       <span class="n">ignore_dist_thres</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Saves all pose and camera information that is provided in BOP datasets.</li>
-<li>Only considers objects from the given <code class="docutils literal notranslate"><span class="pre">&quot;dataset&quot;:</span> <span class="pre">&quot;&lt;args:1&gt;&quot;</span></code></li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;append_to_existing_output&quot;</span></code> means that if the same output folder is chosen, data will be accumulated and not overwritten</li>
-<li>We use a <code class="docutils literal notranslate"><span class="pre">postprocessing.Dist2Depth</span></code> to convert the distance images from Blender to actual depth images.</li>
+<li>Only considers objects from the given <code class="docutils literal notranslate"><span class="pre">dataset</span> <span class="pre">=</span> <span class="pre">args.bop_dataset_name</span></code></li>
+<li>We use a <code class="docutils literal notranslate"><span class="pre">postprocessing.dist2depth</span></code> fct to convert the distance images from Blender to actual depth images.</li>
+<li>Saves the images as jpg</li>
 </ul>
 </div>
 </div>

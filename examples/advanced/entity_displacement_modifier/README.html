@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="#">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -456,91 +457,47 @@ This is an advanced example, please make sure that you have read:</p>
 ## Usage</li>
 </ul>
 <p>Execute this in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/entity_displacement_modifier/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/entity_displacement_modifier/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/scene.obj</span></code>: path to the object file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/entity_displacement_modifier/output</span></code>: path to the output directory.</li>
 </ul>
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">entity_displacement_modifier</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Creates a point light: <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Sets two camera positions: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Selects objects based on the condition: <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> module.</li>
-<li>Change some parameters of the selected entities: <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> module.</li>
-<li>Renders rgb, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="entitymanipulator">
-<h3>EntityManipulator<a class="headerlink" href="#entitymanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span> <span class="c1"># this guarantees that the object is a mesh, and not for example a camera</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_add_uv_mapping&quot;</span><span class="p p-Indicator">:{</span>
-      <span class="s">&quot;projection&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;cylinder&quot;</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_add_displace_modifier_with_texture&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;texture&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Texture&quot;</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;min_vertices_for_subdiv&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10000</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;mid_level&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;subdiv_level&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;int&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;strength&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;normal&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;mean&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;std_dev&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add displacement to all objects</span>
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+    <span class="c1"># Create a uv mapping based on a cylinder projection</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">add_uv_mapping</span><span class="p">(</span><span class="s2">&quot;cylinder&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create a random procedural texture</span>
+    <span class="n">texture</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">create_procedural_texture</span><span class="p">(</span><span class="s1">&#39;CLOUDS&#39;</span><span class="p">)</span>
+    <span class="c1"># Displace the vertices of the object based on that random texture</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">add_displace_modifier</span><span class="p">(</span>
+        <span class="n">texture</span><span class="o">=</span><span class="n">texture</span><span class="p">,</span>
+        <span class="n">strength</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+        <span class="n">subdiv_level</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
-<p>The focus of this example are the custom functions <code class="docutils literal notranslate"><span class="pre">cf_add_displacement_modifier_with_texture</span></code> and <code class="docutils literal notranslate"><span class="pre">cf_add_uv_mapping</span></code> of the EntityManipulator module.
-We are selecting multiple entities based on a user-defined condition and change the attribute and custom property values of the selected entities.
-First we want to check if each entity has a uv_map and if not, we add a uv_map to the entity. Than we add a displacement modifier with a random texture to each entity.</p>
-<p>1.) <code class="docutils literal notranslate"><span class="pre">cf_add_uv_mapping</span></code> - section of the <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code> for adding a uv map to an object if uv map is missing.</p>
+<p>If an object doesn’t already have an uv map, we add one, since it’s necessary for mapping a displacement texture to the object.
+For the UV mapping we chose a <code class="docutils literal notranslate"><span class="pre">projection</span></code>. Possible projection types given by blender are: “cube”, “cylinder”, “smart” and “sphere”.</p>
+<p>Then we add a displacement modifier with a random texture to each entity.</p>
 <ul class="simple">
-<li>This step is mandatory for adding a displacement modifier to an object, if the object doesn’t have a uv_map. Because if a object doesn’t have a uv_map it is not possible to put a texture over it. And without texture a displacement is not possible.
-For the UV mapping we have to chose a <code class="docutils literal notranslate"><span class="pre">projection</span></code>. Possible projection types given by blender are: “cube”, “cylinder”, “smart” and “sphere”.</li>
-</ul>
-<p>2.) <code class="docutils literal notranslate"><span class="pre">cf_add_displacement_modifier_with_texture</span></code> - section of the <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code> for adding a displacement modifier with texture to an entity.</p>
-<ul class="simple">
-<li>First we need a <code class="docutils literal notranslate"><span class="pre">texture</span></code> to lay over the object. This can be a random or a specific texture. For possible <code class="docutils literal notranslate"><span class="pre">texture</span></code>’s data types check <code class="docutils literal notranslate"><span class="pre">provider.sampler.Texture</span></code> documentation.</li>
-<li>All other, following parameter are not mandatory but can be used to further customize the displacement.</li>
-<li>By adding a value to <code class="docutils literal notranslate"><span class="pre">min_vertices_for_subdiv</span></code> we can check if a subdivision modifier is necessary for the entity. If the vertices of a entity are less than <code class="docutils literal notranslate"><span class="pre">min_vertices_for_subdiv</span></code> a Subdivision modifier will be added to increase the number of vertices. The number of vertices of a entity has a big effect on the displacement modifier. If there are not enough vertices, the displacement modifier will not work well.</li>
+<li><code class="docutils literal notranslate"><span class="pre">strength</span></code> is the amount to displace geometry. We are here sampling the <code class="docutils literal notranslate"><span class="pre">strength</span></code> over a gaussian distribution with mean <code class="docutils literal notranslate"><span class="pre">0.0</span></code> and standard deviation of <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</li>
 <li>If a subdivision is being applied the <code class="docutils literal notranslate"><span class="pre">subdiv_level</span></code> defines the numbers of subdivisions to perform on the entity. We are using one or two in this example.</li>
 <li><code class="docutils literal notranslate"><span class="pre">mid_level</span></code> is the texture value which will be treated as no displacement by the modifier. Texture values below this threshold will result in negative displacement along the selected direction, while texture values above it will result in positive displacement. <code class="docutils literal notranslate"><span class="pre">displacement</span> <span class="pre">=</span> <span class="pre">texture_value</span> <span class="pre">-</span> <span class="pre">mid_level</span></code>. Recall that color/luminosity values are typically between (0.0 to 1.0) in Blender, and not between (0 to 255).</li>
-<li><code class="docutils literal notranslate"><span class="pre">strength</span></code> is the amount to displace geometry. We are here sampling the <code class="docutils literal notranslate"><span class="pre">strength</span></code> over a gaussian distribution with mean <code class="docutils literal notranslate"><span class="pre">0.0</span></code> and standard deviation of <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</li>
+<li>By adding a value to <code class="docutils literal notranslate"><span class="pre">min_vertices_for_subdiv</span></code> we can check if a subdivision modifier is necessary for the entity. If the vertices of a entity are less than <code class="docutils literal notranslate"><span class="pre">min_vertices_for_subdiv</span></code> a Subdivision modifier will be added to increase the number of vertices. The number of vertices of a entity has a big effect on the displacement modifier. If there are not enough vertices, the displacement modifier will not work well.</li>
 </ul>
-</div>
 </div>
 </div>
 

@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -457,11 +458,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/scenenet_with_cctextures/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/scenenet_with_cctextures/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;PATH_TO_SCENE_NET_OBJ_FILE&gt;</span></code>: path to the used scene net <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file, download via this <span class="xref std std-doc">script</span></li>
 <li><cite>&lt;PATH_TO_TEXTURE_FOLDER&gt;</cite>: path to the downloaded texture files, you can find them [here](<a class="reference external" href="http://tinyurl.com/zpc9ppb">http://tinyurl.com/zpc9ppb</a>)</li>
 <li><code class="docutils literal notranslate"><span class="pre">resources/cctextures</span></code>:  path to the cctexture folder, downloaded via the script.</li>
@@ -471,7 +472,7 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">scenenet_with_cctextures</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
@@ -482,185 +483,44 @@
 <li>Each object gets randomly assigned textures based on its name. Therefore, in each run the objects, will have different textures.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="global">
-<h3>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;main.Initializer&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;diffuse_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;glossy_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;transmission_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;transparency_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>We define here besides the usual <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> also the amount of light bounces done by the path tracer.
-Usually these values can be quite low, but if the materials are more complex higher bounce numbers give better results.
-However, they increase the render time slightly and that’s why they are usually turned off.</p>
-</div>
-<div class="section" id="scenenetloader">
-<h3>SceneNetLoader<a class="headerlink" href="#scenenetloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.SceneNetLoader&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;file_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;texture_folder&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>This module loads the SceneNet data object, specified via the <code class="docutils literal notranslate"><span class="pre">file_path</span></code>.
-All objects included in this <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file get a randomly selected texture from the <code class="docutils literal notranslate"><span class="pre">texture_folder</span></code>.
-The <code class="docutils literal notranslate"><span class="pre">category_id</span></code> of each object are set based on their name, check the <span class="xref std std-doc">table</span> for more information on the labels.</p>
-</div>
-<div class="section" id="camerasampler">
-<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span> <span class="c1"># amount of camera samples</span>
-        <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.8</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span>  <span class="c1"># 2 stands for floor</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;check_if_pose_above_object_list&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}]</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>We sample here five random camera poses, where the location is above the object with the <code class="docutils literal notranslate"><span class="pre">category_id:</span> <span class="pre">2</span></code>, which is the floor.
-So all cameras will be sampled above the floor, with a certain height.
-In the end, we perform a check with <code class="docutils literal notranslate"><span class="pre">check_if_pose_above_object_lis</span></code> that the sampled pose is directly above a floor and not an object.</p>
-</div>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
+<p>Here we focus on the cc material. For every other step please have a look in the scenenet example.</p>
 <div class="section" id="ccmaterialloader">
 <h3>CCMaterialLoader<a class="headerlink" href="#ccmaterialloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="c1"># you can use the scripts/download_cc_textures.py to download them</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;folder_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;preload&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load all recommended cc materials, however don&#39;t load their textures yet</span>
+<span class="n">cc_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ccmaterials</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cc_material_path</span><span class="p">,</span> <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module loads empty materials, corresponding to the materials ,which are available at <a class="reference external" href="https://cc0textures.com/">cc0textures.com</a>.
+<p>This loads empty materials, corresponding to the materials ,which are available at <a class="reference external" href="https://cc0textures.com/">cc0textures.com</a>.
 It assumes the textures have been downloaded via the <span class="xref std std-doc">script</span>.</p>
-<p>As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.
-Each material will have a custom property <code class="docutils literal notranslate"><span class="pre">&quot;is_cc_texture&quot;:</span> <span class="pre">True</span></code>.</p>
-<p>This module only sets up the materials which can then be used by other modules.</p>
+<p>As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.</p>
+<p>This only sets up the materials which can then be used by other functions.</p>
 </div>
 <div class="section" id="materialrandomizer">
 <h3>MaterialRandomizer<a class="headerlink" href="#materialrandomizer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_randomize_materials&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;randomization_level&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.4</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;materials_to_replace_with&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;random_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_is_cc_texture&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>  <span class="c1"># this will return one random loaded cc textures</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Go through all objects</span>
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+    <span class="c1"># For each material of the object</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_materials</span><span class="p">())):</span>
+        <span class="c1"># In 40% of all cases</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.4</span><span class="p">:</span>
+            <span class="c1"># Replace the material with a random one from cc materials</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_material</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">cc_materials</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>This builds up on the <span class="xref std std-doc">material_randomizer</span> example.</p>
-<p>We also use the <code class="docutils literal notranslate"><span class="pre">randomization_level</span></code> and set it <code class="docutils literal notranslate"><span class="pre">0.4</span></code>.</p>
-<p>Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
-Each material loaded by CCMaterialLoader set the <code class="docutils literal notranslate"><span class="pre">cp_is_cc_texture</span></code> custom property to true.</p>
+<p>The randomization level is set to <code class="docutils literal notranslate"><span class="pre">0.4</span></code>.</p>
+<p>Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.</p>
 </div>
 <div class="section" id="id1">
 <h3>CCMaterialLoader<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="c1"># you can use the scripts/download_cc_textures.py to download them</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;folder_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;fill_used_empty_materials&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now load all textures of the materials that were assigned to at least one object</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ccmaterials</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cc_material_path</span><span class="p">,</span> <span class="n">fill_used_empty_materials</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now the empty materials, which have been used by the <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> are filled with the actual images.
 If this is not done, all the materials will be empty.</p>
-</div>
-<div class="section" id="scenenetlighting">
-<h3>SceneNetLighting<a class="headerlink" href="#scenenetlighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*lamp.*&quot;</span>
-          <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15.0</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;keep_using_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The first module call will make the lamps in the scene emit light, while using the assigned material textures.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Ceiling&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.0</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>The second module call will make the ceiling emit light and remove any materials placed on it.
-This can be changed if desired for more information check out the documentation of the module.</p>
 </div>
 </div>
 </div>

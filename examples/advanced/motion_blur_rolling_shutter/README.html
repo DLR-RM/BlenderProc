@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="#">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -463,11 +464,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">config_motion_blur</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">config_motion_blur</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/motion_blur_rolling_shutter/config_{motion_blur</span> <span class="pre">/</span> <span class="pre">rolling_shutter}.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/motion_blur_rolling_shutter/config_{motion_blur</span> <span class="pre">/</span> <span class="pre">rolling_shutter}.yaml</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/motion_blur_rolling_shutter/camera_positions</span></code>: text file with parameters of camera positions.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/scene.obj</span></code>: path to the object file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/motion_blur_rolling_shutter/output</span></code>: path to the output directory.</li>
@@ -477,43 +478,33 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">motion_blur_rolling_shutter</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="motion-blur">
+<h3>Motion Blur<a class="headerlink" href="#motion-blur" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable motion blur</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_motion_blur</span><span class="p">(</span><span class="n">motion_blur_length</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Creates a point light : <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Renders rgb, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li><code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code> sets the time the shutter is open as fraction of the time between two frames. A value of <code class="docutils literal notranslate"><span class="pre">1</span></code> thus leaves the shutter open for the full time. The shutter opens half the <code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code> before the keyframe pose and closes half the time after.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="rgbrenderer">
-<h3>RgbRenderer<a class="headerlink" href="#rgbrenderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.RgbRenderer&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;output_key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;colors&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">350</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;render_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;distance_output_key&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;use_motion_blur&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;motion_blur_length&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="nv">0.8</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;use_rolling_shutter&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;rolling_shutter_length&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="nv">0.05</span>
-      <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="rolling-shutter">
+<h3>Rolling Shutter<a class="headerlink" href="#rolling-shutter" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable motion blur and rolling shutter</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_motion_blur</span><span class="p">(</span>
+    <span class="n">motion_blur_length</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">rolling_shutter_type</span><span class="o">=</span><span class="s2">&quot;TOP&quot;</span><span class="p">,</span>
+    <span class="n">rolling_shutter_length</span><span class="o">=</span><span class="mf">0.05</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">use_motion_blur</span></code> enables the motion blur feature of Blender used for motion blur and rolling shutter simulation.</li>
-<li><code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code> sets the time the shutter is open as fraction of the time between two frames. A value of <code class="docutils literal notranslate"><span class="pre">1</span></code> thus leaves the shutter open for the full time. The shutter opens half the <code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code> before the keyframe pose and closes half the time after.</li>
-<li><code class="docutils literal notranslate"><span class="pre">use_rolling_shutter</span></code> enables rolling shutter simulation. Rows are exposed from top to bottom. <code class="docutils literal notranslate"><span class="pre">use_motion_blur</span></code> has to be activated and <code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code> set to a value bigger than <code class="docutils literal notranslate"><span class="pre">0</span></code>.</li>
 <li><code class="docutils literal notranslate"><span class="pre">rolling_shutter_length</span></code> sets the time one scanline is exposed as fraction of the <code class="docutils literal notranslate"><span class="pre">motion_blur_length</span></code>. If this value is set to <code class="docutils literal notranslate"><span class="pre">1</span></code>, no rolling shutter effect is created but just motion blur. If set to <code class="docutils literal notranslate"><span class="pre">0</span></code>, a pure rolling shutter effect is achieved.</li>
 </ul>
 </div>

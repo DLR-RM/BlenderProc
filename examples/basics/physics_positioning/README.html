@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,11 +455,11 @@ This is done via a physics simulation where the spheres are first placed randoml
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">active</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">passive</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">active</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">passive</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/basics/physics_positioning/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/basics/physics_positioning/main.py</span></code>: path to the python file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/physics_positioning/active.obj</span></code>: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/physics_positioning/passive.obj</span></code>: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/physics_positioning/output</span></code>: path to the output directory.</li>
@@ -467,99 +468,48 @@ This is done via a physics simulation where the spheres are first placed randoml
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">physics_positioning</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">active.obj</span></code> (6 spheres) with <code class="docutils literal notranslate"><span class="pre">&quot;physics&quot;</span> <span class="pre">=</span> <span class="pre">True</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Loads <code class="docutils literal notranslate"><span class="pre">passive.obj</span></code> (one bumpy plane) with <code class="docutils literal notranslate"><span class="pre">&quot;physics&quot;</span> <span class="pre">=</span> <span class="pre">False</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Randomly places them: <code class="docutils literal notranslate"><span class="pre">object.ObjectPoseSampler</span></code> module.</li>
-<li>Adds a camera and a light: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> and <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Runs the physics simulation: <code class="docutils literal notranslate"><span class="pre">object.PhysicsPositioning</span></code> module.</li>
-<li>Renders rgb and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config File<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="load-active-and-passive-objects">
-<h3>Load active and passive objects<a class="headerlink" href="#load-active-and-passive-objects" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ObjectLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-      <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ObjectLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">False</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>First some spheres are loaded from the file <code class="docutils literal notranslate"><span class="pre">active.obj</span></code> (0th placeholder <code class="docutils literal notranslate"><span class="pre">&lt;args:0&gt;</span></code>) and their physics attribute is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, so that they will later be influenced by gravity.
-Then the plane is loaded from the file <code class="docutils literal notranslate"><span class="pre">passive.obj</span></code> (1th placeholder <code class="docutils literal notranslate"><span class="pre">&lt;args:1&gt;</span></code>). The <code class="docutils literal notranslate"><span class="pre">physics</span></code> attribute will hereby set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
-</div>
 <div class="section" id="random-positioning">
 <h3>Random positioning<a class="headerlink" href="#random-positioning" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.ObjectPoseSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;objects_to_sample&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;pos_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">5</span><span class="p p-Indicator">,</span> <span class="nv">5</span><span class="p p-Indicator">,</span> <span class="nv">8</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">-5</span><span class="p p-Indicator">,</span> <span class="nv">-5</span><span class="p p-Indicator">,</span> <span class="nv">12</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;rot_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">6.28</span><span class="p p-Indicator">,</span> <span class="nv">6.28</span><span class="p p-Indicator">,</span> <span class="nv">6.28</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a function that samples the pose of a given sphere</span>
+<span class="k">def</span> <span class="nf">sample_pose</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">MeshObject</span><span class="p">):</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">]))</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_rotation_euler</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">uniformSO3</span><span class="p">())</span>
+
+<span class="c1"># Sample the poses of all spheres above the ground without any collisions in-between</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">sample_poses</span><span class="p">(</span>
+    <span class="n">spheres</span><span class="p">,</span>
+    <span class="n">sample_pose_func</span><span class="o">=</span><span class="n">sample_pose</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">ObjectPoseSampler</span></code> is used to place <code class="docutils literal notranslate"><span class="pre">active</span></code> objects randomly above the plane. <code class="docutils literal notranslate"><span class="pre">selector</span></code> call a Provider <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code> which allows us to select objects with <code class="docutils literal notranslate"><span class="pre">True</span></code> physics property.
-Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called <code class="docutils literal notranslate"><span class="pre">sampler.Uniform3d</span></code> twice: once for <code class="docutils literal notranslate"><span class="pre">pos_sampler</span></code> and once for <code class="docutils literal notranslate"><span class="pre">rot_sampler</span></code>.</p>
+<p>At first, we define a fct, which sets the given objects to new poses. This function is then used in the <code class="docutils literal notranslate"><span class="pre">bproc.object.sample_poses</span></code> fct call, where it is called on each object and then checked if a collision with the other objects occurs.
+This process is repeated until all objects are placed without collisions.</p>
 </div>
-<div class="section" id="run-simulation">
-<h3>Run simulation<a class="headerlink" href="#run-simulation" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.PhysicsPositioning&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;min_simulation_time&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;max_simulation_time&quot;</span><span class="p p-Indicator">:</span> <span class="nv">20</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;check_object_interval&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;collision_shape&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="run-physics-simulation">
+<h3>Run physics simulation<a class="headerlink" href="#run-physics-simulation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make all spheres actively participate in the simulation</span>
+<span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">spheres</span><span class="p">:</span>
+  <span class="n">obj</span><span class="o">.</span><span class="n">enable_rigidbody</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># The ground should only act as an obstacle and is therefore marked passive.</span>
+<span class="c1"># To let the spheres fall into the valleys of the ground, make the collision shape MESH instead of CONVEX_HULL.</span>
+<span class="n">ground</span><span class="o">.</span><span class="n">enable_rigidbody</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">collision_shape</span><span class="o">=</span><span class="s2">&quot;MESH&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run the simulation and fix the poses of the spheres at the end</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">simulate_physics_and_fix_final_poses</span><span class="p">(</span><span class="n">min_simulation_time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_simulation_time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">check_object_interval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module now internally does a physics simulation.
-All objects with <code class="docutils literal notranslate"><span class="pre">physics</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code> will be influenced by gravity, while all <code class="docutils literal notranslate"><span class="pre">False</span></code> objects will remain steady.
-In this way the spheres will fall down until they hit the bumpy plane.
-We set the collision shape to <code class="docutils literal notranslate"><span class="pre">MESH</span></code> (default is <code class="docutils literal notranslate"><span class="pre">CONVEX_HULL</span></code>) here to make sure the spheres can drop into the valleys.
-Keep in mind that using the mesh collision shape in more complex use-cases can cause performance and glitch issues.</p>
-<p>When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped.
-Nevertheless the simulation is run at least for 4 seconds and at most for 20 seconds.</p>
+<p>We now set all sphere objects to be active by enabling the rigidbody attribute on them. For the ground the active attribute is set to False, meaning that it will be passive in the scene.
+But active objects are able to interact with it. The collision shape for the ground is <code class="docutils literal notranslate"><span class="pre">MESH</span></code>, instead of the default <code class="docutils literal notranslate"><span class="pre">CONVEX_HULL</span></code>.
+Keep in mind that using the mesh collision shape in more complex use-cases can cause performance and glitch issues.
+If you experience those it is better to checkout the <a class="reference internal" href="../../advanced/physics_convex_decomposition/README.html"><span class="doc">physics_convex_decomposition</span></a>.</p>
+<p>When running the physics simulation the function checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped.
+Nevertheless, the simulation is run at least for 4 seconds and at most for 20 seconds.</p>
 <p>At the end of the simulation the position of all spheres is made fixed again.
 In this way we can easily sample random positions of the spheres on top of the bumpy plane.</p>
 </div>

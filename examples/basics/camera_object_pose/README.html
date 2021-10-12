@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,13 +455,12 @@
 </p><p>In this example we show how to load and render a 3D model in specified extrinsics and intrinsics with BlenderProc.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically
-downloaded blender, see the config-file if you want to change the installation path:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">obj_000004</span><span class="o">.</span><span class="n">ply</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">output</span>
+<p>Execute in the BlenderProc main directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">obj_000004</span><span class="o">.</span><span class="n">ply</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">camera_object_pose</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/basics/camera_object_pose/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/basics/camera_object_pose/main.py</span></code>: path to the python file.</li>
 </ul>
 <p>The arguments afterwards are used to fill placeholders like <code class="docutils literal notranslate"><span class="pre">&lt;args:0&gt;</span></code> inside this config file.</p>
 <ul class="simple">
@@ -470,127 +470,74 @@ downloaded blender, see the config-file if you want to change the installation p
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">obj_00004.ply</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Selects objects and change their pose based on the condition: <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> module.</li>
-<li>Creates a point light : <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Loads camera positions: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Sets vertex colors as material: <code class="docutils literal notranslate"><span class="pre">manipulators.MaterialManipulator</span></code> module.</li>
-<li>Renders rgb and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes data, intrinsics and extrinsics in <code class="docutils literal notranslate"><span class="pre">bop_dataset</span></code> format: <code class="docutils literal notranslate"><span class="pre">writer.BopWriter</span></code> module, this is explained in more details in the bop
-examples.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="objectloader">
-<h3>ObjectLoader<a class="headerlink" href="#objectloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ObjectLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;1&quot;</span>
-    <span class="p p-Indicator">},</span>
-  <span class="p p-Indicator">},</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="entity-manipulation">
+<h3>Entity manipulation<a class="headerlink" href="#entity-manipulation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use vertex color for texturing</span>
+<span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_materials</span><span class="p">():</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">map_vertex_color</span><span class="p">()</span>
+<span class="c1"># Set pose of object via local-to-world transformation matrix</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">set_local2world_mat</span><span class="p">(</span>
+    <span class="p">[[</span><span class="mf">0.331458</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9415833</span><span class="p">,</span> <span class="mf">0.05963787</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.04474526765165741</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.6064861</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2610635</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7510136</span><span class="p">,</span> <span class="mf">0.08970402424862098</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.7227108</span><span class="p">,</span> <span class="mf">0.2127592</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6575879</span><span class="p">,</span> <span class="mf">0.6823395750305427</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span>
+<span class="p">)</span>
+<span class="c1"># Scale 3D model from mm to m</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">set_scale</span><span class="p">([</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">])</span>
+<span class="c1"># Set category id which will be used in the BopWriter</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Loads an object and adds a custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code>. This is required by the <code class="docutils literal notranslate"><span class="pre">bop_writer</span></code> to write object poses in <code class="docutils literal notranslate"><span class="pre">bop_format</span></code>.</li>
-</ul>
-</div>
-<div class="section" id="entitymanipulator">
-<h3>EntityManipulator<a class="headerlink" href="#entitymanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>  <span class="c1"># this guarantees that the object is a mesh, and not for example a camera</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;matrix_world&quot;</span><span class="p p-Indicator">:</span>
-        <span class="p p-Indicator">[[</span><span class="nv">0.331458</span><span class="p p-Indicator">,</span> <span class="nv">-0.9415833</span><span class="p p-Indicator">,</span> <span class="nv">0.05963787</span><span class="p p-Indicator">,</span> <span class="nv">-0.04474526765165741</span><span class="p p-Indicator">],</span>
-         <span class="p p-Indicator">[</span><span class="nv">-0.6064861</span><span class="p p-Indicator">,</span> <span class="nv">-0.2610635</span><span class="p p-Indicator">,</span> <span class="nv">-0.7510136</span><span class="p p-Indicator">,</span> <span class="nv">0.08970402424862098</span><span class="p p-Indicator">],</span>
-         <span class="p p-Indicator">[</span><span class="nv">0.7227108</span><span class="p p-Indicator">,</span> <span class="nv">0.2127592</span><span class="p p-Indicator">,</span> <span class="nv">-0.6575879</span><span class="p p-Indicator">,</span> <span class="nv">0.6823395750305427</span><span class="p p-Indicator">],</span>
-         <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">]],</span>
-    <span class="s">&quot;scale&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.001</span><span class="p p-Indicator">,</span> <span class="nv">0.001</span><span class="p p-Indicator">,</span> <span class="nv">0.001</span><span class="p p-Indicator">]</span> <span class="c1"># Scale 3D model from mm to m</span>
-  <span class="p p-Indicator">},</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<ul class="simple">
+<li>Converts all materials to vertex color materials, where the vertex color of each loaded .ply object is directly used.</li>
 <li>Set the object pose <code class="docutils literal notranslate"><span class="pre">matrix_world</span></code> in meter</li>
 <li><code class="docutils literal notranslate"><span class="pre">scale</span></code> the original model from mm to meter in every dimension. Note: Remove when object is already in meter!</li>
+<li>Set a new custom property <code class="docutils literal notranslate"><span class="pre">&quot;category_id&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">1</span></code>, this one is later used by the <code class="docutils literal notranslate"><span class="pre">segmentation</span> <span class="pre">renderer</span></code>.</li>
 </ul>
-<div class="section" id="cameraloader">
-<h4>CameraLoader<a class="headerlink" href="#cameraloader" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;local_frame_change&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;X&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Y&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Z&quot;</span><span class="p p-Indicator">],</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="s">&quot;cam2world_matrix&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">],</span>
-    <span class="s">&quot;default_cam_param&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cam_K&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">537.4799</span><span class="p p-Indicator">,</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">318.8965</span><span class="p p-Indicator">,</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">536.1447</span><span class="p p-Indicator">,</span> <span class="nv">238.3781</span><span class="p p-Indicator">,</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">0.0</span><span class="p p-Indicator">,</span> <span class="nv">1.0</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;resolution_x&quot;</span><span class="p p-Indicator">:</span> <span class="nv">640</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;resolution_y&quot;</span><span class="p p-Indicator">:</span> <span class="nv">480</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="camera-setting">
+<h4>Camera setting<a class="headerlink" href="#camera-setting" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set intrinsics via K matrix</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span>
+    <span class="p">[[</span><span class="mf">537.4799</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">318.8965</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">536.1447</span><span class="p">,</span> <span class="mf">238.3781</span><span class="p">],</span>
+     <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]],</span> <span class="mi">640</span><span class="p">,</span> <span class="mi">480</span>
+<span class="p">)</span>
+<span class="c1"># Set camera pose via cam-to-world transformation matrix</span>
+<span class="n">cam2world</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="c1"># Change coordinate frame of transformation matrix from OpenCV to Blender coordinates</span>
+<span class="n">cam2world</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">change_source_coordinate_frame_of_transformation_matrix</span><span class="p">(</span><span class="n">cam2world</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">])</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
+<li>The camera K matrix is set by calling <code class="docutils literal notranslate"><span class="pre">set_intriniscs_from_K_matrix</span></code>.</li>
 <li>The camera pose is defined by its world matrix, in this case it is just the identity.</li>
 <li>Change the camera source frame to match blender frame (this changes from OpenCV coordinate frame to blender’s).</li>
-<li>The <code class="docutils literal notranslate"><span class="pre">default_cam_param</span></code> is where we can set the camera parameters e.g. intrinsics matrix “cam_K”, fov, resolution.</li>
-<li>This module also writes the cam poses into extra <code class="docutils literal notranslate"><span class="pre">.npy</span></code> files located inside the <code class="docutils literal notranslate"><span class="pre">temp_dir</span></code> (default: /dev/shm/blender<em>proc</em>$pid).</li>
-</ul>
-</div>
-<div class="section" id="material-manipulator">
-<h4>Material Manipulator<a class="headerlink" href="#material-manipulator" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ply_material&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_change_to_vertex_color&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Col&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li>Required to render vertex colors defined in ply file</li>
+<li>Finally, add this new camera matrix to the pose, which should be rendered</li>
 </ul>
 </div>
 <div class="section" id="bop-writer">
-<h4>Bop Writer<a class="headerlink" href="#bop-writer" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.BopWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;m2mm&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;append_to_existing_output&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;postprocessing_modules&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.Dist2Depth&quot;</span><span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<h4>Bop writer<a class="headerlink" href="#bop-writer" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># render the whole pipeline</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+<span class="c1"># Map distance to depth</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">postprocessing</span><span class="o">.</span><span class="n">dist2depth</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">])</span>
+
+<span class="c1"># Write object poses, color and depth in bop format</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_bop</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span> <span class="n">m2mm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append_to_existing_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
+<li>After rendering, the distance images are postprocessed to depth images. There is a difference between the two: In <a class="reference external" href="https://en.wikipedia.org/wiki/Range_imaging">distance images</a>, each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In <a class="reference external" href="https://en.wikipedia.org/wiki/Depth_map">depth images</a>, each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.</li>
 <li>Saves all pose and camera information that is provided in BOP datasets.</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;m2mm&quot;</span></code> (default=True) converts the pose to mm as in the original bop annotations. Set to False if you want it in meters.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;m2mm&quot;</span></code> converts the pose to mm as in the original bop annotations. Set to False if you want it in meters.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;append_to_existing_output&quot;</span></code> means that if the same output folder is chosen, data will be accumulated and not overwritten</li>
-<li><code class="docutils literal notranslate"><span class="pre">postprocessing.Dist2Depth</span></code> to convert the distance images from Blender to actual depth images.</li>
 </ul>
 </div>
 </div>

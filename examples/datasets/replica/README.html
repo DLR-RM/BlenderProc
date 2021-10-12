@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -452,11 +453,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path_to_the_replica_data_folder</span><span class="o">&gt;</span>  <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path_to_the_replica_data_folder</span><span class="o">&gt;</span>  <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/replica/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/replica/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_the_replica_data_folder&gt;</span></code>: Path to the replica dataset directory.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/replica/output</span></code>: path to the output directory.</li>
 </ul>
@@ -464,116 +465,83 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">example</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">example</span><span class="o">/</span><span class="n">replica</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Load replica room: <code class="docutils literal notranslate"><span class="pre">loader.ReplicaLoader</span></code> module.</li>
-<li>Extracts a floor in the room: <code class="docutils literal notranslate"><span class="pre">object.FloorExtractor</span></code> module.</li>
-<li>Samples multiples cameras in the room: <code class="docutils literal notranslate"><span class="pre">camera.ReplicaCameraSampler</span></code> module.</li>
-<li>Renders rgb and normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes output to .hdf5 container: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>Load the replica dataset : <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_replica()</span></code>.</li>
+<li>Extract the floor from the room: <code class="docutils literal notranslate"><span class="pre">bproc.object.extract_floor()</span></code>.</li>
+<li>Find point of interest, all cam poses should look towards it: <code class="docutils literal notranslate"><span class="pre">bproc.object.compute_poi()</span></code>.</li>
+<li>Sample random camera location around the objects: <code class="docutils literal notranslate"><span class="pre">bproc.sampler.sphere()</span></code>.</li>
+<li>Adds camera pose to the scene: <code class="docutils literal notranslate"><span class="pre">bproc.camera.add_camera_pose()</span></code>.</li>
+<li>Enables normals and distance (rgb is enabled by default): <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_normals_output()</span></code> <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_distance_output()</span></code>.</li>
+<li>Renders all set camera poses: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.render()</span></code>.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code></li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="global">
 <h3>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;main.Initializer&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;data_set_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;office_1&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the replica dataset</span>
+<span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_replica</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">replica_data_folder</span><span class="p">,</span> <span class="n">data_set_name</span><span class="o">=</span><span class="s2">&quot;office_1&quot;</span><span class="p">,</span> <span class="n">use_smooth_shading</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">&quot;data_set_name&quot;:</span> <span class="pre">&quot;office_1&quot;</span></code> is a replica room you want to render. This line can be replace with:
 <code class="docutils literal notranslate"><span class="pre">&quot;data_set_name&quot;:</span> <span class="pre">&quot;&lt;args:X&gt;&gt;&quot;</span></code>, i.e. with an appropriate placeholder where <code class="docutils literal notranslate"><span class="pre">X</span></code> is a number of a placeholder.</p>
-<p>As before all these values are stored in the GlobalStorage and are only used if no value is defined in the module itself.</p>
-</div>
-<div class="section" id="replica-loader">
-<h3>Replica loader<a class="headerlink" href="#replica-loader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ReplicaLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;use_smooth_shading&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;True&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p><code class="docutils literal notranslate"><span class="pre">loader.ReplicaLoader</span></code> handles importing objects from a given path. Here we are using smooth shading on all surfaces, instead of flat shading.</p>
+<p>As before all these values are stored in the GlobalStorage and are only used if no value are defined.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bproc.loader.load_replica</span></code> handles importing objects from a given path. Here we are using smooth shading on all surfaces, instead of flat shading.</p>
 </div>
 <div class="section" id="floor-extractor">
 <h3>Floor extractor<a class="headerlink" href="#floor-extractor" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.FloorExtractor&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;is_replica_object&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;True&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;obj_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;mesh&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;compare_angle_degrees&quot;</span><span class="nt"> </span><span class="p">:</span> <span class="nv">7.5</span><span class="p p-Indicator">,</span> <span class="c1"># max angle difference to up facing polygons</span>
-    <span class="s">&quot;compare_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.15</span>  <span class="c1"># height, which is allowed for polygons to be away from the height level in up and down dir.</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the floor from the loaded room</span>
+<span class="n">floor</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">extract_floor</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="n">new_name_for_object</span><span class="o">=</span><span class="s2">&quot;floor&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">room</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">one_by_attr</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;mesh&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">object.FloorExtractor</span></code> searches for the specified object and splits the surfaces which point upwards at a specified level away.</p>
+<p><code class="docutils literal notranslate"><span class="pre">bproc.object.extract_floor()</span></code> searches for the specified object and splits the surfaces which point upwards at a specified level away.</p>
 </div>
 <div class="section" id="replica-camera-sampler">
 <h3>Replica camera sampler<a class="headerlink" href="#replica-camera-sampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.ReplicaCameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;is_replica_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;clip_start&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.01</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;avg&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.0</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4.0</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1.55</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.373401334</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.373401334</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">}]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Init sampler for sampling locations inside the loaded replica room</span>
+<span class="n">point_sampler</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">ReplicaPointInRoomSampler</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">height_list_values</span><span class="p">)</span>
+
+<span class="c1"># define the camera intrinsics</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_resolution</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+
+<span class="c1"># Init bvh tree containing all mesh objects</span>
+<span class="n">bvh_tree</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_bvh_tree_multi_objects</span><span class="p">([</span><span class="n">room</span><span class="p">,</span> <span class="n">floor</span><span class="p">])</span>
+
+<span class="n">poses</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="ow">and</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">:</span>
+    <span class="c1"># Sample point inside room at 1.55m height</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">point_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="mf">1.55</span><span class="p">)</span>
+    <span class="c1"># Sample rotation (fix around X and Y axis)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">1.373401334</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.373401334</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">])</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation</span><span class="p">)</span>
+
+    <span class="c1"># Check that obstacles are at least 1 meter away from the camera and have an average distance between 2 and 4 meters</span>
+    <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;avg&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">}},</span> <span class="n">bvh_tree</span><span class="p">):</span>
+        <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+        <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">camera.ReplicaCameraSampler</span></code> samples multiple camera poses per every imported room with camera-object collision check and obstacle check.</p>
+<p>This samples multiple camera poses per every imported room with camera-object collision check and obstacle check.</p>
 </div>
 </div>
 <div class="section" id="material-manipulator">
 <h2>Material Manipulator<a class="headerlink" href="#material-manipulator" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;ply_material&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_change_to_vertex_color&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Col&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use vertex color of mesh as texture for all materials</span>
+<span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">room</span><span class="o">.</span><span class="n">get_materials</span><span class="p">():</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">map_vertex_color</span><span class="p">(</span><span class="s2">&quot;Col&quot;</span><span class="p">,</span> <span class="n">active_shading</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">materials.Manipulator</span></code> changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
+<p>The <code class="docutils literal notranslate"><span class="pre">mat.map_vertex_color()</span></code> changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
 <strong>Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.</strong></p>
 <p>If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.</p>
 </div>

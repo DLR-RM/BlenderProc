@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -453,11 +454,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/basics/light_sampling/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/basics/light_sampling/main.py</span></code>: path to the python file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/camera_positions</span></code>: text file with parameters of camera positions.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/scene.obj</span></code>: path to the object file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/light_sampling/output</span></code>: path to the output directory.</li>
@@ -466,55 +467,33 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">light_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Samples light position: <code class="docutils literal notranslate"><span class="pre">light.LightSampler</span></code> module.</li>
-<li>Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Writes state of all objects to a file: <code class="docutils literal notranslate"><span class="pre">writer.ObjectStateWriter</span></code> module.</li>
-<li>Writes state of a light to a file: <code class="docutils literal notranslate"><span class="pre">writer.LightStateWriter</span></code> module.</li>
-<li>Writes state of camera poses tp a file: <code class="docutils literal notranslate"><span class="pre">writer.CameraStateWriter</span></code> module.</li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
 <h3>Light sampling<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.LightSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;lights&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">3</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">7</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">70</span>
-          <span class="p p-Indicator">},</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;POINT&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;energy&quot;</span><span class="p p-Indicator">:</span> <span class="nv">500</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a light</span>
+<span class="n">light</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Light</span><span class="p">()</span>
+<span class="n">light</span><span class="o">.</span><span class="n">set_type</span><span class="p">(</span><span class="s2">&quot;POINT&quot;</span><span class="p">)</span>
+<span class="c1"># Sample its location in a shell around the point [1, 2, 3]</span>
+<span class="n">light</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span>
+    <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="n">radius_min</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">radius_max</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">elevation_min</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">elevation_max</span><span class="o">=</span><span class="mi">70</span>
+<span class="p">))</span>
+<span class="n">light</span><span class="o">.</span><span class="n">set_energy</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The focus of this example is <code class="docutils literal notranslate"><span class="pre">light.LightSampler</span></code> module which allows one to sample values for various light attributes.</p>
+<p>The focus of this example is the sampling of a location via the <code class="docutils literal notranslate"><span class="pre">sampler.shell</span></code> module which allows one to sample locations on a shell.</p>
 <ul class="simple">
-<li>Sample location in a spherical shell.</li>
+<li>Sample location in a spherical shell, by setting the center, the minimum and maximum radius and the minimum and maximum angle of elevation in degree.</li>
+<li>Set the light energy to 500</li>
 </ul>
-<p>Note that for this we are using <span class="xref std std-doc">sampler.Shell</span> Provider which is not a part of a module, but a useful tool for introducing some “controlled randomness” into the process.
-To call a sampler for some attribute of a camera, specify a <code class="docutils literal notranslate"><span class="pre">name</span></code> of a desired sampler and define some input arguments for it, e.g. <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">radius_min</span></code>, <code class="docutils literal notranslate"><span class="pre">radius_max</span></code>, etc.
-Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.</p>
 </div>
 </div>
 </div>

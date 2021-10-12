@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -453,11 +454,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">camera_positions</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/coco_annotations/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/coco_annotations/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/camera_positions</span></code>: text file with parameters of camera positions.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/coco_annotations/scene.blend</span></code>: path to the blend file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/coco_annotations/output</span></code>: path to the output directory.</li>
@@ -465,65 +466,43 @@
 <div class="section" id="visualizing-annotations">
 <h3>Visualizing Annotations<a class="headerlink" href="#visualizing-annotations" title="Permalink to this headline">¶</a></h3>
 <p>You can use vis_coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">vis_coco_annotation</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">image</span> <span class="n">index</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">coco</span> <span class="n">annotations</span> <span class="n">json</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">base</span> <span class="n">folder</span> <span class="n">of</span> <span class="n">coco</span> <span class="n">json</span> <span class="ow">and</span> <span class="n">image</span> <span class="n">files</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">image</span> <span class="n">index</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">coco</span> <span class="n">annotations</span> <span class="n">json</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">base</span> <span class="n">folder</span> <span class="n">of</span> <span class="n">coco</span> <span class="n">json</span> <span class="ow">and</span> <span class="n">image</span> <span class="n">files</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="working-examples">
 <h3>Working Examples<a class="headerlink" href="#working-examples" title="Permalink to this headline">¶</a></h3>
 <p>With specific values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">vis_coco_annotation</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">i</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="n">coco_annotations</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">b</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span> <span class="o">-</span><span class="n">i</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="n">coco_annotations</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">b</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span>
 </pre></div>
 </div>
 <p>Above are also the default values, i.e. for the same result call:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">vis_coco_annotation</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul>
-<li><p class="first">Loads <code class="docutils literal notranslate"><span class="pre">scene.blend</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.BlendLoader</span></code> module. The <code class="docutils literal notranslate"><span class="pre">BlendLoader</span></code> is used here as we always load the <code class="docutils literal notranslate"><span class="pre">cp_category_id</span></code> for each object, which is stored in the <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file.</p>
-</li>
-<li><p class="first">Creates a point light: <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</p>
-</li>
-<li><p class="first">Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</p>
-</li>
-<li><p class="first">Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</p>
-</li>
-<li><p class="first">Renders instance segmentation: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</p>
-</li>
-<li><p class="first">Writes coco annotations: <code class="docutils literal notranslate"><span class="pre">writer.CocoAnnotationsWriter</span></code> module.</p>
-<!-- * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module. --></li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="segmaprenderer">
-<h3>SegMapRenderer<a class="headerlink" href="#segmaprenderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.SegMapRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;map_by&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;instance&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;class&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;name&quot;</span><span class="p p-Indicator">],</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set some category ids for loaded objects</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objs</span><span class="p">):</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Render segmentation data and produce instance attribute maps</span>
+<span class="n">seg_data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render_segmap</span><span class="p">(</span><span class="n">map_by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> needs to render both instance and class maps. The class is defined in terms of a custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code> which must be previously defined for each instance. The <code class="docutils literal notranslate"><span class="pre">category_id</span></code> can be either set in a custom Loader module or in a <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file.
+<p>To create coco annotations we need to render both instance and class maps. The class is defined in terms of a custom property <code class="docutils literal notranslate"><span class="pre">category_id</span></code> which must be previously defined for each instance. The <code class="docutils literal notranslate"><span class="pre">category_id</span></code> can be either set by a custom property as above or in a loader or can be directly defined in a <code class="docutils literal notranslate"><span class="pre">.blend</span></code> file.
 We also add <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;</span></code> to the mapping, s.t. we can later use the object’s names for labeling the categories in the coco annotations writer.</p>
-</div>
-<div class="section" id="cocoannotationswriter">
-<h3>CocoAnnotationsWriter<a class="headerlink" href="#cocoannotationswriter" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.CocoAnnotationsWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write data to coco file</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_coco_annotations</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;coco_data&#39;</span><span class="p">),</span>
+                                    <span class="n">instance_segmaps</span><span class="o">=</span><span class="n">seg_data</span><span class="p">[</span><span class="s2">&quot;instance_segmaps&quot;</span><span class="p">],</span>
+                                    <span class="n">instance_attribute_maps</span><span class="o">=</span><span class="n">seg_data</span><span class="p">[</span><span class="s2">&quot;instance_attribute_maps&quot;</span><span class="p">],</span>
+                                    <span class="n">colors</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span>
+                                    <span class="n">color_file_format</span><span class="o">=</span><span class="s2">&quot;JPEG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This modules depends on output from <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> and stores annotations in <code class="docutils literal notranslate"><span class="pre">coco_annotations.json</span></code>. Optionally, you can set <code class="docutils literal notranslate"><span class="pre">&quot;supercategory&quot;:</span> <span class="pre">&quot;&lt;some_supercategory&gt;&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">writer.CocoAnnotationsWriter</span></code> config to filter objects by a previously assigned custom property <code class="docutils literal notranslate"><span class="pre">&quot;supercategory&quot;</span></code>.</p>
-</div>
+<p>This function stores annotations in <code class="docutils literal notranslate"><span class="pre">coco_annotations.json</span></code>. Optionally, you can set <code class="docutils literal notranslate"><span class="pre">&quot;supercategory&quot;:</span> <span class="pre">&quot;&lt;some_supercategory&gt;&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">writer.CocoAnnotationsWriter</span></code> config to filter objects by a previously assigned custom property <code class="docutils literal notranslate"><span class="pre">&quot;supercategory&quot;</span></code>.</p>
 </div>
 </div>
 

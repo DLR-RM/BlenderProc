@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,13 +455,13 @@
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>First make sure that you have downloaded a <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP dataset</a> in the original folder structure. Also please clone the <a class="reference external" href="https://github.com/thodan/bop_toolkit">BOP toolkit</a>.</p>
-<p>In <span class="xref std std-doc">examples/datasets/bop_scene_replication/config.yaml</span> set the <code class="docutils literal notranslate"><span class="pre">blender_install_path</span></code> where Blender is or should be installed.</p>
+<p>In <span class="xref std std-doc">examples/datasets/bop_scene_replication/main.py</span> set the <code class="docutils literal notranslate"><span class="pre">blender_install_path</span></code> where Blender is or should be installed.</p>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_scene_replication/config.yaml</span></code>: path to the pipeline configuration file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_scene_replication/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;bop_dataset_name&gt;</span></code>: name of BOP dataset, e.g. tless</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_toolkit&gt;</span></code>: path to the BOP toolkit containing dataset parameters, etc.</li>
@@ -470,36 +471,29 @@
 <div class="section" id="visualization">
 <h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
 <p>Visualize the generated data and labels:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">example</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">example</span><span class="o">/</span><span class="n">bop_scene_replication</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h1>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Loads BOP scene with object models, object poses, camera poses and camera intrinsics: <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> module.</li>
-<li>Creates a point light sampled inside a shell: <code class="docutils literal notranslate"><span class="pre">lighting.LightSampler</span></code> module.</li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders instance segmentation masks: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes labels and images to compressed hdf5 files in output_dir: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-<li>Writes pose labels in BOP format to output_dir: <code class="docutils literal notranslate"><span class="pre">writer.BopWriter</span></code> module.</li>
+<li>Loads BOP scene with object models, object poses, camera poses and camera intrinsics: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop()</span></code>.</li>
+<li>Creates a point light sampled inside a shell.</li>
+<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">bproc.renderer()</span></code>.</li>
+<li>Renders instance segmentation masks: <code class="docutils literal notranslate"><span class="pre">bproc.renderer()</span></code>.</li>
+<li>Writes pose labels in BOP format to output_dir: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_bop()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h1>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="python-file-main-py">
+<h1>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="boploader">
 <h2>BopLoader<a class="headerlink" href="#boploader" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BopLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;source_frame&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;X&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Y&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Z&quot;</span><span class="p p-Indicator">],</span>
-    <span class="s">&quot;bop_dataset_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;/&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;mm2m&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;split&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;test&quot;</span><span class="p p-Indicator">,</span> <span class="c1"># careful, some BOP datasets only have test sets</span>
-    <span class="s">&quot;scene_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;model_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
+                          <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+                          <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                          <span class="n">scene_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                          <span class="n">split</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span><span class="p">)</span> <span class="c1"># careful, some BOP datasets only have labeled &#39;val&#39; sets</span>
 </pre></div>
 </div>
 <p>If <code class="docutils literal notranslate"><span class="pre">scene_id</span></code> is specified, BopLoader recreates the specified scene of the BOP dataset specified by <code class="docutils literal notranslate"><span class="pre">bop_dataset_path</span></code>. All camera poses and intrinsics from the specified scene are also loaded.<span class="raw-html-m2r"><br></span>

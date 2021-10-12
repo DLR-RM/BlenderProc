@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -487,7 +488,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">blenderproc_root</span><span class="p">,</span> <span class="s2">&quot;blenderproc&quot;</span><span class="p">,</span> <span class="s2">&quot;resources&quot;</span><span class="p">,</span> <span class="n">relative_resource_path</span><span class="p">))</span></div>
 
-
 <div class="viewcode-block" id="num_frames"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.num_frames">[docs]</a><span class="k">def</span> <span class="nf">num_frames</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Returns the currently total number of registered frames.</span>
 
@@ -495,6 +495,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">-</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span></div>
 
+<div class="viewcode-block" id="reset_keyframes"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.reset_keyframes">[docs]</a><span class="k">def</span> <span class="nf">reset_keyframes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Removes registered keyframes from all objects and resets frame_start and frame_end &quot;&quot;&quot;</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="set_keyframe_render_interval"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.set_keyframe_render_interval">[docs]</a><span class="k">def</span> <span class="nf">set_keyframe_render_interval</span><span class="p">(</span><span class="n">frame_start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">frame_end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets frame_start and/or frame_end which determine the frames that will be rendered.</span>
+
+<span class="sd">    :param frame_start: The new frame_start value. If None, it will be ignored.</span>
+<span class="sd">    :param frame_end: The new frame_end value. If None, it will be ignored.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">frame_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span> <span class="o">=</span> <span class="n">frame_start</span>
+    <span class="k">if</span> <span class="n">frame_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">=</span> <span class="n">frame_end</span></div>
 
 <div class="viewcode-block" id="Utility"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">[docs]</a><span class="k">class</span> <span class="nc">Utility</span><span class="p">:</span>
     <span class="n">blenderproc_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">)</span>

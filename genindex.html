@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -514,8 +515,6 @@
       <li><a href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility._build_coordinate_frame_changing_transformation_matrix">_build_coordinate_frame_changing_transformation_matrix() (blenderproc.python.utility.MathUtility.MathUtility static method)</a>
 </li>
       <li><a href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface._cam2world_matrix_from_cam_extrinsics">_cam2world_matrix_from_cam_extrinsics() (blenderproc.python.modules.camera.CameraInterface.CameraInterface method)</a>
-</li>
-      <li><a href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility._check_bb_intersection_on_values">_check_bb_intersection_on_values() (blenderproc.python.utility.CollisionUtility.CollisionUtility static method)</a>
 </li>
       <li><a href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute._check_compatibility">_check_compatibility() (blenderproc.python.modules.provider.getter.Attribute.Attribute method)</a>
 
@@ -1540,18 +1539,10 @@
       <li><a href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler.check_above_surface">check_above_surface() (blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler static method)</a>
 </li>
       <li><a href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection">check_bb_intersection() (blenderproc.python.utility.CollisionUtility.CollisionUtility static method)</a>
-
-      <ul>
-        <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_bb_intersection">(in module blenderproc.python.utility.BlenderUtility)</a>
 </li>
-      </ul></li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_bb_intersection_on_values">check_bb_intersection_on_values() (in module blenderproc.python.utility.BlenderUtility)</a>
+      <li><a href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection_on_values">check_bb_intersection_on_values() (blenderproc.python.utility.CollisionUtility.CollisionUtility static method)</a>
 </li>
       <li><a href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility.check_if_setup_utilities_are_at_the_top">check_if_setup_utilities_are_at_the_top() (blenderproc.python.utility.SetupUtility.SetupUtility static method)</a>
-</li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_if_uv_coordinates_are_set">check_if_uv_coordinates_are_set() (in module blenderproc.python.utility.BlenderUtility)</a>
-</li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_intersection">check_intersection() (in module blenderproc.python.utility.BlenderUtility)</a>
 </li>
       <li><a href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_intersections">check_intersections() (blenderproc.python.utility.CollisionUtility.CollisionUtility static method)</a>
 </li>
@@ -1603,10 +1594,10 @@
 </li>
       <li><a href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color (class in blenderproc.python.modules.provider.sampler.Color)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.color_depth">color_depth (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.api.object.html#blenderproc.object.compute_poi">compute_poi() (in module blenderproc.object)</a>
 
       <ul>
@@ -1671,8 +1662,6 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.create_bvh_tree">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.create_bvh_tree_for_object">create_bvh_tree_for_object() (in module blenderproc.python.utility.BlenderUtility)</a>
-</li>
       <li><a href="blenderproc.api.object.html#blenderproc.object.create_bvh_tree_multi_objects">create_bvh_tree_multi_objects() (in module blenderproc.object)</a>
 
       <ul>
@@ -1825,8 +1814,6 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.duplicate">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.duplicate_objects">duplicate_objects() (in module blenderproc.python.utility.BlenderUtility)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -2009,10 +1996,6 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.get_bound_box_volume">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.get_bound_volume">get_bound_volume() (in module blenderproc.python.utility.BlenderUtility)</a>
-</li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.get_bounds">get_bounds() (in module blenderproc.python.utility.BlenderUtility)</a>
-</li>
       <li><a href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility.get_cam_attribute">get_cam_attribute() (blenderproc.python.writer.WriterUtility.WriterUtility static method)</a>
 </li>
       <li><a href="blenderproc.api.camera.html#blenderproc.camera.get_camera_pose">get_camera_pose() (in module blenderproc.camera)</a>
@@ -2097,10 +2080,10 @@
 </li>
       <li><a href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config.get_matrix_2x2">get_matrix_2x2() (blenderproc.python.modules.utility.Config.Config method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config.get_matrix_3x3">get_matrix_3x3() (blenderproc.python.modules.utility.Config.Config method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config.get_matrix_4x4">get_matrix_4x4() (blenderproc.python.modules.utility.Config.Config method)</a>
 </li>
       <li><a href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_mesh">get_mesh() (blenderproc.python.types.MeshObjectUtility.MeshObject method)</a>
@@ -2378,11 +2361,7 @@
 </li>
       </ul></li>
       <li><a href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility.is_point_inside_object">is_point_inside_object() (blenderproc.python.utility.CollisionUtility.CollisionUtility static method)</a>
-
-      <ul>
-        <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.is_point_inside_object">(in module blenderproc.python.utility.BlenderUtility)</a>
 </li>
-      </ul></li>
       <li><a href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.is_valid">is_valid() (blenderproc.python.types.StructUtility.Struct method)</a>
 
       <ul>
@@ -2431,8 +2410,6 @@
         <li><a href="blenderproc.api.utility.html#blenderproc.utility.LabelIdMapping">(class in blenderproc.utility)</a>
 </li>
       </ul></li>
-      <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.lens">lens (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
-</li>
       <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.lens_unit">lens_unit (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
 </li>
       <li><a href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light (class in blenderproc.python.types.LightUtility)</a>
@@ -2562,8 +2539,6 @@
 </li>
       </ul></li>
       <li><a href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface (class in blenderproc.python.modules.loader.LoaderInterface)</a>
-</li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.local_to_world">local_to_world() (in module blenderproc.python.utility.BlenderUtility)</a>
 </li>
       <li><a href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser.log">log() (blenderproc.python.modules.utility.ConfigParser.ConfigParser method)</a>
 </li>
@@ -2871,6 +2846,12 @@
 
       <ul>
         <li><a href="blenderproc.api.sampler.html#blenderproc.sampler.ReplicaPointInRoomSampler">(class in blenderproc.sampler)</a>
+</li>
+      </ul></li>
+      <li><a href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.reset_keyframes">reset_keyframes() (in module blenderproc.python.utility.Utility)</a>
+
+      <ul>
+        <li><a href="blenderproc.api.utility.html#blenderproc.utility.reset_keyframes">(in module blenderproc.utility)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.postprocessing.SGMUtility.html#blenderproc.python.postprocessing.SGMUtility.resize">resize() (in module blenderproc.python.postprocessing.SGMUtility)</a>
@@ -3193,6 +3174,12 @@
 
       <ul>
         <li><a href="blenderproc.python.camera.CameraUtility.html#blenderproc.python.camera.CameraUtility.set_intrinsics_from_K_matrix">(in module blenderproc.python.camera.CameraUtility)</a>
+</li>
+      </ul></li>
+      <li><a href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.set_keyframe_render_interval">set_keyframe_render_interval() (in module blenderproc.python.utility.Utility)</a>
+
+      <ul>
+        <li><a href="blenderproc.api.utility.html#blenderproc.utility.set_keyframe_render_interval">(in module blenderproc.utility)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_light_bounces">set_light_bounces() (in module blenderproc.python.renderer.RendererUtility)</a>
@@ -3534,8 +3521,6 @@
       <li><a href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader.valid_object_types">valid_object_types (blenderproc.python.loader.BlendLoader.BlendLoader attribute)</a>
 </li>
       <li><a href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value (class in blenderproc.python.modules.provider.sampler.Value)</a>
-</li>
-      <li><a href="blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.vector_to_euler">vector_to_euler() (in module blenderproc.python.utility.BlenderUtility)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>

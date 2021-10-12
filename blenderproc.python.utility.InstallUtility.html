@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,7 +455,7 @@
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="staticmethod">
 <dt id="blenderproc.python.utility.InstallUtility.InstallUtility.determine_blender_install_path">
-<em class="property">static </em><code class="descname">determine_blender_install_path</code><span class="sig-paren">(</span><em>is_config</em>, <em>args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/InstallUtility.html#InstallUtility.determine_blender_install_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.InstallUtility.InstallUtility.determine_blender_install_path" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">determine_blender_install_path</code><span class="sig-paren">(</span><em>is_config</em>, <em>args</em>, <em>user_args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/InstallUtility.html#InstallUtility.determine_blender_install_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.InstallUtility.InstallUtility.determine_blender_install_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determines the path of the blender installation</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -463,6 +464,7 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>is_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether a yaml config file was given instead of a python script.</li>
 <li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The given command line arguments.</li>
+<li><strong>user_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The arguments that will be forwarded to the users script.</li>
 </ul>
 </td>
 </tr>

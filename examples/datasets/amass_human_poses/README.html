@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -479,7 +480,7 @@
 Download the dataset and extract it under the <code class="docutils literal notranslate"><span class="pre">resources/AMASS</span></code> folder.</dd>
 </dl>
 </li>
-<li>In the end the structure of the <code class="docutils literal notranslate"><span class="pre">resource/AMASS</span></code> folder should be, this might mean you need to create some folders or move some data:</li>
+<li>In the end the structure of the <code class="docutils literal notranslate"><span class="pre">resource/AMASS</span></code> folder should be as following. This might mean you need to create some folders or move some data:</li>
 </ol>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>- resources
     - AMASS
@@ -507,53 +508,54 @@ Download the dataset and extract it under the <code class="docutils literal notr
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS examples/datasets/amass_human_poses/output
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>blenderproc run examples/datasets/amass_human_poses/main.py resources/AMASS examples/datasets/amass_human_poses/output
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
-<li><code class="docutils literal notranslate"><span class="pre">resources/AMASS</span></code>: path to the AMASS Dataset folder in resources folder</li>
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/output</span></code>: path to the output directory</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/main.py</span></code>: path to the python file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resources/AMASS</span></code>: path to the AMASS Dataset folder in resources folder.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/output</span></code>: path to the output directory.</li>
 </ul>
 </div>
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find multiple <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> files. These can be visualized with the script:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>blenderproc vis_hdf5 examples/datasets/amass_human_poses/output/*.hdf5
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>AMASSLoader first checks the taxonomy.json file for the currently supported datasets</li>
-<li>Loads the body parameters for the selected pose from dataset</li>
-<li>Loads the parametric body model from the downloaded body models</li>
-<li>Feed the the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose</li>
-<li>Adds cameras to the scene: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code></li>
-<li>Renders rgb, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>AMASSLoader first checks the taxonomy.json file for the currently supported datasets.</li>
+<li>Loads the body parameters for the selected pose from the dataset.</li>
+<li>Loads the parametric body model from the downloaded body models.</li>
+<li>Feed the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose.</li>
+<li>Define a light and set its location and energy level.</li>
+<li>Find point of interest, all cam poses should look towards it: <code class="docutils literal notranslate"><span class="pre">bproc.object.compute_poi()</span></code>.</li>
+<li>Sample random camera location around the objects: <code class="docutils literal notranslate"><span class="pre">bproc.sampler.sphere()</span></code>.</li>
+<li>Adds camera pose to the scene: <code class="docutils literal notranslate"><span class="pre">bproc.camera.add_camera_pose()</span></code>.</li>
+<li>Enables normals and distance (rgb is enabled by default): <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_normals_output()</span></code> <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_distance_output()</span></code>.</li>
+<li>Renders all set camera poses: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.render()</span></code>.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="amassloader">
 <h3>AMASSLoader<a class="headerlink" href="#amassloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.AMASSLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;sub_dataset_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;CMU&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;body_model_gender&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;male&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;subject_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;10&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;sequence_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;1&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;frame_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;600&quot;</span><span class="p p-Indicator">,</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_AMASS</span><span class="p">(</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">amass_dir</span><span class="p">,</span>
+    <span class="n">sub_dataset_id</span><span class="o">=</span><span class="s2">&quot;CMU&quot;</span><span class="p">,</span>
+    <span class="n">body_model_gender</span><span class="o">=</span><span class="s2">&quot;male&quot;</span><span class="p">,</span>
+    <span class="n">subject_id</span><span class="o">=</span><span class="s2">&quot;10&quot;</span><span class="p">,</span>
+    <span class="n">sequence_id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">frame_id</span><span class="o">=</span><span class="mi">600</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">sub_dataset_id</span></code> : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset <a class="reference external" href="https://amass.is.tue.mpg.de/dataset">https://amass.is.tue.mpg.de/dataset</a> <strong>Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module</strong></li>
+<li><code class="docutils literal notranslate"><span class="pre">sub_dataset_id</span></code> : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset <a class="reference external" href="https://amass.is.tue.mpg.de/dataset">https://amass.is.tue.mpg.de/dataset</a> <strong>Note: only the CMU motion capture dataset is currently supported by the AMASSLoader</strong></li>
 <li><code class="docutils literal notranslate"><span class="pre">body_model_gender</span></code> : select gender of the model that will represent the selected pose. Available options are: <code class="docutils literal notranslate"><span class="pre">[male,</span> <span class="pre">female,</span> <span class="pre">neutral]</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">subject_id</span></code> : represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website <a class="reference external" href="http://mocap.cs.cmu.edu/search.php?subjectnumber=%&amp;motion=%">http://mocap.cs.cmu.edu/search.php?subjectnumber=%&amp;motion=%</a> and configure the number equivalent to the category id. <em>For this example, we are interested in the “kick soccer ball” category, so we chose the subject_id to be ``10``.</em></li>
 <li><code class="docutils literal notranslate"><span class="pre">sequence_id</span></code> : every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</li>
@@ -562,28 +564,16 @@ Download the dataset and extract it under the <code class="docutils literal notr
 </div>
 <div class="section" id="camerasampler">
 <h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span>
-          <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Sphere&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-            <span class="s">&quot;radius&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SURFACE&quot;</span>
-          <span class="p p-Indicator">},</span>
-          <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find point of interest, all cam poses should look towards it</span>
+<span class="n">poi</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">compute_poi</span><span class="p">(</span><span class="n">objs</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="c1"># Sample random camera location around the objects</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">sphere</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;SURFACE&quot;</span><span class="p">)</span>
+    <span class="c1"># Compute rotation based on vector going from location towards poi</span>
+    <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">poi</span> <span class="o">-</span> <span class="n">location</span><span class="p">)</span>
+    <span class="c1"># Add homog cam pose based on location an rotation</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="p">)</span>
+    <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span>
 </pre></div>
 </div>
 <p>We sample here five random camera poses, where the location is on a sphere with a radius of 3 around the object.

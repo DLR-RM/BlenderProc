@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -458,11 +459,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_ShapeNetCore</span><span class="o">.</span><span class="n">v2</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">PATH_TO_SCENE_NET_OBJ_FILE</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_TEXTURE_FOLDER</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">PATH_TO_ShapeNetCore</span><span class="o">.</span><span class="n">v2</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/shapenet_with_scenenet/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/shapenet_with_scenenet/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;PATH_TO_SCENE_NET_OBJ_FILE&gt;</span></code>: path to the used SceneNet <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file, download via this <span class="xref std std-doc">script</span></li>
 <li><cite>&lt;PATH_TO_TEXTURE_FOLDER&gt;</cite>: path to the downloaded texture files, you can find them [here](<a class="reference external" href="http://tinyurl.com/zpc9ppb">http://tinyurl.com/zpc9ppb</a>)</li>
 <li><cite>&lt;PATH_TO_ShapeNetCore.v2&gt;</cite>: path to the downloaded shape net core v2 dataset, get it [here](<a class="reference external" href="http://www.shapenet.org/">http://www.shapenet.org/</a>)</li>
@@ -473,7 +474,7 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>In the output folder you will find a series of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> containers. These can be visualized with the script:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">shapenet_with_scenenet</span><span class="o">/</span><span class="n">output</span><span class="o">/*.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
@@ -491,160 +492,61 @@
 <li>Now we only have to render it and store the results it in a <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> container</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="scenenetloader">
 <h3>SceneNetLoader<a class="headerlink" href="#scenenetloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.SceneNetLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="c1"># after downloading the scenenet dataset it should be located inside of resources/scenenet/SceneNetData/</span>
-    <span class="s">&quot;file_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;texture_folder&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">False</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the scenenet room and label its objects with category ids based on the nyu mapping</span>
+<span class="n">label_mapping</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">from_csv</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">resolve_resource</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;id_mappings&#39;</span><span class="p">,</span> <span class="s1">&#39;nyu_idset.csv&#39;</span><span class="p">)))</span>
+<span class="n">room_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_scenenet</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">scene_net_obj_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">scene_texture_path</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This loader automatically loads a SceneNet scene/house given the corresponding <code class="docutils literal notranslate"><span class="pre">.obj</span></code> file.
 The textures are randomly sampled from the texture folder, for more information see the <a class="reference internal" href="../scenenet/README.html"><span class="doc">scenenet</span></a> example.
-The <code class="docutils literal notranslate"><span class="pre">SceneNetLoader</span></code> also sets the <code class="docutils literal notranslate"><span class="pre">category_id</span></code> of each object, such that semantic segmentation maps can be rendered in a following step.</p>
-<p>To each loaded object do we add the custom property <code class="docutils literal notranslate"><span class="pre">cp_physics:</span> <span class="pre">False</span></code>, which means that all of the objects behave passively in a physics simulation.</p>
+The <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_scenenet()</span></code> also sets the <code class="docutils literal notranslate"><span class="pre">category_id</span></code> of each object, such that semantic segmentation maps can be rendered in a following step.</p>
 </div>
 <div class="section" id="shapenetloader">
 <h3>ShapeNetLoader<a class="headerlink" href="#shapenetloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ShapeNetLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;used_synset_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;02801938&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;add_properties&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cp_shape_net_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-      <span class="c1"># set the custom property physics to True</span>
-      <span class="s">&quot;cp_physics&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">shapenet_obj</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_shapenet</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">shapenet_path</span><span class="p">,</span> <span class="n">used_synset_id</span><span class="o">=</span><span class="s2">&quot;02801938&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This module loads a ShapeNet Object, it only needs the path to the <code class="docutils literal notranslate"><span class="pre">ShapeNetCore.v2</span></code> folder, which is saved in <code class="docutils literal notranslate"><span class="pre">data_path</span></code>.
-The <code class="docutils literal notranslate"><span class="pre">synset_id</span></code> = <code class="docutils literal notranslate"><span class="pre">02801938</span></code> is set to the id of a basket, which means a random basket will be loaded.</p>
-<p>The position will be in the center of the scene, and we add the custom property <code class="docutils literal notranslate"><span class="pre">cp_physics:</span> <span class="pre">True</span></code> so that the object will fall during the physics simulation.
-We also add a custom property to make the selection with <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code> in the next step easier and set the property that the object will be simulated during the physics simulation.</p>
+<p>This loads a ShapeNet Object, it only needs the path to the <code class="docutils literal notranslate"><span class="pre">ShapeNetCore.v2</span></code> folder, which is saved in <code class="docutils literal notranslate"><span class="pre">data_path</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">used_synset_id</span></code> = <code class="docutils literal notranslate"><span class="pre">02801938</span></code> is set to the id of a basket, which means a random basket will be loaded.</p>
+<p>The position will be in the center of the scene and the object will fall during the physics simulation.</p>
 </div>
 <div class="section" id="entitymanipulator">
 <h3>EntityManipulator<a class="headerlink" href="#entitymanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="c1"># get all shape net objects, as we have only loaded one, this returns only one entity</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_shape_net_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="c1"># Sets the location of this entity above a bed</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.3</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;cp_category_id&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span> <span class="c1"># 4 is the category of the bed</span>
-              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-            <span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Collect all beds</span>
+<span class="n">beds</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_cp</span><span class="p">(</span><span class="n">room_objs</span><span class="p">,</span> <span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="n">label_mapping</span><span class="o">.</span><span class="n">id_from_label</span><span class="p">(</span><span class="s2">&quot;bed&quot;</span><span class="p">))</span>
+<span class="c1"># Sample the location of the ShapeNet object above a random bed</span>
+<span class="n">shapenet_obj</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">upper_region</span><span class="p">(</span><span class="n">beds</span><span class="p">,</span> <span class="n">min_height</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
 
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="c1"># by adding a modifier we avoid that the objects falls through other objects during the physics simulation</span>
-      <span class="s">&quot;cf_add_modifier&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Solidify&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;thickness&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.0025</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<span class="c1"># Make sure the ShapeNet object has a minimum thickness (this will increase the stability of the simulator)</span>
+<span class="n">shapenet_obj</span><span class="o">.</span><span class="n">add_modifier</span><span class="p">(</span><span class="s2">&quot;SOLIDIFY&quot;</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">0.0025</span><span class="p">)</span>
+<span class="c1"># Make the ShapeNet object actively participating in the simulation and increase its mass to stabilize the simulation</span>
+<span class="n">shapenet_obj</span><span class="o">.</span><span class="n">enable_rigidbody</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">mass_factor</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">collision_margin</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">,</span> <span class="n">collision_shape</span><span class="o">=</span><span class="s2">&quot;MESH&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>With the <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code> do we change the location and the custom properties of the ShapeNet Object.
-For that we first select the object, via the <code class="docutils literal notranslate"><span class="pre">&quot;selector&quot;</span></code>, based on these conditions it returns the ShapeNetObject, which we will manipulate next.</p>
-<p>We first set the location to be sampled above an entity, which has the <code class="docutils literal notranslate"><span class="pre">category_id:</span> <span class="pre">4</span></code> (4 stands for bed).
-Finally, we add a solidify modifier to get a correct physics interaction.</p>
+<p>With this we change the location and the custom properties of the ShapeNet Object.
+For that we first select the object, via the <code class="docutils literal notranslate"><span class="pre">&quot;filter&quot;</span></code>, based on these conditions it returns the ShapeNetObject, which we will manipulate next.</p>
+<p>We first set the location to be sampled above an entity, which has the category “bed”.
+We add a solidify modifier and add mass to get a correct physics interaction.</p>
 </div>
 <div class="section" id="physicspositioning">
 <h3>PhysicsPositioning<a class="headerlink" href="#physicspositioning" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.PhysicsPositioning&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;solver_iters&quot;</span><span class="p p-Indicator">:</span> <span class="nv">30</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;substeps_per_frame&quot;</span><span class="p p-Indicator">:</span> <span class="nv">40</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min_simulation_time&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max_simulation_time&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;check_object_interval&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.25</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;mass_scaling&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;mass_factor&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2000</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;collision_margin&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.00001</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;collision_shape&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">simulate_physics_and_fix_final_poses</span><span class="p">(</span>
+    <span class="n">solver_iters</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">substeps_per_frame</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">min_simulation_time</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">max_simulation_time</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">check_object_interval</span><span class="o">=</span><span class="mf">0.25</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <p>We then run the physics simulation, for more information about that please see the <span class="xref std std-doc">example/physiscs_positioning</span>.
 The high mass factor and the small collision margin guarantee that the object does not move too much.
 Important here are the amount of <code class="docutils literal notranslate"><span class="pre">solver_iters</span></code> and <code class="docutils literal notranslate"><span class="pre">substeps_per_frame</span></code> as they have to be high, as lot of objects in the ShapeNet dataset consist out of thin small pieces.
 Without this they might slide into the SceneNet objects.</p>
-</div>
-<div class="section" id="camerasampler">
-<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.PartSphere&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-                <span class="s">&quot;cp_shape_net_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-                <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-              <span class="p p-Indicator">}</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">},</span>
-          <span class="s">&quot;distance_above_center&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;radius&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SURFACE&quot;</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-                <span class="s">&quot;cp_shape_net_object&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-                <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
-              <span class="p p-Indicator">}</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>We sample here five random camera poses, where the location is on a PartSphere with a radius of 2 around the ShapeNet object.
-Only points, which are 0.5 above the center are considered.
-These objects are selected via a <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code> provider, which feeds into a <code class="docutils literal notranslate"><span class="pre">getter.POI</span></code>, which returns the bounding box center of the selected object.
-Each cameras’ rotation is such that it looks directly at the object, and the camera faces upwards in Z direction, we use the same selection for the center of the object as for the location.</p>
-<p>We render again and store the result inside of <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> container.</p>
 </div>
 </div>
 </div>

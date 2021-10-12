@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,11 +455,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute this in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/basics/material_manipulation/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/basics/material_manipulation/main.py</span></code>: path to the python file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/material_manipulation/scene.obj</span></code>: path to the object file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/material_manipulation</span></code>: path to a folder with .jpg textures to be used in the sampling process.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/basics/material_manipulation/output</span></code>: path to the output directory.</li>
@@ -467,75 +468,44 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">basics</span><span class="o">/</span><span class="n">material_manipulation</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Creates a point light: <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Sets two camera positions: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Selects materials based on the condition and changes some parameters of the selected materials: <code class="docutils literal notranslate"><span class="pre">material.MaterialManipulator</span></code> module.</li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="materialmanipulator">
-<h3>MaterialManipulator<a class="headerlink" href="#materialmanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Material.001&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_color_link_to_displacement&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="material-manipulation">
+<h3>Material manipulation<a class="headerlink" href="#material-manipulation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find all materials</span>
+<span class="n">materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">collect_all</span><span class="p">()</span>
+
+<span class="c1"># Find the material of the ground object</span>
+<span class="n">ground_material</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">one_by_attr</span><span class="p">(</span><span class="n">materials</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Material.001&quot;</span><span class="p">)</span>
+<span class="c1"># Set its displacement based on its base color texture</span>
+<span class="n">ground_material</span><span class="o">.</span><span class="n">set_displacement_from_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">multiply_factor</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Material.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;once_for_each&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;cf_textures&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;Base</span><span class="nv"> </span><span class="s">Color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Path&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;/*.jpg&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<p>The focus of this example is the selection and adaption of a material.</p>
+<ul class="simple">
+<li>With the <code class="docutils literal notranslate"><span class="pre">filter.one_by_attr</span></code> we filter again for a certain material, for that we use all materials currently available.</li>
+</ul>
+<p>All available material <code class="docutils literal notranslate"><span class="pre">attribute</span> <span class="pre">name</span></code>’s can be seen here: <a class="reference external" href="https://docs.blender.org/api/current/bpy.types.Material.html">https://docs.blender.org/api/current/bpy.types.Material.html</a></p>
+<p>We then link the input to the <code class="docutils literal notranslate"><span class="pre">Base</span> <span class="pre">Color</span></code> of the principled shader to the displacement output of the material and multiply with a given factor before that.
+This value is used to scale the color input the texture up or down to increase or decrease the effect of the displacement.</p>
+<p align="center">
+<img src="https://docs.blender.org/manual/en/latest/_images/render_shader-nodes_shader_principled_node.png" alt="Front readme image">
+</p><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Collect all jpg images in the specified directory</span>
+<span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">image_dir</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;material_manipulation_sample_texture*.jpg&quot;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">materials</span><span class="p">:</span>
+    <span class="c1"># Load one random image</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">images</span><span class="p">)))</span>
+    <span class="c1"># Set it as base color of the current material</span>
+    <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The focus of this example is the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> module and <code class="docutils literal notranslate"><span class="pre">getter.Material</span></code> which allow us to select multiple materials based on a user-defined condition and change the attribute values of the selected materials.</p>
-<ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">selector</span></code> - section of the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> for stating the chosen <code class="docutils literal notranslate"><span class="pre">provider</span></code> and the <code class="docutils literal notranslate"><span class="pre">condition</span></code> to use for selecting.</li>
-</ul>
-<p>Our condition is: <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;:</span> <span class="pre">'Material.001'</span></code>, which means that we want to select all the materials with <code class="docutils literal notranslate"><span class="pre">material.name</span> <span class="pre">==</span> <span class="pre">'Material'</span></code>. In our case we have only one material which meets the requirement.
-Yet one may define any condition where <code class="docutils literal notranslate"><span class="pre">key</span></code> is the valid name of any attribute of entities present in the scene.
-This way it is possible to select multiple materials.</p>
-<p>NOTE: any given attribute_value of the type string will be treated as a <em>REGULAR EXPRESSION</em>, so <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;:</span> <span class="pre">'Material.*'</span></code> condition will select us all materials in the scene.</p>
-<p>For possible <code class="docutils literal notranslate"><span class="pre">attribute_name</span></code>’s data types check <code class="docutils literal notranslate"><span class="pre">getter.Material</span></code> documentation.</p>
-<p>After <code class="docutils literal notranslate"><span class="pre">selector</span></code> section we are defining attribute name and attribute value pairs in the familiar format of {attribute_name: attribute_value}.
-If attribute_name is a valid name of any attribute of selected object(s), its value will be set to attribute_value.</p>
-<p>With the argument: <code class="docutils literal notranslate"><span class="pre">color_link_to_displacement</span></code> will all materials, which were previously selected checked for a texture, which is then connected to the displacement output of the material.
-The <span class="raw-html-m2r"><float></span> value is used to scale the color input the texture up or down to increase or decrease the effect of the displacement.</p>
-<p>If one wants to have values sampled once and have them set to defined attribute/properties, set <code class="docutils literal notranslate"><span class="pre">&quot;mode&quot;:</span> <span class="pre">&quot;once_for_all&quot;</span></code> at the end of this section.
-By the default it is <code class="docutils literal notranslate"><span class="pre">&quot;once_for_each&quot;</span></code>.</p>
-<p>The second <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> module is yet again selecting a material: <code class="docutils literal notranslate"><span class="pre">Material.*</span></code> which equals to selecting all the materials in the scene, but this time it uses a <code class="docutils literal notranslate"><span class="pre">sampler.Path</span></code> to randomly choose one <code class="docutils literal notranslate"><span class="pre">color</span></code> .jpg image texture from the example folder to assign to the chosen material.</p>
+<p>Finally, for all materials including the ground material a new image is loaded and selected as the <code class="docutils literal notranslate"><span class="pre">Base</span> <span class="pre">Color</span></code> input.
+This means that the image which has been used for the displacement is now only used for the displacement and a new image is used for the color information.
+This is the visible in the preview image at the top, that the displacement does not align with the texture of the object.</p>
 </div>
 </div>
 </div>

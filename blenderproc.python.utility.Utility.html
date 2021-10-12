@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -1014,6 +1015,20 @@ is ambiguous.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="blenderproc.python.utility.Utility.reset_keyframes">
+<code class="descclassname">blenderproc.python.utility.Utility.</code><code class="descname">reset_keyframes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#reset_keyframes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.reset_keyframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes registered keyframes from all objects and resets frame_start and frame_end</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="blenderproc.python.utility.Utility.resolve_path">
 <code class="descclassname">blenderproc.python.utility.Utility.</code><code class="descname">resolve_path</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#resolve_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.resolve_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an absolute path. If given path is relative, current working directory is put in front.</p>
@@ -1044,6 +1059,24 @@ is ambiguous.</p>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The absolute path.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.python.utility.Utility.set_keyframe_render_interval">
+<code class="descclassname">blenderproc.python.utility.Utility.</code><code class="descname">set_keyframe_render_interval</code><span class="sig-paren">(</span><em>frame_start=None</em>, <em>frame_end=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#set_keyframe_render_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.set_keyframe_render_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets frame_start and/or frame_end which determine the frames that will be rendered.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The new frame_start value. If None, it will be ignored.</li>
+<li><strong>frame_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The new frame_end value. If None, it will be ignored.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

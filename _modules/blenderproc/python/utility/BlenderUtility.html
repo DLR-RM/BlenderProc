@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -459,208 +460,6 @@
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
 
-<div class="viewcode-block" id="local_to_world"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.local_to_world">[docs]</a><span class="k">def</span> <span class="nf">local_to_world</span><span class="p">(</span><span class="n">coords</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                   <span class="n">world</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Matrix</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a cords transformed to the given transformation world matrix</span>
-
-<span class="sd">    :param coords: coordinates a tuple of 3 values for x,y,z</span>
-<span class="sd">    :param world: world matrix &lt;- transformation matrix</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">world</span> <span class="o">@</span> <span class="n">Vector</span><span class="p">(</span><span class="n">cord</span><span class="p">)</span> <span class="k">for</span> <span class="n">cord</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="get_bounds"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.get_bounds">[docs]</a><span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param obj: a mesh object</span>
-<span class="sd">    :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">local_to_world</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">bound_box</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="check_bb_intersection"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_bb_intersection">[docs]</a><span class="k">def</span> <span class="nf">check_bb_intersection</span><span class="p">(</span><span class="n">obj1</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">,</span> <span class="n">obj2</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks if there is a bounding box collision, these don&#39;t have to be axis-aligned, but if they are not:</span>
-<span class="sd">    The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.</span>
-
-<span class="sd">    :param obj1: object 1  to check for intersection, must be a mesh</span>
-<span class="sd">    :param obj2: object 2  to check for intersection, must be a mesh</span>
-<span class="sd">    :return: True if the two bounding boxes intersect with each other</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">b1w</span> <span class="o">=</span> <span class="n">get_bounds</span><span class="p">(</span><span class="n">obj1</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">min_and_max_point</span><span class="p">(</span><span class="n">bb</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Find the minimum and maximum point of the bounding box</span>
-<span class="sd">        :param bb: bounding box</span>
-<span class="sd">        :return: min, max</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># get min and max point of the axis-aligned bounding box</span>
-    <span class="n">min_b1</span><span class="p">,</span> <span class="n">max_b1</span> <span class="o">=</span> <span class="n">min_and_max_point</span><span class="p">(</span><span class="n">b1w</span><span class="p">)</span>
-    <span class="n">b2w</span> <span class="o">=</span> <span class="n">get_bounds</span><span class="p">(</span><span class="n">obj2</span><span class="p">)</span>
-    <span class="c1"># get min and max point of the axis-aligned bounding box</span>
-    <span class="n">min_b2</span><span class="p">,</span> <span class="n">max_b2</span> <span class="o">=</span> <span class="n">min_and_max_point</span><span class="p">(</span><span class="n">b2w</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">check_bb_intersection_on_values</span><span class="p">(</span><span class="n">min_b1</span><span class="p">,</span> <span class="n">max_b1</span><span class="p">,</span> <span class="n">min_b2</span><span class="p">,</span> <span class="n">max_b2</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="check_bb_intersection_on_values"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_bb_intersection_on_values">[docs]</a><span class="k">def</span> <span class="nf">check_bb_intersection_on_values</span><span class="p">(</span><span class="n">min_b1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_b1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">min_b2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_b2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                                    <span class="n">used_check</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,</span>
-<span class="sd">    namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional</span>
-<span class="sd">    problems.</span>
-
-<span class="sd">    :param min_b1: List of minimum bounding box points for b1.</span>
-<span class="sd">    :param max_b1: List of maximum bounding box points for b1.</span>
-<span class="sd">    :param min_b2: List of minimum bounding box points for b2.</span>
-<span class="sd">    :param max_b2: List of maximum bounding box points for b2.</span>
-<span class="sd">    :param used_check: The operation used inside of the is_overlapping1D. With that it possible to change the \</span>
-<span class="sd">                       collision check from volume and surface check to pure surface or volume checks.</span>
-<span class="sd">    :return: True if the two bounding boxes intersect with each other</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">collide</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">for</span> <span class="n">min_b1_val</span><span class="p">,</span> <span class="n">max_b1_val</span><span class="p">,</span> <span class="n">min_b2_val</span><span class="p">,</span> <span class="n">max_b2_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">min_b1</span><span class="p">,</span> <span class="n">max_b1</span><span class="p">,</span> <span class="n">min_b2</span><span class="p">,</span> <span class="n">max_b2</span><span class="p">):</span>
-        <span class="c1"># inspired by this:</span>
-        <span class="c1"># https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap</span>
-        <span class="c1"># Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.</span>
-        <span class="k">def</span> <span class="nf">is_overlapping_1D</span><span class="p">(</span><span class="n">x_min_1</span><span class="p">,</span> <span class="n">x_max_1</span><span class="p">,</span> <span class="n">x_min_2</span><span class="p">,</span> <span class="n">x_max_2</span><span class="p">):</span>
-            <span class="c1"># returns true if the min and max values are overlapping</span>
-            <span class="k">return</span> <span class="n">used_check</span><span class="p">(</span><span class="n">x_max_1</span><span class="p">,</span> <span class="n">x_min_2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">used_check</span><span class="p">(</span><span class="n">x_max_2</span><span class="p">,</span> <span class="n">x_min_1</span><span class="p">)</span>
-
-        <span class="n">collide</span> <span class="o">=</span> <span class="n">collide</span> <span class="ow">and</span> <span class="n">is_overlapping_1D</span><span class="p">(</span><span class="n">min_b1_val</span><span class="p">,</span> <span class="n">max_b1_val</span><span class="p">,</span> <span class="n">min_b2_val</span><span class="p">,</span> <span class="n">max_b2_val</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">collide</span></div>
-
-
-<div class="viewcode-block" id="check_intersection"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_intersection">[docs]</a><span class="k">def</span> <span class="nf">check_intersection</span><span class="p">(</span><span class="n">obj1</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">,</span> <span class="n">obj2</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">,</span> <span class="n">skip_inside_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-                       <span class="n">bvh_cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> \
-        <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks if the two objects are intersecting.</span>
-
-<span class="sd">    This will use BVH trees to check whether the objects are overlapping.</span>
-
-<span class="sd">    It is further also checked if one object is completely inside the other.</span>
-<span class="sd">    This check requires that both objects are watertight, have correct normals and are coherent.</span>
-<span class="sd">    If this is not the case it can be disabled via the parameter skip_inside_check.</span>
-
-<span class="sd">    :param obj1: object 1 to check for intersection, must be a mesh</span>
-<span class="sd">    :param obj2: object 2 to check for intersection, must be a mesh</span>
-<span class="sd">    :param skip_inside_check: Disables checking whether one object is completely inside the other.</span>
-<span class="sd">    :param bvh_cache: Dict of all the bvh trees, removes the `obj` from the cache before adding it again.</span>
-<span class="sd">    :return: True, if they are intersecting</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">bvh_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">bvh_cache</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="c1"># If one of the objects has no vertices, collision is impossible</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">bvh_cache</span>
-
-    <span class="c1"># create bvhtree for obj1</span>
-    <span class="k">if</span> <span class="n">obj1</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bvh_cache</span><span class="p">:</span>
-        <span class="n">obj1_BVHtree</span> <span class="o">=</span> <span class="n">create_bvh_tree_for_object</span><span class="p">(</span><span class="n">obj1</span><span class="p">)</span>
-        <span class="n">bvh_cache</span><span class="p">[</span><span class="n">obj1</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj1_BVHtree</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">obj1_BVHtree</span> <span class="o">=</span> <span class="n">bvh_cache</span><span class="p">[</span><span class="n">obj1</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-
-    <span class="c1"># create bvhtree for obj2</span>
-    <span class="k">if</span> <span class="n">obj2</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bvh_cache</span><span class="p">:</span>
-        <span class="n">obj2_BVHtree</span> <span class="o">=</span> <span class="n">create_bvh_tree_for_object</span><span class="p">(</span><span class="n">obj2</span><span class="p">)</span>
-        <span class="n">bvh_cache</span><span class="p">[</span><span class="n">obj2</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj2_BVHtree</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">obj2_BVHtree</span> <span class="o">=</span> <span class="n">bvh_cache</span><span class="p">[</span><span class="n">obj2</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-
-    <span class="c1"># Check whether both meshes intersect</span>
-    <span class="n">inter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj1_BVHtree</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">obj2_BVHtree</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
-
-    <span class="c1"># Optionally check whether obj2 is contained in obj1</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">inter</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">skip_inside_check</span><span class="p">:</span>
-        <span class="n">inter</span> <span class="o">=</span> <span class="n">is_point_inside_object</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj1_BVHtree</span><span class="p">,</span> <span class="n">obj2</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@</span> <span class="n">obj2</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">co</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Detected that &quot;</span> <span class="o">+</span> <span class="n">obj2</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is completely inside &quot;</span> <span class="o">+</span> <span class="n">obj1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span>
-              <span class="s2">&quot;. This might be wrong, if &quot;</span> <span class="o">+</span> <span class="n">obj1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span>
-              <span class="s2">&quot; is not water tight or has incorrect normals. If that is the case, consider setting &quot;</span>
-              <span class="s2">&quot;skip_inside_check to True.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Optionally check whether obj1 is contained in obj2</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">inter</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">skip_inside_check</span><span class="p">:</span>
-        <span class="n">inter</span> <span class="o">=</span> <span class="n">is_point_inside_object</span><span class="p">(</span><span class="n">obj2</span><span class="p">,</span> <span class="n">obj2_BVHtree</span><span class="p">,</span> <span class="n">obj1</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@</span> <span class="n">obj1</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">co</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Detected that &quot;</span> <span class="o">+</span> <span class="n">obj1</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is completely inside &quot;</span> <span class="o">+</span> <span class="n">obj2</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span>
-              <span class="s2">&quot;. This might be wrong, if &quot;</span> <span class="o">+</span> <span class="n">obj2</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; is not water tight or has incorrect &quot;</span>
-                                                         <span class="s2">&quot;normals. If that is the case, consider &quot;</span>
-                                                         <span class="s2">&quot;setting skip_inside_check to True.&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">inter</span><span class="p">,</span> <span class="n">bvh_cache</span></div>
-
-
-<div class="viewcode-block" id="create_bvh_tree_for_object"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.create_bvh_tree_for_object">[docs]</a><span class="k">def</span> <span class="nf">create_bvh_tree_for_object</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Creates a fresh BVH tree for the given object</span>
-
-<span class="sd">    :param obj: The object</span>
-<span class="sd">    :return: The BVH tree</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">bm</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-    <span class="n">bm</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">bm</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)</span>
-    <span class="n">obj_BVHtree</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="o">.</span><span class="n">FromBMesh</span><span class="p">(</span><span class="n">bm</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">obj_BVHtree</span></div>
-
-
-<div class="viewcode-block" id="is_point_inside_object"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.is_point_inside_object">[docs]</a><span class="k">def</span> <span class="nf">is_point_inside_object</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">,</span> <span class="n">obj_BVHtree</span><span class="p">:</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="p">,</span>
-                           <span class="n">point</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Vector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Checks whether the given point is inside the given object.</span>
-
-<span class="sd">    This only works if the given object is watertight and has correct normals</span>
-
-<span class="sd">    :param obj: The object</span>
-<span class="sd">    :param obj_BVHtree: A bvh tree of the object</span>
-<span class="sd">    :param point: The point to check</span>
-<span class="sd">    :return: True, if the point is inside the object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">point</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-    <span class="c1"># Look for closest point on object</span>
-    <span class="n">nearest</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">obj_BVHtree</span><span class="o">.</span><span class="n">find_nearest</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
-    <span class="c1"># Compute direction</span>
-    <span class="n">p2</span> <span class="o">=</span> <span class="n">nearest</span> <span class="o">-</span> <span class="n">point</span>
-    <span class="c1"># Compute dot product between direction and normal vector</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">p2</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">obj</span><span class="o">.</span><span class="n">rotation_euler</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span> <span class="o">@</span> <span class="n">normal</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="mf">0.0</span></div>
-
-
-<div class="viewcode-block" id="check_if_uv_coordinates_are_set"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.check_if_uv_coordinates_are_set">[docs]</a><span class="k">def</span> <span class="nf">check_if_uv_coordinates_are_set</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param obj: should be an object, which has a mesh</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This only support objects which only have one uv layer.&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">:</span>
-        <span class="n">max_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">uv_coords</span><span class="o">.</span><span class="n">uv</span><span class="p">)</span> <span class="k">for</span> <span class="n">uv_coords</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">max_val</span> <span class="o">&gt;</span> <span class="mf">1e-7</span>
-    <span class="k">return</span> <span class="kc">False</span></div>
-
-
-<div class="viewcode-block" id="vector_to_euler"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.vector_to_euler">[docs]</a><span class="k">def</span> <span class="nf">vector_to_euler</span><span class="p">(</span><span class="n">vector</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">vector_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Euler</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.</span>
-<span class="sd">    :param vector_type: Type of an input vector: UP or FORWARD. Type: string.</span>
-<span class="sd">    :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Check vector type</span>
-    <span class="k">if</span> <span class="n">vector_type</span> <span class="o">==</span> <span class="s2">&quot;UP&quot;</span><span class="p">:</span>
-        <span class="c1"># UP vectors are used for MESH type objects</span>
-        <span class="n">euler_angles</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">to_track_quat</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">vector_type</span> <span class="o">==</span> <span class="s2">&quot;FORWARD&quot;</span><span class="p">:</span>
-        <span class="c1"># FORWARD vectors are used for LIGHT and CAMERA type objects</span>
-        <span class="n">euler_angles</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">to_track_quat</span><span class="p">(</span><span class="s1">&#39;-Z&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unknown vector type: &quot;</span> <span class="o">+</span> <span class="n">vector_type</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">euler_angles</span></div>
-
-
 <div class="viewcode-block" id="add_object_only_with_vertices"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.add_object_only_with_vertices">[docs]</a><span class="k">def</span> <span class="nf">add_object_only_with_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;NewVertexObject&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a new object with the given vertices, no edges or faces are generated.</span>
@@ -720,7 +519,6 @@
     <span class="n">bm</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">obj</span></div>
 
-
 <div class="viewcode-block" id="add_cube_based_on_bb"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.add_cube_based_on_bb">[docs]</a><span class="k">def</span> <span class="nf">add_cube_based_on_bb</span><span class="p">(</span><span class="n">bouding_box</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;NewCube&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.</span>
@@ -754,7 +552,6 @@
     <span class="n">bm</span><span class="o">.</span><span class="n">to_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
     <span class="n">bm</span><span class="o">.</span><span class="n">free</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">obj</span></div>
-
 
 <div class="viewcode-block" id="get_all_blender_mesh_objects"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.get_all_blender_mesh_objects">[docs]</a><span class="k">def</span> <span class="nf">get_all_blender_mesh_objects</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -820,46 +617,6 @@
             <span class="n">error</span> <span class="o">+=</span> <span class="s1">&#39;`python -c &quot;import imageio; imageio.plugins.freeimage.download()&quot;`</span><span class="se">\n</span><span class="s1">&#39;</span>
             <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot;Now everything should work -&gt; run the pipeline again.&quot;</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">error</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="get_bound_volume"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.get_bound_volume">[docs]</a><span class="k">def</span> <span class="nf">get_bound_volume</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Gets the volume of a possible orientated bounding box.</span>
-<span class="sd">    :param obj: Mesh object.</span>
-<span class="sd">    :return: volume of a bounding box.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">bb</span> <span class="o">=</span> <span class="n">get_bounds</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-    <span class="c1"># Search for the point which is the maximum distance away from the first point</span>
-    <span class="c1"># we call this first point min and the furthest away point max</span>
-    <span class="c1"># the vector between the two is a diagonal of the bounding box</span>
-    <span class="n">min_point</span><span class="p">,</span> <span class="n">max_point</span> <span class="o">=</span> <span class="n">bb</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span>
-    <span class="n">max_dist</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">bb</span><span class="p">:</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">min_point</span><span class="p">)</span><span class="o">.</span><span class="n">length</span>
-        <span class="k">if</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="n">max_dist</span><span class="p">:</span>
-            <span class="n">max_point</span> <span class="o">=</span> <span class="n">point</span>
-            <span class="n">max_dist</span> <span class="o">=</span> <span class="n">dist</span>
-    <span class="n">diag</span> <span class="o">=</span> <span class="n">max_point</span> <span class="o">-</span> <span class="n">min_point</span>
-    <span class="c1"># use the diagonal to calculate the volume of the box</span>
-    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">diag</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span></div>
-
-
-<div class="viewcode-block" id="duplicate_objects"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.duplicate_objects">[docs]</a><span class="k">def</span> <span class="nf">duplicate_objects</span><span class="p">(</span><span class="n">objects</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates duplicates of objects, first duplicates are given name &lt;orignial_object_name&gt;.001</span>
-
-<span class="sd">    :param objects: an object or a list of objects to be duplicated</span>
-<span class="sd">    :return: a list of objects</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">objects</span> <span class="o">=</span> <span class="p">[</span><span class="n">objects</span><span class="p">]</span>
-
-    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
-    <span class="n">duplicates</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">duplicates</span></div>
 
 
 <div class="viewcode-block" id="collect_all_orphan_datablocks"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.collect_all_orphan_datablocks">[docs]</a><span class="k">def</span> <span class="nf">collect_all_orphan_datablocks</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>

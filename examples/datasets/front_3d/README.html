@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -479,14 +480,11 @@ Best regards,
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">Json</span><span class="o">-</span><span class="n">File</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Future</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">texture</span><span class="p">}</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">Json</span><span class="o">-</span><span class="n">File</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Future</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">texture</span><span class="p">}</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/front_3d/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
-</ul>
-<p>The three arguments afterwards are used to fill placeholders like <code class="docutils literal notranslate"><span class="pre">&lt;args:0&gt;</span></code> inside this config file.</p>
-<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/front_3d/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">PATH_TO_3D-Front-Json-File</span></code>: path to the 3D-Front json file</li>
 <li><code class="docutils literal notranslate"><span class="pre">PATH_TO_3D-Future</span></code>: path to the folder where all 3D-Future objects are stored</li>
 <li><code class="docutils literal notranslate"><span class="pre">PATH_TO_3D-Front-texture</span></code>: path to the folder where all 3D-Front textures are stored</li>
@@ -496,79 +494,61 @@ Best regards,
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loads the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file: <code class="docutils literal notranslate"><span class="pre">loader.Front3DLoader</span></code> module. It loads all modules and creates the rooms, it furthermore also adds emission shaders to the ceiling and lamps.</li>
-<li>Sets the category_id of the background to 0: <code class="docutils literal notranslate"><span class="pre">manipulators.WorldManipulator</span></code></li>
-<li>Adds cameras to the scene: <code class="docutils literal notranslate"><span class="pre">camera.Front3DCameraSampler</span></code></li>
-<li>Renders rgb, normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders semantic segmentation: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module, removes unnecessary channels for the <code class="docutils literal notranslate"><span class="pre">&quot;distance&quot;</span></code></li>
+<li>Loads the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_front3d</span></code>. It creates the rooms and also adds emission shaders to the ceiling and lamps.</li>
+<li>Adds camera pose to the scene: <code class="docutils literal notranslate"><span class="pre">bproc.camera.add_camera_pose()</span></code>.</li>
+<li>Enables normals and distance (rgb is enabled by default): <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_normals_output()</span></code> <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_distance_output()</span></code>.</li>
+<li>Renders all set camera poses: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.render()</span></code>.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="front3dloader">
 <h3>Front3DLoader<a class="headerlink" href="#front3dloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.Front3DLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;json_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;3D_future_model_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;3D_front_texture_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_front3d</span><span class="p">(</span>
+    <span class="n">json_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">front</span><span class="p">,</span>
+    <span class="n">future_model_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">future_folder</span><span class="p">,</span>
+    <span class="n">front_3D_texture_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">front_3D_texture_path</span><span class="p">,</span>
+    <span class="n">label_mapping</span><span class="o">=</span><span class="n">mapping</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>This module imports an 3D-Front.json file into the scene.</li>
+<li>This imports an 3D-Front.json file into the scene.</li>
 <li>It also needs the path to the <code class="docutils literal notranslate"><span class="pre">3D-FUTURE-model</span></code> and to the <code class="docutils literal notranslate"><span class="pre">3D-Front-texture</span></code></li>
 <li>It is also possible to set the strength of the lights here, check the top of the Front3DLoader for more information.</li>
 </ul>
 </div>
 <div class="section" id="front3dcamerasampler">
 <h3>Front3DCameraSampler<a class="headerlink" href="#front3dcamerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.Front3DCameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-      <span class="p p-Indicator">{</span>
-        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.15</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;avg&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.5</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3.5</span><span class="p p-Indicator">,</span>
-          <span class="p p-Indicator">},</span>
-          <span class="s">&quot;no_background&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1.8</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1.4</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.338</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">proximity_checks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">&quot;avg&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mf">3.5</span><span class="p">},</span> <span class="s2">&quot;no_background&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="ow">and</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="c1"># Sample point inside house</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">point_sampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+    <span class="c1"># Sample rotation (fix around X and Y axis)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mf">1.2217</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.338</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation</span><span class="p">)</span>
+
+    <span class="c1"># Check that obstacles are at least 1 meter away from the camera and have an average distance between 2.5 and 3.5</span>
+    <span class="c1"># meters and make sure that no background is visible, finally make sure the view is interesting enough</span>
+    <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">scene_coverage_score</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="n">special_objects</span><span class="p">,</span> <span class="n">special_objects_weight</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.8</span> \
+            <span class="ow">and</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="n">proximity_checks</span><span class="p">,</span> <span class="n">bvh_tree</span><span class="p">):</span>
+        <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+        <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>This module samples camera poses in the loaded 3D Front scenes</li>
-<li>It will create 10 different camera poses, based on the <code class="docutils literal notranslate"><span class="pre">number_of_samples</span></code></li>
+<li>This samples camera poses in the loaded 3D Front scenes</li>
+<li>It will create 10 different camera poses, based on the <code class="docutils literal notranslate"><span class="pre">poses</span></code></li>
 <li>It will ensure that the min_interest_score is above 0.25, which means that there must be a variety of objects in the scene, this avoids that there are pictures of an empty corridor</li>
 <li>The proximity checks have several conditions:<ul>
 <li>the camera can not be closer than 1.0 (meters) to any object, be aware that we use a sparse sampling here, which might over look thin objects</li>

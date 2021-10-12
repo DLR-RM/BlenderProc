@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -452,7 +453,7 @@
 <img src="../../../images/readme.jpg" alt="Front readme image" width=430>
 </p><p>In contrast to the SUNCG basic example, we improve the materials loaded by SUNCG.
 The procedure shown here could be done with every objects material as long as the material can be selected.</p>
-<p>Furthermore, we do not load precomputed camera poses, but sample them using the <code class="docutils literal notranslate"><span class="pre">SuncgCameraSampler</span></code> module.</p>
+<p>Furthermore, we do not load precomputed camera poses, but sample them.</p>
 <p>This is an advanced example please check these example before:</p>
 <ul class="simple">
 <li><a class="reference internal" href="../suncg_basic/README.html"><span class="doc">sung_basic</span></a>: More on rendering SUNCG scenes with fixed camera poses.</li>
@@ -461,11 +462,11 @@ The procedure shown here could be done with every objects material as long as th
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderpoc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_improved_mat/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_improved_mat/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">house.json&gt;</span></code>: Path to the house.json file of the SUNCG scene you want to render.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/suncg_with_improved_mat/output</span></code>: path to the output directory.</li>
 </ul>
@@ -473,139 +474,64 @@ The procedure shown here could be done with every objects material as long as th
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">suncg_with_improved_mat</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loads a SUNCG scene: <code class="docutils literal notranslate"><span class="pre">loader.SuncgLoader</span></code> module.</li>
-<li>Sample camera positions inside every room: <code class="docutils literal notranslate"><span class="pre">camera.SuncgCameraSampler</span></code> module.</li>
-<li>Automatically adds light sources inside each room: <code class="docutils literal notranslate"><span class="pre">lighting.SuncgLighting</span></code> module.</li>
-<li>After that we change the materials with the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code>, we call it three times, with different values.</li>
-<li>Writes sampled camera poses to file: <code class="docutils literal notranslate"><span class="pre">writer.CameraStateWriter</span></code> module.</li>
-<li>Renders semantic segmentation map: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Renders rgb, distance and normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+<li>Loads a SUNCG scene.</li>
+<li>Sample camera positions inside every room.</li>
+<li>Automatically adds light sources inside each room.</li>
+<li>After that we change the materials three times, with different values.</li>
+<li>Writes sampled camera poses to file.</li>
+<li>Renders semantic segmentation map.</li>
+<li>Renders rgb, distance and normals.</li>
+<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="global">
-<h2>Global<a class="headerlink" href="#global" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;main.Initializer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;global&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;output_dir&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;diffuse_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;glossy_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;transmission_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;transparency_bounces&quot;</span><span class="p p-Indicator">:</span> <span class="nv">200</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>We define here besides the usual <code class="docutils literal notranslate"><span class="pre">output_dir</span></code> also the amount of light bounces done by the path tracer.
-Usually these values can be quite low, but if the materials are more complex higher bounce numbers give better results.
-However, they increase the render time slightly and that’s why they are usually turned off.</p>
-<div class="section" id="suncgcamerasampler">
-<h3>SuncgCameraSampler<a class="headerlink" href="#suncgcamerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.SuncgCameraSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
-      <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.4</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">],</span>
-        <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0.5</span><span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.2217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">}]</span>
-  <span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>With this module we want to sample <code class="docutils literal notranslate"><span class="pre">10</span></code> valid camera poses inside the loaded SUNCG rooms.
-The x and y coordinate are hereby automatically sampled uniformly across a random room, while we configure the z coordinate to lie between <code class="docutils literal notranslate"><span class="pre">0.5m</span></code> and <code class="docutils literal notranslate"><span class="pre">2m</span></code> above the ground.
-Regarding the camera rotation we fix the pitch angle to <code class="docutils literal notranslate"><span class="pre">70°</span></code>, the roll angle to <code class="docutils literal notranslate"><span class="pre">0°</span></code> and sample the yaw angle uniformly between <code class="docutils literal notranslate"><span class="pre">0°</span></code> and <code class="docutils literal notranslate"><span class="pre">360°</span></code>.</p>
-<p>After sampling a pose the pose is only accepted if it is valid according to the properties we have specified:</p>
-<ul class="simple">
-<li>Per default a camera pose is only accepted, if there is no object between it and the floor</li>
-<li>As we enabled <code class="docutils literal notranslate"><span class="pre">proximity_checks</span></code> with a <code class="docutils literal notranslate"><span class="pre">min</span></code> value of <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, we then only accept the pose if every object in front of it is at least 1 meter away</li>
-<li>At the end we also check if the sampled view is interesting enough. Therefore a score is calculated based on the number of objects that are visible and how much space they occupy. Only if the score is above <code class="docutils literal notranslate"><span class="pre">0.4</span></code> the pose is accepted.</li>
-</ul>
-</div>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="materialmanipulator">
 <h3>MaterialManipulator<a class="headerlink" href="#materialmanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;wood.*&quot;</span><span class="p p-Indicator">},</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;laminate.*&quot;</span><span class="p p-Indicator">},</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;beam.*&quot;</span><span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_Roughness&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-       <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-       <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-       <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.05</span><span class="p p-Indicator">,</span>
-       <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_set_Specular&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_color_link_to_displacement&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.001</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.15</span><span class="p p-Indicator">,</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;once_for_each&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># improve the materials, first use all materials and only filter the relevant materials out</span>
+<span class="n">all_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">collect_all</span><span class="p">()</span>
+<span class="n">all_wood_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">all_materials</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;wood.*|laminate.*|beam.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># now change the used values</span>
+<span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">all_wood_materials</span><span class="p">:</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Roughness&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Specular&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_displacement_from_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">))</span>
+
+<span class="n">all_stone_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">all_materials</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;tile.*|brick.*|stone.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># now change the used values</span>
+<span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">all_stone_materials</span><span class="p">:</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Roughness&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Specular&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+<span class="n">all_floor_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">all_materials</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet.*|textile.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># now change the used values</span>
+<span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">all_floor_materials</span><span class="p">:</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Roughness&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Specular&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>This a quite complex module call, that’s why we will call through it from the top to the bottom.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-  <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-    <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;wood.*&quot;</span><span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;laminate.*&quot;</span><span class="p p-Indicator">},</span>
-    <span class="p p-Indicator">{</span><span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;beam.*&quot;</span><span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">]</span>
-<span class="p p-Indicator">}</span>
+<p>This a quite complex call, that’s why we will call through it from the top to the bottom.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">all_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">collect_all</span><span class="p">()</span>
+<span class="n">all_wood_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">all_materials</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;wood.*|laminate.*|beam.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In this first part do we select all materials, which name start with wood, laminate or beam.
 All of those are in the Suncg dataset materials, which look like wood structures.
 If you want to find out how your materials are named, click on the objects during debugging in blender and check their names.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;cf_set_Roughness&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-   <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-   <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-   <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.05</span><span class="p p-Indicator">,</span>
-   <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">all_wood_materials</span><span class="p">:</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Roughness&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Specular&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+    <span class="n">material</span><span class="o">.</span><span class="n">set_displacement_from_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>This step is now repeated two times, with different values.
@@ -613,14 +539,6 @@ We first sample the <code class="docutils literal notranslate"><span class="pre"
 After that we repeat this process for the <code class="docutils literal notranslate"><span class="pre">Specular</span></code> sampling.
 Check this page to understand the possible values better (<a class="reference external" href="https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html#examples">web link</a>).
 You can set any of those values there, even overwrite the <code class="docutils literal notranslate"><span class="pre">&quot;Base</span> <span class="pre">Color&quot;</span></code>, which would remove any linked textures.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="s">&quot;cf_color_link_to_displacement&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-  <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Value&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;float&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.001</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.15</span><span class="p p-Indicator">,</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
 <p>This last option adds displacement to your objects, so the object gets changed based on the color texture.
 This means that a dark spot in the image dents the object inwards at that point and outwards if it is bright.
 This make the surface more real looking as they do not look so flat.</p>

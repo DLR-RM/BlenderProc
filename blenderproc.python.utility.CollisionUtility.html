@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -453,8 +454,30 @@
 <em class="property">class </em><code class="descclassname">blenderproc.python.utility.CollisionUtility.</code><code class="descname">CollisionUtility</code><a class="reference internal" href="_modules/blenderproc/python/utility/CollisionUtility.html#CollisionUtility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.CollisionUtility.CollisionUtility" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="staticmethod">
-<dt id="blenderproc.python.utility.CollisionUtility.CollisionUtility._check_bb_intersection_on_values">
-<em class="property">static </em><code class="descname">_check_bb_intersection_on_values</code><span class="sig-paren">(</span><em>min_b1</em>, <em>max_b1</em>, <em>min_b2</em>, <em>max_b2</em>, <em>used_check=&lt;function CollisionUtility.&lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/CollisionUtility.html#CollisionUtility._check_bb_intersection_on_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.CollisionUtility.CollisionUtility._check_bb_intersection_on_values" title="Permalink to this definition">¶</a></dt>
+<dt id="blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection">
+<em class="property">static </em><code class="descname">check_bb_intersection</code><span class="sig-paren">(</span><em>obj1</em>, <em>obj2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/CollisionUtility.html#CollisionUtility.check_bb_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if there is a bounding box collision, these don’t have to be axis-aligned, but if they are not:
+The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj1</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – object 1  to check for intersection, must be a mesh</li>
+<li><strong>obj2</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – object 2  to check for intersection, must be a mesh</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the two bounding boxes intersect with each other</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection_on_values">
+<em class="property">static </em><code class="descname">check_bb_intersection_on_values</code><span class="sig-paren">(</span><em>min_b1</em>, <em>max_b1</em>, <em>min_b2</em>, <em>max_b2</em>, <em>used_check=&lt;function CollisionUtility.&lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/CollisionUtility.html#CollisionUtility.check_bb_intersection_on_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection_on_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
 namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
 problems.</p>
@@ -468,28 +491,6 @@ problems.</p>
 <li><strong>min_b2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of minimum bounding box points for b2.</li>
 <li><strong>max_b2</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of maximum bounding box points for b2.</li>
 <li><strong>used_check</strong> – The operation used inside of the is_overlapping1D. With that it possible to change the                            collision check from volume and surface check to pure surface or volume checks.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the two bounding boxes intersect with each other</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection">
-<em class="property">static </em><code class="descname">check_bb_intersection</code><span class="sig-paren">(</span><em>obj1</em>, <em>obj2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/CollisionUtility.html#CollisionUtility.check_bb_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.CollisionUtility.CollisionUtility.check_bb_intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if there is a bounding box collision, these don’t have to be axis-aligned, but if they are not:
-The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj1</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – object 1  to check for intersection, must be a mesh</li>
-<li><strong>obj2</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – object 2  to check for intersection, must be a mesh</li>
 </ul>
 </td>
 </tr>

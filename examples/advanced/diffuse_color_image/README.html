@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -454,11 +455,11 @@
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">resources</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">obj</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/diffuse_color_image/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/diffuse_color_image/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/resources/scene.obj</span></code>: path to the object file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/diffuse_color_image/output</span></code>: path to the output directory.</li>
 </ul>
@@ -466,100 +467,16 @@
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">diffuse_color_image</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
-<li>Creates a point light : <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Samples camera positions randomly above the plane looking to the point of interest: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> module.</li>
-<li>Renders rgb, diffuse color, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="objectloader">
-<h3>ObjectLoader<a class="headerlink" href="#objectloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.ObjectLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_diffuse_color_output</span><span class="p">()</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li>This module imports an .obj file into the scene.</li>
-<li>The path of the .obj file should be configured via the parameter <code class="docutils literal notranslate"><span class="pre">path</span></code>.</li>
-<li>Here we are using the first argument given, in the upper command the output path is set to <code class="docutils literal notranslate"><span class="pre">examples/resources/scene.obj</span></code>.</li>
-</ul>
-</div>
-<div class="section" id="rgbrenderer">
-<h3>RgbRenderer<a class="headerlink" href="#rgbrenderer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.RgbRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-     <span class="s">&quot;samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">350</span><span class="p p-Indicator">,</span>
-     <span class="s">&quot;render_normals&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-     <span class="s">&quot;render_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-     <span class="s">&quot;render_diffuse_color&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li>This module just goes through all cam poses and renders a rgb image for each of them.</li>
-<li>The sample amount determines the quality of the rendering, higher sampling reduces noise but increases the render time.</li>
-<li>The output files are stored in the defined output directory (see <a class="reference external" href="https://docs.python.org/3/reference/simple_stmts.html#global" title="(in Python v3.10)"><span class="xref std std-ref">Global</span></a>) and are named like <code class="docutils literal notranslate"><span class="pre">i.png</span></code> where <code class="docutils literal notranslate"><span class="pre">i</span></code> is the cam pose index</li>
-</ul>
-<p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">rgb_0000.png</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb_0001.png</span></code>.</p>
-<p>It also creates the normals and distance and the diffuse color image</p>
-<ul class="simple">
-<li>The diffuse color image, which describes the base color of the textures, is rendered using the <code class="docutils literal notranslate"><span class="pre">.png</span></code> format.</li>
-</ul>
-<p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">diffuse_0000.png</span></code> and <code class="docutils literal notranslate"><span class="pre">diffuse_0001.png</span></code>.</p>
-<p>In this example all of these are temporary and are used in the next module.</p>
-</div>
-<div class="section" id="hdf5writer">
-<h3>Hdf5Writer<a class="headerlink" href="#hdf5writer" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.Hdf5Writer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;postprocessing_modules&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span>
-          <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.TrimRedundantChannels&quot;</span><span class="p p-Indicator">,</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li>The last module now merges all the single temporary files created by the two rendering modules into one <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file per cam pose.</li>
-<li>A <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file can be seen as a dict of numpy arrays, where the keys correspond to the <code class="docutils literal notranslate"><span class="pre">output_key</span></code> defined before.</li>
-<li>The module can also apply some post-processing routines based on two parameters, the <code class="docutils literal notranslate"><span class="pre">output_key</span></code> (in this case <code class="docutils literal notranslate"><span class="pre">distance</span></code>) and the post-processor module, which is in this case <code class="docutils literal notranslate"><span class="pre">postprocessing.TrimRedundantChannels.py</span></code>. This reduces the distance map from 3 channels to a single channel (the other channels exist for internal reasons).</li>
-</ul>
-<p>The file <code class="docutils literal notranslate"><span class="pre">0.h5py</span></code> would therefore look like the following:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;colors&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from rgb_0000.png&gt;,</span>
-  <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from distance_0000.exr&gt;,</span>
-  <span class="s">&quot;normals&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from normals_0000.exr&gt;,</span>
-  <span class="s">&quot;diffuse&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from diffuse_0000.png&gt;,</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li>At the end of the hdf5 writer all temporary files are deleted.</li>
-<li>If you want to keep them, put <code class="docutils literal notranslate"><span class="pre">&quot;output_is_temp&quot;:</span> <span class="pre">False</span></code> into the config of the corresponding module or in the <code class="docutils literal notranslate"><span class="pre">Global</span></code> section.</li>
-</ul>
-<p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">0.h5py</span></code> and <code class="docutils literal notranslate"><span class="pre">1.h5py</span></code></p>
-</div>
+<p>Enable rendering the diffuse color image, which describes the base color of the textures.</p>
 </div>
 </div>
 

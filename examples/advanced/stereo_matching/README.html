@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -458,11 +459,11 @@ areas are consistent and close to the rendered depth images.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cam_pose</span> <span class="n">file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">cam_pose</span> <span class="n">file</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path</span> <span class="n">to</span> <span class="n">house</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/stereo_matching/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/stereo_matching/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">cam_pose</span> <span class="pre">file&gt;</span></code>: Should point to a file which describes one camera pose per line (here the output of <code class="docutils literal notranslate"><span class="pre">scn2cam</span></code> from the <code class="docutils literal notranslate"><span class="pre">SUNCGToolbox</span></code> can be used).</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">house.json&gt;</span></code>: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/stereo_matching/output</span></code>: path to the output directory.</li>
@@ -471,90 +472,32 @@ areas are consistent and close to the rendered depth images.</p>
 <div class="section" id="visualizaton">
 <h2>Visualizaton<a class="headerlink" href="#visualizaton" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">1.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">stereo_matching</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">1.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads a SUNCG scene: <code class="docutils literal notranslate"><span class="pre">loader.SuncgLoader</span></code> module.</li>
-<li>Loads camera positions from a given file: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Automatically adds light sources inside each room: <code class="docutils literal notranslate"><span class="pre">lighting.SuncgLighting</span></code> module.</li>
-<li>Renders semantic segmentation map: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Renders rgb, depth and normals in stereo mode: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Computes depth based on stereo matching: <code class="docutils literal notranslate"><span class="pre">writer.StereoGlobalMatchingWriter</span></code> module</li>
-<li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;pip&quot;</span><span class="p">:</span> <span class="p">[</span>
-      <span class="s2">&quot;h5py&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;python-dateutil==2.1&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;Pillow&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;opencv-contrib-python&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;scipy&quot;</span>
-    <span class="p">]</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable stereo mode and set baseline</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">set_stereo_parameters</span><span class="p">(</span><span class="n">interocular_distance</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">convergence_mode</span><span class="o">=</span><span class="s2">&quot;PARALLEL&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Make sure these python packages are included.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;file_format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;location</span><span class="nv"> </span><span class="s">rotation/value</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_</span><span class="nv"> </span><span class="s">_&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;world_frame_change&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;X&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;-Z&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Y&quot;</span><span class="p p-Indicator">],</span>
-    <span class="s">&quot;default_cam_param&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;forward_vec&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;intrinsics&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;interocular_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.05</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;stereo_convergence_mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;PARALLEL&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;convergence_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.00001</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;cam_K&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">650.018</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">637.962</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">650.018</span><span class="p p-Indicator">,</span> <span class="nv">355.984</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span> <span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">],</span>
-      <span class="s">&quot;resolution_x&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1280</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;resolution_y&quot;</span><span class="p p-Indicator">:</span> <span class="nv">720</span>
-    <span class="p p-Indicator">},</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>Here we specify the camera parameters, some notable points are:</p>
+<p>Here we enable stereo rendering and specify the camera parameters, some notable points are:</p>
 <ul class="simple">
 <li>Setting the <code class="docutils literal notranslate"><span class="pre">interocular_distance</span></code> which is the stereo baseline.</li>
-<li>Specifying <code class="docutils literal notranslate"><span class="pre">stereo_convergence_mode</span></code> to be parallel (i.e. both cameras lie on the same line and are just shifted by <code class="docutils literal notranslate"><span class="pre">interocular_distance</span></code>, and are trivially coplanar).<ul>
-<li>Other options are <code class="docutils literal notranslate"><span class="pre">OFF-AXIS</span></code> where the cameras rotate inwards (converge) up to some plane.</li>
-<li>Check <code class="docutils literal notranslate"><span class="pre">camera.CameraModule</span></code>’s documentation for more info.</li>
+<li>Specifying <code class="docutils literal notranslate"><span class="pre">convergence_mode</span></code> to be <code class="docutils literal notranslate"><span class="pre">&quot;PARALLEL&quot;</span></code> (i.e. both cameras lie on the same line and are just shifted by <code class="docutils literal notranslate"><span class="pre">interocular_distance</span></code>, and are trivially coplanar).<ul>
+<li>Other options are <code class="docutils literal notranslate"><span class="pre">OFF-AXIS</span></code> where the cameras rotate inwards (converge) up to some plane.<ul>
+<li><code class="docutils literal notranslate"><span class="pre">convergence_distance</span></code> is the distance from the cameras to the aforementioned plane they converge to in case of <code class="docutils literal notranslate"><span class="pre">OFF-AXIS</span></code> convergence mode. In this case, this parameter is ignored by Blender, but it is added here for clarification.</li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">Convergence_distance</span></code> is the distance from the cameras to the aforementioned plane they converge to in case of <code class="docutils literal notranslate"><span class="pre">OFF-AXIS</span></code> convergence mode. In this case, this parameter is ignored by Blender, but it is added here for clarification.</li>
-<li>Adding a camera matrix in <code class="docutils literal notranslate"><span class="pre">cam_K</span></code>.</li>
-<li>Adding the image resolution once again in <code class="docutils literal notranslate"><span class="pre">intrinsics</span></code>, since this nested parameter is not on the same level as the global parameters, and thus the global parameters won’t affect any configuration inside <code class="docutils literal notranslate"><span class="pre">intrinsics</span></code>.</li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;renderer.RgbRenderer&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;render_distance&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;render_normals&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;stereo&quot;</span><span class="p p-Indicator">:</span> <span class="nv">true</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply stereo matching to each pair of images</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;stereo-depth&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;disparity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">postprocessing</span><span class="o">.</span><span class="n">stereo_global_matching</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span> <span class="n">disparity_filter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We enable stereo rendering here. Also notice the order of the modules, where the stereo RGB rendering should be added before stereo matching. Orderings generally reflect dependencies.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.StereoGlobalMatchingWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;disparity_filter&quot;</span><span class="p p-Indicator">:</span> <span class="nv">false</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>Finally, we add the module responsible for stereo matching. This module has the following attributes and configurations:</p>
+<p>Here we apply the stereo matching.</p>
 <ul class="simple">
 <li>It is based on OpenCV’s <a class="reference external" href="https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html?highlight=sgbm#stereosgbm-stereosgbm">implementation</a> of <a class="reference external" href="https://elib.dlr.de/73119/1/180Hirschmueller.pdf">stereo semi global matching</a>.</li>
 <li>Its pipeline runs as follows:<ul>
@@ -563,16 +506,12 @@ areas are consistent and close to the rendered depth images.</p>
 <li>Triangulate the depth values using the focal length and disparity.</li>
 <li>Clip the depth map from 0 to <code class="docutils literal notranslate"><span class="pre">depth_max</span></code>, where this value is retrieved from <code class="docutils literal notranslate"><span class="pre">renderer.Renderer</span></code>.</li>
 <li>Apply an optional <a class="reference external" href="https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py">depth completion routine</a>, based on simple image processing techniques. This is enabled by setting <code class="docutils literal notranslate"><span class="pre">depth_completion</span></code>.</li>
-<li>Finally, save the resulting depth map and optionally the disparity map in the .hdf5 file that contains the rendered outputs with keys: <code class="docutils literal notranslate"><span class="pre">stereo-depth</span></code> and <code class="docutils literal notranslate"><span class="pre">disparity</span></code> respectively. This is handled by the module: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code>.</li>
 </ul>
 </li>
-<li>The focal length can be either set manually, or inferred from the field of view angle that in this case should be supplied to the CameraModule. To specify how it should be retrieved, use this config parameter: <code class="docutils literal notranslate"><span class="pre">infer_focal_length_from_fov</span></code></li>
-<li>There are some stereo semi global matching parameters that can be configured from the config file, such as:<ul>
+<li>There are some stereo semi global matching parameters that can be tuned (see fct docs), such as:<ul>
 <li><code class="docutils literal notranslate"><span class="pre">window_size</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">num_disparities</span></code></li>
 <li><code class="docutils literal notranslate"><span class="pre">min_disparity</span></code></li>
-<li>These are usually the most important parameters that need to be tuned. It is advisable that you try the <code class="docutils literal notranslate"><span class="pre">StereoGlobalMatchingWriter</span></code> externally on a few test images
-to tune the parameters, and then apply it in BlenderProc.</li>
 </ul>
 </li>
 </ul>

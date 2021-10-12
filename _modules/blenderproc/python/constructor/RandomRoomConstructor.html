@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -456,7 +457,6 @@
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.modules.provider.getter.Material</span> <span class="kn">import</span> <span class="n">Material</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">check_bb_intersection_on_values</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.CollisionUtility</span> <span class="kn">import</span> <span class="n">CollisionUtility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.EntityUtility</span> <span class="kn">import</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">delete_multiple</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span><span class="p">,</span> <span class="n">create_primitive</span>
@@ -745,7 +745,7 @@
                     <span class="n">collision_face_found</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">for</span> <span class="n">existing_face</span> <span class="ow">in</span> <span class="n">bm</span><span class="o">.</span><span class="n">faces</span><span class="p">:</span>
                         <span class="n">existing_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">co</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">existing_face</span><span class="o">.</span><span class="n">verts</span><span class="p">])</span>
-                        <span class="k">if</span> <span class="n">check_bb_intersection_on_values</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">existing_verts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="k">if</span> <span class="n">CollisionUtility</span><span class="o">.</span><span class="n">check_bb_intersection_on_values</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">existing_verts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span>
                                                            <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">existing_verts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span>
                                                            <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">new_verts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span>
                                                            <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">new_verts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="mi">2</span><span class="p">],</span>

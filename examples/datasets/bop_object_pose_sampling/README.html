@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -454,13 +455,13 @@
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>First make sure that you have downloaded a <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP dataset</a> in the original folder structure. Also please clone the <a class="reference external" href="https://github.com/thodan/bop_toolkit">BOP toolkit</a>.</p>
-<p>In <span class="xref std std-doc">examples/datasets/bop_object_pose_sampling/config.yaml</span> set the <code class="docutils literal notranslate"><span class="pre">blender_install_path</span></code> where Blender is or should be installed.</p>
+<p>In <span class="xref std std-doc">examples/datasets/bop_object_pose_sampling/main.py</span> set the <code class="docutils literal notranslate"><span class="pre">blender_install_path</span></code> where Blender is or should be installed.</p>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_pose_sampling/config.yaml</span></code>: path to the pipeline configuration file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_pose_sampling/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;bop_dataset_name&gt;</span></code>: name of BOP dataset, e.g. lm</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_toolkit&gt;</span></code>: path to the BOP toolkit containing dataset parameters, etc.</li>
@@ -470,136 +471,103 @@
 <div class="section" id="visualization">
 <h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
 <p>Visualize the generated data and labels:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 <p>Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">vis_coco_annotation</span><span class="o">.</span><span class="n">py</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output_dir</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">output_dir</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h1>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Loads object models and camera intrinsics from specified BOP dataset: <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> module.</li>
-<li>Creates a point light sampled inside a shell: <code class="docutils literal notranslate"><span class="pre">lighting.LightSampler</span></code> module.</li>
-<li>Loops over: <code class="docutils literal notranslate"><span class="pre">composite.CameraObjectSampler</span></code> module.<ul>
+<li>Loads object models and camera intrinsics from specified BOP dataset: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop()</span></code>.</li>
+<li>Creates a point light sampled inside a shell</li>
+<li>Loops over five times:<ul>
 <li>Sample Object Poses inside a cube with collision checks</li>
 <li>Sample Camera Poses inside a shell looking at objects</li>
 </ul>
 </li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders instance segmentation masks: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes instance segmentation masks: <code class="docutils literal notranslate"><span class="pre">writer.CocoAnnotationsWriter</span></code> module.</li>
-<li>Writes labels and images to compressed hdf5 files in output_dir: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
-<li>Writes BOP labels: <code class="docutils literal notranslate"><span class="pre">writer.BopWriter</span></code> module.</li>
+<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">bproc.renderer</span></code>.</li>
+<li>Renders instance segmentation masks: <code class="docutils literal notranslate"><span class="pre">bproc.renderer()</span></code>.</li>
+<li>Writes pose labels in BOP format to output_dir: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_bop()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h1>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="python-file-main-py">
+<h1>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="boploader">
 <h2>BopLoader<a class="headerlink" href="#boploader" title="Permalink to this headline">¶</a></h2>
 <p>If <code class="docutils literal notranslate"><span class="pre">scene_id</span></code> is not specified (default = -1), <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> simply loads all or the specified <code class="docutils literal notranslate"><span class="pre">obj_ids</span></code> from the BOP dataset given by <code class="docutils literal notranslate"><span class="pre">bop_dataset_path</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BopLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;bop_dataset_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;/&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;mm2m&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;split&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;val&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;obj_ids&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nv">3</span><span class="p p-Indicator">],</span>
-    <span class="s">&quot;model_type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
+                          <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+                          <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                          <span class="n">split</span> <span class="o">=</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="c1"># careful, some BOP datasets only have test sets</span>
+                          <span class="n">obj_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="cameraobjectsampler">
 <h2>CameraObjectSampler<a class="headerlink" href="#cameraobjectsampler" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;composite.CameraObjectSampler&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;total_noof_cams&quot;</span><span class="p p-Indicator">:</span> <span class="nv">10</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;noof_cams_per_scene&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;object_pose_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;object.ObjectPoseSampler&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;max_iterations&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1000</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;pos_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0.2</span><span class="p p-Indicator">,</span> <span class="nv">0.2</span><span class="p p-Indicator">,</span> <span class="nv">0.2</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">-0.2</span><span class="p p-Indicator">,</span> <span class="nv">-0.2</span><span class="p p-Indicator">,</span> <span class="nv">-0.2</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">},</span>
-        <span class="s">&quot;rot_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">6.28</span><span class="p p-Indicator">,</span> <span class="nv">6.28</span><span class="p p-Indicator">,</span> <span class="nv">6.28</span><span class="p p-Indicator">]</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;camera_pose_sampler&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-          <span class="p p-Indicator">{</span>
-            <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.Shell&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
-              <span class="s">&quot;radius_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;radius_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.2</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;elevation_min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;elevation_max&quot;</span><span class="p p-Indicator">:</span> <span class="nv">89</span>
-            <span class="p p-Indicator">},</span>
-            <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-              <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
-              <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-                <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span><span class="p p-Indicator">,</span>
-                <span class="s">&quot;parameters&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{}</span>
-              <span class="p p-Indicator">}</span>
-            <span class="p p-Indicator">}</span>
-          <span class="p p-Indicator">}</span>
-        <span class="p p-Indicator">]</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample object poses and check collisions</span>
+    <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">sample_poses</span><span class="p">(</span><span class="n">objects_to_sample</span> <span class="o">=</span> <span class="n">bop_objs</span><span class="p">,</span>
+                            <span class="n">sample_pose_func</span> <span class="o">=</span> <span class="n">sample_pose_func</span><span class="p">,</span>
+                            <span class="n">max_tries</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+
+    <span class="c1"># BVH tree used for camera obstacle checks</span>
+    <span class="n">bop_bvh_tree</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_bvh_tree_multi_objects</span><span class="p">(</span><span class="n">bop_objs</span><span class="p">)</span>
+    <span class="n">poses</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Render two camera poses</span>
+    <span class="k">while</span> <span class="n">poses</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># Sample location</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">shell</span><span class="p">(</span><span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                <span class="n">radius_min</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                <span class="n">radius_max</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">,</span>
+                                <span class="n">elevation_min</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                <span class="n">elevation_max</span> <span class="o">=</span> <span class="mi">89</span><span class="p">,</span>
+                                <span class="n">uniform_elevation</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Determine point of interest in scene as the object closest to the mean of a subset of objects</span>
+        <span class="n">poi</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">compute_poi</span><span class="p">(</span><span class="n">bop_objs</span><span class="p">)</span>
+        <span class="c1"># Compute rotation based on vector going from location towards poi</span>
+        <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">poi</span> <span class="o">-</span> <span class="n">location</span><span class="p">,</span> <span class="n">inplane_rot</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.7854</span><span class="p">,</span> <span class="mf">0.7854</span><span class="p">))</span>
+        <span class="c1"># Add homog cam pose based on location an rotation</span>
+        <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">rotation_matrix</span><span class="p">)</span>
+
+        <span class="c1"># Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough</span>
+        <span class="k">if</span> <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span> <span class="n">bop_bvh_tree</span><span class="p">):</span>
+            <span class="c1"># Persist camera pose</span>
+            <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span>
+                                          <span class="n">frame</span> <span class="o">=</span> <span class="n">poses</span><span class="p">)</span>
+            <span class="n">poses</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">composite.CameraObjectSampler</span></code> alternates between sampling new cameras using a <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code> and sampling new object poses using a <code class="docutils literal notranslate"><span class="pre">object.ObjectPoseSampler</span></code>. Additionally, here you set the parameters</p>
-<ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">noof_cams_per_scene</span></code> after which the object poses are resampled</li>
-<li><code class="docutils literal notranslate"><span class="pre">total_noof_cams</span></code> to generate</li>
-</ul>
+<p>This alternates between sampling new cameras using a <code class="docutils literal notranslate"><span class="pre">bproc.camera</span></code> and sampling new object poses using a <code class="docutils literal notranslate"><span class="pre">bproc.object.sample_poses()</span></code>.</p>
 </div>
 <div class="section" id="cocoannotationswriter">
 <h2>CocoAnnotationsWriter<a class="headerlink" href="#cocoannotationswriter" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.CocoAnnotationsWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;supercategory&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_coco_annotations</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;coco_data&#39;</span><span class="p">),</span>
+                            <span class="n">supercategory</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">,</span>
+                            <span class="n">instance_segmaps</span> <span class="o">=</span> <span class="n">seg_data</span><span class="p">[</span><span class="s2">&quot;instance_segmaps&quot;</span><span class="p">],</span>
+                            <span class="n">instance_attribute_maps</span> <span class="o">=</span> <span class="n">seg_data</span><span class="p">[</span><span class="s2">&quot;instance_attribute_maps&quot;</span><span class="p">],</span>
+                            <span class="n">colors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span>
+                            <span class="n">color_file_format</span> <span class="o">=</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">,</span>
+                            <span class="n">append_to_existing_output</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Writes CocoAnnotations of all objects from the given BOP dataset (<code class="docutils literal notranslate"><span class="pre">&quot;supercategory&quot;</span></code>).</p>
 </div>
 <div class="section" id="bopwriter">
 <h2>BopWriter<a class="headerlink" href="#bopwriter" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;writer.BopWriter&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;dataset&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;append_to_existing_output&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;depth_scale&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.0</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;postprocessing_modules&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
-        <span class="p p-Indicator">{</span><span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;postprocessing.Dist2Depth&quot;</span><span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">]</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_bop</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="s1">&#39;bop_data&#39;</span><span class="p">),</span>
+                         <span class="n">dataset</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">,</span>
+                         <span class="n">depths</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">postprocessing</span><span class="o">.</span><span class="n">dist2depth</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]),</span>
+                         <span class="n">depth_scale</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                         <span class="n">colors</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">],</span>
+                         <span class="n">color_file_format</span> <span class="o">=</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">,</span>
+                         <span class="n">append_to_existing_output</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Writes object to camera poses and intrinsics of the given <code class="docutils literal notranslate"><span class="pre">&quot;dataset&quot;:</span> <span class="pre">&quot;&lt;args:1&gt;&quot;</span></code> in BOP format. Converts Blender distance images to depth images. If output folder exists outputs are appended with <code class="docutils literal notranslate"><span class="pre">&quot;append_to_existing_output&quot;:</span> <span class="pre">True</span></code>.</p>
+<p>Writes object to camera poses and intrinsics of the given <code class="docutils literal notranslate"><span class="pre">&quot;dataset&quot;:</span> <span class="pre">&quot;args.bop_dataset_name&quot;</span></code> in BOP format. Converts Blender distance images to depth images. If output folder exists outputs are appended with <code class="docutils literal notranslate"><span class="pre">&quot;append_to_existing_output&quot;:</span> <span class="pre">True</span></code>.</p>
 <p><cite>“depth_scale”: 1.0</cite>: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy and maximum depth value. Default value <cite>“depth_scale”: 1.0</cite> corresponds to 65.54m maximum depth and 1mm accuracy.</p>
 </div>
 </div>

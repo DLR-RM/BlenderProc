@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -457,13 +458,13 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">Json</span><span class="o">-</span><span class="n">File</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Future</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">texture</span><span class="p">}</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">Json</span><span class="o">-</span><span class="n">File</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Future</span><span class="p">}</span> <span class="p">{</span><span class="n">PATH_TO_3D</span><span class="o">-</span><span class="n">Front</span><span class="o">-</span><span class="n">texture</span><span class="p">}</span> <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/front_3d_with_improved_mat/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/front_3d_with_improved_mat/main.py</span></code>: path to the python file with pipeline configuration.</li>
 </ul>
-<p>The three arguments afterwards are used to fill placeholders like <code class="docutils literal notranslate"><span class="pre">&lt;args:0&gt;</span></code> inside this config file.</p>
+<p>The three arguments afterwards are used to fill placeholders like <code class="docutils literal notranslate"><span class="pre">&lt;args:0&gt;</span></code> inside this python file.</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">PATH_TO_3D-Front-Json-File</span></code>: path to the 3D-Front json file</li>
 <li><code class="docutils literal notranslate"><span class="pre">PATH_TO_3D-Future</span></code>: path to the folder where all 3D-Future objects are stored</li>
@@ -471,99 +472,65 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 <li><code class="docutils literal notranslate"><span class="pre">resources/cctextures</span></code>: path to the cc texture folder</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/front_3d_with_improved_mat/output</span></code>: path to the output directory</li>
 </ul>
-<p>Be aware that the default path for the CCMaterialLoader is used, if you want to change this please refer to the documentation in the <code class="docutils literal notranslate"><span class="pre">CCMaterialLoader</span></code> class.</p>
 </div>
 <div class="section" id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>Visualize the generated data:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">visHdf5Files</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_hdf5</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">front_3d_with_improved_mat</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="mf">0.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loads the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file: <code class="docutils literal notranslate"><span class="pre">loader.Front3DLoader</span></code> module. It loads all modules and creates the rooms, it furthermore also adds emission shaders to the ceiling and lamps.</li>
-<li>Sets the category_id of the background to 0: <code class="docutils literal notranslate"><span class="pre">manipulators.WorldManipulator</span></code></li>
-<li>Adds cameras to the scene: <code class="docutils literal notranslate"><span class="pre">camera.Front3DCameraSampler</span></code></li>
-<li>Loads the cc Materials: <code class="docutils literal notranslate"><span class="pre">loader.CCMaterialLoader</span></code></li>
-<li>Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials: <code class="docutils literal notranslate"><span class="pre">manupulators.EntityManipulator</span></code></li>
-<li>Renders rgb, normals: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-<li>Renders semantic segmentation: <code class="docutils literal notranslate"><span class="pre">renderer.SegMapRenderer</span></code> module.</li>
-<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module, removes unnecessary channels for the <code class="docutils literal notranslate"><span class="pre">&quot;distance&quot;</span></code></li>
+<li>Loads the <code class="docutils literal notranslate"><span class="pre">.json</span></code> file: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_front3d</span></code>. It creates the rooms and also adds emission shaders to the ceiling and lamps.</li>
+<li>Adds camera pose to the scene: <code class="docutils literal notranslate"><span class="pre">bproc.camera.add_camera_pose()</span></code>.</li>
+<li>Loading the cc material: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_ccmaterials()</span></code>.</li>
+<li>The material is filtered: <code class="docutils literal notranslate"><span class="pre">bproc.filter.by_attr()</span></code>.</li>
+<li>Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials.</li>
+<li>Enables normals and distance (rgb is enabled by default): <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_normals_output()</span></code> <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_distance_output()</span></code>.</li>
+<li>Renders all set camera poses: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.render()</span></code>.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">bproc.writer.write_hdf5()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python-file-main-py">
+<h2>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ccmaterialloader">
 <h3>CCMaterialLoader<a class="headerlink" href="#ccmaterialloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;folder_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:2&gt;&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;used_assets&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;Bricks&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Wood&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Carpet&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tile&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Marble&quot;</span><span class="p p-Indicator">]</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cc_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_ccmaterials</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cc_material_path</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Bricks&quot;</span><span class="p">,</span> <span class="s2">&quot;Wood&quot;</span><span class="p">,</span> <span class="s2">&quot;Carpet&quot;</span><span class="p">,</span> <span class="s2">&quot;Tile&quot;</span><span class="p">,</span> <span class="s2">&quot;Marble&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">folder_path</span></code> if the script was used, should be <code class="docutils literal notranslate"><span class="pre">&quot;resources/cctextures&quot;</span></code>
-This module loads the assets which names contain a string listed in <code class="docutils literal notranslate"><span class="pre">&quot;used_assets&quot;</span></code>.
+This loads the assets which names contain a string listed in <code class="docutils literal notranslate"><span class="pre">&quot;used_assets&quot;</span></code>.
 These will be later used to replace the materials in the 3D-Front scenes.</p>
 </div>
 <div class="section" id="entity-manipulator">
 <h3>Entity Manipulator<a class="headerlink" href="#entity-manipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floor.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_randomize_materials&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;randomization_level&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.95</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;materials_to_replace_with&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;random_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_is_cc_texture&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">floors</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Floor.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">floor</span> <span class="ow">in</span> <span class="n">floors</span><span class="p">:</span>
+    <span class="c1"># For each material of the object</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">floor</span><span class="o">.</span><span class="n">get_materials</span><span class="p">())):</span>
+        <span class="c1"># In 95% of all cases</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.95</span><span class="p">:</span>
+            <span class="c1"># Replace the material with a random one</span>
+            <span class="n">floor</span><span class="o">.</span><span class="n">set_material</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">cc_materials</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>This is one of the <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> which swaps the materials of the selected objects, with the materials which are used to replace them.
-It will replace 95% of all materials of object, which are selected via the <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code>.
-The materials which are used to replace the existing ones all have to be from the CCMaterialLoader, which adds to each loaded material the custom property of <code class="docutils literal notranslate"><span class="pre">&quot;cp_is_cc_texture&quot;</span></code>.</p>
+<p>This is one of the manipulators which swaps the materials of the selected objects, with the materials which are used to replace them.
+It will replace 95% of all materials of object, which are selected via the <code class="docutils literal notranslate"><span class="pre">bproc.filter.by_attr()</span></code>.</p>
 <p>A further example is:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Wall.*&quot;</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">},</span>
-    <span class="s">&quot;cf_randomize_materials&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;randomization_level&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.1</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;materials_to_replace_with&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;random_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;cp_is_cc_texture&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span><span class="p p-Indicator">,</span>
-          <span class="s">&quot;cp_asset_name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Marble.*&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">}</span>
-    <span class="p p-Indicator">}</span>
-  <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">walls</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Wall.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">marble_materials</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_cp</span><span class="p">(</span><span class="n">cc_materials</span><span class="p">,</span> <span class="s2">&quot;asset_name&quot;</span><span class="p">,</span> <span class="s2">&quot;Marble.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">wall</span> <span class="ow">in</span> <span class="n">walls</span><span class="p">:</span>
+    <span class="c1"># For each material of the object</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wall</span><span class="o">.</span><span class="n">get_materials</span><span class="p">())):</span>
+        <span class="c1"># In 50% of all cases</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="c1"># Replace the material with a random one</span>
+            <span class="n">wall</span><span class="o">.</span><span class="n">set_material</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">marble_materials</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, which names start with <code class="docutils literal notranslate"><span class="pre">&quot;Marble&quot;</span></code>.
+<p>Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, whose names start with <code class="docutils literal notranslate"><span class="pre">&quot;Marble&quot;</span></code>.
 Also pay attention that only 10% of all materials are replaced, to not over load the rooms with marble.</p>
 </div>
 </div>

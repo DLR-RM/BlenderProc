@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -454,11 +455,11 @@ from left to right, FLAT, AUTO and SMOOTH shading.</p>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>Execute in the Blender-Pipeline main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">run</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">camera_position</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">camera_position</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">scene</span><span class="o">.</span><span class="n">blend</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">auto_shading</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/auto_shading/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/advanced/auto_shading/main.py</span></code>: path to the main python file to run.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/auto_shading/camera_position</span></code>: text file with parameters of camera positions.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/auto_shading/scene.blend</span></code>: path to the blend file with the basic scene.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/advanced/auto_shading/output</span></code>: path to the output directory.</li>
@@ -468,40 +469,13 @@ from left to right, FLAT, AUTO and SMOOTH shading.</p>
 <h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
 <p>The rendered image as shown above can be found in the output directory.</p>
 </div>
-<div class="section" id="steps">
-<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Loads <code class="docutils literal notranslate"><span class="pre">scene.blend</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.BlendLoader</span></code> module.</li>
-<li>Selects materials based on the condition and changes some parameters of the selected materials: <code class="docutils literal notranslate"><span class="pre">material.MaterialManipulator</span></code> module.</li>
-<li>Selects objects based on the condition: <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> module. Used here to set the different shading modes for each object.</li>
-<li>Creates a point light : <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
-<li>Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Renders rgb: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
-</ul>
-</div>
-<div class="section" id="config-file">
-<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="entitymanipulator">
-<h3>EntityManipulator<a class="headerlink" href="#entitymanipulator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
-    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.EntityManipulator&quot;</span><span class="p p-Indicator">,</span>
-    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
-        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
-          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Sphere&quot;</span>
-        <span class="p p-Indicator">}</span>
-      <span class="p p-Indicator">},</span>
-      <span class="s">&quot;cf_set_shading&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;AUTO&quot;</span><span class="p p-Indicator">,</span>
-      <span class="s">&quot;cf_shading_auto_smooth_angle_in_deg&quot;</span><span class="p p-Indicator">:</span> <span class="nv">45</span>
-    <span class="p p-Indicator">}</span>
-<span class="p p-Indicator">}</span>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sphere</span><span class="o">.</span><span class="n">set_shading_mode</span><span class="p">(</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Using the <code class="docutils literal notranslate"><span class="pre">manipulators.EntityManipulator</span></code> we can manipulate properties of the entity selected by <code class="docutils literal notranslate"><span class="pre">name</span></code> using the <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code> provider.
-Here, we assign <code class="docutils literal notranslate"><span class="pre">AUTO</span></code> to the shading function <code class="docutils literal notranslate"><span class="pre">cf_set_shading</span></code> and also specify the angle (in degrees) up to which we want to apply smoothing.
-All angles greater 45 degrees will be shaded flat.</p>
-</div>
+<p>Each MeshObject has a shading mode (‘flat’, ‘smooth’, ‘auto’). For ‘auto’ you specify the angle (in degrees) up to which shading is smooth.
+All angles greater 45 degrees will be shaded flat, here.</p>
 </div>
 </div>
 

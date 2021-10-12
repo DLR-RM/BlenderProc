@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -569,102 +570,6 @@ point plus the normal times the radius. No faces are generated.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.check_bb_intersection">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">check_bb_intersection</code><span class="sig-paren">(</span><em>obj1</em>, <em>obj2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#check_bb_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.check_bb_intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if there is a bounding box collision, these don’t have to be axis-aligned, but if they are not:
-The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – object 1  to check for intersection, must be a mesh</li>
-<li><strong>obj2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – object 2  to check for intersection, must be a mesh</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the two bounding boxes intersect with each other</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.check_bb_intersection_on_values">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">check_bb_intersection_on_values</code><span class="sig-paren">(</span><em>min_b1</em>, <em>max_b1</em>, <em>min_b2</em>, <em>max_b2</em>, <em>used_check=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#check_bb_intersection_on_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.check_bb_intersection_on_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
-namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
-problems.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>min_b1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – List of minimum bounding box points for b1.</li>
-<li><strong>max_b1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – List of maximum bounding box points for b1.</li>
-<li><strong>min_b2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – List of minimum bounding box points for b2.</li>
-<li><strong>max_b2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – List of maximum bounding box points for b2.</li>
-<li><strong>used_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]) – The operation used inside of the is_overlapping1D. With that it possible to change the                        collision check from volume and surface check to pure surface or volume checks.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the two bounding boxes intersect with each other</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.check_if_uv_coordinates_are_set">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">check_if_uv_coordinates_are_set</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#check_if_uv_coordinates_are_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.check_if_uv_coordinates_are_set" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – should be an object, which has a mesh</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.check_intersection">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">check_intersection</code><span class="sig-paren">(</span><em>obj1</em>, <em>obj2</em>, <em>skip_inside_check=False</em>, <em>bvh_cache=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#check_intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.check_intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the two objects are intersecting.</p>
-<p>This will use BVH trees to check whether the objects are overlapping.</p>
-<p>It is further also checked if one object is completely inside the other.
-This check requires that both objects are watertight, have correct normals and are coherent.
-If this is not the case it can be disabled via the parameter skip_inside_check.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj1</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – object 1 to check for intersection, must be a mesh</li>
-<li><strong>obj2</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – object 2 to check for intersection, must be a mesh</li>
-<li><strong>skip_inside_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Disables checking whether one object is completely inside the other.</li>
-<li><strong>bvh_cache</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code>]]) – Dict of all the bvh trees, removes the <cite>obj</cite> from the cache before adding it again.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code>]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True, if they are intersecting</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="blenderproc.python.utility.BlenderUtility.collect_all_orphan_datablocks">
 <code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">collect_all_orphan_datablocks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#collect_all_orphan_datablocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.collect_all_orphan_datablocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all orphan data blocks grouped by their type</p>
@@ -752,42 +657,6 @@ If this is not the case it can be disabled via the parameter skip_inside_check.<
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.create_bvh_tree_for_object">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">create_bvh_tree_for_object</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#create_bvh_tree_for_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.create_bvh_tree_for_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a fresh BVH tree for the given object</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – The object</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The BVH tree</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.duplicate_objects">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">duplicate_objects</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#duplicate_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.duplicate_objects" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates duplicates of objects, first duplicates are given name &lt;orignial_object_name&gt;.001</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>]]) – an object or a list of objects to be duplicated</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of objects</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="blenderproc.python.utility.BlenderUtility.get_all_blender_mesh_objects">
 <code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">get_all_blender_mesh_objects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#get_all_blender_mesh_objects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.get_all_blender_mesh_objects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all mesh objects in the scene
@@ -812,33 +681,6 @@ If this is not the case it can be disabled via the parameter skip_inside_check.<
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.get_bound_volume">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">get_bound_volume</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#get_bound_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.get_bound_volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the volume of a possible orientated bounding box.
-:type obj: <code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>
-:param obj: Mesh object.
-:rtype: <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
-:return: volume of a bounding box.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.get_bounds">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">get_bounds</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#get_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.get_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – a mesh object</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[8x[3xfloat]] the object aligned bounding box coordinates in world coordinates</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="blenderproc.python.utility.BlenderUtility.get_node_attributes">
 <code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">get_node_attributes</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#get_node_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.get_node_attributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all properties identifiers if they should not be ignored</p>
@@ -851,32 +693,6 @@ If this is not the case it can be disabled via the parameter skip_inside_check.<
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of attributes of the given node</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.is_point_inside_object">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">is_point_inside_object</code><span class="sig-paren">(</span><em>obj</em>, <em>obj_BVHtree</em>, <em>point</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#is_point_inside_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.is_point_inside_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks whether the given point is inside the given object.</p>
-<p>This only works if the given object is watertight and has correct normals</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Object</span></code>) – The object</li>
-<li><strong>obj_BVHtree</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code>) – A bvh tree of the object</li>
-<li><strong>point</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The point to check</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True, if the point is inside the object</p>
-</td>
 </tr>
 </tbody>
 </table>
@@ -901,50 +717,6 @@ If this is not the case it can be disabled via the parameter skip_inside_check.<
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The numpy array</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.local_to_world">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">local_to_world</code><span class="sig-paren">(</span><em>coords</em>, <em>world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#local_to_world"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.local_to_world" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a cords transformed to the given transformation world matrix</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>coords</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – coordinates a tuple of 3 values for x,y,z</li>
-<li><strong>world</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – world matrix &lt;- transformation matrix</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.python.utility.BlenderUtility.vector_to_euler">
-<code class="descclassname">blenderproc.python.utility.BlenderUtility.</code><code class="descname">vector_to_euler</code><span class="sig-paren">(</span><em>vector</em>, <em>vector_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/BlenderUtility.html#vector_to_euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.BlenderUtility.vector_to_euler" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>vector</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>) – UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.</li>
-<li><strong>vector_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Type of an input vector: UP or FORWARD. Type: string.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Euler</span></code></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.</p>
 </td>
 </tr>
 </tbody>

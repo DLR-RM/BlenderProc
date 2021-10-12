@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -449,7 +450,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.modules.main.Provider</span> <span class="kn">import</span> <span class="n">Provider</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_bounds</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span>
 
 
 <div class="viewcode-block" id="Attribute"><a class="viewcode-back" href="../../../../../../blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">[docs]</a><span class="k">class</span> <span class="nc">Attribute</span><span class="p">(</span><span class="n">Provider</span><span class="p">):</span>
@@ -596,7 +597,7 @@
             <span class="k">elif</span> <span class="n">look_for</span> <span class="ow">in</span> <span class="n">obj</span> <span class="ow">and</span> <span class="n">cp_search</span><span class="p">:</span>
                 <span class="n">raw_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="n">look_for</span><span class="p">])</span>
             <span class="k">elif</span> <span class="n">look_for</span> <span class="o">==</span> <span class="s2">&quot;bounding_box_means&quot;</span> <span class="ow">and</span> <span class="n">cf_search</span><span class="p">:</span>
-                <span class="n">bb_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">get_bounds</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">bb_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">MeshObject</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">get_bound_box</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">raw_result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">bb_mean</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unknown parameter name: &quot;</span> <span class="o">+</span> <span class="n">look_for</span><span class="p">)</span>
