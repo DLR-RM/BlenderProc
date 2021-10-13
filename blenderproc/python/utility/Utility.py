@@ -15,6 +15,7 @@ import json
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
+from blenderproc.version import __version__
 
 
 def resolve_path(path: str) -> str:
@@ -161,8 +162,7 @@ class Utility:
         try:
             repo = git.Repo(search_parent_directories=True)
         except git.InvalidGitRepositoryError as e:
-            warnings.warn("Invalid git repository")
-            return None
+            return __version__
         return repo.head.object.hexsha
 
     @staticmethod
