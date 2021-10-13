@@ -5,8 +5,12 @@ import numpy as np
 import bmesh
 import mathutils
 from mathutils import Vector, Matrix
-from blenderproc.external.vhacd.decompose import convex_decomposition
+from sys import platform
 
+
+if platform != "win32":
+    # this is only supported under linux and mac os, the import itself already doesn't work under windows
+    from blenderproc.external.vhacd.decompose import convex_decomposition
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
@@ -218,6 +222,9 @@ class MeshObject(Entity):
         :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
         :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
         """
+        if platform == "win32":
+            raise Exception("This is currently not supported under Windows")
+
         if temp_dir is None:
             temp_dir = Utility.get_temporary_directory()
 
