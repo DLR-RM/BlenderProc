@@ -11,7 +11,7 @@ Make sure that you downloaded the [BOP datasets](https://bop.felk.cvut.cz/datase
 Execute in the BlenderProc main directory:
 
 ```
-python scripts/download_cc_textures.py 
+blenderproc download cc_textures 
 ```
 
 ```

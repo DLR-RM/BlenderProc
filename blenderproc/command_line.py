@@ -11,32 +11,54 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.InstallUtility import InstallUtility
 
 def cli():
-    parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic training image generation.")
+    
+    options = {
+        "vis": {
+            'hdf5': "Visualizes the content of one or multiple .hdf5 files.", 
+            'coco': "Visualizes the annotations written in coco format."
+            }, 
+        "extract": {
+            'hdf5': "Extracts images out of an hdf5 file into separate image files."
+            },
+        "download": {
+            'blenderkit': "Downloads materials and models from blenderkit.",
+            'cc_textures': "Downloads textures from cc0textures.com.",
+            'haven': "Downloads HDRIs, Textures and Models from polyhaven.com.",
+            'ikea': "Downloads the IKEA dataset.",
+            'pix3d': "Downloads the Pix3D dataset.",
+            'scenenet': "Downloads the scenenet dataset."
+            },
+        "pip": {
+            'install': "Installs package in the Blender python environment", 
+            'uninstall': "Uninstalls package in the Blender python environment"
+            },
+    }
+    
+    parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic image generation.", formatter_class=argparse.RawTextHelpFormatter)
     subparsers = parser.add_subparsers(dest='mode', help="Select a BlenderProc command to run:")
 
     # Setup different modes
     parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
     parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
+    parser_vis = subparsers.add_parser('vis', help="Visualize the content of BlenderProc output files. \nOptions: {}".format(", ".join(options['vis'])), formatter_class=argparse.RawTextHelpFormatter)
+    parser_download = subparsers.add_parser('download', help="Download datasets, materials or 3D models to run examples or your own pipeline. \nOptions: {}".format(", ".join(options['download'])), formatter_class=argparse.RawTextHelpFormatter)
+    parser_extract = subparsers.add_parser('extract', help="Extract the raw images from generated containers such as hdf5. \nOptions: {}".format(", ".join(options['extract'])), formatter_class=argparse.RawTextHelpFormatter)
+    parser_pip = subparsers.add_parser('pip', help="Can be used to install/uninstall pip packages in the Blender python environment. \nOptions: {}".format(", ".join(options['pip'])), formatter_class=argparse.RawTextHelpFormatter)
 
-    # Adds modes for scripts
-    parser_scripts = []
-    # A dict that contains command and help text
-    scripts = {
-        "vis_hdf5": "Visualizes the content of one or multiple .hdf5 files.",
-        "vis_coco": "Visualizes the annotations written in coco format.",
-        "extract_hdf5": "Extracts images out of an hdf5 file into separate image files.",
-        "download_blenderkit": "Downloads materials and models from blenderkit.",
-        "download_cc_textures": "Downloads textures from cc0textures.com.",
-        "download_haven": "Downloads HDRIs, Textures and Models from polyhaven.com.",
-        "download_ikea": "Downloads the IKEA dataset.",
-        "download_pix3d": "Downloads the Pix3D dataset.",
-        "download_scenenet": "Downloads the scenenet dataset.",
-    }
-    for script_command, script_help in scripts.items():
-        parser_scripts.append(subparsers.add_parser(script_command, add_help=False, help=script_help))
-
-    parser_pip = subparsers.add_parser('pip', help="Can be used to install/uninstall pip packages in Blenders python environment.")
-    parser_pip.add_argument('pip_mode', choices=["install", "uninstall"], help="The pip mode to run. Currently only install and uninstall is supported.")
+    sub_parser_vis = parser_vis.add_subparsers(dest='vis_mode')
+    for cmd, help in options['vis'].items():
+        sub_parser_vis.add_parser(cmd, help=help, add_help=False)
+        
+    sub_parser_download = parser_download.add_subparsers(dest='download_mode')
+    for cmd, help in options['download'].items():
+        sub_parser_download.add_parser(cmd, help=help, add_help=False)
+        
+    sub_parser_extract = parser_extract.add_subparsers(dest='extract_mode')
+    for cmd, help in options['extract'].items():
+        sub_parser_extract.add_parser(cmd, help=help, add_help=False)
+    
+    format_dict = lambda d : '\n'.join("{}: {}".format(key, value) for key, value in d.items())
+    parser_pip.add_argument('pip_mode', choices=options['pip'], help=format_dict(options['pip']))
     parser_pip.add_argument('pip_packages', metavar='pip_packages', nargs='*', help='A list of pip packages that should be installed/uninstalled. Packages versions can be determined via the `==` notation.')
 
     # Setup all common arguments of run and debug mode
@@ -116,28 +138,28 @@ def cli():
         clean_temp_dir()
 
         exit(p.returncode)
-    elif args.mode in scripts.keys():
-        # Import the required entry point
-        if args.mode == "vis_hdf5":
+    # Import the required entry point
+    elif args.mode in ["vis", "extract", "download"]:
+        if args.mode == "vis" and args.vis_mode == "hdf5":
             from blenderproc.scripts.visHdf5Files import cli
-        elif args.mode == "vis_coco":
+        elif args.mode == "vis" and args.vis_mode == "coco":
             from blenderproc.scripts.vis_coco_annotation import cli
-        elif args.mode == "extract_hdf5":
+        elif args.mode == "extract" and args.extract_mode == "hdf5":
             from blenderproc.scripts.saveAsImg import cli
-        elif args.mode == "download_blenderkit":
+        elif args.mode == "download" and args.download_mode == "blenderkit":
             from blenderproc.scripts.download_blenderkit import cli
-        elif args.mode == "download_cc_textures":
+        elif args.mode == "download" and args.download_mode == "cc_textures":
             from blenderproc.scripts.download_cc_textures import cli
-        elif args.mode == "download_haven":
+        elif args.mode == "download" and args.download_mode == "haven":
             from blenderproc.scripts.download_haven import cli
-        elif args.mode == "download_ikea":
+        elif args.mode == "download" and args.download_mode == "ikea":
             from blenderproc.scripts.download_ikea import cli
-        elif args.mode == "download_pix3d":
+        elif args.mode == "download" and args.download_mode == "pix3d":
             from blenderproc.scripts.download_pix3d import cli
-        elif args.mode == "download_scenenet":
+        elif args.mode == "download" and args.download_mode == "scenenet":
             from blenderproc.scripts.download_scenenet import cli
         else:
-            raise Exception("There is no linked script for the command: " + args.mode)
+            raise Exception("There is no linked script for the command: {}. Options are: {}".format(args.mode, options[args.mode]))
 
         # Remove the first argument (its the script name)
         sys.argv = sys.argv[:1] + unknown_args

@@ -30,7 +30,7 @@ blenderpoc run examples/datasets/suncg_with_improved_mat/main.py <path to house.
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/datasets/suncg_with_improved_mat/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/suncg_with_improved_mat/output/0.hdf5
 ```
 
 ## Steps

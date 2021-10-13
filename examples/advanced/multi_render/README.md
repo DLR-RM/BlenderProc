@@ -25,7 +25,7 @@ blenderproc run examples/advanced/multi_render/main.py <PATH_TO_ShapeNetCore.v2>
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/multi_render/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/multi_render/output/0.hdf5
 ```
 
 ## Steps

@@ -30,7 +30,7 @@ Make sure that you have downloaded the `ikea` dataset and the `cctextures` befor
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/advanced/random_room_constructor/output/*.hdf5
+blenderproc vis hdf5 examples/advanced/random_room_constructor/output/*.hdf5
 ``` 
 
 ## Implementation

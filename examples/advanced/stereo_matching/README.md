@@ -24,7 +24,7 @@ blenderproc run examples/advanced/stereo_matching/main.py <path to cam_pose file
 ## Visualizaton
 Visualize the generated data:
 ```
-blenderproc vis_hdf5 examples/advanced/stereo_matching/output/1.hdf5
+blenderproc vis hdf5 examples/advanced/stereo_matching/output/1.hdf5
 ```
 
 ## Implementation

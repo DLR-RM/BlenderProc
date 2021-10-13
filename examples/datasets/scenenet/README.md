@@ -30,7 +30,7 @@ Please remove the `1Office/3_hereisfree_not_labelled.obj` at it is not supported
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/datasets/scenenet/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/scenenet/output/*.hdf5
 ``` 
 
 ## Steps
