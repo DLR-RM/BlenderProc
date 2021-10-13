@@ -2,7 +2,7 @@ import os
 import h5py
 import argparse
 import numpy as np
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 import sys
 import json
 import re
