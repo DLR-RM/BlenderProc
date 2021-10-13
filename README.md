@@ -5,7 +5,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <p align="center">
-<img src="https://drive.google.com/uc?id=1vfo3p5AJigXNt2GQQKb017Cve8lFK9f1" alt="Front readme image" width=100%>
+<img src="https://user-images.githubusercontent.com/6104887/137109535-275a2aa3-f5fd-4173-9d16-a9a9b86f66e7.gif" alt="Front readme image" width=100%>
 </p>
 
 A procedural Blender pipeline for photorealistic rendering.
