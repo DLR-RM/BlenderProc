@@ -126,8 +126,6 @@ The pipeline can be run multiple times, as in the beginning of each run the scen
 
 As you now ran your first BlenderProc script, your ready to learn the basics:
 
-<!---.. _tutorials: ---> 
-
 ### Tutorials
 
 Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:
