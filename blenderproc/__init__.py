@@ -1,5 +1,6 @@
 import os
 import sys
+from .version import __version__
 
 # check the python version, only python 3.X is allowed:
 if sys.version_info.major < 3:
