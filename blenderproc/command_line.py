@@ -45,11 +45,19 @@ def cli():
     parser_extract = subparsers.add_parser('extract', help="Extract the raw images from generated containers such as hdf5. \nOptions: {}".format(", ".join(options['extract'])), formatter_class=argparse.RawTextHelpFormatter)
     parser_pip = subparsers.add_parser('pip', help="Can be used to install/uninstall pip packages in the Blender python environment. \nOptions: {}".format(", ".join(options['pip'])), formatter_class=argparse.RawTextHelpFormatter)
 
-    format_dict = lambda d : '\n'.join("{}: {}".format(key, value) for key, value in d.items())
+    sub_parser_vis = parser_vis.add_subparsers(dest='vis_mode')
+    for cmd, help in options['vis'].items():
+        sub_parser_vis.add_parser(cmd, help=help, add_help=False)
+        
+    sub_parser_download = parser_download.add_subparsers(dest='download_mode')
+    for cmd, help in options['download'].items():
+        sub_parser_download.add_parser(cmd, help=help, add_help=False)
+        
+    sub_parser_extract = parser_extract.add_subparsers(dest='extract_mode')
+    for cmd, help in options['extract'].items():
+        sub_parser_extract.add_parser(cmd, help=help, add_help=False)
     
-    parser_vis.add_argument('vis_mode', choices=options['vis'], help=format_dict(options['vis']))
-    parser_download.add_argument('download_mode', choices=options['download'], help=format_dict(options['download']))
-    parser_extract.add_argument('extract_mode', choices=options['extract'], help=format_dict(options['extract']))
+    format_dict = lambda d : '\n'.join("{}: {}".format(key, value) for key, value in d.items())
     parser_pip.add_argument('pip_mode', choices=options['pip'], help=format_dict(options['pip']))
     parser_pip.add_argument('pip_packages', metavar='pip_packages', nargs='*', help='A list of pip packages that should be installed/uninstalled. Packages versions can be determined via the `==` notation.')
 
