@@ -1,15 +1,14 @@
-# BlenderProc
+# BlenderProc2
 
 [![Documentation](https://img.shields.io/badge/documentation-passing-brightgreen.svg)](https://dlr-rm.github.io/BlenderProc/)
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basics/basic/basic_example.ipynb)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A procedural Blender pipeline for photorealistic image generation.
-
 <p align="center">
-<img src="images/readme.jpg" alt="Front readme image" width=500>
+<img src="https://drive.google.com/uc?id=1vfo3p5AJigXNt2GQQKb017Cve8lFK9f1" alt="Front readme image" width=100%>
 </p>
 
+A procedural Blender pipeline for photorealistic rendering.
 
 [Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
 ## Features
