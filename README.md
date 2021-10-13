@@ -13,8 +13,8 @@ A procedural Blender pipeline for photorealistic rendering.
 [Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
 ## Features
 
-* Loading: `*.obj`, `*.ply`, BOP datasets, ShapeNet, Haven, 3D-FRONT, etc.
-* Objects: Sample object poses, apply physics and collision checking.
+* Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
+* Objects: Set or sample object poses, apply physics and collision checking.
 * Materials: Set or sample physically-based materials and textures
 * Lighting: Set or sample lights, automatic lighting of 3D-FRONT scenes.
 * Cameras: Set, sample or load camera poses from file.
@@ -99,7 +99,7 @@ BlenderProc now creates the specified scene and renders the image into `output/0
 To visualize that image, simply call:
 
 ```bash
-blenderproc vis_hdf5 output/0.hdf5
+blenderproc vis hdf5 output/0.hdf5
 ```
 
 Thats it! You rendered your first image with BlenderProc!
