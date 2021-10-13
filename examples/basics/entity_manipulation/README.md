@@ -23,7 +23,7 @@ blenderproc run examples/basics/entity_manipulation/main.py examples/resources/s
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/basics/entity_manipulation/output/0.hdf5
+blenderproc vis hdf5 examples/basics/entity_manipulation/output/0.hdf5
 ```
 
 ## Steps

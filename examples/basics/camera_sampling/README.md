@@ -26,7 +26,7 @@ blenderproc run examples/basics/camera_sampling/main.py examples/resources/scene
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/basics/camera_sampling/output/0.hdf5
+blenderproc vis hdf5 examples/basics/camera_sampling/output/0.hdf5
 ```
 
 ## Steps

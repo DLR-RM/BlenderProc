@@ -21,7 +21,7 @@ blenderpoc run examples/datasets/suncg_with_cam_sampling/main.py <path to house.
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/datasets/suncg_with_cam_sampling/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/suncg_with_cam_sampling/output/0.hdf5
 ```
 
 ## Steps

@@ -31,7 +31,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/datasets/front_3d_with_improved_mat/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/front_3d_with_improved_mat/output/0.hdf5
 ```
 
 ## Steps

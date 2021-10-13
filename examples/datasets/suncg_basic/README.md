@@ -22,7 +22,7 @@ blenderpoc run examples/datasets/suncg_basic/main.py <path to cam_pose file> <pa
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/datasets/suncg_basic/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/suncg_basic/output/0.hdf5
 ```
 
 ## Steps

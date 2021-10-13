@@ -22,7 +22,7 @@ blenderproc run examples/advanced/on_surface_object_sampling/main.py examples/re
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/on_surface_object_sampling/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/on_surface_object_sampling/output/0.hdf5
 ```
 
 ## Implementation

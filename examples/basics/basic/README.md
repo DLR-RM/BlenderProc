@@ -27,7 +27,7 @@ The three arguments afterwards are used by the `argparser` at the top of the `ma
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/basics/basic/output/0.hdf5
+blenderproc vis hdf5 examples/basics/basic/output/0.hdf5
 ```
 
 ## Steps
