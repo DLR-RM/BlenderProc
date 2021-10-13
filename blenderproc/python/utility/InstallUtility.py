@@ -73,7 +73,7 @@ class InstallUtility:
                           "on this machine.".format(join("/home_local", user_name), home_path))
                     # Replace the seperator from '/' to the os-specific one
                     # Since all example config files use '/' as seperator
-                    blender_install_path = blender_install_path.replace('/'.join(["/home_local", user_name]), home_path, 1)
+                    blender_install_path = blender_install_path.replace(os.path.join("/home_local", user_name), home_path, 1)
                     blender_install_path = blender_install_path.replace('/', os.path.sep)
             else:
                 blender_install_path = "blender"
