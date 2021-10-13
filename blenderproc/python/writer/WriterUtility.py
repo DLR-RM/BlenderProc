@@ -9,6 +9,7 @@ import mathutils
 import h5py
 
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
+from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.Utility import resolve_path, Utility, NumpyEncoder
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, \
@@ -231,7 +232,7 @@ class WriterUtility:
             return change_coordinate_frame_of_point(up, world_frame_change)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = change_source_coordinate_frame_of_transformation_matrix(item.matrix_world,
+            matrix_world = change_source_coordinate_frame_of_transformation_matrix(Entity(item).get_local2world_mat(),
                                                                                    local_frame_change)
             matrix_world = change_target_coordinate_frame_of_transformation_matrix(matrix_world, world_frame_change)
             return [[x for x in c] for c in matrix_world]

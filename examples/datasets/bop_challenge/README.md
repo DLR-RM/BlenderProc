@@ -19,7 +19,7 @@ Download the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/) and th
 Execute in the BlenderProc main directory:
 
 ```
-python scripts/download_cc_textures.py 
+blenderproc download cc_textures 
 ```
 
 ```

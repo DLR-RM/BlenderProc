@@ -3,7 +3,7 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('scene_net_obj_path', help="Path to the used scene net `.obj` file, download via scripts/download_scenenet.py")
+parser.add_argument('scene_net_obj_path', help="Path to the used scene net `.obj` file, download via 'blenderproc download scenenet'")
 parser.add_argument('scene_texture_path', help="Path to the downloaded texture files, you can find them at http://tinyurl.com/zpc9ppb")
 parser.add_argument('shapenet_path', help="Path to the downloaded shape net core v2 dataset, get it from http://www.shapenet.org/")
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet_with_scenenet/output", help="Path to where the final files, will be saved")

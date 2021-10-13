@@ -30,7 +30,7 @@ blenderproc run examples/advanced/physics_convex_decomposition/main.py examples/
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/physics_convex_decomposition/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/physics_convex_decomposition/output/0.hdf5
 ```
 
 ## Implementation

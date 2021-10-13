@@ -26,7 +26,7 @@ blenderproc run examples/basics/material_manipulation/main.py examples/basics/ma
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/basics/material_manipulation/output/0.hdf5
+blenderproc vis hdf5 examples/basics/material_manipulation/output/0.hdf5
 ```
 
 ## Steps

@@ -24,7 +24,7 @@ blenderproc run examples/advanced/material_randomizer/main.py examples/resources
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/material_randomizer/output/*.hdf5
+blenderproc vis hdf5 examples/advanced/material_randomizer/output/*.hdf5
 ```
 
 ## Implementation

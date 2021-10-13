@@ -53,7 +53,7 @@ blenderproc run examples/datasets/front_3d/main.py {PATH_TO_3D-Front-Json-File} 
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/datasets/front_3d/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/front_3d/output/0.hdf5
 ```
 
 ## Steps

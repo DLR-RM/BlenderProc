@@ -37,7 +37,7 @@ The configuration `config_motion_blur.yaml` creates pure motion blur, the config
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/motion_blur_rolling_shutter/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/motion_blur_rolling_shutter/output/0.hdf5
 ```
 
 ## Implementation

@@ -23,7 +23,7 @@ blenderproc run examples/advanced/entity_displacement_modifier/main.py examples/
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/entity_displacement_modifier/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/entity_displacement_modifier/output/0.hdf5
 ```
 
 ## Implementation

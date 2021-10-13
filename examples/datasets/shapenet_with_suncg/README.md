@@ -30,7 +30,7 @@ blenderpoc run examples/datasets/shapenet_with_suncg/main.py <PATH_TO_ShapeNetCo
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/datasets/shapenet_with_suncg/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/shapenet_with_suncg/output/*.hdf5
 ``` 
 
 ## Steps
