@@ -44,6 +44,14 @@ Each time this method is called, a new key frame is added with the given camera 
 When calling the renderer afterwards the scene is rendered from the view of all registered camera poses.
 To learn more about how that works in detail, please read the [key frame](key_frames.md) chapter.
 
+Blender uses the OpenGL coordinate frame. 
+So, if you want to use camera poses that are specified in OpenCV coordinates, you need to transform them first.
+To do so, you can use the following utility function:
+```python
+# OpenCV -> OpenGL
+cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
+```
+
 --- 
 
 Next Tutorial: [Rendering the scene](renderer.md)

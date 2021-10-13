@@ -19,10 +19,10 @@ blenderproc run examples/advanced/coco_annotations/main.py examples/resources/ca
 
 ### Visualizing Annotations
 
-You can use vis_coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:
+You can use vis coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:
 
 ```
-blenderproc vis_coco [-i <image index>] [-c <coco annotations json>] [-b <base folder of coco json and image files>]
+blenderproc vis coco [-i <image index>] [-c <coco annotations json>] [-b <base folder of coco json and image files>]
 ```
 
 ### Working Examples
@@ -30,13 +30,13 @@ blenderproc vis_coco [-i <image index>] [-c <coco annotations json>] [-b <base f
 With specific values:
 
 ```
-blenderproc vis_coco -i 1 -c coco_annotations.json -b examples/advanced/coco_annotations/output/coco_data
+blenderproc vis coco -i 1 -c coco_annotations.json -b examples/advanced/coco_annotations/output/coco_data
 ```
 
 Above are also the default values, i.e. for the same result call:
 
 ```
-blenderproc vis_coco
+blenderproc vis coco
 ```
 
 ## Implementation

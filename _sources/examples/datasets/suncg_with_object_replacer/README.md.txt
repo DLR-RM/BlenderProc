@@ -26,7 +26,7 @@ blenderpoc run examples/datasets/suncg_with_object_replacer/main.py <path to hou
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 example/suncg_with_object_replacer/output/0.hdf5
+blenderproc vis hdf5 example/suncg_with_object_replacer/output/0.hdf5
 ```
 
 ## Steps

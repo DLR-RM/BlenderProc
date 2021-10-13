@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1 current"><a class="reference external" href="#">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="../../examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../examples/basics/basic/README.html">basic</a></li>
@@ -486,6 +505,13 @@ This means either setting the focal length in mm:</p>
 <p>Each time this method is called, a new key frame is added with the given camera pose assigned to it.
 When calling the renderer afterwards the scene is rendered from the view of all registered camera poses.
 To learn more about how that works in detail, please read the <a class="reference internal" href="key_frames.html"><span class="doc">key frame</span></a> chapter.</p>
+<p>Blender uses the OpenGL coordinate frame.
+So, if you want to use camera poses that are specified in OpenCV coordinates, you need to transform them first.
+To do so, you can use the following utility function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># OpenCV -&gt; OpenGL</span>
+<span class="n">cam2world</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">change_source_coordinate_frame_of_transformation_matrix</span><span class="p">(</span><span class="n">cam2world</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
 <hr class="docutils" />
 <p>Next Tutorial: <a class="reference internal" href="renderer.html"><span class="doc">Rendering the scene</span></a></p>
 </div>

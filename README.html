@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BlenderProc &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>BlenderProc2 &mdash; BlenderProc 2.0.0 documentation</title>
   
 
   
@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
@@ -428,7 +447,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>BlenderProc</li>
+      <li>BlenderProc2</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -447,22 +466,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="blenderproc">
-<h1>BlenderProc<a class="headerlink" href="#blenderproc" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="blenderproc2">
+<h1>BlenderProc2<a class="headerlink" href="#blenderproc2" title="Permalink to this headline">¶</a></h1>
 <a class="reference external image-reference" href="https://dlr-rm.github.io/BlenderProc/"><img alt="Documentation" src="https://img.shields.io/badge/documentation-passing-brightgreen.svg" /></a>
 <a class="reference external image-reference" href="https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basics/basic/basic_example.ipynb"><img alt="Open In Collab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 <a class="reference external image-reference" href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg" /></a>
-<p>A procedural Blender pipeline for photorealistic image generation.</p>
 <p align="center">
 
-<img src="images/readme.jpg" alt="Front readme image" width=500>
+<img src="https://user-images.githubusercontent.com/6104887/137109535-275a2aa3-f5fd-4173-9d16-a9a9b86f66e7.gif" alt="Front readme image" width=100%>
 
-</p><p><a class="reference external" href="https://dlr-rm.github.io/BlenderProc">Documentation</a> | <a class="reference internal" href="index.html#tutorials"><span class="std std-ref">Tutorials</span></a> | <a class="reference internal" href="index.html#examples"><span class="std std-ref">Examples</span></a> | <a class="reference external" href="https://arxiv.org/abs/1911.01911">ArXiv paper</a> | <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">Workshop paper</a></p>
+</p><p>A procedural Blender pipeline for photorealistic rendering.</p>
+<p><a class="reference external" href="https://dlr-rm.github.io/BlenderProc">Documentation</a> | <a class="reference internal" href="index.html#tutorials"><span class="std std-ref">Tutorials</span></a> | <a class="reference internal" href="index.html#examples"><span class="std std-ref">Examples</span></a> | <a class="reference external" href="https://arxiv.org/abs/1911.01911">ArXiv paper</a> | <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">Workshop paper</a></p>
 <div class="section" id="features">
 <span id="id1"></span><h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Loading: <code class="docutils literal notranslate"><span class="pre">*.obj</span></code>, <code class="docutils literal notranslate"><span class="pre">*.ply</span></code>, BOP datasets, ShapeNet, Haven, 3D-FRONT, etc.</li>
-<li>Objects: Sample object poses, apply physics and collision checking.</li>
+<li>Loading: <code class="docutils literal notranslate"><span class="pre">*.obj</span></code>, <code class="docutils literal notranslate"><span class="pre">*.ply</span></code>, <code class="docutils literal notranslate"><span class="pre">*.blend</span></code>, BOP, ShapeNet, Haven, 3D-FRONT, etc.</li>
+<li>Objects: Set or sample object poses, apply physics and collision checking.</li>
 <li>Materials: Set or sample physically-based materials and textures</li>
 <li>Lighting: Set or sample lights, automatic lighting of 3D-FRONT scenes.</li>
 <li>Cameras: Set, sample or load camera poses from file.</li>
@@ -558,7 +577,7 @@ pip install -e .
 </div>
 <p>BlenderProc now creates the specified scene and renders the image into <code class="docutils literal notranslate"><span class="pre">output/0.hdf5</span></code>.</p>
 <p>To visualize that image, simply call:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc vis_hdf5 output/0.hdf5
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc vis hdf5 output/0.hdf5
 </pre></div>
 </div>
 <p>Thats it! You rendered your first image with BlenderProc!</p>
@@ -582,7 +601,7 @@ pip install -e .
 <div class="section" id="what-to-do-next">
 <span id="id8"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
 <p>As you now ran your first BlenderProc script, your ready to learn the basics:</p>
-<!---.. _tutorials: ---><div class="section" id="tutorials">
+<div class="section" id="tutorials">
 <span id="id9"></span><h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
 <p>Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:</p>
 <ol class="arabic simple">

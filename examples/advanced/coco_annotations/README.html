@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../../docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="../../basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../basics/basic/README.html">basic</a></li>
@@ -465,19 +484,19 @@
 </ul>
 <div class="section" id="visualizing-annotations">
 <h3>Visualizing Annotations<a class="headerlink" href="#visualizing-annotations" title="Permalink to this headline">¶</a></h3>
-<p>You can use vis_coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">image</span> <span class="n">index</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">coco</span> <span class="n">annotations</span> <span class="n">json</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">base</span> <span class="n">folder</span> <span class="n">of</span> <span class="n">coco</span> <span class="n">json</span> <span class="ow">and</span> <span class="n">image</span> <span class="n">files</span><span class="o">&gt;</span><span class="p">]</span>
+<p>You can use vis coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis</span> <span class="n">coco</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span><span class="n">image</span> <span class="n">index</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">coco</span> <span class="n">annotations</span> <span class="n">json</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="o">&lt;</span><span class="n">base</span> <span class="n">folder</span> <span class="n">of</span> <span class="n">coco</span> <span class="n">json</span> <span class="ow">and</span> <span class="n">image</span> <span class="n">files</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="working-examples">
 <h3>Working Examples<a class="headerlink" href="#working-examples" title="Permalink to this headline">¶</a></h3>
 <p>With specific values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span> <span class="o">-</span><span class="n">i</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="n">coco_annotations</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">b</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis</span> <span class="n">coco</span> <span class="o">-</span><span class="n">i</span> <span class="mi">1</span> <span class="o">-</span><span class="n">c</span> <span class="n">coco_annotations</span><span class="o">.</span><span class="n">json</span> <span class="o">-</span><span class="n">b</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">coco_annotations</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span>
 </pre></div>
 </div>
 <p>Above are also the default values, i.e. for the same result call:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis_coco</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">vis</span> <span class="n">coco</span>
 </pre></div>
 </div>
 </div>

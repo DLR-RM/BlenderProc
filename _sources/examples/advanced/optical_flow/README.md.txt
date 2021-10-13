@@ -33,7 +33,7 @@ blenderproc run examples/advanced/optical_flow/main.py examples/advanced/optical
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/optical_flow/output/1.hdf5
+blenderproc vis hdf5 examples/advanced/optical_flow/output/1.hdf5
 ```
 
 ## Implementation

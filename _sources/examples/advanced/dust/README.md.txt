@@ -26,7 +26,7 @@ blenderproc run examples/advanced/dust/main.py resources/haven/models/ArmChair_0
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/datasets/haven/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/haven/output/*.hdf5
 ``` 
 
 ## Implementation

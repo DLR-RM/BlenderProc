@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
@@ -511,7 +530,7 @@ makes the resulting image look sharper, while a low value decreases the sharpnes
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The 4x4 cam2world transformation matrx.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The 4x4 cam2world transformation matrix.</td>
 </tr>
 </tbody>
 </table>
@@ -624,7 +643,7 @@ at least the vertical FOV heavily differs from how it would usually be defined.<
 
 <dl class="function">
 <dt id="blenderproc.python.camera.CameraUtility.set_intrinsics_from_K_matrix">
-<code class="descclassname">blenderproc.python.camera.CameraUtility.</code><code class="descname">set_intrinsics_from_K_matrix</code><span class="sig-paren">(</span><em>K</em>, <em>image_width</em>, <em>image_height</em>, <em>clip_start=0.1</em>, <em>clip_end=1000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/camera/CameraUtility.html#set_intrinsics_from_K_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.camera.CameraUtility.set_intrinsics_from_K_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.python.camera.CameraUtility.</code><code class="descname">set_intrinsics_from_K_matrix</code><span class="sig-paren">(</span><em>K</em>, <em>image_width</em>, <em>image_height</em>, <em>clip_start=None</em>, <em>clip_end=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/camera/CameraUtility.html#set_intrinsics_from_K_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.camera.CameraUtility.set_intrinsics_from_K_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the camera intrinsics via a K matrix.</p>
 <dl class="docutils">
 <dt>The K matrix should have the format:</dt>
@@ -644,8 +663,8 @@ at least the vertical FOV heavily differs from how it would usually be defined.<
 <li><strong>K</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – The 3x3 K matrix.</li>
 <li><strong>image_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The image width in pixels.</li>
 <li><strong>image_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The image height in pixels.</li>
-<li><strong>clip_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Clipping start.</li>
-<li><strong>clip_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Clipping end.</li>
+<li><strong>clip_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Clipping start.</li>
+<li><strong>clip_end</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Clipping end.</li>
 </ul>
 </td>
 </tr>

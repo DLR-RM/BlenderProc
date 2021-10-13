@@ -23,7 +23,7 @@ blenderproc run examples/advanced/diffuse_color_image/main.py examples/resources
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/diffuse_color_image/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/diffuse_color_image/output/0.hdf5
 ```
 
 ## Implementation

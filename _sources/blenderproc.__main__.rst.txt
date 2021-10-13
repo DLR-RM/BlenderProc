@@ -1,0 +1,7 @@
+blenderproc\.\_\_main\_\_ module
+================================
+
+.. automodule:: blenderproc.__main__
+    :members:
+    :undoc-members:
+    :show-inheritance:

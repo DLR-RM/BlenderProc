@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
@@ -568,15 +587,15 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">mode_set</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;EDIT&#39;</span><span class="p">)</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">bb_center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="n">bb_center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">bb_min_z_value</span><span class="p">])</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">mode_set</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">deselect</span><span class="p">()</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deselect</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MeshObject.get_bound_box"><a class="viewcode-back" href="../../../../blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_bound_box">[docs]</a>    <span class="k">def</span> <span class="nf">get_bound_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_coords</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :return: 8x3 array describing the object aligned bounding box coordinates in world coordinates</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">local_coords</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@</span> <span class="n">Vector</span><span class="p">(</span><span class="n">cord</span><span class="p">)</span> <span class="k">for</span> <span class="n">cord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">bound_box</span><span class="p">])</span>
+            <span class="n">local2world</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_local2world_mat</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">local2world</span> <span class="o">@</span> <span class="n">Vector</span><span class="p">(</span><span class="n">cord</span><span class="p">)</span> <span class="k">for</span> <span class="n">cord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">bound_box</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Vector</span><span class="p">(</span><span class="n">cord</span><span class="p">)</span> <span class="k">for</span> <span class="n">cord</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">bound_box</span><span class="p">])</span></div>
 
@@ -670,7 +689,7 @@
             <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
 
         <span class="c1"># Decompose the object</span>
-        <span class="n">parts</span> <span class="o">=</span> <span class="n">convex_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">vhacd_path</span><span class="p">),</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">))</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">convex_decomposition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">vhacd_path</span><span class="p">),</span> <span class="n">cache_dir</span><span class="o">=</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">))</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">MeshObject</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">]</span>
 
         <span class="c1"># Make the convex parts children of this object, enable their rigid body component and hide them</span>
@@ -692,7 +711,7 @@
 <span class="sd">        :param new_parent: The new parent object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">new_parent</span><span class="o">.</span><span class="n">blender_obj</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">matrix_parent_inverse</span> <span class="o">=</span> <span class="n">new_parent</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">matrix_parent_inverse</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">new_parent</span><span class="o">.</span><span class="n">get_local2world_mat</span><span class="p">())</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="MeshObject.get_parent"><a class="viewcode-back" href="../../../../blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_parent">[docs]</a>    <span class="k">def</span> <span class="nf">get_parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot; Returns the parent object.</span>
@@ -1054,7 +1073,7 @@
 <span class="sd">            If any object has been hit, the MeshObject otherwise None.</span>
 <span class="sd">            Some 4x4 matrix.</span>
 <span class="sd">   &quot;&quot;&quot;</span>
-    <span class="n">hit</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="p">,</span>
+    <span class="n">hit</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">evaluated_depsgraph_get</span><span class="p">(),</span>
                                                                                   <span class="n">Vector</span><span class="p">(</span><span class="n">origin</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span>
                                                                                   <span class="n">distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">hit_object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

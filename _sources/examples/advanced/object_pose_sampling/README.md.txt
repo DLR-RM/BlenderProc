@@ -22,7 +22,7 @@ blenderproc run examples/advanced/object_pose_sampling/main.py examples/resource
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/object_pose_sampling/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/object_pose_sampling/output/0.hdf5
 ```
 
 ## Implementation

@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
@@ -486,10 +505,10 @@
     <span class="sd">&quot;&quot;&quot; Returns the camera pose in the form of a 4x4 cam2world transformation matrx.</span>
 
 <span class="sd">    :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame is used.</span>
-<span class="sd">    :return: The 4x4 cam2world transformation matrx.</span>
+<span class="sd">    :return: The 4x4 cam2world transformation matrix.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Entity</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="p">)</span><span class="o">.</span><span class="n">get_local2world_mat</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="rotation_from_forward_vec"><a class="viewcode-back" href="../../../../blenderproc.python.camera.CameraUtility.html#blenderproc.python.camera.CameraUtility.rotation_from_forward_vec">[docs]</a><span class="k">def</span> <span class="nf">rotation_from_forward_vec</span><span class="p">(</span><span class="n">forward_vec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Vector</span><span class="p">],</span> <span class="n">up_axis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Y&#39;</span><span class="p">,</span>
@@ -588,7 +607,7 @@
 
 
 <div class="viewcode-block" id="set_intrinsics_from_K_matrix"><a class="viewcode-back" href="../../../../blenderproc.python.camera.CameraUtility.html#blenderproc.python.camera.CameraUtility.set_intrinsics_from_K_matrix">[docs]</a><span class="k">def</span> <span class="nf">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">K</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">],</span> <span class="n">image_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">image_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                                 <span class="n">clip_start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">clip_end</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+                                 <span class="n">clip_start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">clip_end</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Set the camera intrinsics via a K matrix.</span>
 
 <span class="sd">    The K matrix should have the format:</span>

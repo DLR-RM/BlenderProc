@@ -6,6 +6,7 @@ Submodules
 
 .. toctree::
 
+   blenderproc.__main__
    blenderproc.command_line
 
 Module contents

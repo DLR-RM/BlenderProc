@@ -24,7 +24,7 @@ blenderproc run examples/advanced/camera_depth_of_field/main.py examples/resourc
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/advanced/camera_depth_of_field/output/0.hdf5
+blenderproc vis hdf5 examples/advanced/camera_depth_of_field/output/0.hdf5
 ```
 
 ## Implementation

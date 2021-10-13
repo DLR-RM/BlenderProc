@@ -8,7 +8,7 @@ The focus of this example is the [haven dataset](https://3dmodelhaven.com/) coll
 In order to use this example first download all the haven assets via the haven download script:
 
 ```shell
-python scripts/download_haven.py
+blenderproc download haven
 ```
 
 This will download all 3D models, all environment HDRs and also all textures they provide.
@@ -31,7 +31,7 @@ blenderproc run examples/datasets/haven/main.py resources/haven/models/ArmChair_
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/datasets/haven/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/haven/output/*.hdf5
 ``` 
 
 ## Steps

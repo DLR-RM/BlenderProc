@@ -1,4 +1,4 @@
-# BlenderProc
+# BlenderProc2
 
 
 
@@ -10,17 +10,15 @@
 
 
 
-A procedural Blender pipeline for photorealistic image generation.
-
-
-
 <p align="center">
 
-<img src="images/readme.jpg" alt="Front readme image" width=500>
+<img src="https://user-images.githubusercontent.com/6104887/137109535-275a2aa3-f5fd-4173-9d16-a9a9b86f66e7.gif" alt="Front readme image" width=100%>
 
 </p>
 
 
+
+A procedural Blender pipeline for photorealistic rendering.
 
 
 
@@ -32,9 +30,9 @@ A procedural Blender pipeline for photorealistic image generation.
 
 
 
-* Loading: `*.obj`, `*.ply`, BOP datasets, ShapeNet, Haven, 3D-FRONT, etc.
+* Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
 
-* Objects: Sample object poses, apply physics and collision checking.
+* Objects: Set or sample object poses, apply physics and collision checking.
 
 * Materials: Set or sample physically-based materials and textures
 
@@ -214,7 +212,7 @@ To visualize that image, simply call:
 
 ```bash
 
-blenderproc vis_hdf5 output/0.hdf5
+blenderproc vis hdf5 output/0.hdf5
 
 ```
 
@@ -269,10 +267,6 @@ The pipeline can be run multiple times, as in the beginning of each run the scen
 
 
 As you now ran your first BlenderProc script, your ready to learn the basics:
-
-
-
-<!---.. _tutorials: ---> 
 
 
 

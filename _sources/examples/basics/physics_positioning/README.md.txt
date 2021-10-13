@@ -23,7 +23,7 @@ blenderproc run examples/basics/physics_positioning/main.py examples/basics/phys
 Visualize the generated data:
 
 ```
-blenderproc vis_hdf5 examples/basics/physics_positioning/output/0.hdf5
+blenderproc vis hdf5 examples/basics/physics_positioning/output/0.hdf5
 ```
 
 ## Steps

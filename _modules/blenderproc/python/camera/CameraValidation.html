@@ -80,7 +80,26 @@
             
             
               <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
 <ul class="compound-middle">
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
@@ -596,7 +615,7 @@
             <span class="c1"># Compute current point on plane</span>
             <span class="n">end</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">vec_y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="c1"># Send ray from the camera position through the current point on the plane</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">evaluated_depsgraph_get</span><span class="p">(),</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
             <span class="c1"># Add hit object to set</span>
             <span class="n">visible_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MeshObject</span><span class="p">(</span><span class="n">hit_object</span><span class="p">))</span>
 
@@ -647,7 +666,7 @@
             <span class="c1"># Compute current point on plane</span>
             <span class="n">end</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">vec_y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="c1"># Send ray from the camera position through the current point on the plane</span>
-            <span class="n">hit</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
+            <span class="n">hit</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">evaluated_depsgraph_get</span><span class="p">(),</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">hit</span><span class="p">:</span>
                 <span class="n">is_of_special_dataset</span> <span class="o">=</span> <span class="s2">&quot;is_suncg&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span> <span class="ow">or</span> <span class="s2">&quot;is_3d_front&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span>

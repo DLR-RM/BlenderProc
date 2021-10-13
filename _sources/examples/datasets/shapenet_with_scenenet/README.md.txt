@@ -31,7 +31,7 @@ As this example requires a bed to be present in the scene, it will only work wit
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-blenderproc vis_hdf5 examples/datasets/shapenet_with_scenenet/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/shapenet_with_scenenet/output/*.hdf5
 ``` 
 
 ## Steps
