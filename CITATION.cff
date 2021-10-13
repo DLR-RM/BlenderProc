@@ -37,7 +37,7 @@ version: 2.0.0
 date-released: 2019-10-25
 licence: GNU General Public License v3.0
 repository-code: "https://github.com/DLR-RM/BlenderProc/"
-url: https://arxiv.org/abs/1911.01911
+url: "https://arxiv.org/abs/1911.01911"
 abstract: "BlenderProc is a modular procedural pipeline, which helps in generating real looking images for the training of convolutional neural networks. These can be used in a variety of use cases including segmentation, depth, normal and pose estimation and many others. A key feature of our extension of blender is the simple to use modular pipeline, which was designed to be easily extendable. By offering standard modules, which cover a variety of scenarios, we provide a starting point on which new modules can be created."
 keywords:
   - "machine learning"
