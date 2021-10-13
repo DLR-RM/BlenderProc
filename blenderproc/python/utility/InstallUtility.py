@@ -1,9 +1,11 @@
 import argparse
 import os
+import ssl
 import tarfile
 from os.path import join
 import subprocess
 import shutil
+import ssl
 import signal
 import sys
 from sys import platform, version_info
@@ -117,28 +119,37 @@ class InstallUtility:
                 else:
                     raise Exception("This system is not supported yet: {}".format(platform))
                 try:
-                    import progressbar
-                    class DownloadProgressBar(object):
-                        def __init__(self):
-                            self.pbar = None
+                    try:
+                        import progressbar
+                        class DownloadProgressBar(object):
+                            def __init__(self):
+                                self.pbar = None
 
-                        def __call__(self, block_num, block_size, total_size):
-                            if not self.pbar:
-                                self.pbar = progressbar.ProgressBar(maxval=total_size)
-                                self.pbar.start()
-                            downloaded = block_num * block_size
-                            if downloaded < total_size:
-                                self.pbar.update(downloaded)
-                            else:
-                                self.pbar.finish()
+                            def __call__(self, block_num, block_size, total_size):
+                                if not self.pbar:
+                                    self.pbar = progressbar.ProgressBar(maxval=total_size)
+                                    self.pbar.start()
+                                downloaded = block_num * block_size
+                                if downloaded < total_size:
+                                    self.pbar.update(downloaded)
+                                else:
+                                    self.pbar.finish()
 
-                    print("Downloading blender from " + url)
-                    file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
-                except ImportError:
-                    print("Progressbar for downloading, can only be shown, "
-                          "when the python package \"progressbar\" is installed")
-                    file_tmp = urlretrieve(url, None)[0]
-
+                        print("Downloading blender from " + url)
+                        file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
+                    except ImportError:
+                        print("Progressbar for downloading, can only be shown, "
+                              "when the python package \"progressbar\" is installed")
+                        file_tmp = urlretrieve(url, None)[0]
+                except ssl.SSLCertVerificationError as e:
+                    if platform == "win32":
+                        # on windows this is a known problem that the ssl certificates don't properly work
+                        # deactivate the ssl check
+                        if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
+                            ssl._create_default_https_context = ssl._create_unverified_context
+                        file_tmp = urlretrieve(url, None)[0]
+                    else:
+                        raise e
                 if platform == "linux" or platform == "linux2":
                     if version_info.major == 3:
                         SetupUtility.extract_file(blender_install_path, file_tmp, "TAR")
