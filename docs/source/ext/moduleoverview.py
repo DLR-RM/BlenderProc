@@ -14,42 +14,76 @@ class ClasslistDirective(Directive):
     def run(self):
         return [classlist('')]
 
-def generate_collapsible_classlist(app, fromdocname, classes, container, caption, module_index):
+def generate_classlist(app, fromdocname, subtree, class_list, prefix, level=2):
+    for e in class_list:
+        ref = nodes.reference('', '')
+        ref['refdocname'] = e[3]
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, e[3])
+        ref['refuri'] += '#' + e[4]
+        ref.append(nodes.Text(prefix + e[0].split(".")[-1]))
+        class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l" + str(level)])
+        #print(fromdocname, e[3])
+        if fromdocname.startswith(e[3].replace(".api.", ".")):
+            #print("current")
+            class_item['classes'].append('current')
+        subtree += class_item
 
-    entries = defaultdict(list)
-    prefix = ".".join(classes[0][0].split(".")[:module_index]) + "."
-    for e in classes:
-        module = e[0].split(".")[module_index]
-        entries[module].append(e)
-
-    #print("t", fromdocname)
+def generate_collapsible_classlist(app, fromdocname, classes, container, caption, module_index, label_prefix):
     toc = nodes.bullet_list()
     toc += nodes.caption(caption, '', *[nodes.Text(caption)])
-    for module, class_list in entries.items():
-        #print("t2", "src." + prefix + module)
+
+    if module_index is not None:
+        entries = defaultdict(list)
+        #print("test", classes, fromdocname, caption)
+        prefix = ".".join(classes[0][0].split(".")[:module_index]) + "."
+        for e in classes:
+            module = e[0].split(".")[module_index]
+            entries[module].append(e)
+
+        #print("t", fromdocname)
+        for module, class_list in entries.items():
+            #print("t2", "src." + prefix + module)
+            ref = nodes.reference('', '')
+            ref['refuri'] = app.builder.get_relative_uri(fromdocname, prefix + module)
+            ref.append(nodes.Text((label_prefix + module) if label_prefix != "" else module.capitalize()))
+            module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
+            if fromdocname.startswith(prefix + module):
+                module_item["classes"].append('current')
+            toc += module_item
+
+            subtree = nodes.bullet_list()
+            module_item += subtree
+
+            generate_classlist(app, fromdocname, subtree, class_list, "")
+    else:
+        generate_classlist(app, fromdocname, toc, classes, label_prefix, level=1)
+    container += toc
+
+
+def generate_tutorials_sidebar(app, fromdocname, container):
+    tutorials_dir = Path(__file__).absolute().parent.parent / "docs" / "tutorials"
+
+    tutorials = [
+        ("Loading and manipulating objects", "loader"),
+        ("Configuring the camera", "camera"),
+        ("Rendering the scene", "renderer"),
+        ("Writing the results to file", "writer"),
+        ("How key frames work", "key_frames"),
+        ("Positioning objects via the physics simulator", "physics"),
+    ]
+
+    container += nodes.caption("Tutorials", '', *[nodes.Text("Tutorials")])
+    for tutorial in tutorials:
+        toc = nodes.bullet_list()
+
         ref = nodes.reference('', '')
-        ref['refuri'] = app.builder.get_relative_uri(fromdocname, prefix + module)
-        ref.append(nodes.Text(module.capitalize()))
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, "docs/tutorials/" + tutorial[1])
+        ref.append(nodes.Text(tutorial[0]))
         module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
-        if fromdocname.startswith(prefix + module):
+        if fromdocname.startswith("docs/tutorials/" + tutorial[1]):
             module_item["classes"].append('current')
         toc += module_item
-
-        subtree = nodes.bullet_list()
-        module_item += subtree
-
-        for e in class_list:
-            ref = nodes.reference('', '')
-            ref['refdocname'] = e[3]
-            ref['refuri'] = app.builder.get_relative_uri(fromdocname, e[3])
-            ref['refuri'] += '#' + e[4]
-            ref.append(nodes.Text(e[0].split(".")[-1]))
-            class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l2"])
-            if fromdocname.startswith(e[3]):
-                class_item['classes'].append('current')
-            subtree += class_item
-
-    container += toc
+        container += toc
 
 def generate_examples_sidebar(app, fromdocname, container):
     examples = Path(__file__).absolute().parent.parent / "examples"
@@ -86,21 +120,27 @@ def generate_sidebar(app, fromdocname):
     env = app.builder.env
     container = nodes.compound(classes=['toctree-wrapper'])#addnodes.compact_paragraph('', '', classes=['toctree-wrapper'])
     py = env.get_domain('py')
-    classes = [_ for _ in py.get_objects() if _[2] == 'class']
+    classes = py.get_objects()
+    #print("classes", classes, [_[2] for _ in py.get_objects()])
 
-    classes_per_group = {"modules": ([], 1), "provider": ([], 2), "core": ([], 1)}
+    classes_per_group = {"api": ([], None, "bproc."), "internal": ([], 2, "bproc.python."), "modules (deprecated)": ([], 3, "")}#"modules": ([], 1), "provider": ([], 2),
     for e in classes:
-        if e[0].startswith("src.provider."):
-            group = "provider"
-        elif e[0].startswith("src.main.") or e[0].startswith("src.utility."):
-            group = "core"
-        else:
-            group = "modules"
-        classes_per_group[group][0].append(e)
+        if e[2] == 'module' and e[3].startswith("blenderproc.api.") or e[2] == 'class' and not e[3].startswith("blenderproc.api."):
+            #print(e)
+            if e[3].startswith("blenderproc.api."):
+                group = "api"
+            elif e[0].startswith("blenderproc.python.modules."):
+                group = "modules (deprecated)"
+            else:
+                group = "internal"
+            #print(group, e)
 
+            classes_per_group[group][0].append(e)
+
+    generate_tutorials_sidebar(app, fromdocname, container)
     generate_examples_sidebar(app, fromdocname, container)
     for key, items in classes_per_group.items():
-        generate_collapsible_classlist(app, fromdocname, items[0], container, key.capitalize(), items[1])
+        generate_collapsible_classlist(app, fromdocname, items[0], container, key.capitalize(), items[1], items[2])
 
     return container
 
