@@ -7,10 +7,13 @@ import bpy
 import time
 import inspect
 import importlib
-import git
 import warnings
 import numpy as np
 import json
+from sys import platform
+if platform != "win32":
+    # importing git doesn't work under windows
+    import git
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
@@ -159,6 +162,8 @@ class Utility:
 
         :return: a string, the BlenderProc version, or None if unavailable
         """
+        if platform == "win32":
+            return __version__
         try:
             repo = git.Repo(search_parent_directories=True)
         except git.InvalidGitRepositoryError as e:
