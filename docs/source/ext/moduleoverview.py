@@ -59,6 +59,32 @@ def generate_collapsible_classlist(app, fromdocname, classes, container, caption
         generate_classlist(app, fromdocname, toc, classes, label_prefix, level=1)
     container += toc
 
+
+def generate_tutorials_sidebar(app, fromdocname, container):
+    tutorials_dir = Path(__file__).absolute().parent.parent / "docs" / "tutorials"
+
+    tutorials = [
+        ("Loading and manipulating objects", "loader"),
+        ("Configuring the camera", "camera"),
+        ("Rendering the scene", "renderer"),
+        ("Writing the results to file", "writer"),
+        ("How key frames work", "key_frames"),
+        ("Positioning objects via the physics simulator", "physics"),
+    ]
+
+    container += nodes.caption("Tutorials", '', *[nodes.Text("Tutorials")])
+    for tutorial in tutorials:
+        toc = nodes.bullet_list()
+
+        ref = nodes.reference('', '')
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, "docs/tutorials/" + tutorial[1])
+        ref.append(nodes.Text(tutorial[0]))
+        module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
+        if fromdocname.startswith("docs/tutorials/" + tutorial[1]):
+            module_item["classes"].append('current')
+        toc += module_item
+        container += toc
+
 def generate_examples_sidebar(app, fromdocname, container):
     examples = Path(__file__).absolute().parent.parent / "examples"
 
@@ -111,6 +137,7 @@ def generate_sidebar(app, fromdocname):
 
             classes_per_group[group][0].append(e)
 
+    generate_tutorials_sidebar(app, fromdocname, container)
     generate_examples_sidebar(app, fromdocname, container)
     for key, items in classes_per_group.items():
         generate_collapsible_classlist(app, fromdocname, items[0], container, key.capitalize(), items[1], items[2])
