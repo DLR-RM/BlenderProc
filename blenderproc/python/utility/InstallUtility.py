@@ -13,6 +13,7 @@ from typing import List, Union
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
+    from urllib.error import URLError
 else:
     from urllib import urlretrieve
     import contextlib
@@ -141,7 +142,7 @@ class InstallUtility:
                         print("Progressbar for downloading, can only be shown, "
                               "when the python package \"progressbar\" is installed")
                         file_tmp = urlretrieve(url, None)[0]
-                except ssl.SSLCertVerificationError as e:
+                except URLError as e:
                     if platform == "win32":
                         # on windows this is a known problem that the ssl certificates don't properly work
                         # deactivate the ssl check
