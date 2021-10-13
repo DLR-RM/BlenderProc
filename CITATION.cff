@@ -1,7 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "BlenderProc"
-type: "article"
 authors:
     - family-names: Denninger
       given-names: Maximilian
