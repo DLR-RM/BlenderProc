@@ -15,5 +15,5 @@ setup(name='blenderproc',
       entry_points={
             'console_scripts': ['blenderproc=blenderproc.command_line:cli'],
       },
-      install_requires=["setuptools", "pyyaml", "requests", "matplotlib", "numpy", "Pillow", "h5py"]
+      install_requires=["setuptools", "pyyaml", "requests", "matplotlib", "numpy", "Pillow", "h5py", "progressbar"]
       )
