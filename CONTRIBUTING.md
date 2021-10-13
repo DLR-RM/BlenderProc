@@ -25,7 +25,7 @@ The following is a short set of guidelines for contributing to BlenderProc. Thes
 
 ### BlenderProc Source Code
 
-BlenderProc is a small open source project: just one repository. So when you decide to contribute to our ongoing effort to improve this tool, it is expected that you are familiar with the [source code](src/) and made your way through the relevant [examples](examples/).
+BlenderProc is a small open source project: just one repository. So when you decide to contribute to our ongoing effort to improve this tool, it is expected that you are familiar with the [source code](blenderproc/) and made your way through the relevant [examples](examples/).
 
 ### BlenderProc Design Decisions
 

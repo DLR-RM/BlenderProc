@@ -42,9 +42,6 @@
     {
       "module": "camera.ReplicaCameraSampler",
       "config": {
-        "intrinsics": {
-          "pixel_aspect_x": 1.333333333
-        },
         "is_replica_object": True,
         "cam_poses": [{
           "number_of_samples": 15,
@@ -76,7 +73,7 @@
             "name": "ply_material"
           }
         },
-        "cf_change_to_vertex_color": "Col"
+        "cf_change_to_vertex_color_no_shading": "Col"
       }
     },
     {

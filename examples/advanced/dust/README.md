@@ -1,6 +1,6 @@
 # How to apply dust to objects 
 <p align="center">
-<img src="rendered_example.jpg" alt="normals and color rendering of example table" width=300>
+<img src="../../../images/dust_rendered_example.jpg" alt="normals and color rendering of example table" width=300>
 </p>
 
 
@@ -13,10 +13,10 @@ Make sure that you have downloaded the haven dataset first, see the [haven examp
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven/output
+blenderproc run examples/advanced/dust/main.py resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven/output
 ``` 
 
-* `examples/advanced/dust/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/dust/main.py`: path to the main python file to run.
 * `resources/haven/models/ArmChair_01/ArmChair_01.blend`:  Path to the blend file, from the haven dataset, browse the model folder, for all possible options
 * `resources/haven`: The folder where the `hdri` folder can be found, to load an world environment
 * `examples/datasets/haven/output`: path to the output directory.
@@ -26,41 +26,16 @@ python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/haven/output/*.hdf5
+blenderproc vis hdf5 examples/datasets/haven/output/*.hdf5
 ``` 
 
-## Steps
+## Implementation
 
-* The BlendLoader loads the given blend file and extracts the object
-* Then the `HavenEnvironmentLoader` loads a randomly selected HDR image as world environment
-* After that the `MaterialManipulator` adds to all materials in the scene a layer of dust
-* Then it is rendered and saved in a `hdf5` file.
- 
-## Config file
-
-### MaterialManipulator 
-
-```yaml
-{
-  "module": "manipulators.MaterialManipulator",
-  "config":{
-    "selector": {
-      "provider": "getter.Material",
-      "conditions": {
-        "name": ".*",
-        "use_nodes": True
-      }
-    },
-    "cf_add_dust": {
-      "strength": 0.8,
-      "texture_scale": 0.05
-    }
-  }
-},
+```python
+# Add dust to all materials of the loaded object
+for material in obj.get_materials():
+    bproc.material.add_dust(material, strength=0.8, texture_scale=0.05)
 ```
 
-The `MaterialManipulator` selects all materials in the scene and uses the `cf_add_dust` option to add dust to all of them.
-Dust is always displayed on the top of a model, where the top is defined as facing upwards in Z direction. 
-Here `"strength"` defines the amount of dust used on the model, the range is from zero to one. But, values above 1.0 might also work just do they add a lot of dust.
-The `"texture_scale"` is used to reduce the size of the generated noise texture, be aware this only works if the object already has a UV mapping. 
-Else you can generate one with the `EntityManipulator`.
+Here `"strength"` defines the amount of dust used on the model, the range is typically from zero to one. But, values above 1.0 might also work to add a lot of dust.
+The `"texture_scale"` is used to reduce the size of the generated noise texture, be aware this only works if the object already has a UV mapping. If not you can try `obj.add_uv_mapping()` for that.

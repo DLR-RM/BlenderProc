@@ -1,6 +1,6 @@
 # Auto shading
 
-![](rendering.png)
+![](../../../images/auto_shading_rendering.jpg)
 
 This example demonstrates the different shading modes of Blender and how to apply them to objects. Available options are,
 from left to right, FLAT, AUTO and SMOOTH shading.
@@ -10,10 +10,10 @@ from left to right, FLAT, AUTO and SMOOTH shading.
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/advanced/auto_shading/config.yaml examples/advanced/auto_shading/camera_position examples/advanced/auto_shading/scene.blend examples/advanced/auto_shading/output
+blenderproc run examples/advanced/auto_shading/main.py examples/advanced/auto_shading/camera_position examples/advanced/auto_shading/scene.blend examples/advanced/auto_shading/output
 ``` 
 
-* `examples/advanced/auto_shading/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/auto_shading/main.py`: path to the main python file to run.
 * `examples/advanced/auto_shading/camera_position`: text file with parameters of camera positions.
 * `examples/advanced/auto_shading/scene.blend`: path to the blend file with the basic scene.
 * `examples/advanced/auto_shading/output`: path to the output directory.
@@ -22,35 +22,11 @@ python run.py examples/advanced/auto_shading/config.yaml examples/advanced/auto_
 
 The rendered image as shown above can be found in the output directory.
 
-## Steps
+## Implementation
 
-* Loads `scene.blend`: `loader.BlendLoader` module.
-* Selects materials based on the condition and changes some parameters of the selected materials: `material.MaterialManipulator` module.
-* Selects objects based on the condition: `manipulators.EntityManipulator` module. Used here to set the different shading modes for each object.
-* Creates a point light : `lighting.LightLoader` module.
-* Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb: `renderer.RgbRenderer` module.
-
-## Config file
-
-### EntityManipulator
-
-```yaml
-    {
-        "module": "manipulators.EntityManipulator",
-        "config": {
-          "selector": {
-            "provider": "getter.Entity",
-            "conditions": {
-              "name": "Sphere"
-            }
-          },
-          "cf_set_shading": "AUTO",
-          "cf_shading_auto_smooth_angle_in_deg": 45
-        }
-    }
+```python
+sphere.set_shading_mode("auto", 45)
 ```
 
-Using the `manipulators.EntityManipulator` we can manipulate properties of the entity selected by `name` using the `getter.Entity` provider.
-Here, we assign `AUTO` to the shading function `cf_set_shading` and also specify the angle (in degrees) up to which we want to apply smoothing.
-All angles greater 45 degrees will be shaded flat.
+Each MeshObject has a shading mode ('flat', 'smooth', 'auto'). For 'auto' you specify the angle (in degrees) up to which shading is smooth.
+All angles greater 45 degrees will be shaded flat, here.

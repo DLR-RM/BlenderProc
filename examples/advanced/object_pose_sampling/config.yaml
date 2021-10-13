@@ -41,10 +41,7 @@
       "module": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
-        "file_format": "location rotation/value",
-        "intrinsics": {
-          "fov": 1
-        }
+        "file_format": "location rotation/value"
       }
     },
     {
@@ -75,7 +72,7 @@
       "config": {
         "output_key": "colors",
         "samples": 50,
-        "render_normal": True
+        "render_normals": True
       }
     },
     {
