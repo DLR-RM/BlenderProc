@@ -121,14 +121,14 @@ class MeshObject(Entity):
         bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
         bpy.ops.object.mode_set(mode='OBJECT')
         self.deselect()
-        bpy.context.view_layer.update()
 
     def get_bound_box(self, local_coords: bool = False) -> np.ndarray:
         """
         :return: 8x3 array describing the object aligned bounding box coordinates in world coordinates
         """
         if not local_coords:
-            return np.array([self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box])
+            local2world = Matrix(self.get_local2world_mat())
+            return np.array([local2world @ Vector(cord) for cord in self.blender_obj.bound_box])
         else:
             return np.array([Vector(cord) for cord in self.blender_obj.bound_box])
 
@@ -222,7 +222,7 @@ class MeshObject(Entity):
             temp_dir = Utility.get_temporary_directory()
 
         # Decompose the object
-        parts = convex_decomposition(self.blender_obj, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
+        parts = convex_decomposition(self, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
         parts = [MeshObject(p) for p in parts]
 
         # Make the convex parts children of this object, enable their rigid body component and hide them
@@ -244,7 +244,7 @@ class MeshObject(Entity):
         :param new_parent: The new parent object.
         """
         self.blender_obj.parent = new_parent.blender_obj
-        self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
+        self.blender_obj.matrix_parent_inverse = Matrix(new_parent.get_local2world_mat()).inverted()
 
     def get_parent(self) -> Optional[Entity]:
         """ Returns the parent object.
@@ -606,7 +606,7 @@ def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vec
             If any object has been hit, the MeshObject otherwise None.
             Some 4x4 matrix.
    """
-    hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
+    hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(),
                                                                                   Vector(origin), Vector(direction),
                                                                                   distance=max_distance)
     if hit_object is not None:

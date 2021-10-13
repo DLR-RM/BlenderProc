@@ -100,7 +100,6 @@ def load_ikea(data_dir: str = 'resources/IKEA', obj_categories: Union[list, str]
             bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.transform.resize(value=(scale, scale, scale))
             bpy.ops.object.mode_set(mode='OBJECT')
-            bpy.context.view_layer.update()
             bpy.ops.object.select_all(action='DESELECT')
 
     # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files

@@ -6,6 +6,7 @@ import math
 import bpy
 import numpy as np
 
+from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility
@@ -326,10 +327,8 @@ def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "
 
     # set the matrix accordingly
     rot_around_x_axis = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X')
-    cam_ob = bpy.context.scene.camera
     for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-        bpy.context.scene.frame_set(frame)
-        used_rotation_matrix = cam_ob.matrix_world @ rot_around_x_axis
+        used_rotation_matrix = CameraUtility.get_camera_pose(frame) @ rot_around_x_axis
         for row_index in range(3):
             for column_index in range(3):
                 current_multiply = multiplication_values[row_index][column_index]

@@ -21,19 +21,18 @@ from sys import platform
 
 import git
 
-from blenderproc.python.utility.Utility import resolve_path
 import bpy
 from mathutils import Matrix
 import bmesh
 from subprocess import Popen
 import shutil
 
-def convex_decomposition(ob, temp_dir, vhacd_path, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001, cache_dir=None):
+def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000, name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True, apply_transforms: str = "NONE", depth: int = 20, concavity: float = 0.0025, plane_downsampling: int = 4, convexhull_downsampling: int = 4, alpha: float = 0.05, beta: float = 0.05, gamma: float = 0.00125, pca: bool = False, mode: str = "VOXEL", max_num_vertices_per_ch: int = 32, min_volume_per_ch: float = 0.0001, cache_dir: str = None):
     """ Uses V-HACD to decompose the given object.
 
     You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
 
-    :param ob: The blender object to decompose.
+    :param obj: The blender object to decompose.
     :param temp_dir: The temp directory where to store the convex parts.
     :param vhacd_path: The directory in which vhacd should be installed or is already installed.
     :param resolution: maximum number of voxels generated during the voxelization stage
@@ -77,12 +76,12 @@ def convex_decomposition(ob, temp_dir, vhacd_path, resolution=1000000, name_temp
     # Apply modifiers
     bpy.ops.object.select_all(action='DESELECT')
     if apply_modifiers:
-        mesh = ob.evaluated_get(bpy.context.evaluated_depsgraph_get()).data.copy()
+        mesh = obj.blender_obj.evaluated_get(bpy.context.evaluated_depsgraph_get()).data.copy()
     else:
-        mesh = ob.data.copy()
+        mesh = obj.blender_obj.data.copy()
 
     # Apply transforms
-    translation, quaternion, scale = ob.matrix_world.decompose()
+    translation, quaternion, scale = Matrix(obj.get_local2world_mat()).decompose()
     scale_matrix = Matrix(((scale.x, 0, 0, 0), (0, scale.y, 0, 0), (0, 0, scale.z, 0), (0, 0, 0, 1)))
     if apply_transforms in ['S', 'RS', 'LRS']:
         pre_matrix = scale_matrix
@@ -138,7 +137,7 @@ def convex_decomposition(ob, temp_dir, vhacd_path, resolution=1000000, name_temp
 
         # Import convex parts
         if not os.path.exists(outFileName):
-            raise Exception("No output produced by convex decomposition of object " + ob.name)
+            raise Exception("No output produced by convex decomposition of object " + obj.get_name())
 
         if cache_dir is not None:
             # Create cache dir, if it not exists yet
@@ -156,7 +155,7 @@ def convex_decomposition(ob, temp_dir, vhacd_path, resolution=1000000, name_temp
     for index, hull in enumerate(imported):
         hull.select_set(False)
         hull.matrix_basis = post_matrix
-        name = name_template.replace('?', ob.name, 1)
+        name = name_template.replace('?', obj.get_name(), 1)
         name = name.replace('#', str(index + 1), 1)
         if name == name_template:
             name += str(index + 1)

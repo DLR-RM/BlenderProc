@@ -38,10 +38,10 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
     """ Returns the camera pose in the form of a 4x4 cam2world transformation matrx.
 
     :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame is used.
-    :return: The 4x4 cam2world transformation matrx.
+    :return: The 4x4 cam2world transformation matrix.
     """
     with KeyFrame(frame):
-        return np.array(bpy.context.scene.camera.matrix_world)
+        return np.array(Entity(bpy.context.scene.camera).get_local2world_mat())
 
 
 def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: str = 'Y',
