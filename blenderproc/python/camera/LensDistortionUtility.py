@@ -106,13 +106,17 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
         # (distortion models are tricky if badly parameterized, especially in outer regions)
         if (it > 1) and (res[-1] > res[-2] * .99999):
             print("The residual for the worst distorted pixel got unstable/stalled.")
-            print("You might as well double-check your distortion model!")
             # factor *= .5
-            print("Alternatively, use the Matlab code in robotic.de/callab, which robustifies against these unstable pixels.")
             if it > 1e3:
                 raise Exception(
                     "The iterative distortion algorithm is unstable/stalled after 1000 iterations.")
             if error > 1e9:
+                print("Some (corner) pixels of the desired image are not defined by the used lens distortion model.")
+                print("We invite you to double-check your distortion model.")
+                print("The parameters k3,p1,p2 can easily overshoot for regions where the calibration software had no datapoints.")
+                print("You can either take more projections (ideally image-filling) at the image corners, reduce the # of released paramters to k1,k2, or reduce the target image size.")
+                print("BlenderProc will not generate incomplete images with void regions since these are not useful for ML (data leakage).")
+                print("For that, you can use the Matlab code in robotic.de/callab, which robustifies against these unstable pixels.")
                 raise Exception("The iterative distortion algorithm is unstable.")
 
         # update undistorted projection
