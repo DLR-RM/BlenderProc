@@ -15,7 +15,7 @@ class Light(Entity):
 
         :param type: The initial type of light, can be one of [POINT, SUN, SPOT, AREA].
         :param name: The name of the new light
-        :param blender_obj: A bpy.types.Light, this is then used instead of the type and param.
+        :param blender_obj: A bpy.types.Light, this is then used instead of the type and name.
         """
         if blender_obj is None:
             # this create a light object and sets is as the used entity inside of the super class
