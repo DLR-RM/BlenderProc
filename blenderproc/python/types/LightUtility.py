@@ -8,16 +8,23 @@ from mathutils import Color
 
 
 class Light(Entity):
-    def __init__(self, type: str = "POINT", name: str = "light"):
+    def __init__(self, type: str = "POINT", name: str = "light", blender_obj: bpy.types.Light = None):
         """
+        Constructs a new light if no blender_obj is given, else the params type and name are used to construct a new
+        light.
+
         :param type: The initial type of light, can be one of [POINT, SUN, SPOT, AREA].
         :param name: The name of the new light
+        :param blender_obj: A bpy.types.Light, this is then used instead of the type and param.
         """
-        # this create a light object and sets is as the used entity inside of the super class
-        light_data = bpy.data.lights.new(name=name, type=type)
-        light_obj = bpy.data.objects.new(name=name, object_data=light_data)
-        bpy.context.collection.objects.link(light_obj)
-        super(Light, self).__init__(light_obj)
+        if blender_obj is None:
+            # this create a light object and sets is as the used entity inside of the super class
+            light_data = bpy.data.lights.new(name=name, type=type)
+            light_obj = bpy.data.objects.new(name=name, object_data=light_data)
+            bpy.context.collection.objects.link(light_obj)
+            super(Light, self).__init__(light_obj)
+        else:
+            super(Light, self).__init__(blender_obj)
 
     def update_blender_ref(self, name):
         """ Updates the contained blender reference using the given name of the instance.
