@@ -23,7 +23,7 @@ K = np.array([
 ])
 bproc.camera.set_intrinsics_from_K_matrix(K, 1280, 720)
 # Enable stereo mode and set baseline
-bproc.camera.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL")
+bproc.camera.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
