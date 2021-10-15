@@ -8,7 +8,11 @@
 
 # Version History
 
-## Version 2.0.0 13th October 2021
+## Version 2.0.0a7 13th October 2021
+- fix `Light` class to work properly with `bpy.types.Light` in `load_blend`
+- fix the stereo matching example add missing parameter to fct. call
+
+## Version 2.0.0a6 13th October 2021
 - moved to a full python API support (`.yaml` files are still supported)
   - blenderproc can now be installed via pip: `pip install blenderproc` 
   - complete new structure to most of the files
