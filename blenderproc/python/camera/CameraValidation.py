@@ -148,7 +148,7 @@ def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_
             # Compute current point on plane
             end = frame[0] + vec_x * x / float(sqrt_number_of_rays - 1) + vec_y * y / float(sqrt_number_of_rays - 1)
             # Send ray from the camera position through the current point on the plane
-            _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, position, end - position)
+            _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
             # Add hit object to set
             visible_objects.add(MeshObject(hit_object))
 
@@ -199,7 +199,7 @@ def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_ob
             # Compute current point on plane
             end = frame[0] + vec_x * x / float(sqrt_number_of_rays - 1) + vec_y * y / float(sqrt_number_of_rays - 1)
             # Send ray from the camera position through the current point on the plane
-            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, position, end - position)
+            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
 
             if hit:
                 is_of_special_dataset = "is_suncg" in hit_object or "is_3d_front" in hit_object

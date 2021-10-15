@@ -7,14 +7,18 @@ import bpy
 import time
 import inspect
 import importlib
-import git
 import warnings
 import numpy as np
 import json
+from sys import platform
+if platform != "win32":
+    # importing git doesn't work under windows
+    import git
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
+from blenderproc.version import __version__
 
 
 def resolve_path(path: str) -> str:
@@ -40,7 +44,6 @@ def resolve_resource(relative_resource_path: str) -> str:
     """
     return resolve_path(os.path.join(Utility.blenderproc_root, "blenderproc", "resources", relative_resource_path))
 
-
 def num_frames() -> int:
     """ Returns the currently total number of registered frames.
 
@@ -48,6 +51,23 @@ def num_frames() -> int:
     """
     return bpy.context.scene.frame_end - bpy.context.scene.frame_start
 
+def reset_keyframes() -> None:
+    """ Removes registered keyframes from all objects and resets frame_start and frame_end """
+    bpy.context.scene.frame_start = 0
+    bpy.context.scene.frame_end = 0
+    for a in bpy.data.actions:
+        bpy.data.actions.remove(a)
+
+def set_keyframe_render_interval(frame_start: Optional[int] = None, frame_end: Optional[int] = None):
+    """ Sets frame_start and/or frame_end which determine the frames that will be rendered.
+
+    :param frame_start: The new frame_start value. If None, it will be ignored.
+    :param frame_end: The new frame_end value. If None, it will be ignored.
+    """
+    if frame_start is not None:
+        bpy.context.scene.frame_start = frame_start
+    if frame_end is not None:
+        bpy.context.scene.frame_end = frame_end
 
 class Utility:
     blenderproc_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
@@ -142,11 +162,12 @@ class Utility:
 
         :return: a string, the BlenderProc version, or None if unavailable
         """
+        if platform == "win32":
+            return __version__
         try:
             repo = git.Repo(search_parent_directories=True)
         except git.InvalidGitRepositoryError as e:
-            warnings.warn("Invalid git repository")
-            return None
+            return __version__
         return repo.head.object.hexsha
 
     @staticmethod

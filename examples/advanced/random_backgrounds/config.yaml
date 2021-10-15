@@ -160,7 +160,7 @@
       }
       ],
       "intrinsics": {
-        "fov": 1,
+  
         "resolution_x": 640,
         "resolution_y": 480
       }

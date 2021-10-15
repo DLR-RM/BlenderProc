@@ -9,7 +9,6 @@ import numpy as np
 import random
 
 from blenderproc.python.modules.provider.getter.Material import Material
-from blenderproc.python.utility.BlenderUtility import check_bb_intersection_on_values
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.EntityUtility import Entity, delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
@@ -298,7 +297,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
                     collision_face_found = False
                     for existing_face in bm.faces:
                         existing_verts = np.array([v.co for v in existing_face.verts])
-                        if check_bb_intersection_on_values(np.min(existing_verts, axis=0)[:2],
+                        if CollisionUtility.check_bb_intersection_on_values(np.min(existing_verts, axis=0)[:2],
                                                            np.max(existing_verts, axis=0)[:2],
                                                            np.min(new_verts, axis=0)[:2],
                                                            np.max(new_verts, axis=0)[:2],

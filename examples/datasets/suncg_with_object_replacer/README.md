@@ -1,6 +1,6 @@
 # SUNCG scene with object switching
 
-![](../../../images/suncg_with_object_replacer_result.png)
+![](../../../images/suncg_with_object_replacer_result.jpg)
 
 The ObjectReplacer tries to replace objects with other objects.
 First, you can specify the group of objects, which should be replaced: `objects_to_be_replaced` 
@@ -12,10 +12,10 @@ Both groups of objects can be selected with the `getter.Entity`
 Execute in the Blender-Proc main directory:
 
 ```
-python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new object> examples/datasets/suncg_with_object_replacer/output
+blenderpoc run examples/datasets/suncg_with_object_replacer/main.py <path to house.json> <path to new object> examples/datasets/suncg_with_object_replacer/output
 ```
 
-* `examples/datasets/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_with_object_replacer/main.py`: path to the python file with pipeline configuration.
 * `<path to house.json>`: path to the house.json file of the SUNCG scene you want to render.
 * `<path to new object>`: path to the `objects_to_replace_with`.
 * `examples/datasets/suncg_with_object_replacer/output`: path to the output directory.
@@ -26,57 +26,49 @@ python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
+blenderproc vis hdf5 example/suncg_with_object_replacer/output/0.hdf5
 ```
 
 ## Steps
 
-* Loads a SUNCG scene: `loader.SuncgLoader` module
-* Loads new object: `loader.ObjectLoader` module
-* Hides the new loaded objects from the renderer: `manipulators.EntityManipulator` module
-* Switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config: `object.ObjectReplacer` module
-* Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
-* Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
-* Writes sampled camera poses to file: `writer.CameraStateWriter` module.
-* Renders rgb, distance and normals: `renderer.RgbRenderer` module.
-* Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
+* Loads a SUNCG scene.
+* Loads new object.
+* Hides the new loaded objects from the renderer.
+* Replacing objects.
+* Sample camera positions inside every room.
+* Automatically adds light sources inside each room.
+* Writes sampled camera poses to file.
+* Renders rgb, distance and normals.
+* Merges all into an `.hdf5` file.
 
-## Config file
+## Python file (main.py)
 
 ### ObjectReplacer
 
-```yaml
-    {
-      "module": "object.ObjectReplacer",
-      "config": {
-        "replace_ratio": 1,
-        "copy_properties": True,
-        "objects_to_be_replaced": {
-            "provider": "getter.Entity",
-            "conditions": {
-              "type": "MESH",
-              "cp_coarse_grained_class": "chair"
-            }
-        },
-        "objects_to_replace_with": {
-            "provider": "getter.Entity",
-            "conditions": {
-              "cp_replace": "chair",
-              "type": "MESH"
-            }
-        },
-        "ignore_collision_with": {
-        "provider": "getter.Entity",
-          "conditions": {
-            "name": "Floor",
-            "type": "MESH"
-          }
-        },
-      }
-    }
+```python
+chair_obj = bproc.loader.load_obj(args.object_path)
+if len(chair_obj) != 1:
+    raise Exception(f"There should only be one chair object not: {len(chair_obj)}")
+chair_obj = chair_obj[0]
+
+
+def relative_pose_sampler(obj):
+    # Sample random rotation and apply it to the objects pose
+    obj.blender_obj.rotation_euler.rotate(Euler((0, 0, np.random.uniform(0.0, 6.283185307))))
+
+
+replace_ratio = 1.0
+bproc.object.replace_objects(
+    objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
+    objects_to_replace_with=[chair_obj],
+    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
+    replace_ratio=replace_ratio,
+    copy_properties=True,
+    relative_pose_sampler=relative_pose_sampler
+)
 ```
 
-* This module replaces objects from `objects_to_be_replaced` with objects from `objects_to_replace_with`. The module uses for that the `getter.Entity` provider.
-* Furthermore, a probability of `switch_probability` can be set to make the switching probabilistic, if no collision happens between `objects_to_replace_with` and objects in the scene.
+
+* This replaces objects from `objects_to_be_replaced` with objects from `objects_to_replace_with`.
 * When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom properties that the `objects_to_be_replaced` used to have.
-* This module doesn't do collision checking between `objects_to_replace_with` and object provided by the `getter.Entity` `ignore_collision_with`.
+* This doesn't do collision checking between `objects_to_replace_with` and object provided by `ignore_collision_with`.

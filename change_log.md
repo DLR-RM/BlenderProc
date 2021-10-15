@@ -8,6 +8,26 @@
 
 # Version History
 
+## Version 2.0.0a7 13th October 2021
+- fix `Light` class to work properly with `bpy.types.Light` in `load_blend`
+- fix the stereo matching example add missing parameter to fct. call
+
+## Version 2.0.0a6 13th October 2021
+- moved to a full python API support (`.yaml` files are still supported)
+  - blenderproc can now be installed via pip: `pip install blenderproc` 
+  - complete new structure to most of the files
+  - offer new command line interfaces: `blenderproc run`, `blenderproc debug`, `blenderproc vis` and many more 
+  - optional/flag arguments can now be used in the users python script
+- adds feature to render multiple times in one session (see example `advanced/multi_render`)
+- added tutorials to get easy start with BlenderProc
+- adjusted all examples to explain how the python API would be used there
+- restructured the documentation
+- fixed a bug with the view layer update, which wasn't done before the scene coverage score was calculated, which caused problems in the 3D-FRONT examples.
+- removed a lot of view layer update calls, which makes the whole execution faster, by manually calculation the `matrix_world`.
+- vertex colors can now be used with a Principled BSDF shader
+- all images are now moved into a seperate `image/` directory
+- all functions now use type hints
+
 ## Version 1.12.0 23th July 2021
 - switch to blender 2.93, with that textures are now stored on the GPU between different frames increasing the speed drastically
 - moved a lot of modules to the python API

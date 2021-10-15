@@ -1,8 +1,8 @@
 # 3D Front Dataset
 
 <p align="center">
-<img src="../../../images/front_3d_rendering_0.png" alt="Front readme image" width=375>
-<img src="../../../images/front_3d_rendering_1.png" alt="Front readme image" width=375>
+<img src="../../../images/front_3d_rendering_0.jpg" alt="Front readme image" width=375>
+<img src="../../../images/front_3d_rendering_1.jpg" alt="Front readme image" width=375>
 </p>
 
 In this example we explain to you how to use the 3D-Front Dataset with the BlenderProc pipeline.
@@ -38,12 +38,11 @@ Best regards,
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/datasets/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} examples/datasets/front_3d/output 
+blenderproc run examples/datasets/front_3d/main.py {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} examples/datasets/front_3d/output 
 ```
 
-* `examples/datasets/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/front_3d/main.py`: path to the python file with pipeline configuration.
 
-The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
 * `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 
@@ -54,76 +53,58 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/front_3d/output/0.hdf5
+blenderproc vis hdf5 examples/datasets/front_3d/output/0.hdf5
 ```
 
 ## Steps
 
-* Loads the `.json` file: `loader.Front3DLoader` module. It loads all modules and creates the rooms, it furthermore also adds emission shaders to the ceiling and lamps.
-* Sets the category_id of the background to 0: `manipulators.WorldManipulator`
-* Adds cameras to the scene: `camera.Front3DCameraSampler`
-* Renders rgb, normals: `renderer.RgbRenderer` module.
-* Renders semantic segmentation: `renderer.SegMapRenderer` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module, removes unnecessary channels for the `"distance"`
+* Loads the `.json` file: `bproc.loader.load_front3d`. It creates the rooms and also adds emission shaders to the ceiling and lamps.
+* Adds camera pose to the scene: `bproc.camera.add_camera_pose()`. 
+* Enables normals and distance (rgb is enabled by default): `bproc.renderer.enable_normals_output()` `bproc.renderer.enable_distance_output()`.
+* Renders all set camera poses: `bproc.renderer.render()`.
+* Writes the output to .hdf5 containers: `bproc.writer.write_hdf5()`.
 
-## Config file
 
+## Python file (main.py)
 
 #### Front3DLoader 
 
-```yaml
-{
-  "module": "loader.Front3DLoader",
-  "config": {
-    "json_path": "<args:0>",
-    "3D_future_model_path": "<args:1>",
-    "3D_front_texture_path": "<args:2>"
-  }
-}
+```python
+loaded_objects = bproc.loader.load_front3d(
+    json_path=args.front,
+    future_model_path=args.future_folder,
+    front_3D_texture_path=args.front_3D_texture_path,
+    label_mapping=mapping
+)
 ```
 
-* This module imports an 3D-Front.json file into the scene.
+* This imports an 3D-Front.json file into the scene.
 * It also needs the path to the `3D-FUTURE-model` and to the `3D-Front-texture`
 * It is also possible to set the strength of the lights here, check the top of the Front3DLoader for more information.
 
 #### Front3DCameraSampler 
 
-```yaml
-{
-  "module": "camera.Front3DCameraSampler",
-  "config": {
-    "cam_poses": [
-      {
-        "number_of_samples": 10,
-        "min_interest_score": 0.15,
-        "proximity_checks": {
-          "min": 1.0,
-          "avg": {
-            "min": 2.5,
-            "max": 3.5,
-          },
-          "no_background": True
-        },
-        "location": {
-          "provider":"sampler.Uniform3d",
-          "max":[0, 0, 1.8],
-          "min":[0, 0, 1.4]
-        },
-        "rotation": {
-          "value": {
-            "provider":"sampler.Uniform3d",
-            "max":[1.338, 0, 6.283185307],
-            "min":[1.2217, 0, 0]
-          }
-        }
-      }
-    ]
-  }
-}
+```python
+proximity_checks = {"min": 1.0, "avg": {"min": 2.5, "max": 3.5}, "no_background": True}
+while tries < 10000 and poses < 10:
+    # Sample point inside house
+    height = np.random.uniform(1.4, 1.8)
+    location = point_sampler.sample(height)
+    # Sample rotation (fix around X and Y axis)
+    rotation = np.random.uniform([1.2217, 0, 0], [1.338, 0, np.pi * 2])
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
+
+    # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2.5 and 3.5
+    # meters and make sure that no background is visible, finally make sure the view is interesting enough
+    if bproc.camera.scene_coverage_score(cam2world_matrix, special_objects, special_objects_weight=10.0) > 0.8 \
+            and bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, proximity_checks, bvh_tree):
+        bproc.camera.add_camera_pose(cam2world_matrix)
+        poses += 1
+    tries += 1
 ```
 
-* This module samples camera poses in the loaded 3D Front scenes
-* It will create 10 different camera poses, based on the `number_of_samples`
+* This samples camera poses in the loaded 3D Front scenes
+* It will create 10 different camera poses, based on the `poses`
 * It will ensure that the min_interest_score is above 0.25, which means that there must be a variety of objects in the scene, this avoids that there are pictures of an empty corridor
 * The proximity checks have several conditions:
   * the camera can not be closer than 1.0 (meters) to any object, be aware that we use a sparse sampling here, which might over look thin objects

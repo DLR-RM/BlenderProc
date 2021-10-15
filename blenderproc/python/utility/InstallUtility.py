@@ -1,9 +1,11 @@
 import argparse
 import os
+import ssl
 import tarfile
 from os.path import join
 import subprocess
 import shutil
+import ssl
 import signal
 import sys
 from sys import platform, version_info
@@ -11,6 +13,7 @@ from typing import List, Union
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
+    from urllib.error import URLError
 else:
     from urllib import urlretrieve
     import contextlib
@@ -22,18 +25,19 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 class InstallUtility:
 
     @staticmethod
-    def determine_blender_install_path(is_config: bool, args: List[str]) -> Union[str, str]:
+    def determine_blender_install_path(is_config: bool, args: List[str], user_args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
         :param is_config: Whether a yaml config file was given instead of a python script.
         :param args: The given command line arguments.
+        :param user_args: The arguments that will be forwarded to the users script.
         :return:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.
         """
         if is_config:
             config_parser = ConfigParser()
-            config = config_parser.parse(args.file, args.args, False)  # Don't parse placeholder args in batch mode.
+            config = config_parser.parse(args.file, user_args, False)  # Don't parse placeholder args in batch mode.
             setup_config = config["setup"]
             custom_blender_path = setup_config["custom_blender_path"] if "custom_blender_path" in setup_config else args.custom_blender_path
             blender_install_path = setup_config["blender_install_path"] if "blender_install_path" in setup_config else args.blender_install_path
@@ -47,7 +51,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
 
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool) -> Union[str, str]:
+    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool = False) -> Union[str, str]:
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
@@ -69,7 +73,7 @@ class InstallUtility:
                           "on this machine.".format(join("/home_local", user_name), home_path))
                     # Replace the seperator from '/' to the os-specific one
                     # Since all example config files use '/' as seperator
-                    blender_install_path = blender_install_path.replace('/'.join(["/home_local", user_name]), home_path, 1)
+                    blender_install_path = blender_install_path.replace(os.path.join("/home_local", user_name), home_path, 1)
                     blender_install_path = blender_install_path.replace('/', os.path.sep)
             else:
                 blender_install_path = "blender"
@@ -116,28 +120,37 @@ class InstallUtility:
                 else:
                     raise Exception("This system is not supported yet: {}".format(platform))
                 try:
-                    import progressbar
-                    class DownloadProgressBar(object):
-                        def __init__(self):
-                            self.pbar = None
+                    try:
+                        import progressbar
+                        class DownloadProgressBar(object):
+                            def __init__(self):
+                                self.pbar = None
 
-                        def __call__(self, block_num, block_size, total_size):
-                            if not self.pbar:
-                                self.pbar = progressbar.ProgressBar(maxval=total_size)
-                                self.pbar.start()
-                            downloaded = block_num * block_size
-                            if downloaded < total_size:
-                                self.pbar.update(downloaded)
-                            else:
-                                self.pbar.finish()
+                            def __call__(self, block_num, block_size, total_size):
+                                if not self.pbar:
+                                    self.pbar = progressbar.ProgressBar(maxval=total_size)
+                                    self.pbar.start()
+                                downloaded = block_num * block_size
+                                if downloaded < total_size:
+                                    self.pbar.update(downloaded)
+                                else:
+                                    self.pbar.finish()
 
-                    print("Downloading blender from " + url)
-                    file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
-                except ImportError:
-                    print("Progressbar for downloading, can only be shown, "
-                          "when the python package \"progressbar\" is installed")
-                    file_tmp = urlretrieve(url, None)[0]
-
+                        print("Downloading blender from " + url)
+                        file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
+                    except ImportError:
+                        print("Progressbar for downloading, can only be shown, "
+                              "when the python package \"progressbar\" is installed")
+                        file_tmp = urlretrieve(url, None)[0]
+                except URLError as e:
+                    if platform == "win32":
+                        # on windows this is a known problem that the ssl certificates don't properly work
+                        # deactivate the ssl check
+                        if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None)):
+                            ssl._create_default_https_context = ssl._create_unverified_context
+                        file_tmp = urlretrieve(url, None)[0]
+                    else:
+                        raise e
                 if platform == "linux" or platform == "linux2":
                     if version_info.major == 3:
                         SetupUtility.extract_file(blender_install_path, file_tmp, "TAR")

@@ -42,8 +42,8 @@
             "number_of_samples": 5,
             "location": {
               "provider":"sampler.Uniform3d",
-              "max":[10, 10, 8],
-              "min":[-10, -10, 12]
+              "max":[10, 10, 12],
+              "min":[-10, -10, 8]
             },
             "rotation": {
               "format": "look_at",

@@ -1,0 +1,150 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "BlenderProc2"
+version: 2.0.0
+date-released: 2021-10-12
+licence: GNU General Public License v3.0
+authors:
+  - family-names: Denninger
+    given-names: Maximilian
+    affiliation: "German Aerospace Center (DLR)"
+    email: "maximilian.denninger@dlr.de"
+    orcid: "https://orcid.org/0000-0002-1557-2234"
+  - family-names: Sundermeyer
+    given-names: Martin
+    affiliation: "German Aerospace Center (DLR)"
+    email: "martin.sundermeyer@dlr.de"
+    orcid: "https://orcid.org/0000-0003-0587-9643"
+  - family-names: Winkelbauer
+    given-names: Dominik
+    affiliation: "German Aerospace Center (DLR)"
+    email: "dominik.winkelbauer@dlr.de"
+    orcid: "https://orcid.org/0000-0001-7443-1071"
+  - family-names: Olefir
+    given-names: Dmitry
+    affiliation: "German Aerospace Center (DLR)"
+    orcid: "https://orcid.org/0000-0001-5244-9676"
+  - family-names: Hodan
+    given-names: Tomas
+    affiliation: "Visual Recognition Group, Czech Technical University in Prague"
+    email: "hodantom@cmp.felk.cvut.cz"
+  - family-names: Zidan
+    given-names: Youssef
+    affiliation: "German Aerospace Center (DLR)"
+  - family-names: Elbadrawy
+    given-names: Mohamad
+    affiliation: "German Aerospace Center (DLR)"
+  - family-names: Knauer
+    given-names: Markus
+    affiliation: "German Aerospace Center (DLR)"
+    email: "markus.knauer@dlr.de"
+    orcid: "https://orcid.org/0000-0001-8229-9410"
+  - family-names: Katam
+    given-names: Harinandan
+    affiliation: "German Aerospace Center (DLR)"
+  - family-names: Lodhi
+    given-names: Ahsan
+    affiliation: "German Aerospace Center (DLR)"
+  - family-names: Penzkofer
+    given-names: Anna
+    affiliation: "German Aerospace Center (DLR)"
+repository-code: "https://github.com/DLR-RM/BlenderProc/"
+url: "https://dlr-rm.github.io/BlenderProc/"
+abstract: "BlenderProc is a modular procedural pipeline, which helps in generating real looking images for the training of convolutional neural networks. These can be used in a variety of use cases including segmentation, depth, normal and pose estimation and many others. A key feature of our extension of blender is the simple to use modular pipeline, which was designed to be easily extendable. By offering standard modules, which cover a variety of scenarios, we provide a starting point on which new modules can be created."
+keywords:
+  - "machine learning"
+  - "deep learning"
+  - "artificial intelligence"
+  - "computer vision"
+  - "simulation"
+  - "photo realistic rendering"
+  - "blender"
+  - "robot framework"
+  - "dataset generation"
+references:
+  - type: article
+    title: "BlenderProc"
+    authors:
+      - family-names: Denninger
+        given-names: Maximilian
+        affiliation: "German Aerospace Center (DLR)"
+        email: "maximilian.denninger@dlr.de"
+        orcid: "https://orcid.org/0000-0002-1557-2234"
+      - family-names: Sundermeyer
+        given-names: Martin
+        affiliation: "German Aerospace Center (DLR)"
+        email: "martin.sundermeyer@dlr.de"
+        orcid: "https://orcid.org/0000-0003-0587-9643"
+      - family-names: Winkelbauer
+        given-names: Dominik
+        affiliation: "German Aerospace Center (DLR)"
+        email: "dominik.winkelbauer@dlr.de"
+        orcid: "https://orcid.org/0000-0001-7443-1071"
+      - family-names: Zidan
+        given-names: Youssef
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Olefir
+        given-names: Dmitry
+        affiliation: "German Aerospace Center (DLR)"
+        orcid: "https://orcid.org/0000-0001-5244-9676"
+      - family-names: Elbadrawy
+        given-names: Mohamad
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Lodhi
+        given-names: Ahsan
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Katam
+        given-names: Harinandan
+        affiliation: "German Aerospace Center (DLR)"
+    year: 2019
+    url: https://arxiv.org/abs/1911.01911
+  - type: article
+    title: "BlenderProc: Reducing the Reality Gap with Photorealistic Rendering"
+    authors:
+      - family-names: Denninger
+        given-names: Maximilian
+        affiliation: "German Aerospace Center (DLR)"
+        email: "maximilian.denninger@dlr.de"
+        orcid: "https://orcid.org/0000-0002-1557-2234"
+      - family-names: Sundermeyer
+        given-names: Martin
+        affiliation: "German Aerospace Center (DLR)"
+        email: "martin.sundermeyer@dlr.de"
+        orcid: "https://orcid.org/0000-0003-0587-9643"
+      - family-names: Winkelbauer
+        given-names: Dominik
+        affiliation: "German Aerospace Center (DLR)"
+        email: "dominik.winkelbauer@dlr.de"
+        orcid: "https://orcid.org/0000-0001-7443-1071"
+      - family-names: Olefir
+        given-names: Dmitry
+        affiliation: "German Aerospace Center (DLR)"
+        orcid: "https://orcid.org/0000-0001-5244-9676"
+      - family-names: Hodan
+        given-names: Tomas
+        affiliation: "Visual Recognition Group, Czech Technical University in Prague"
+        email: "hodantom@cmp.felk.cvut.cz"
+      - family-names: Zidan
+        given-names: Youssef
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Elbadrawy
+        given-names: Mohamad
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Knauer
+        given-names: Markus
+        affiliation: "German Aerospace Center (DLR)"
+        email: "markus.knauer@dlr.de"
+        orcid: "https://orcid.org/0000-0001-8229-9410"
+      - family-names: Katam
+        given-names: Harinandan
+        affiliation: "German Aerospace Center (DLR)"
+      - family-names: Lodhi
+        given-names: Ahsan
+        affiliation: "German Aerospace Center (DLR)"
+    year: 2020
+    conference: "International Conference on Robotics: Sciene and Systems, RSS 2020"
+    url: "https://sim2real.github.io/assets/papers/2020/denninger.pdf"
+
+
+
+

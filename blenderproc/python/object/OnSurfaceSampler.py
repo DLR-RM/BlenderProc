@@ -88,7 +88,6 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
             print("Giving up on {}, deleting...".format(obj.get_name()))
             obj.delete()
 
-    bpy.context.view_layer.update()
     return placed_objects
 
 

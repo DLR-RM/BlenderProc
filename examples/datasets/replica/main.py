@@ -24,7 +24,7 @@ room = bproc.filter.one_by_attr(objs, "name", "mesh")
 point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list_values)
 
 # define the camera intrinsics
-bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+bproc.camera.set_resolution(512, 512)
 
 # Init bvh tree containing all mesh objects
 bvh_tree = bproc.object.create_bvh_tree_multi_objects([room, floor])

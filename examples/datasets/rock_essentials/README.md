@@ -1,6 +1,6 @@
 # Rock Essentials Dataset
 
-![](../../../images/rock_essentials_rendering.png)
+![](../../../images/rock_essentials_rendering.jpg)
 
 The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor.RockEssentialsGroundConstructor`, and `materials.RockEssentialsTextureSampler` modules that allow us to load models and textures from the [Rock Essentials](https://blendermarket.com/products/the-rock-essentials) (RE) dataset.
 
@@ -9,7 +9,7 @@ The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/datasets/rock_essentials/config.yaml <re_dataset> examples/datasets/rock_essentials/output
+blenderpoc run examples/datasets/rock_essentials/config.yaml <re_dataset> examples/datasets/rock_essentials/output
 ``` 
 
 * `examples/datasets/rock_essentials/config.yaml`: path to the configuration file with pipeline configuration.

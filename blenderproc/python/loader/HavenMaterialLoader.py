@@ -84,8 +84,8 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
 
 class HavenMaterialLoader:
     """
-    This class loads all textures obtained from https://texturehaven.com, use the script
-    (scripts/download_haven.py) to download all the textures to your pc.
+    This class loads all textures obtained from https://texturehaven.com, use 'blenderproc download haven'
+    to download all the textures to your pc.
 
     All textures here support Physically based rendering (PBR), which makes the textures more realistic.
 

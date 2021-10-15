@@ -9,15 +9,15 @@ In this example we demonstrate the basic functionality of BlenderProc.
 
 ## Usage
 
-Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the config-file if you want to change the installation path:
+Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the CLI arguments if you want to change the installation path:
 
 ```
-python run.py examples/basics/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basics/basic/output
+blenderproc run examples/basics/basic/main.py examples/resources/camera_positions examples/resources/scene.obj examples/basics/basic/output
 ```
 
-* `examples/basics/basic/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/basic/main.py`: path to the python file with pipeline configuration.
 
-The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
+The three arguments afterwards are used by the `argparser` at the top of the `main.py` file:
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/basics/basic/output`: path to the output directory.
@@ -27,7 +27,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/basics/basic/output/0.hdf5
+blenderproc vis hdf5 examples/basics/basic/output/0.hdf5
 ```
 
 ## Steps
@@ -38,167 +38,113 @@ python scripts/visHdf5Files.py examples/basics/basic/output/0.hdf5
 * Renders rgb, normals and distance: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
-## Config file
-
 ### Setup
 
-```yaml
-  "setup": {
-    "blender_install_path": "/home_local/<env:USER>/blender/",
-    "pip": [
-      "h5py"
-    ]
-  }
+```python
+import blenderproc as bproc
 ```
 
-* blender is installed into `/home_local/<env:USER>/blender/` where `<env:USER>` is automatically replaced by the username.
-* we want to use blender 2.8 (installation is done automatically on the first run).
-* inside the blender python environment the python package `h5py` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
+This sets up the `blenderproc` environment. `blenderproc` has to be the first import. This import already installs blender and all necessary pip packages.
 
-### Modules
-
-Under `modules` we list all modules we want the pipeline to execute. The order also defines the order in which they are executed.
-Every module has a name which specifies the python path to the corresponding class starting from the `src` directory and a `config` dict where we can configure the module to our needs.
-
-#### Initializer
-
-```yaml
- {
-  "module": "main.Initializer", 
-  "config": {
-    "global": {
-      "output_dir": "<args:2>"
-    }
-  }
-}
+```python
+bproc.init()
 ```
 
-* This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-It also initializes the GlobalStorage, which contains two parts:
-* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basics/basic/output`.
-* These values are provided to all modules, but can be overwritten by the config in any module.
-* The second part of the GlobalStorage is a container, which can store information over the boundaries over single modules.
-* For more information on the GlobalStorage read the documentation in the class.
+This init does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates a camera).
 
-#### ObjectLoader
+#### Object loading
 
-```yaml
-{
-  "module": "loader.ObjectLoader",
-  "config": {
-    "path": "<args:1>"
-  }
-}
+```python
+# load the objects into the scene
+objs = bproc.loader.load_obj(args.scene)
 ```
 
-* This module imports an .obj file into the scene.
-* The path of the .obj file should be configured via the parameter `path`.
-* Here we are using the second argument given, in the upper command the output path is set to `examples/resources/scene.obj`.
+* This call imports an .obj file into the scene.
+* The path of the `.obj` is given via the `args.scene` value.
+* Here we are using the second argument given to the `blenderproc` run, in the upper command. The output path is set to `examples/resources/scene.obj`.
 
-#### LightLoader
+#### Light loading 
 
-```yaml
-{
-  "module": "lighting.LightLoader",
-  "config": {
-    "lights": [
-      {
-        "type": "POINT",
-        "location": [5, -5, 5],
-        "energy": 1000
-      }
-    ]
-  }
-}
+```python
+# define a light and set its location and energy level
+light = bproc.types.Light()
+light.set_type("POINT")
+light.set_location([5, -5, 5])
+light.set_energy(1000)
 ```
 
-* This module creates a point light.
-* The properties of this light are configured via the parameter `lights`.
+Here a point light is created. The location and energy are set via the `set_location` and `set_energy` fcts.
 
-#### CameraLoader
+#### Camera loading
 
-```yaml
-{
-  "module": "camera.CameraLoader",
-  "config": {
-    "path": "<args:0>",
-    "file_format": "location rotation/value",
-    "intrinsics": {
-      "fov": 1
-    }
-  }
-}
+```python
+# define the camera resolution
+bproc.camera.set_resolution(512, 512)
+
+# read the camera positions file and convert into homogeneous camera-world transformation
+with open(args.camera, "r") as f:
+    for line in f.readlines():
+        line = [float(x) for x in line.split()]
+        position, euler_rotation = line[:3], line[3:6]
+        matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
+        bproc.camera.add_camera_pose(matrix_world)
 ```
 
-* This module imports the camera poses which defines from where the renderings should be taken.
-* The camera positions are defined in a file whose path is again given via the command line (`examples/resources/camera_positions` - contains 2 cam poses).
-* The file uses the following format which is defined at `file_format`.
+First the camera resolution is set to `512` by `512`. 
+After that the camera pose file is parsed and a matrix to world is calculated based on the extracted position and rotation. 
+This is then set via the `bproc.camera.add_camera_pose(matrix_world)` fct call. 
+Be aware that each of these calls uses the created camera in the `init` step and adds a new key frame saving its pose.
+
+The file format here is: 
 
 ```
 location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
 
-* The FOV is set via `intrinsics/fov`.
-* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0000.npy` and `campose_0001.npy` 
 
-#### RgbRenderer
+#### Rgb rendering
 
-```yaml
-{
-  "module": "renderer.RgbRenderer",
-  "config": {
-     "output_key": "colors",
-     "samples": 350,
-     "render_normals": True,
-     "normal_output_key": "normals",
-     "render_distance": True,
-     "distance_output_key": "distance"
-  }
-}
+```python
+# activate normal and distance rendering
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
+# set the amount of samples, which should be used for the color rendering
+bproc.renderer.set_samples(350)
+
+# render the whole pipeline
+data = bproc.renderer.render()
 ```
 
-* This module just goes through all cam poses and renders a rgb image for each of them.
-* The sample amount determines the quality of the rendering, higher sampling reduces noise but increases the render time.
-* The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.png` where `i` is the cam pose index
-* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files, we set the `output_key`, here to `colors`.
+First we enable that `blenderproc` also generates the `normals` and the `distance` for each color image, and then we set the amount of samples used for generating the color image.
+A higher sample amount will reduce the noise in the image, but increase the rendering time. 
+The correct value depends on the complexity of your scene and the GPU budget you can spare.
 
-=> Creates the files `rgb_0000.png` and `rgb_0001.png`.
+=> Creates the files `rgb_0000.png` and `rgb_0001.png` in the temp folder.
 
 It also creates the normals and distance
 
 * The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* By using `"render_distance": True`, an antialiased distance image is rendered. To render a z-buffer depth image without any smoothing effects use `"render_depth": True` instead. 
-  While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene. 
-  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
-* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`
+* Here, the distance image is antialiased, meaning that for each pixel the depth in this pixel is aggregated over its surface. If you want to render a z-buffer depth image without any smoothing effects use `bproc.renderer.enable_depth_output()` instead. While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
-In this example all of these are temporary and are used in the next module.
+In this example all of these are temporary and are read in directly after rendering and deleted in the temp folder. 
+These are then packed into a dictionary and returned and saved in the `data` variable.
 
-#### Hdf5Writer
+FAQ: Why are they stored on disc if we read them directly in again? 
+- Blender offers no other option than to first save them to disc and afterwards reading them in again.
 
-```yaml
-{
-  "module": "writer.Hdf5Writer",
-  "config": {
-    "postprocessing_modules": {
-      "distance": [
-        {
-          "module": "postprocessing.TrimRedundantChannels",
-        }
-      ]
-    }
-  }
-}
+#### Hdf5 Writing 
+
+```python
+# write the data to a .hdf5 container
+bproc.writer.write_hdf5(args.output_dir, data)
 ```
 
-* The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose.
-* A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before.
-* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `distance`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This reduces the distance map from 3 channels to a single channel (the other channels exist for internal reasons). 
-
+* The last module now merges all images created by the rendering call into one `.hdf5` file per cam pose.
+* A `.hdf5` file can be seen as a dict of numpy arrays.
 
 The file `0.h5py` would therefore look like the following:
 
@@ -210,11 +156,8 @@ The file `0.h5py` would therefore look like the following:
 }
 ``` 
 
-* At the end of the hdf5 writer all temporary files are deleted.
-* If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
-
 => Creates the files `0.h5py` and `1.h5py`
 
 # More Modules
 
-Well done, how about another tutorial on [camera_sampling](../camera_sampling/README.md) or are you more interested in [object manipulation](../entity_manipulation/README.md)?
+Well done, how about another example on [camera_sampling](../camera_sampling/README.md) or are you more interested in [object manipulation](../entity_manipulation/README.md)?

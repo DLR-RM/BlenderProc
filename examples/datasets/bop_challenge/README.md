@@ -19,11 +19,11 @@ Download the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/) and th
 Execute in the BlenderProc main directory:
 
 ```
-python scripts/download_cc_textures.py 
+blenderproc download cc_textures 
 ```
 
 ```
-python run.py examples/datasets/bop_challenge/<config_dataset.yaml> 
+blenderpoc run examples/datasets/bop_challenge/<config_dataset.yaml> 
               <path_to_bop_data> 
               <bop_dataset_name> 
               <path_to_bop_toolkit> 

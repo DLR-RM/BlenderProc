@@ -22,7 +22,7 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # define the camera intrinsics
-bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+bproc.camera.set_resolution(512, 512)
 # Set the empty object as focus point and set fstop to regulate the sharpness of the scene
 bproc.camera.add_depth_of_field(focus_point, fstop_value=0.25)
 

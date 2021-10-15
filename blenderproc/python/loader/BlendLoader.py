@@ -66,7 +66,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                     if obj.type == 'MESH':
                         loaded_objects.append(MeshObject(obj))
                     elif obj.type == 'LIGHT':
-                        loaded_objects.append(Light(obj))
+                        loaded_objects.append(Light(blender_obj=obj))
                     else:
                         loaded_objects.append(Entity(obj))
 

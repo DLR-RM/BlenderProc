@@ -12,208 +12,6 @@ from typing import Union, List, Tuple, Callable, Optional, Dict, Any
 from blenderproc.python.utility.Utility import Utility
 
 
-def local_to_world(coords: Union[List[float], Vector, np.ndarray],
-                   world: Union[np.ndarray, mathutils.Matrix]) -> List[Vector]:
-    """
-    Returns a cords transformed to the given transformation world matrix
-
-    :param coords: coordinates a tuple of 3 values for x,y,z
-    :param world: world matrix <- transformation matrix
-    """
-    return [world @ Vector(cord) for cord in coords]
-
-
-def get_bounds(obj: bpy.types.Object) -> List[Vector]:
-    """
-    :param obj: a mesh object
-    :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
-    """
-    return local_to_world(obj.bound_box, obj.matrix_world)
-
-
-def check_bb_intersection(obj1: bpy.types.Object, obj2: bpy.types.Object):
-    """
-    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
-    The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.
-
-    :param obj1: object 1  to check for intersection, must be a mesh
-    :param obj2: object 2  to check for intersection, must be a mesh
-    :return: True if the two bounding boxes intersect with each other
-    """
-    b1w = get_bounds(obj1)
-
-    def min_and_max_point(bb: List[Vector]) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Find the minimum and maximum point of the bounding box
-        :param bb: bounding box
-        :return: min, max
-        """
-        values = np.array(bb)
-        return np.min(values, axis=0), np.max(values, axis=0)
-
-    # get min and max point of the axis-aligned bounding box
-    min_b1, max_b1 = min_and_max_point(b1w)
-    b2w = get_bounds(obj2)
-    # get min and max point of the axis-aligned bounding box
-    min_b2, max_b2 = min_and_max_point(b2w)
-    return check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
-
-
-def check_bb_intersection_on_values(min_b1: np.ndarray, max_b1: np.ndarray, min_b2: np.ndarray, max_b2: np.ndarray,
-                                    used_check: Callable[[float, float], bool] = lambda a, b: a >= b) -> bool:
-    """
-    Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
-    namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
-    problems.
-
-    :param min_b1: List of minimum bounding box points for b1.
-    :param max_b1: List of maximum bounding box points for b1.
-    :param min_b2: List of minimum bounding box points for b2.
-    :param max_b2: List of maximum bounding box points for b2.
-    :param used_check: The operation used inside of the is_overlapping1D. With that it possible to change the \
-                       collision check from volume and surface check to pure surface or volume checks.
-    :return: True if the two bounding boxes intersect with each other
-    """
-    collide = True
-    for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
-        # inspired by this:
-        # https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
-        # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
-        def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
-            # returns true if the min and max values are overlapping
-            return used_check(x_max_1, x_min_2) and used_check(x_max_2, x_min_1)
-
-        collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
-    return collide
-
-
-def check_intersection(obj1: bpy.types.Object, obj2: bpy.types.Object, skip_inside_check: bool = False,
-                       bvh_cache: Optional[Dict[str, mathutils.bvhtree.BVHTree]] = None) \
-        -> Tuple[bool, Dict[str, mathutils.bvhtree.BVHTree]]:
-    """
-    Checks if the two objects are intersecting.
-
-    This will use BVH trees to check whether the objects are overlapping.
-
-    It is further also checked if one object is completely inside the other.
-    This check requires that both objects are watertight, have correct normals and are coherent.
-    If this is not the case it can be disabled via the parameter skip_inside_check.
-
-    :param obj1: object 1 to check for intersection, must be a mesh
-    :param obj2: object 2 to check for intersection, must be a mesh
-    :param skip_inside_check: Disables checking whether one object is completely inside the other.
-    :param bvh_cache: Dict of all the bvh trees, removes the `obj` from the cache before adding it again.
-    :return: True, if they are intersecting
-    """
-
-    if bvh_cache is None:
-        bvh_cache = {}
-
-    # If one of the objects has no vertices, collision is impossible
-    if len(obj1.data.vertices) == 0 or len(obj2.data.vertices) == 0:
-        return False, bvh_cache
-
-    # create bvhtree for obj1
-    if obj1.name not in bvh_cache:
-        obj1_BVHtree = create_bvh_tree_for_object(obj1)
-        bvh_cache[obj1.name] = obj1_BVHtree
-    else:
-        obj1_BVHtree = bvh_cache[obj1.name]
-
-    # create bvhtree for obj2
-    if obj2.name not in bvh_cache:
-        obj2_BVHtree = create_bvh_tree_for_object(obj2)
-        bvh_cache[obj2.name] = obj2_BVHtree
-    else:
-        obj2_BVHtree = bvh_cache[obj2.name]
-
-    # Check whether both meshes intersect
-    inter = len(obj1_BVHtree.overlap(obj2_BVHtree)) > 0
-
-    # Optionally check whether obj2 is contained in obj1
-    if not inter and not skip_inside_check:
-        inter = is_point_inside_object(obj1, obj1_BVHtree, obj2.matrix_world @ obj2.data.vertices[0].co)
-        print("Warning: Detected that " + obj2.name + " is completely inside " + obj1.name +
-              ". This might be wrong, if " + obj1.name +
-              " is not water tight or has incorrect normals. If that is the case, consider setting "
-              "skip_inside_check to True.")
-
-    # Optionally check whether obj1 is contained in obj2
-    if not inter and not skip_inside_check:
-        inter = is_point_inside_object(obj2, obj2_BVHtree, obj1.matrix_world @ obj1.data.vertices[0].co)
-        print("Warning: Detected that " + obj1.name + " is completely inside " + obj2.name +
-              ". This might be wrong, if " + obj2.name + " is not water tight or has incorrect "
-                                                         "normals. If that is the case, consider "
-                                                         "setting skip_inside_check to True.")
-
-    return inter, bvh_cache
-
-
-def create_bvh_tree_for_object(obj: bpy.types.Object) -> mathutils.bvhtree.BVHTree:
-    """ Creates a fresh BVH tree for the given object
-
-    :param obj: The object
-    :return: The BVH tree
-    """
-    bm = bmesh.new()
-    bm.from_mesh(obj.data)
-    bm.transform(obj.matrix_world)
-    obj_BVHtree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
-    return obj_BVHtree
-
-
-def is_point_inside_object(obj: bpy.types.Object, obj_BVHtree: mathutils.bvhtree.BVHTree,
-                           point: Union[Vector, np.ndarray]) -> bool:
-    """ Checks whether the given point is inside the given object.
-
-    This only works if the given object is watertight and has correct normals
-
-    :param obj: The object
-    :param obj_BVHtree: A bvh tree of the object
-    :param point: The point to check
-    :return: True, if the point is inside the object
-    """
-    point = Vector(point)
-    # Look for closest point on object
-    nearest, normal, _, _ = obj_BVHtree.find_nearest(point)
-    # Compute direction
-    p2 = nearest - point
-    # Compute dot product between direction and normal vector
-    a = p2.normalized().dot((obj.rotation_euler.to_matrix() @ normal).normalized())
-    return a >= 0.0
-
-
-def check_if_uv_coordinates_are_set(obj: bpy.types.Object) -> bool:
-    """
-    :param obj: should be an object, which has a mesh
-    """
-    if len(obj.data.uv_layers) > 1:
-        raise Exception("This only support objects which only have one uv layer.")
-    for layer in obj.data.uv_layers:
-        max_val = np.max([list(uv_coords.uv) for uv_coords in layer.data])
-        return max_val > 1e-7
-    return False
-
-
-def vector_to_euler(vector: Vector, vector_type: str) -> mathutils.Euler:
-    """
-    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.
-    :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
-    :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.
-    """
-    # Check vector type
-    if vector_type == "UP":
-        # UP vectors are used for MESH type objects
-        euler_angles = vector.to_track_quat('Z', 'Y').to_euler()
-    elif vector_type == "FORWARD":
-        # FORWARD vectors are used for LIGHT and CAMERA type objects
-        euler_angles = vector.to_track_quat('-Z', 'Y').to_euler()
-    else:
-        raise Exception("Unknown vector type: " + vector_type)
-
-    return euler_angles
-
-
 def add_object_only_with_vertices(vertices: List[List[float]], name: str = 'NewVertexObject') -> bpy.types.Object:
     """
     Generates a new object with the given vertices, no edges or faces are generated.
@@ -273,7 +71,6 @@ def add_object_only_with_direction_vectors(vertices: List[List[float]], normals:
     bm.free()
     return obj
 
-
 def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bpy.types.Object:
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
@@ -307,7 +104,6 @@ def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bp
     bm.to_mesh(mesh)
     bm.free()
     return obj
-
 
 def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     """
@@ -373,46 +169,6 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
             error += '`python -c "import imageio; imageio.plugins.freeimage.download()"`\n'
             error += "Now everything should work -> run the pipeline again."
             raise Exception(error)
-
-
-def get_bound_volume(obj: bpy.types.Object) -> float:
-    """ Gets the volume of a possible orientated bounding box.
-    :param obj: Mesh object.
-    :return: volume of a bounding box.
-    """
-    bb = get_bounds(obj)
-    # Search for the point which is the maximum distance away from the first point
-    # we call this first point min and the furthest away point max
-    # the vector between the two is a diagonal of the bounding box
-    min_point, max_point = bb[0], None
-    max_dist = -1
-    for point in bb:
-        dist = (point - min_point).length
-        if dist > max_dist:
-            max_point = point
-            max_dist = dist
-    diag = max_point - min_point
-    # use the diagonal to calculate the volume of the box
-    return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
-
-
-def duplicate_objects(objects: Union[bpy.types.Object, List[bpy.types.Object]]) -> List[bpy.types.Object]:
-    """
-    Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
-
-    :param objects: an object or a list of objects to be duplicated
-    :return: a list of objects
-    """
-    if not isinstance(objects, list):
-        objects = [objects]
-
-    bpy.ops.object.select_all(action='DESELECT')
-    for obj in objects:
-        obj.select_set(True)
-    bpy.ops.object.duplicate()
-    duplicates = bpy.context.selected_objects
-    bpy.ops.object.select_all(action='DESELECT')
-    return duplicates
 
 
 def collect_all_orphan_datablocks() -> Dict[str, Any]:
