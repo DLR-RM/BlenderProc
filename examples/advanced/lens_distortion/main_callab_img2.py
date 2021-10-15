@@ -8,9 +8,6 @@ from mathutils import Matrix
 
 import os # path
 
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', help="Path to the scene.obj file, should be examples/resources/scene.obj")
 parser.add_argument('output_dir', help="Path to where the final files, will be saved, could be examples/basics/basic/output")
