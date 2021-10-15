@@ -1,6 +1,6 @@
 # Camera lens distortion generation and validation
 
-Generates distorted images (RGB, depth, and normals) of a typical BlenderProc virtual scene and of a precisely measured camera calibration plate at a known pose and intrinsics. The latter will be used for validation of our geometric camera model by comparing the resulting images to real images.
+Generates distorted images (RGB, depth, and normals) of a typical BlenderProc virtual scene and of a precisely measured camera calibration plate at known poses and intrinsics. The latter will be used for validation of our geometric camera model by comparing the generated images to real images.
 
 ## Usage
 
@@ -10,23 +10,23 @@ Execute in the BlenderProc main directory:
 blenderproc run examples/advanced/lens-distortion/main.py examples/resources/scene.obj examples/advanced/lens-distortion/output
 ``` 
 for the standard scene:
-![](../../../images/lens_img0_generated.gif)
+![](../../../images/lens_img0_generated.png)
 or
 ```
 blenderproc run examples/advanced/lens-distortion/main_callab_img1.py examples/resources/callab_platte.obj examples/advanced/lens-distortion/output
 ``` 
 for a simple calibration image:
-![](../../../images/lens_img1_generated.gif)
+![](../../../images/lens_img1_generated.png)
 or
 ```
 blenderproc run examples/advanced/lens-distortion/main_callab_img2.py examples/resources/callab_platte_justin.obj examples/advanced/lens-distortion/output
 ``` 
 for a fairly distorted image:
-![](../../../images/lens_img2_generated.gif)
+![](../../../images/lens_img2_generated.png)
 
 ## Visualization
 
-The `output` folder will contain hdf5 files including distorted color, depth, and normal images. Use `./blenderproc/scripts/saveAsImg.py` to unpack.
+The `output` folder will contain hdf5 files including distorted color, depth, and normal images. Use `./blenderproc/scripts/saveAsImg.py` or `blenderproc extract hdf5` to unpack.
 
 ## Validation
 
@@ -41,9 +41,9 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 * Loads objects; locates them at the origin of the world ref. frame
 * Creates a point light
 * Sets the camera intrinsics including the lens distortion parameters
-* Intializes the undistorted-to-distorted coordinates mapping for all generated undstorted images (typically in a higher resolution than needed) to be eventually distorted
+* Intializes the undistorted-to-distorted coordinates mapping for all generated undistorted images (typically in a higher resolution than desired) to be eventually distorted
 * Either samples camera-to-object poses (first example) or loads the camera poses measured with a camera calibration software (e.g., [DLR CalLab v1](https://www.robotic.de/callab))
-* Renders RGB, depth and normals
+* Renders RGB, depth and, normals
 * Applies lens distortion (to the temporal, higher-resoluted, intermediate Blender images, and then cropes them down to the desired resolution)
 * Writes the distorted data to a .hdf5 container
 
@@ -53,7 +53,7 @@ You can adapt the files at the following stages:
 
 ### Object loader
 
-This comes by argument and accepts both `.obj` (+`.mtl`) and `.blend` files. The `.blend` files included in the directory show the BlenderProc2 logo as in the GIF images above. The objects are expected in metric scale.
+This comes by argument and accepts both `.obj` (+`.mtl`) and `.blend` files. The `.blend` files included in the directory show the BlenderProc2 logo as in the GIF images above. The object models are expected in metric scale.
 
 ### Camera loader
 
@@ -66,11 +66,11 @@ bproc.camera.set_intrinsics_from_K_matrix(cam_K, resolution_x, resolution_y,
 bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
 ```
 
-Here we set the camera intrinsics (following the pinhole camera model but with skew=0 always) and the undistorted-to-distorted Brown-Conrady lens distortion model. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they are may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
+Here we set the camera intrinsics (following the pinhole camera model but with skew=0 always) and the undistorted-to-distorted Brown-Conrady lens distortion model. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
 
 ### Camera pose
 
-Either sample a pose:
+Either sample poses for the configured scene to be in camera view (first example):
 ```python
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
@@ -82,9 +82,8 @@ rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane
 cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 bproc.camera.add_camera_pose(cam2world_matrix)
 ```
-This module samples the configured scene across the camera view. 
 
-Or input a known pose as an homog. transformation matrix from the world ref. frame to the camara ref. frame:
+Or input a known pose as an homog. transformation matrix from the world ref. frame to the camera ref. frame:
 ```python
 cam2world = Matrix(([0.999671270370088, -0.00416970801689331, -0.0252831090758257, 0.18543145448762],
     [-0.0102301044453415, 0.839689004789377, -0.542971400435615, 0.287115596159953],
