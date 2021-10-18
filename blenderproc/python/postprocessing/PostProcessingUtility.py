@@ -173,9 +173,9 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
     return image
 
 def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray], 
-                          mapping_coords: np.ndarray = None,
-                          orig_res_x: int = None,
-                          orig_res_y: int = None) -> Union[List[np.ndarray], np.ndarray]:
+                          mapping_coords: Optional[np.ndarray] = None,
+                          orig_res_x: Optional[int] = None,
+                          orig_res_y: Optional[int] = None) -> Union[List[np.ndarray], np.ndarray]:
     return LensDistortionUtility.apply_lens_distortion(image, mapping_coords, orig_res_x, orig_res_y)
 
 
