@@ -45,7 +45,7 @@ bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y,
 bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
 
 # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
-mapping_coords, orig_img_res = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
+mapping_coords = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
 
 # Use a known camera pose (from DLR CalLab)
 cam2world = Matrix(([0.999671270370088, -0.00416970801689331, -0.0252831090758257, 0.18543145448762],
