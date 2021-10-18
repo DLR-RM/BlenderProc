@@ -13,13 +13,13 @@ for the standard scene:
 ![](../../../images/lens_img0_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens-distortion/main_callab_img1.py examples/resources/callab_platte.obj examples/advanced/lens-distortion/output
+blenderproc run examples/advanced/lens-distortion/main_callab_img1.py examples/advanced/lens-distortion/callab_platte.obj examples/advanced/lens-distortion/output
 ``` 
 for a simple calibration image:
 ![](../../../images/lens_img1_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens-distortion/main_callab_img2.py examples/resources/callab_platte_justin.obj examples/advanced/lens-distortion/output
+blenderproc run examples/advanced/lens-distortion/main_callab_img2.py examples/advanced/lens-distortion/callab_platte_justin.obj examples/advanced/lens-distortion/output
 ``` 
 for a fairly distorted image:
 ![](../../../images/lens_img2_generated.png)
