@@ -72,7 +72,7 @@ Here we set the original camera intrinsics (following the pinhole camera model b
 mapping_coords, orig_img_res = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
 ```
 
-Here we setup the lens distortion and adapt intrinsics so that it can be later applied in the PostProcessing. Mapping coordinates between the distorted and undistorted image as well as the original image resolution are saved and required to apply the lens distortion as postprocessing.
+Here we setup the lens distortion and adapt intrinsics so that it can be later applied in the PostProcessing. Mapping coordinates between the distorted and undistorted image as well as the original image resolution are saved and need to be applied in the actual lens distortion step done in postprocessing.
 
 ### Camera pose
 

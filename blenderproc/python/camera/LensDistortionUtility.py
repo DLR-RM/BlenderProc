@@ -29,11 +29,8 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     values by interpolation. Note that when adapting the internal image resolution demanded from Blender, the
     camera main point (cx,cy) of the K intrinsic matrix is (internally and temporarily) shifted.
 
-    This function has to be used together with the PostProcessing Module, else only the resolution is increased
-    but the image(s) will not be distorted.
-
-    This functions stores the "_lens_distortion_is_used" key in the GlobalStorage, which contains the information
-    on the mapping and the original image resolution.
+    This function has to be used together with bproc.postprocessing.apply_lens_distortion(), else only the 
+    resolution is increased but the image(s) will not be distorted.
 
     :param k1: First radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
     :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
@@ -43,7 +40,7 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
                Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
     :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global storage (backward compat for configs)
-    :return: mapping coordinates from undistorted to distorted image
+    :return: mapping coordinates from distorted to undistorted image pixels
     """
     if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
         raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
@@ -182,7 +179,7 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
                           orig_res_x: int = None,
                           orig_res_y: int = None) -> Union[List[np.ndarray], np.ndarray]:
     """
-    This functions applies the lens distortion mapping that has be precalculated by `set_lens_distortion`.
+    This functions applies the lens distortion mapping that needs to be precalculated by `bproc.camera.set_lens_distortion()`.
 
     Without calling this function the `set_lens_distortion` fct. only increases the image resolution and
     changes the K matrix of the camera.
