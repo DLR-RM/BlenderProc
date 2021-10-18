@@ -7,19 +7,19 @@ Generates distorted images (RGB, depth, and normals) of a typical BlenderProc vi
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/lens-distortion/main.py examples/resources/scene.obj examples/advanced/lens-distortion/output
+blenderproc run examples/advanced/lens_distortion/main.py examples/resources/scene.obj examples/advanced/lens_distortion/output
 ``` 
 for the standard scene:
 ![](../../../images/lens_img0_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens-distortion/main_callab_img1.py examples/advanced/lens-distortion/callab_platte.obj examples/advanced/lens-distortion/output
+blenderproc run examples/advanced/lens_distortion/main_callab_img1.py examples/advanced/lens_distortion/callab_platte.obj examples/advanced/lens_distortion/output
 ``` 
 for a simple calibration image:
 ![](../../../images/lens_img1_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens-distortion/main_callab_img2.py examples/advanced/lens-distortion/callab_platte_justin.obj examples/advanced/lens-distortion/output
+blenderproc run examples/advanced/lens_distortion/main_callab_img2.py examples/advanced/lens_distortion/callab_platte_justin.obj examples/advanced/lens_distortion/output
 ``` 
 for a fairly distorted image:
 ![](../../../images/lens_img2_generated.png)
@@ -36,7 +36,7 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 
 ![](../../../images/lens_img2.gif)
 
-## Steps in the code
+## Steps
 
 * Loads objects; locates them at the origin of the world ref. frame
 * Creates a point light
@@ -47,15 +47,13 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 * Applies lens distortion (to the temporal, higher-resoluted, intermediate Blender images, and then cropes them down to the desired resolution)
 * Writes the distorted data to a .hdf5 container
 
-## Adapt the `.py` config file as follows:
-
-You can adapt the files at the following stages:
+## Implementation
 
 ### Object loader
 
 This comes by argument and accepts both `.obj` (+`.mtl`) and `.blend` files. The `.blend` files included in the directory show the BlenderProc2 logo as in the GIF images above. The object models are expected in metric scale.
 
-### Camera loader
+### Camera Intrinsics
 
 ```python
 resolution_x, resolution_y = 1336, 1000
@@ -66,7 +64,15 @@ bproc.camera.set_intrinsics_from_K_matrix(cam_K, resolution_x, resolution_y,
 bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
 ```
 
-Here we set the camera intrinsics (following the pinhole camera model but with skew=0 always) and the undistorted-to-distorted Brown-Conrady lens distortion model. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
+Here we set the original camera intrinsics (following the pinhole camera model but with skew=0 always) and the undistorted-to-distorted Brown-Conrady lens distortion model. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
+
+### Setup Lens Distortion
+
+```python
+mapping_coords, orig_img_res = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
+```
+
+Here we setup the lens distortion and adapt intrinsics so that it can be later applied in the PostProcessing. Mapping coordinates between the distorted and undistorted image as well as the original image resolution are saved and required to apply the lens distortion as postprocessing.
 
 ### Camera pose
 
@@ -93,4 +99,12 @@ cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(c
 bproc.camera.add_camera_pose(cam2world)
 ```
 
-Note the required change in the definition of the camera ref. frame from the OpenGL definition to the standard computer vision definition featuring the Z axis to the front, the Y to the bottom, and the X to the right.
+Note the required change in the definition of the camera ref. frame from the OpenGL definition to the standard computer vision (OpenCV) definition featuring the Z axis to the front, the Y to the bottom, and the X to the right.
+
+### Apply Lens Distortion
+```python
+# post process the data and apply the lens distortion
+for key in ['colors', 'distance', 'normals']:
+    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_img_res)
+```
+For all generated image outputs (this would also include segmentation if generated) we now apply the mapping coordinates to distort the rendered image and crop it back to the original resolution.
