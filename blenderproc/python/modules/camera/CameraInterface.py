@@ -293,7 +293,7 @@ class CameraInterface(Module):
             k1, k2, k3 = config.get_float("lens_distortion/k1", 0.0), config.get_float("lens_distortion/k2", 0.0), \
                          config.get_float("lens_distortion/k3", 0.0)
             p1, p2 = config.get_float("lens_distortion/p1", 0.0), config.get_float("lens_distortion/p2", 0.0)
-            set_lens_distortion(k1, k2, k3, p1, p2)
+            set_lens_distortion(k1, k2, k3, p1, p2, use_global_storage=True)
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.

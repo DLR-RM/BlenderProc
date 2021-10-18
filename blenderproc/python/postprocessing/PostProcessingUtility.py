@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Tuple
 import numpy as np
 import bpy
 
@@ -172,8 +172,11 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
 
     return image
 
-def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
-    return LensDistortionUtility.apply_lens_distortion(image)
+def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray], 
+                          mapping_coords: np.ndarray = None,
+                          orig_res_x: int = None,
+                          orig_res_y: int = None) -> Union[List[np.ndarray], np.ndarray]:
+    return LensDistortionUtility.apply_lens_distortion(image, mapping_coords, orig_res_x, orig_res_y)
 
 
 class PostProcessingUtility:

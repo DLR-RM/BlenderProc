@@ -22,7 +22,7 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # set the camera intrinsics
-resolution_x, resolution_y = 640, 480
+orig_res_x, orig_res_y = 640, 480
 cam_K = np.array([[349.554, 0.0, 336.84], [0.0, 349.554, 189.185], [0.0, 0.0, 1.0]])
 k1, k2, k3 = -0.172992, 0.0248708, 0.00149384
 p1, p2 = 0.000311976, -9.62967e-5
@@ -31,11 +31,10 @@ p1, p2 = 0.000311976, -9.62967e-5
 clip_start = bpy.context.scene.camera.data.clip_start
 clip_end = bpy.context.scene.camera.data.clip_end
 
-bproc.camera.set_intrinsics_from_K_matrix(cam_K, resolution_x, resolution_y, clip_start, clip_end)
+bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y, clip_start, clip_end)
 
-# apply the lens distortion, this only adds the necessary mapping to GlobalStorage, so that it can be later used
-# in the PostProcessing
-bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
+# setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
+mapping_coords = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
 
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
@@ -59,10 +58,8 @@ bproc.renderer.set_samples(350)
 data = bproc.renderer.render()
 
 # post process the data and apply the lens distortion
-for key in data.keys():
-    # make sure the input is only an image
-    if isinstance(data[key], list) and len(data[key][0].shape) >= 2:
-        data[key] = bproc.postprocessing.apply_lens_distortion(data[key])
+for key in ['colors', 'distance', 'normals']:
+    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y)
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

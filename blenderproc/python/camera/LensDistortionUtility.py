@@ -19,7 +19,7 @@ For more information on lens distortion see: https://en.wikipedia.org/wiki/Disto
 Note that, unlike in that wikipedia entry as of early 2021, we're here using the undistorted-to-distorted formulation.
 """
 
-def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0):
+def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0, use_global_storage: bool = False) -> np.ndarray:
     """
     This function applies the lens distortion parameters to obtain an distorted-to-undistorted mapping for all
     natural pixels coordinates of the goal distorted image into the real pixel coordinates of the undistorted
@@ -42,6 +42,8 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
                Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
     :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
                Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
+    :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global storage (backward compat for configs)
+    :return: mapping coordinates from undistorted to distorted image
     """
     if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
         raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
@@ -169,11 +171,16 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
 
     CameraUtility.set_intrinsics_from_K_matrix(camera_changed_K_matrix, new_image_resolution[0],
                                                new_image_resolution[1], clip_start, clip_end)
-    GlobalStorage.set("_lens_distortion_is_used", {"mapping_coords": mapping_coords,
-                                                   "original_image_res": original_image_resolution})
 
+    if use_global_storage:
+        GlobalStorage.set("_lens_distortion_is_used", {"mapping_coords": mapping_coords,
+                                                    "original_image_res": original_image_resolution})
+    return mapping_coords
 
-def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
+def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray], 
+                          mapping_coords: np.ndarray = None, 
+                          orig_res_x: int = None,
+                          orig_res_y: int = None) -> Union[List[np.ndarray], np.ndarray]:
     """
     This functions applies the lens distortion mapping that has be precalculated by `set_lens_distortion`.
 
@@ -181,59 +188,65 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[L
     changes the K matrix of the camera.
 
     :param image: a list of images or an image to be distorted
+    :param mapping_coords: an array of pixel mappings from undistorted to distorted image
+    :param orig_res_x: original and output width resolution of the image
+    :param orig_res_y: original and output height resolution of the image
     :return: a list of images or an image that have been distorted, now in the desired resolution
     """
-    # if lens distortion was used apply it now
-    if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
-        # extract the necessary params from the GlobalStorage
-        content = GlobalStorage.get("_lens_distortion_is_used")
-        mapping_coords = content["mapping_coords"]
-        original_image_res = content["original_image_res"]
 
-        def _internal_apply(input_image: np.ndarray) -> np.ndarray:
-            """
-            Applies the distortion to the input image
-            :param input_image: input image, which will be distorted
-            :return: distorted input image
-            """
-            amount_of_output_channels = 1
-            if len(input_image.shape) == 3:
-                amount_of_output_channels = input_image.shape[2]
-            image_distorted = np.zeros((original_image_res[0], original_image_res[1], amount_of_output_channels))
-            used_dtpye = input_image.dtype
-            data = input_image.astype(np.float)
-            # Forward mapping in order to distort the undistorted image coordinates
-            # and reshape the arrays into the image shape grid.
-            # The reference frame for coords is as in DLR CalDe etc. (the upper-left pixel center is at [0,0])
-            for i in range(image_distorted.shape[2]):
-                if len(input_image.shape) == 3:
-                    image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
-                                                                          order=2, mode='nearest'),
-                                                          image_distorted[:, :, i].shape)
-                else:
-                    image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
-                                                                          order=2, mode='nearest'),
-                                                          image_distorted[:, :, i].shape)
-            # Other options are:
-            # - map_coordinates() in all channels at the same time (turns out to be slower)
-            # - use torch.nn.functional.grid_sample() instead to do it on the GPU (even in batches)
-
-            if used_dtpye == np.uint8:
-                image_distorted = np.clip(image_distorted, 0, 255)
-            data = image_distorted.astype(used_dtpye)
-            if len(input_image.shape) == 2:
-                return data[:, :, 0]
-            else:
-                return data
-
-        if isinstance(image, list):
-            return [_internal_apply(img) for img in image]
-        elif isinstance(image, np.ndarray):
-            return _internal_apply(image)
+    if mapping_coords is None or orig_res_x is None or orig_res_y is None: 
+        # if lens distortion was used apply it now
+        if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
+            # extract the necessary params from the GlobalStorage
+            content = GlobalStorage.get("_lens_distortion_is_used")
+            mapping_coords = content["mapping_coords"]
+            orig_res_y, orig_res_x = content["original_image_res"]
         else:
-            raise Exception(f"This type can not be worked with here: {type(image)}, only "
-                            f"np.ndarray or list of np.ndarray are supported")
+            raise Exception("Applying of a lens distortion is only possible after calling "
+                            "bproc.camera.set_lens_distortion(...) and pass 'mapping_coords' and "
+                            "'orig_res_x' + 'orig_res_x' to bproc.postprocessing.apply_lens_distortion(...). "
+                            "Previously this could also have been done via the CameraInterface module, "
+                            "see the example on lens_distortion.")
+
+    def _internal_apply(input_image: np.ndarray) -> np.ndarray:
+        """
+        Applies the distortion to the input image
+        :param input_image: input image, which will be distorted
+        :return: distorted input image
+        """
+        amount_of_output_channels = 1
+        if len(input_image.shape) == 3:
+            amount_of_output_channels = input_image.shape[2]
+        image_distorted = np.zeros((orig_res_y, orig_res_x, amount_of_output_channels))
+        used_dtpye = input_image.dtype
+        data = input_image.astype(np.float)
+        # Forward mapping in order to distort the undistorted image coordinates
+        # and reshape the arrays into the image shape grid.
+        # The reference frame for coords is as in DLR CalDe etc. (the upper-left pixel center is at [0,0])
+        for i in range(image_distorted.shape[2]):
+            if len(input_image.shape) == 3:
+                image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
+                                                                        order=2, mode='nearest'),
+                                                        image_distorted[:, :, i].shape)
+            else:
+                image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
+                                                                        order=2, mode='nearest'),
+                                                        image_distorted[:, :, i].shape)
+        # Other options are:
+        # - map_coordinates() in all channels at the same time (turns out to be slower)
+        # - use torch.nn.functional.grid_sample() instead to do it on the GPU (even in batches)
+
+        if used_dtpye == np.uint8:
+            image_distorted = np.clip(image_distorted, 0, 255)
+        data = image_distorted.astype(used_dtpye)
+        if len(input_image.shape) == 2:
+            return data[:, :, 0]
+        else:
+            return data
+    if isinstance(image, list):
+        return [_internal_apply(img) for img in image]
+    elif isinstance(image, np.ndarray):
+        return _internal_apply(image)
     else:
-        raise Exception("Applying of a lens distortion is only possible if prior to calling this method "
-                        "CameraUtility.set_lens_distortion(...) was called, this could have been done via the"
-                        "CameraInterface module, see lens_distortion.")
+        raise Exception(f"This type can not be worked with here: {type(image)}, only "
+                        f"np.ndarray or list of np.ndarray are supported")
