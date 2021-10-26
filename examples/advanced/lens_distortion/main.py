@@ -24,6 +24,14 @@ light.set_energy(1000)
 # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
 orig_res_x, orig_res_y, mapping_coords = bproc.camera.set_camera_parameters_from_config_file(args.config_file, read_the_extrinsics=False)
 
+# # Alternatively, you can setup the camera intrinsics by hand as follows:
+# # set the camera intrinsics
+# orig_res_x, orig_res_y = 640, 480
+# cam_K = np.array([[349.554, 0.0, 336.84], [0.0, 349.554, 189.185], [0.0, 0.0, 1.0]])
+# k1, k2, k3 = -0.172992, 0.0248708, 0.00149384
+# p1, p2 = 0.000311976, -9.62967e-5
+# bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y, bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
+
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
