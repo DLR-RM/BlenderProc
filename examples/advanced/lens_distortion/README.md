@@ -7,19 +7,19 @@ Generates distorted images (RGB, depth, and normals) of a typical BlenderProc vi
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/lens_distortion/main.py examples/resources/scene.obj examples/advanced/lens_distortion/output
+blenderproc run examples/advanced/lens_distortion/main.py examples/resources/scene.obj examples/advanced/lens_distortion/camera_calibration_callab_img0.cal examples/advanced/lens_distortion/output
 ``` 
 for the standard scene:
 ![](../../../images/lens_img0_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens_distortion/main_callab_img1.py examples/advanced/lens_distortion/callab_platte.obj examples/advanced/lens_distortion/output
+blenderproc run examples/advanced/lens_distortion/main_callab.py examples/advanced/lens_distortion/callab_platte.obj examples/advanced/lens_distortion/camera_calibration_callab_img1.cal examples/advanced/lens_distortion/output
 ``` 
 for a simple calibration image:
 ![](../../../images/lens_img1_generated.png)
 or
 ```
-blenderproc run examples/advanced/lens_distortion/main_callab_img2.py examples/advanced/lens_distortion/callab_platte_justin.obj examples/advanced/lens_distortion/output
+blenderproc run examples/advanced/lens_distortion/main_callab.py examples/advanced/lens_distortion/callab_platte_justin.obj examples/advanced/lens_distortion/camera_calibration_callab_img2.cal examples/advanced/lens_distortion/output
 ``` 
 for a fairly distorted image:
 ![](../../../images/lens_img2_generated.png)
