@@ -1,12 +1,14 @@
-
+import os
 from typing import Union, Callable, Any, List, Dict, Tuple
 
 import numpy as np
+import yaml
 import bpy
-
 from scipy.ndimage import map_coordinates
+
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 import blenderproc.python.camera.CameraUtility as CameraUtility
+from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
 
 
 """
@@ -247,3 +249,98 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
     else:
         raise Exception(f"This type can not be worked with here: {type(image)}, only "
                         f"np.ndarray or list of np.ndarray are supported")
+
+
+def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, read_the_extrinsics: bool = False,
+                                           camera_index: int = 0) -> Tuple[int, int, np.ndarray]:
+    """
+    This function sets the intrinsics parameters based on a config file, currently it only supports the DLR-Calde calib
+    format.
+    The calibration file allows to use multiple cameras, but only one can be used inside of BlenderProc per run.
+
+    :param camera_intrinsics_file_path: Path to the calibration file
+    :param camera_index: Used camera index
+    :return: mapping coordinates from distorted to undistorted image pixels returns result of on set_lens_distortion
+    """
+    if not os.path.exists(camera_intrinsics_file_path):
+        raise Exception("The camera intrinsics file does not exist: {}".format(camera_intrinsics_file_path))
+
+    def _is_number(value: str) -> bool:
+        # check if the given string value is a digit (float or int)
+        if value.isnumeric():
+            return True
+        try:
+            float(value)
+            return True
+        except ValueError:
+            return False
+
+    with open(camera_intrinsics_file_path, "r") as file:
+        final_lines = []
+        for line in file.readlines():
+            line = line.strip()
+            if "#" in line:
+                line = line[:line.find("#")].strip()
+            if "[" in line and "]" in line:
+                # add commas in between the numbers, which are seperated by spaces
+                line = line.replace(";", " ; ")
+                line = line.replace("[", "[ ")
+                line = line.replace("]", " ]")
+                for i in range(15):
+                    line = line.replace("  ", " ")
+                elements = line.split(" ")
+                if elements:
+                    final_elements = []
+                    # add in commas between two elements if the current and the next element are numbers
+                    for i in range(len(elements) - 1):
+                        final_elements.append(elements[i])
+                        if _is_number(elements[i]) and _is_number(elements[i + 1]):
+                            final_elements.append(",")
+                    final_elements.append(elements[-1])
+                    line = " ".join(final_elements)
+            if ";" in line and "[" in line and "]" in line:
+                # this line contains a matrix
+                line = line.replace("[", "[[").replace("]", "]]").replace(";", "], [")
+            # convert it to yaml format
+            if line.startswith("camera."):
+                current_nr = line[len("camera."):line.find(".", len("camera."))]
+                if _is_number(current_nr):
+                    # remove all lines which are not focused around the selected camera index
+                    if int(current_nr) != camera_index:
+                        line = ""
+                else:
+                    # remove lines which are not specified to a certain camera
+                    line = ""
+            line = line.replace(f"camera.{camera_index}.", "")
+            if line.count("=") == 1:
+                line = f'"{line.split("=")[0]}"= {line.split("=")[1]}'
+            else:
+                line = ""
+            line = line.replace("=", ":")
+            if line:
+                final_lines.append(line)
+
+    extracted_camera_parameters = yaml.safe_load("\n".join(final_lines))
+    # check if all parameters are correct
+    if extracted_camera_parameters.get("version") is None or extracted_camera_parameters["version"] != 2:
+        if extracted_camera_parameters.get("version") is None:
+            raise Exception("The version tag is not set in the config file!")
+        else:
+            raise Exception("Only version of two is supported, not {}".format(extracted_camera_parameters["version"]))
+    if extracted_camera_parameters.get("origin") is None or extracted_camera_parameters["origin"] != "center":
+        raise Exception("The origin has to be defined and has to be set to center!")
+    # set intrinsics based on the read matrix is called A here
+    CameraUtility.set_intrinsics_from_K_matrix(extracted_camera_parameters.get("A"), extracted_camera_parameters["width"],
+                                               extracted_camera_parameters["height"])
+    # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
+    mapping_coords = set_lens_distortion(extracted_camera_parameters["k1"], extracted_camera_parameters.get("k2", 0.0),
+                                         extracted_camera_parameters.get("k3", 0.0), extracted_camera_parameters.get("p1", 0.0),
+                                         extracted_camera_parameters.get("p2", 0.0))
+    if read_the_extrinsics:
+        cam2world = np.eye(4)
+        cam2world[:3, :3] = np.array(extracted_camera_parameters["R"])
+        cam2world[:3, 3] = np.array(extracted_camera_parameters["T"])
+        cam2world = change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
+        CameraUtility.add_camera_pose(cam2world)
+    return extracted_camera_parameters["width"], extracted_camera_parameters["height"], mapping_coords
+

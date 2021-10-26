@@ -3,10 +3,10 @@ import blenderproc as bproc
 import argparse
 
 import numpy as np
-import bpy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', help="Path to the scene.obj file, should be examples/resources/scene.obj")
+parser.add_argument('config_file', help="Path to the camera calibration config file.")
 parser.add_argument('output_dir', help="Path to where the final files, will be saved, could be examples/basics/basic/output")
 args = parser.parse_args()
 
@@ -21,20 +21,8 @@ light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
 
-# set the camera intrinsics
-orig_res_x, orig_res_y = 640, 480
-cam_K = np.array([[349.554, 0.0, 336.84], [0.0, 349.554, 189.185], [0.0, 0.0, 1.0]])
-k1, k2, k3 = -0.172992, 0.0248708, 0.00149384
-p1, p2 = 0.000311976, -9.62967e-5
-
-# reuse the values, which have been set before
-clip_start = bpy.context.scene.camera.data.clip_start
-clip_end = bpy.context.scene.camera.data.clip_end
-
-bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y, clip_start, clip_end)
-
 # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
-mapping_coords = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
+orig_res_x, orig_res_y, mapping_coords = bproc.camera.set_camera_parameters_from_config_file(args.config_file, read_the_extrinsics=False)
 
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
