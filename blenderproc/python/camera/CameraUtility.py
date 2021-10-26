@@ -58,6 +58,7 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
         rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
     return np.array(rotation_matrix)
 
+
 def set_resolution(image_width: int = None, image_height: int = None):
     """ Sets the camera resolution.
     
@@ -124,6 +125,7 @@ def set_intrinsics_from_blender_params(lens: float = None, image_width: int = No
     if shift_y is not None:
         cam.shift_y = shift_y
 
+
 def set_stereo_parameters(convergence_mode: str, convergence_distance: float, interocular_distance: float):
     """ Sets the stereo parameters of the camera.
 
@@ -161,6 +163,9 @@ def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int,
 
     cam_ob = bpy.context.scene.camera
     cam = cam_ob.data
+
+    if abs(K[0][1]) > 1e-7:
+        raise Exception(f"Screw is not supported by blender and therefore not by BlenderProc, set this to zero: {K[0][1]}")
 
     fx, fy = K[0][0], K[1][1]
     cx, cy = K[0][2], K[1][2]
