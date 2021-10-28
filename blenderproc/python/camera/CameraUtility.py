@@ -165,7 +165,7 @@ def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int,
     cam = cam_ob.data
 
     if abs(K[0][1]) > 1e-7:
-        raise Exception(f"Screw is not supported by blender and therefore not by BlenderProc, set this to zero: {K[0][1]}")
+        raise Exception(f"Skew is not supported by blender and therefore nor by BlenderProc, set this to zero: {K[0][1]} and recalibrate")
 
     fx, fy = K[0][0], K[1][1]
     cx, cy = K[0][2], K[1][2]
