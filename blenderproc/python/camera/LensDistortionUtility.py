@@ -254,13 +254,13 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
 def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, read_the_extrinsics: bool = False,
                                            camera_index: int = 0) -> Tuple[int, int, np.ndarray]:
     """
-    This function sets the intrinsics parameters based on a config file, currently it only supports the DLR-Calde calib
-    format.
+    This function sets the camera intrinsic parameters based on a config file, currently it only supports the
+    DLR-RMC camera calibration file format used in the "DLR CalDe and DLR CalLab" camera calibration toolbox.
     The calibration file allows to use multiple cameras, but only one can be used inside of BlenderProc per run.
 
     :param camera_intrinsics_file_path: Path to the calibration file
     :param camera_index: Used camera index
-    :return: mapping coordinates from distorted to undistorted image pixels returns result of on set_lens_distortion
+    :return: mapping coordinates from distorted to undistorted image pixels, as returned from set_lens_distortion()
     """
     if not os.path.exists(camera_intrinsics_file_path):
         raise Exception("The camera intrinsics file does not exist: {}".format(camera_intrinsics_file_path))
@@ -321,15 +321,16 @@ def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, rea
                 final_lines.append(line)
 
     extracted_camera_parameters = yaml.safe_load("\n".join(final_lines))
-    # check if all parameters are correct
+    print(f"Interpreted intrinsics from DLR-RMC camera calibration file: {extracted_camera_parameters}")
+    # check version and origin parameters
     if extracted_camera_parameters.get("version") is None or extracted_camera_parameters["version"] != 2:
         if extracted_camera_parameters.get("version") is None:
-            raise Exception("The version tag is not set in the config file!")
+            raise Exception("The version tag is not set in the DLR-RMC camera calibration file!")
         else:
-            raise Exception("Only version of two is supported, not {}".format(extracted_camera_parameters["version"]))
+            raise Exception("Only version 2 is supported for the DLR-RMC camera calibration file, not {}".format(extracted_camera_parameters["version"]))
     if extracted_camera_parameters.get("origin") is None or extracted_camera_parameters["origin"] != "center":
-        raise Exception("The origin has to be defined and has to be set to center!")
-    # set intrinsics based on the read matrix is called A here
+        raise Exception("The origin in the DLR-RMC camera calibration file has to be defined and set to center for BlenderProc distortion to work.")
+    # set intrinsics based on the yaml-read matrix called A and the yaml-read camera image size
     CameraUtility.set_intrinsics_from_K_matrix(extracted_camera_parameters.get("A"), extracted_camera_parameters["width"],
                                                extracted_camera_parameters["height"])
     # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
