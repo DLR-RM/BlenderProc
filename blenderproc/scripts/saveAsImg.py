@@ -92,15 +92,17 @@ def convert_hdf(base_file_path, output_folder=None):
 
 
 def cli():
-    parser = argparse.ArgumentParser("Script to save images out of a hdf5 files")
+    parser = argparse.ArgumentParser("Script to save images out of a hdf5 files.")
     parser.add_argument('hdf5', nargs='+', help='Path to hdf5 file/s')
+    parser.add_argument('--output_dir', default=None, help="Determines where the data is going to be saved. Default: Current directory")
+    
     args = parser.parse_args()
 
     if isinstance(args.hdf5, str):
-        convert_hdf(args.hdf5)
+        convert_hdf(args.hdf5, args.output_dir)
     elif isinstance(args.hdf5, list):
         for file in args.hdf5:
-            convert_hdf(file)
+            convert_hdf(file, args.output_dir)
     else:
         print("Input must be a path")
 
