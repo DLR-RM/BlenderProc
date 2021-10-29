@@ -39,46 +39,6 @@ light.set_energy(30)
 # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
 orig_res_x, orig_res_y, mapping_coords = bproc.camera.set_camera_parameters_from_config_file(args.config_file, read_the_extrinsics=True)
 
-# # set the camera intrinsics
-# orig_res_x, orig_res_y = 640, 480
-# cam_K = np.array([[601.951, 0.00000, 316.271], [0.00000, 601.951, 236.429], [0.0, 0.0, 1.0]])
-# k1, k2, k3 = 0.131565, -0.270235, 0.
-# p1, p2 = 0., 0.
-# bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y,
-#     bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
-
-# # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
-# mapping_coords = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
-
-# # Use a known camera pose (from DLR CalLab)
-# cam2world = Matrix(([-0.999756082619708, 0.0218268883858996, 0.00338298019529139, 0.0397942297565947],
-#     [-0.0219506049256179, -0.964809706540961, -0.262030515792922, 0.169496716181271],
-#     [-0.00245539019255271, -0.262041183334307, 0.965053185999876, -1.07314329461946],
-#     [0, 0, 0, 1.]))
-# # OpenCV -> OpenGL
-# cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
-# bproc.camera.add_camera_pose(cam2world)
-
-# # set the camera intrinsics
-# orig_res_x, orig_res_y = 1336, 1000
-# cam_K = np.array([[774.189,   0., 665.865], [0., 774.189, 498.651], [0.0, 0.0, 1.0]])
-# k1, k2, k3 = -0.249855, 0.102193, -0.0210435
-# p1, p2 = 0., 0.
-# bproc.camera.set_intrinsics_from_K_matrix(cam_K, orig_res_x, orig_res_y,
-# bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
-
-# # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
-# mapping_coords = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
-
-# # Use a known camera pose (from DLR CalLab)
-# cam2world = Matrix(([0.999671270370088, -0.00416970801689331, -0.0252831090758257, 0.18543145448762],
-#     [-0.0102301044453415, 0.839689004789377, -0.542971400435615, 0.287115596159953],
-#     [0.0234939480338283, 0.543051112648318, 0.839370243145164, -0.209347565773035],
-#     [0, 0, 0, 1.]))
-# # OpenCV -> OpenGL
-# cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
-# bproc.camera.add_camera_pose(cam2world)
-
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_distance_output()
