@@ -18,39 +18,25 @@ def set_denoiser(denoiser: Optional[str]):
 
     Automatically disables all previously activated denoiser.
 
-    :param denoiser: The name of the denoiser which should be enabled. Options are "INTEL", "BLENDER" and None. \
+    :param denoiser: The name of the denoiser which should be enabled. Options are "INTEL", "OPTIX", "BLENDER" and None. \
                      If None is given, then no denoiser will be active.
     """
     # Make sure there is no denoiser active
     _disable_all_denoiser()
     if denoiser is None:
         pass
-    elif denoiser.upper() == "INTEL":
-        # The intel denoiser is activated via the compositor
-        bpy.context.scene.use_nodes = True
-        nodes = bpy.context.scene.node_tree.nodes
-        links = bpy.context.scene.node_tree.links
-
-        # The denoiser gets normal and diffuse color as input
-        bpy.context.view_layer.use_pass_normal = True
-        bpy.context.view_layer.use_pass_diffuse_color = True
-
-        # Add denoiser node
-        denoise_node = nodes.new("CompositorNodeDenoise")
-
-        # Link nodes
-        render_layer_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeRLayers')
-        composite_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeComposite')
-        Utility.insert_node_instead_existing_link(links,
-                                                  render_layer_node.outputs['Image'],
-                                                  denoise_node.inputs['Image'],
-                                                  denoise_node.outputs['Image'],
-                                                  composite_node.inputs['Image'])
-
-        links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
-        links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
-    elif denoiser.upper() == "BLENDER":
+    elif denoiser.upper() == "OPTIX":
+        bpy.context.scene.cycles.use_denoising = True
         bpy.context.view_layer.cycles.use_denoising = True
+        bpy.context.scene.cycles.denoiser = "OPTIX"
+    elif denoiser.upper() == "INTEL":
+        bpy.context.scene.cycles.use_denoising = True
+        bpy.context.view_layer.cycles.use_denoising = True
+        bpy.context.scene.cycles.denoiser = "OPENIMAGEDENOISE"
+    elif denoiser.upper() == "BLENDER":
+        bpy.context.scene.cycles.use_denoising = True
+        bpy.context.view_layer.cycles.use_denoising = True
+        bpy.context.scene.cycles.denoiser = "NLM"
     else:
         raise Exception("No such denoiser: " + denoiser)
 
@@ -274,6 +260,7 @@ def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
 
+    bpy.context.view_layer.use_pass_normal = True
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
     tree = bpy.context.scene.node_tree
@@ -532,24 +519,3 @@ def _disable_all_denoiser():
     """
     # Disable cycles denoiser
     bpy.context.view_layer.cycles.use_denoising = False
-
-    # Disable intel denoiser
-    if bpy.context.scene.use_nodes:
-        nodes = bpy.context.scene.node_tree.nodes
-        links = bpy.context.scene.node_tree.links
-
-        # Go through all existing denoiser nodes
-        for denoiser_node in Utility.get_nodes_with_type(nodes, 'CompositorNodeDenoise'):
-            in_node = denoiser_node.inputs['Image']
-            out_node = denoiser_node.outputs['Image']
-
-            # If it is fully included into the node tree
-            if in_node.is_linked and out_node.is_linked:
-                # There is always only one input link
-                in_link = in_node.links[0]
-                # Connect from_socket of the incoming link with all to_sockets of the out going links
-                for link in out_node.links:
-                    links.new(in_link.from_socket, link.to_socket)
-
-            # Finally remove the denoiser node
-            nodes.remove(denoiser_node)
