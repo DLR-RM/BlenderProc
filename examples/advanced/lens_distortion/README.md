@@ -5,23 +5,29 @@ Generates distorted images (RGB, depth, and normals) of a typical BlenderProc vi
 ## Usage
 
 Execute in the BlenderProc main directory:
-
 ```
-blenderproc run examples/advanced/lens_distortion/main.py examples/resources/scene.obj examples/advanced/lens_distortion/camera_calibration_callab_img0.cal examples/advanced/lens_distortion/output
+blenderproc run examples/advanced/lens_distortion/main.py examples/resources/scene.obj examples/advanced/lens_distortion/output
 ``` 
 for the standard scene:
+
 ![](../../../images/lens_img0_generated.png)
+
 or
 ```
 blenderproc run examples/advanced/lens_distortion/main_callab.py examples/advanced/lens_distortion/callab_platte.obj examples/advanced/lens_distortion/camera_calibration_callab_img1.cal examples/advanced/lens_distortion/output
 ``` 
-for a simple calibration image:
+
+for a simple calibration image by loading intrinsics and extrinsics from a file:
+
 ![](../../../images/lens_img1_generated.png)
+
 or
 ```
 blenderproc run examples/advanced/lens_distortion/main_callab.py examples/advanced/lens_distortion/callab_platte_justin.obj examples/advanced/lens_distortion/camera_calibration_callab_img2.cal examples/advanced/lens_distortion/output
 ``` 
+
 for a fairly distorted image:
+
 ![](../../../images/lens_img2_generated.png)
 
 ## Visualization
@@ -53,8 +59,9 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 
 This comes by argument and accepts both `.obj` (+`.mtl`) and `.blend` files. The `.blend` files included in the directory show the BlenderProc2 logo as in the GIF images above. The object models are expected in metric scale.
 
-### Camera Intrinsics
+### Set camera intrinsics manually and setup lens distortion
 
+You can specify the camera intrinsics (following the pinhole camera model but with skew=0 always) including the undistorted-to-distorted Brown-Conrady lens distortion model in the `.py` config file. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
 ```python
 resolution_x, resolution_y = 1336, 1000
 cam_K = np.array([[774.189,   0., 665.865], [0., 774.189, 498.651], [0.0, 0.0, 1.0]])
@@ -64,19 +71,23 @@ bproc.camera.set_intrinsics_from_K_matrix(cam_K, resolution_x, resolution_y,
 bpy.context.scene.camera.data.clip_start, bpy.context.scene.camera.data.clip_end)
 ```
 
-Here we set the original camera intrinsics (following the pinhole camera model but with skew=0 always) and the undistorted-to-distorted Brown-Conrady lens distortion model. We discourage the use of the parameters `k3`,`p1`,`p2` since they are virtually never needed and they may compromise the distorted-to-undistorted mapping at the corner pixels of the image. This model is widespread in computer vision (e.g., OpenCV, DLR CalLab, Kalibr, Bouguet).
-
-### Setup Lens Distortion
-
+Subsequently, the lens distortion mapping is computed:
 ```python
 mapping_coords, orig_img_res = bproc.camera.set_lens_distortion(k1, k2, k3, p1, p2)
 ```
 
 Here we setup the lens distortion and adapt intrinsics so that it can be later applied in the PostProcessing. Mapping coordinates between the distorted and undistorted image as well as the original image resolution are saved and need to be applied in the actual lens distortion step done in postprocessing.
 
+### Alternatively: Set camera intrinsics from file
+
+You can instead locate all these data within a text file following the DLR-RMC camera calibration file format (e.g., `camera_calibration_callab_img1.cal` as an argument to the `.py` config file). Then you can read, set the parameters, setup the distortion mapping, and even setting a camera pose using this line of code:
+```python
+orig_res_x, orig_res_y, mapping_coords = bproc.camera.set_camera_parameters_from_config_file(args.config_file, read_the_extrinsics=False)
+```
+
 ### Camera pose
 
-Either sample poses for the configured scene to be in camera view (first example):
+You can either sample poses for the configured scene to be in camera view (first example):
 ```python
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
@@ -99,7 +110,9 @@ cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(c
 bproc.camera.add_camera_pose(cam2world)
 ```
 
-Note the required change in the definition of the camera ref. frame from the OpenGL definition to the standard computer vision (OpenCV) definition featuring the Z axis to the front, the Y to the bottom, and the X to the right.
+Note here the required change in the definition of the camera ref. frame from the OpenGL definition to the standard computer vision (OpenCV) definition featuring the Z axis to the front, the Y to the bottom, and the X to the right.
+
+Alternatively, you can skip this step by setting `read_the_extrinsics=True` when reading data from a DLR-RMC camera calibration file.
 
 ### Apply Lens Distortion
 ```python
