@@ -1,5 +1,5 @@
 import os
-from typing import Union, Callable, Any, List, Dict, Tuple
+from typing import Union, Callable, Any, List, Dict, Tuple, Optional
 
 import numpy as np
 import yaml
@@ -176,10 +176,12 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
                                                     "original_image_res": original_image_resolution})
     return mapping_coords
 
-def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray], 
-                          mapping_coords: np.ndarray = None, 
-                          orig_res_x: int = None,
-                          orig_res_y: int = None) -> Union[List[np.ndarray], np.ndarray]:
+
+def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
+                          mapping_coords: Optional[np.ndarray] = None,
+                          orig_res_x: Optional[int] = None,
+                          orig_res_y: Optional[int] = None,
+                          use_interpolation: bool = True) -> Union[List[np.ndarray], np.ndarray]:
     """
     This functions applies the lens distortion mapping that needs to be precalculated by `bproc.camera.set_lens_distortion()`.
 
@@ -190,6 +192,7 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
     :param mapping_coords: an array of pixel mappings from undistorted to distorted image
     :param orig_res_x: original and output width resolution of the image
     :param orig_res_y: original and output height resolution of the image
+    :param use_interpolation: if this is True, for each pixel an interpolation will be performed, if this is false the nearest pixel will be used
     :return: a list of images or an image that have been distorted, now in the desired resolution
     """
 
@@ -206,6 +209,7 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
                             "'orig_res_x' + 'orig_res_x' to bproc.postprocessing.apply_lens_distortion(...). "
                             "Previously this could also have been done via the CameraInterface module, "
                             "see the example on lens_distortion.")
+    interpolation_order = 2 if use_interpolation else 0
 
     def _internal_apply(input_image: np.ndarray) -> np.ndarray:
         """
@@ -225,12 +229,12 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
         for i in range(image_distorted.shape[2]):
             if len(input_image.shape) == 3:
                 image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
-                                                                        order=2, mode='nearest'),
-                                                        image_distorted[:, :, i].shape)
+                                                                      order=interpolation_order,
+                                                                      mode='nearest'), image_distorted[:, :, i].shape)
             else:
-                image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
-                                                                        order=2, mode='nearest'),
-                                                        image_distorted[:, :, i].shape)
+                image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords, order=interpolation_order,
+                                                                      mode='nearest'),
+                                                      image_distorted[:, :, i].shape)
         # Other options are:
         # - map_coordinates() in all channels at the same time (turns out to be slower)
         # - use torch.nn.functional.grid_sample() instead to do it on the GPU (even in batches)
