@@ -47,7 +47,7 @@ shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02
 # Collect all beds
 beds = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
 # Sample the location of the ShapeNet object above a random bed
-shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3))
+shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3, use_ray_trace_check=True))
 
 # Make sure the ShapeNet object has a minimum thickness (this will increase the stability of the simulator)
 shapenet_obj.add_modifier("SOLIDIFY", thickness=0.0025)

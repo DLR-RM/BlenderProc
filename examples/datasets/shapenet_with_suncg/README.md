@@ -80,6 +80,7 @@ We also add a custom property to make the selection with `EntityManipulator` in 
 sample_point = bproc.sampler.upper_region(
     objects_to_sample_on=bed_objs,
     min_height=0.75,
+    use_ray_trace_check=True
 )
 # move the shapenet object to the sampled position
 shapenet_obj.set_location(sample_point)
