@@ -43,7 +43,7 @@ orig_res_x, orig_res_y, mapping_coords = bproc.camera.set_camera_parameters_from
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_samples(350)
+bproc.renderer.set_samples(20)
 
 # render the whole pipeline
 data = bproc.renderer.render()
