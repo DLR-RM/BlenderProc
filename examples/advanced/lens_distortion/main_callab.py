@@ -50,8 +50,10 @@ data = bproc.renderer.render()
 
 # post process the data and apply the lens distortion
 for key in ['colors', 'distance', 'normals']:
-    # use_interpolation should be false, for semantic segmentation
-    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y, use_interpolation=True)
+    # use_interpolation should be false, for everything except colors
+    use_interpolation = key == "colors"
+    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y,
+                                                           use_interpolation=use_interpolation)
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

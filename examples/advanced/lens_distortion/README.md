@@ -118,7 +118,9 @@ Alternatively, you can skip this step by setting `read_the_extrinsics=True` when
 ```python
 # post process the data and apply the lens distortion
 for key in ['colors', 'distance', 'normals']:
-    # use_interpolation should be false, for semantic segmentation
-    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y, use_interpolation=True)
+    # use_interpolation should be false, for everything except colors 
+    use_interpolation = key == "colors"
+    data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y,
+                                                           use_interpolation=use_interpolation)
 ```
 For all generated image outputs (this would also include segmentation if generated) we now apply the mapping coordinates to distort the rendered image and crop it back to the original resolution.
