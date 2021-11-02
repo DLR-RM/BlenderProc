@@ -93,7 +93,7 @@ def cli():
         if os.path.exists(path):
             if os.path.isfile(path):
                 with h5py.File(path, 'r') as data:
-                    print(path + " contains the following keys: " + str(data.keys()))
+                    print(path + ": ")
 
                     # Select only a subset of keys if args.keys is given
                     if args.keys is not None:
@@ -102,8 +102,23 @@ def cli():
                         keys = [key for key in data.keys()]
 
                     # Visualize every key
+                    res = []
                     for key in keys:
                         value = np.array(data[key])
+                        
+                        if sum([ele for ele in value.shape]) < 5 or "version" in key:
+                            if value.dtype == "|S5":
+                                res.append((key, str(value).replace("[", "").replace("]", "").replace("b'", "").replace("'", "")))
+                            else:
+                                res.append((key, value))
+                        else:
+                            res.append((key, value.shape))
+                            
+                    if res:
+                        res = ["'{}': {}".format(key, key_res) for key, key_res in res]
+                        print("Keys: " + ', '.join(res))
+                            
+                    for key in keys:
                         # Check if it is a stereo image
                         if len(value.shape) >= 3 and value.shape[0] == 2:
                             # Visualize both eyes separately
@@ -111,7 +126,6 @@ def cli():
                                 vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
                         else:
                             vis_data(key, value, data, os.path.basename(path))
-
             else:
                 print("The path is not a file")
         else:

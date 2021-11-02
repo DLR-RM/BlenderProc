@@ -6,8 +6,8 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from scripts.saveAsImg import convert_hdf
+sys.path.append(os.path.join(os.path.dirname(__file__), "../blenderproc/scripts"))
+from saveAsImg import convert_hdf
 
 if __name__ == "__main__":
 
