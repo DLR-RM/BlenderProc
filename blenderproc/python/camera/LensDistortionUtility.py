@@ -55,7 +55,6 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     cx, cy = camera_K_matrix[0][2], camera_K_matrix[1][2]
 
     # get the current desired resolution
-    # TODO check how the pixel aspect has to be factored in!
     desired_dis_res = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
     # Get row,column image coordinates for all pixels for row-wise image flattening
     # The center of the upper-left pixel has coordinates [0,0] both in DLR CalDe and python/scipy
