@@ -7,6 +7,9 @@ from mathutils import Matrix
 
 import os # path
 
+from skimage.feature import match_template
+from PIL import Image
+
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', help="Path to the scene.obj file, should be examples/resources/scene.obj")
 parser.add_argument('config_file', help="Path to the camera calibration config file.")
@@ -54,6 +57,29 @@ for key in ['colors', 'distance', 'normals']:
     use_interpolation = key == "colors"
     data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y,
                                                            use_interpolation=use_interpolation)
+
+# test: compare generated image with real image
+if("img1" in os.path.basename(args.config_file)):
+    real_path = "./images/lens_img1_real.jpg"
+    norm_corr_limit = 0.660 # low since the real background is large and different
+elif("img2" in os.path.basename(args.config_file)):
+    real_path = "./images/lens_img2_real.png"
+    norm_corr_limit = 0.890 # less background
+else:
+    raise Exception("Reference real image not found.")
+img_gene = np.asarray(Image.fromarray(data['colors'][0]).convert('L'))
+img_real = np.asarray(Image.open(real_path).convert('RGB').convert('L'))
+assert img_gene.shape == img_real.shape
+result = match_template(img_gene, img_real[3:-3,3:-3], pad_input=False)
+print(np.round(result, 3))
+if(result.argmax()==24): # center of the (7,7) correlation window
+    print(f"The generated image is not biased w.r.t. the reference real image.")
+    if(result.max()>norm_corr_limit):
+        print(f"The norm. correlation index between generated and real images is {np.round(result.max(),3)}, which is fine.")
+    else:
+        raise Exception("The norm. correlation index between generated and real image is too low. The images do not match. Choose other object or config file.")
+else:
+    raise Exception("The generated calibration pattern image and the reference real image do not match. Choose other object or config file.")
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

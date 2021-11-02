@@ -51,6 +51,7 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 * Either samples camera-to-object poses (first example) or loads the camera poses measured with a camera calibration software (e.g., [DLR CalLab v1](https://www.robotic.de/callab))
 * Renders RGB, depth and, normals
 * Applies lens distortion (to the temporal, higher-resoluted, intermediate Blender images, and then cropes them down to the desired resolution)
+* Test by comparing the generated images with the reference real images `./images/lens_img1_real.jpg` and `./images/lens_img2_real.png`
 * Writes the distorted data to a .hdf5 container
 
 ## Implementation
@@ -114,7 +115,7 @@ Note here the required change in the definition of the camera ref. frame from th
 
 Alternatively, you can skip this step by setting `read_the_extrinsics=True` when reading data from a DLR-RMC camera calibration file.
 
-### Apply Lens Distortion
+### Apply lens distortion
 ```python
 # post process the data and apply the lens distortion
 for key in ['colors', 'distance', 'normals']:
@@ -124,3 +125,34 @@ for key in ['colors', 'distance', 'normals']:
                                                            use_interpolation=use_interpolation)
 ```
 For all generated image outputs (this would also include segmentation if generated) we now apply the mapping coordinates to distort the rendered image and crop it back to the original resolution.
+
+### Test w.r.t. real images
+```python
+# test: compare generated image with real image
+if("img1" in os.path.basename(args.config_file)):
+    real_path = "./images/lens_img1_real.jpg"
+    norm_corr_limit = 0.660 # low since the real background is large and different
+elif("img2" in os.path.basename(args.config_file)):
+    real_path = "./images/lens_img2_real.png"
+    norm_corr_limit = 0.890 # less background
+else:
+    raise Exception("Reference real image not found.")
+img_gene = np.asarray(Image.fromarray(data['colors'][0]).convert('L'))
+img_real = np.asarray(Image.open(real_path).convert('RGB').convert('L'))
+assert img_gene.shape == img_real.shape
+result = match_template(img_gene, img_real[3:-3,3:-3], pad_input=False)
+print(np.round(result, 3))
+if(result.argmax()==24): # center of the (7,7) correlation window
+    print(f"The generated image is not biased w.r.t. the reference real image.")
+    if(result.max()>norm_corr_limit):
+        print(f"The norm. correlation index between generated and real images is {np.round(result.max(),3)}, which is fine.")
+    else:
+        raise Exception("The norm. correlation index between generated and real image is too low. The images do not match. Choose other object or config file.")
+else:
+    raise Exception("The generated calibration pattern image and the reference real image do not match. Choose other object or config file.")
+```
+We apply normalized 2-D cross-correlation between the generated image and a reference real image (either `./images/lens_img1_real.jpg` or `./images/lens_img2_real.png`). Of course, the image background beyond the calibration plate is not modeled and differs, yet the strong pattern of the calibration plate dominates such that:
+1. any pixel shift must worsen the cross-correlation result (i.e., its maximum must lie at the kernel center)
+1. their norm. cross-correlation value must reach at least the empiric value `0.660` or `0.890` for img1 or img2, resp. (they are weakened by the unmodeled background, hence <1)
+
+If the test fails, either the wrong object model or calibration file has been used, or a bug appeared in the used BlenderProc version.
