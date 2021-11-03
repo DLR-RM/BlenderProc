@@ -29,12 +29,12 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     from .api import object
     from .api import types
     from .api import filter
-
-# this checks if blenderproc the command line tool or the run.py script are used. If not an exception is thrown
-import traceback
-# extract the basename of the file, which is the first in the traceback
-file_names_of_stack = [os.path.basename(file_summary.filename) for file_summary in traceback.extract_stack()]
-first_file_name = file_names_of_stack[0]
-# check if the name of this file is either blenderproc or if the "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the run.py
-if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ and "blenderproc" != first_file_name:
-    raise Exception(f"\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:\n\tpython {sys.argv[0]}\ncall:\n\tblenderproc run {sys.argv[0]}\n###############")
+else:
+    # this checks if blenderproc the command line tool or the run.py script are used. If not an exception is thrown
+    import traceback
+    # extract the basename of the file, which is the first in the traceback
+    file_names_of_stack = [os.path.basename(file_summary.filename) for file_summary in traceback.extract_stack()]
+    first_file_name = file_names_of_stack[0]
+    # check if the name of this file is either blenderproc or if the "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the run.py
+    if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ and "blenderproc" != first_file_name:
+        raise Exception(f"\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:\n\tpython {sys.argv[0]}\ncall:\n\tblenderproc run {sys.argv[0]}\n###############")
