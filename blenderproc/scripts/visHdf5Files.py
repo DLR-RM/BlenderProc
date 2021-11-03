@@ -119,6 +119,7 @@ def cli():
                         print("Keys: " + ', '.join(res))
                             
                     for key in keys:
+                        value = np.array(data[key])
                         # Check if it is a stereo image
                         if len(value.shape) >= 3 and value.shape[0] == 2:
                             # Visualize both eyes separately
