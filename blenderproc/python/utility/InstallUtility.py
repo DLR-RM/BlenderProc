@@ -79,7 +79,7 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-2.93
+            # right now only support blender-2.93
             major_version = "2.93"
             minor_version = "0"
             blender_version = "blender-{}.{}".format(major_version, minor_version)
@@ -183,11 +183,14 @@ class InstallUtility:
 
             # Try to get major version of given blender installation
             major_version = None
-            for sub_dir in os.listdir(blender_path):
+            for root, sub_dirs, files in os.walk(blender_path):
                 # Search for the subdirectory which has the major version as its name
-                if os.path.isdir(os.path.join(blender_path, sub_dir)) and sub_dir.replace(".", "").isdigit():
-                    major_version = sub_dir
-                    break
+                # Note: For Blender (2.93.5 2021-10-06 arm64) on MacOS the dir is "/Applications/Blender.app/Contents/Resources/2.93/"
+                # That's why we need to search all the subdirectories recursively to find major version
+                for sub_dir in sub_dirs:
+                    if sub_dir.replace(".", "").isdigit():
+                        major_version = sub_dir
+                        break
 
             if major_version is None:
                 raise Exception("Could not determine major blender version")
