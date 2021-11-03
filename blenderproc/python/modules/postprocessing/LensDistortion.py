@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.postprocessing.PostProcessingUtility import apply_lens_distortion
+from blenderproc.python.camera.LensDistortionUtility import apply_lens_distortion
 
 
 class LensDistortion(Module):
