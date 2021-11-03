@@ -7,7 +7,7 @@ If this is not the case please change it in the [Makefile](Makefile).
 First run `config_for_pip_install.yaml` to make sure to install all packages used in our code:
 
 ```bash
-python run.py docs/config_for_pip_install.yaml
+python cli.py docs/config_for_pip_install.yaml
 ```
 
 Now copy markdowns files from examples and main directory:
