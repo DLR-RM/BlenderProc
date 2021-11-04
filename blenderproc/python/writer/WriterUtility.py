@@ -9,7 +9,7 @@ import mathutils
 import h5py
 
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
-from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
+from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth, depth2dist
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.Utility import resolve_path, Utility, NumpyEncoder
