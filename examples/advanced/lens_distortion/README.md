@@ -129,10 +129,10 @@ For all generated image outputs (this would also include segmentation if generat
 ### Test w.r.t. real images
 ```python
 # test: compare generated image with real image
-if("img1" in os.path.basename(args.config_file)):
+if "img1" in os.path.basename(args.config_file):
     real_path = "./images/lens_img1_real.jpg"
     norm_corr_limit = 0.660 # low since the real background is large and different
-elif("img2" in os.path.basename(args.config_file)):
+elif "img2" in os.path.basename(args.config_file):
     real_path = "./images/lens_img2_real.png"
     norm_corr_limit = 0.890 # less background
 else:
@@ -141,10 +141,10 @@ img_gene = np.asarray(Image.fromarray(data['colors'][0]).convert('L'))
 img_real = np.asarray(Image.open(real_path).convert('RGB').convert('L'))
 assert img_gene.shape == img_real.shape
 result = match_template(img_gene, img_real[3:-3,3:-3], pad_input=False)
-print(np.round(result, 3))
-if(result.argmax()==24): # center of the (7,7) correlation window
+#print(np.round(result, 3))
+if result.argmax()==24: # center of the (7,7) correlation window
     print(f"The generated image is not biased w.r.t. the reference real image.")
-    if(result.max()>norm_corr_limit):
+    if result.max()>norm_corr_limit:
         print(f"The norm. correlation index between generated and real images is {np.round(result.max(),3)}, which is fine.")
     else:
         raise Exception("The norm. correlation index between generated and real image is too low. The images do not match. Choose other object or config file.")
