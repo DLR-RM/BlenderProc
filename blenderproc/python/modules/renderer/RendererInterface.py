@@ -186,6 +186,7 @@ class RendererInterface(Module):
         """
         if self.config.get_bool("render_distance", False):
             RendererUtility.enable_distance_output(
+                True,
                 self._determine_output_dir(),
                 self.config.get_string("distance_output_file_prefix", "distance_"),
                 self.config.get_string("distance_output_key", "distance"),
@@ -196,6 +197,7 @@ class RendererInterface(Module):
 
         if self.config.get_bool("render_depth", False):
             RendererUtility.enable_depth_output(
+                False,
                 self._determine_output_dir(),
                 self.config.get_string("depth_output_file_prefix", "depth_"),
                 self.config.get_string("depth_output_key", "depth")
