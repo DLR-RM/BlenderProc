@@ -33,14 +33,16 @@ with open(args.camera, "r") as f:
 
 # activate distance rendering
 bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output()
+
 # render the whole pipeline
 data = bproc.renderer.render()
 
 # Render segmentation masks (per class and per instance)
 data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
 
-# Convert distance to depth
-data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
+# Convert antialiased distance to antialiased depth
+data["antialiased_depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # write the data to a .hdf5 container
