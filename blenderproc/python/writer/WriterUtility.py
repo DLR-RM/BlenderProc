@@ -9,6 +9,7 @@ import mathutils
 import h5py
 
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
+from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.Utility import resolve_path, Utility, NumpyEncoder
@@ -118,11 +119,13 @@ class WriterUtility:
                             output_file = np.array(
                                 [WriterUtility.load_output_file(path, key_has_alpha_channel) for path in
                                  output_paths])
-
                         # For outputs like distance or depth, we automatically trim the last channel here
                         if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
                             output_file = trim_redundant_channels(output_file)
-
+                        if "convert_to_depth" in reg_out and reg_out["convert_to_depth"]:
+                            output_file = dist2depth(output_file)
+                        if "convert_to_distance" in reg_out and reg_out["convert_to_distance"]:
+                            output_file = depth2dist(output_file)
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
                     # per run outputs

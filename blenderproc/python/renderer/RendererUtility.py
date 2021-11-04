@@ -149,24 +149,29 @@ def set_samples(samples: int):
 
     :param samples: The number of samples per pixel
     """
-    bpy.context.scene.cycles.samples = samples
+    bpy.context.scene.cycles.samples = samples:WriterUtility
 
-
-def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = "distance_",
+def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
                            output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
-                           distance_falloff: str = "LINEAR"):
+                           distance_falloff: str = "LINEAR", convert_to_depth: bool = False):
     """ Enables writing distance images.
 
     Distance images will be written in the form of .exr files during the next rendering.
 
+    :param activate_antialiasing: If this is True the final image will be antialiased
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the distance output.
-    :param distance_start: Starting distance of the distance, measured from the camera.
+    :param distance_start: Starting distance of the distance, measured from the camera. Only if activate_antialiasing is True.
     :param distance_range: Total distance in which the distance is measured. \
-                           distance_end = distance_start + distance_range.
-    :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]
+                           distance_end = distance_start + distance_range. Only if activate_antialiasing is True.
+    :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC] \
+                             Only if activate_antialiasing is True.
+    :param convert_to_depth: If this is true, while loading a postprocessing step is executed to convert this distance\
+                             image to a depth image
     """
+    if not activate_antialiasing:
+        return enable_depth_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_distance=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
 
@@ -206,11 +211,13 @@ def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = 
         "key": output_key,
         "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
         "version": "2.0.0",
-        "trim_redundant_channels": True
+        "trim_redundant_channels": True,
+        "convert_to_distance": convert_to_depth
     })
 
 
-def enable_depth_output(output_dir: Optional[str] = None, file_prefix: str = "depth_", output_key: str = "depth"):
+def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
+                        output_key: str = "depth", convert_to_distance: bool = False):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
@@ -218,7 +225,11 @@ def enable_depth_output(output_dir: Optional[str] = None, file_prefix: str = "de
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the depth output.
+    :param convert_to_distance: If this is true, while loading a postprocessing step is executed to convert this depth \
+                                image to a distance image
     """
+    if activate_antialiasing:
+        return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_depth=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
 
@@ -246,7 +257,8 @@ def enable_depth_output(output_dir: Optional[str] = None, file_prefix: str = "de
         "key": output_key,
         "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
         "version": "2.0.0",
-        "trim_redundant_channels": True
+        "trim_redundant_channels": True,
+        "convert_to_distance": convert_to_distance
     })
 
 
