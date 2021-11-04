@@ -51,7 +51,7 @@ cam2world = np.array([
 cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
 bproc.camera.add_camera_pose(cam2world)
 
-# activate normal and distance rendering
+# activate distance rendering
 bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(100)
