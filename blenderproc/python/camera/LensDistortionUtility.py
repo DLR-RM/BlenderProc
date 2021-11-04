@@ -47,22 +47,21 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
         raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
 
-    # save the original image resolution
+    # save the original image resolution (desired output resolution)
     original_image_resolution = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
+
     # get the current K matrix (skew==0 in Blender)
     camera_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
     fx, fy = camera_K_matrix[0][0], camera_K_matrix[1][1]
     cx, cy = camera_K_matrix[0][2], camera_K_matrix[1][2]
 
-    # get the current desired resolution
-    desired_dis_res = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
     # Get row,column image coordinates for all pixels for row-wise image flattening
     # The center of the upper-left pixel has coordinates [0,0] both in DLR CalDe and python/scipy
-    row = np.repeat(np.arange(0, desired_dis_res[0]), desired_dis_res[1])
-    column = np.tile(np.arange(0, desired_dis_res[1]), desired_dis_res[0])
+    row = np.repeat(np.arange(0, original_image_resolution[0]), original_image_resolution[1])
+    column = np.tile(np.arange(0, original_image_resolution[1]), original_image_resolution[0])
 
     # P_und is the undistorted pinhole projection at z==1 of all image pixels
-    P_und = np.linalg.inv(camera_K_matrix) @ np.vstack((column, row, np.ones(np.prod(desired_dis_res[:2]))))
+    P_und = np.linalg.inv(camera_K_matrix) @ np.vstack((column, row, np.ones(np.prod(original_image_resolution[:2]))))
 
     # P_und are then distorted by the lens, i.e. P_dis = dis(P_und)
     # => Find mapping I_dis(row,column) -> I_und(float,float)
@@ -192,7 +191,7 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
     :param orig_res_x: original and output width resolution of the image
     :param orig_res_y: original and output height resolution of the image
     :param use_interpolation: if this is True, for each pixel an interpolation will be performed, if this is false the nearest pixel will be used
-    :return: a list of images or an image that have been distorted, now in the desired resolution
+    :return: a list of images or an image that have been distorted, now in the desired (original) resolution
     """
 
     if mapping_coords is None or orig_res_x is None or orig_res_y is None: 
