@@ -174,6 +174,14 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
         return enable_depth_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_distance=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
+    if GlobalStorage.is_in_storage("distance_output_is_enabled"):
+        msg = "The distance enable function can not be called twice. Either you called it twice or you used the " \
+              "enable_depth_output with activate_antialiasing=True, which internally calls this function. This is " \
+              "currently not supported, but there is an easy way to solve this, you can use the " \
+              "bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate " \
+              "the antialiased depth image yourself."
+        raise Exception(msg)
+    GlobalStorage.add("distance_output_is_enabled", True)
 
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
@@ -232,6 +240,15 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
         return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_depth=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
+    if GlobalStorage.is_in_storage("depth_output_is_enabled"):
+        msg = "The depth enable function can not be called twice. Either you called it twice or you used the " \
+              "enable_distance_output with activate_antialiasing=False, which internally calls this function. This is " \
+              "currently not supported, but there is an easy way to solve this, you can use the " \
+              "bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate " \
+              "the antialiased distance image yourself."
+        raise Exception(msg)
+    GlobalStorage.add("depth_output_is_enabled", True)
+
 
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True

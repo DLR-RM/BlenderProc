@@ -40,6 +40,7 @@ def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
 
     return depth
 
+
 def depth2dist(depth: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """
     :param depth: The depth data.
@@ -74,6 +75,7 @@ def depth2dist(depth: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     dist = depth * np.sqrt(x_opt ** 2 + y_opt ** 2 + f ** 2) / f
 
     return dist
+
 
 def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """

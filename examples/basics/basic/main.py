@@ -31,12 +31,14 @@ with open(args.camera, "r") as f:
 
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_distance_output(activate_antialiasing=True)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 
 # render the whole pipeline
 data = bproc.renderer.render()
+
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
