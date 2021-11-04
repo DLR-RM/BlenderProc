@@ -41,7 +41,7 @@ blenderproc vis hdf5 examples/datasets/suncg_with_improved_mat/output/0.hdf5
 * After that we change the materials three times, with different values.
 * Writes sampled camera poses to file.
 * Renders semantic segmentation map.
-* Renders rgb, distance and normals.
+* Renders rgb, depth and normals.
 * Merges all into an `.hdf5` file.
 
 ## Python file (main.py)
@@ -102,7 +102,7 @@ This last option adds displacement to your objects, so the object gets changed b
 This means that a dark spot in the image dents the object inwards at that point and outwards if it is bright.
 This make the surface more real looking as they do not look so flat. 
 
-The distance rendering is not affected by this, the normal rendering is effected by this though.
+The depth rendering is not affected by this, the normal rendering is effected by this though.
 
 Finally, the mode specifies if the same values are used for all materials or if each material gets its own values.
 With `"once_for_each"` we decide that each object gets its own values.

@@ -31,19 +31,14 @@ with open(args.camera, "r") as f:
         matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
         bproc.camera.add_camera_pose(matrix_world)
 
-# activate distance rendering
-bproc.renderer.enable_distance_output()
-bproc.renderer.enable_depth_output()
+# activate depth rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 
 # render the whole pipeline
 data = bproc.renderer.render()
 
 # Render segmentation masks (per class and per instance)
 data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
-
-# Convert antialiased distance to antialiased depth
-data["antialiased_depth"] = bproc.postprocessing.dist2depth(data["distance"])
-del data["distance"]
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

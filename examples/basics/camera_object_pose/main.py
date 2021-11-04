@@ -51,16 +51,13 @@ cam2world = np.array([
 cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
 bproc.camera.add_camera_pose(cam2world)
 
-# activate distance rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(100)
 
 # render the whole pipeline
 data = bproc.renderer.render()
 
-# Map distance to depth
-depth = bproc.postprocessing.dist2depth(data["distance"])
-
 # Write object poses, color and depth in bop format
-bproc.writer.write_bop(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)
+bproc.writer.write_bop(args.output_dir, data["depth"], data["colors"], m2mm=True, append_to_existing_output=True)

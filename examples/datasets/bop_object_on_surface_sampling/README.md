@@ -47,7 +47,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Sample upright objects poses on surface.
 * Sample point light source.
 * Sample camera poses `bproc.add_camera_pose()`.
-* Render RGB and distance: `bproc.renderer`.
+* Render RGB and depth: `bproc.renderer`.
 * Write BOP data: `bproc.writer.write_bop`.
 
 
@@ -217,17 +217,17 @@ while poses < 10:
 ### Rgb Renderer
 
 ```python
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 ```
-* Renders RGB using 50 `"samples"` and also outputs distance images. 
+* Renders RGB using 50 `"samples"` and also outputs depth images. 
 
 ### Bop Writer
 
 ```python
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset = args.bop_dataset_name,
-                       depths = bproc.postprocessing.dist2depth(data["distance"]),
+                       depths = data["depth"],
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)
@@ -235,7 +235,6 @@ bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
 
 * Saves all pose and camera information that is provided in BOP datasets.
 * Only considers objects from the given `dataset = args.bop_dataset_name`
-* We use a `postprocessing.dist2depth` fct to convert the distance images from Blender to actual depth images.
 * Saves the images as jpg
 
 ## More examples

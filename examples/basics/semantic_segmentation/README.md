@@ -37,12 +37,6 @@ This can be done manually by:
 ```python
 obj.set_cp("category_id", 0)
 ```
-
-### Depth Rendering
-
-We also render the distance and depth in this example. Here, the distance image is antialiased, meaning that for each pixel the depth in this pixel is aggregated over its surface. As we want to render a z-buffer depth image without any smoothing effects use `bproc.renderer.enable_depth_output()` instead. While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
-We only render the distance so that in the end we have an antialiased and not antialiased depth image.
-
 ### SegMapRenderer
 
 ```python
@@ -64,17 +58,3 @@ Furthermore, if an instance image is used all other keys are stored in the .csv.
 For example, it would also be possible to use the key: `"location"`. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
 This can be avoided by providing a default value like: `default_values= {"location: [0,0,0]}`.
-
-### Hdf5 writing
-
-```python
-# Convert antialiased distance to antialiased depth
-data["antialiased_depth"] = bproc.postprocessing.dist2depth(data["distance"])
-del data["distance"]
-
-# write the data to a .hdf5 container
-bproc.writer.write_hdf5(args.output_dir, data)
-```
-
-We first map the distance to a depth image and delete the distance image from the data dictionary.
-At the end the rendered images are stored in `.hdf5` files.

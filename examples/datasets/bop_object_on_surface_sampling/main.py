@@ -111,8 +111,8 @@ while poses < 10:
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
 
-# activate distance rendering and set amount of samples for color rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering and set amount of samples for color rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 
 # render the whole pipeline
@@ -121,7 +121,7 @@ data = bproc.renderer.render()
 # Write data in bop format
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset = args.bop_dataset_name,
-                       depths = bproc.postprocessing.dist2depth(data["distance"]),
+                       depths = data["depth"],
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)

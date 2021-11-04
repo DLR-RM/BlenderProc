@@ -35,8 +35,8 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
-# activate distance rendering and set amount of samples for color rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering and set amount of samples for color rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 
 # Render five different scenes
@@ -82,7 +82,7 @@ for _ in range(5):
     # Write data to bop format
     bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                            dataset = args.bop_dataset_name,
-                           depths = bproc.postprocessing.dist2depth(data["distance"]),
+                           depths = data["depth"],
                            depth_scale = 1.0, 
                            colors = data["colors"], 
                            color_file_format = "JPEG", 
