@@ -210,15 +210,18 @@ def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = 
     })
 
 
-def enable_depth_output(output_dir: str, file_prefix: str = "depth_", output_key: str = "depth"):
+def enable_depth_output(output_dir: Optional[str] = None, file_prefix: str = "depth_", output_key: str = "depth"):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
 
-    :param output_dir: The directory to write files to.
+    :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the depth output.
     """
+    if output_dir is None:
+        output_dir = Utility.get_temporary_directory()
+
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
 
@@ -429,7 +432,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
     if load_keys is None:
-        load_keys = {'colors', 'distance', 'normals', 'diffuse'}
+        load_keys = {'colors', 'distance', 'normals', 'diffuse', 'depth'}
         keys_with_alpha_channel = {'colors'} if bpy.context.scene.render.film_transparent else None
 
     if output_key is not None:
