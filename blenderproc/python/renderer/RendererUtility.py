@@ -149,7 +149,7 @@ def set_samples(samples: int):
 
     :param samples: The number of samples per pixel
     """
-    bpy.context.scene.cycles.samples = samples:WriterUtility
+    bpy.context.scene.cycles.samples = samples
 
 def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
                            output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
