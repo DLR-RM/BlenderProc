@@ -58,6 +58,9 @@ for key in ['colors', 'distance', 'normals']:
     data[key] = bproc.postprocessing.apply_lens_distortion(data[key], mapping_coords, orig_res_x, orig_res_y,
                                                            use_interpolation=use_interpolation)
 
+# write the data to a .hdf5 container
+bproc.writer.write_hdf5(args.output_dir, data)
+
 # test: compare generated image with real image
 if "img1" in os.path.basename(args.config_file):
     real_path = "./images/lens_img1_real.jpg"
@@ -80,6 +83,3 @@ if result.argmax()==24: # center of the (7,7) correlation window
         raise Exception("The norm. correlation index between generated and real image is too low. The images do not match. Choose other object or config file.")
 else:
     raise Exception("The generated calibration pattern image and the reference real image do not match. Choose other object or config file.")
-
-# write the data to a .hdf5 container
-bproc.writer.write_hdf5(args.output_dir, data)

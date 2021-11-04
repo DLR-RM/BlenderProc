@@ -51,8 +51,8 @@ Compare the above images with the real images in `./images/lens*real*` for geome
 * Either samples camera-to-object poses (first example) or loads the camera poses measured with a camera calibration software (e.g., [DLR CalLab v1](https://www.robotic.de/callab))
 * Renders RGB, depth and, normals
 * Applies lens distortion (to the temporal, higher-resoluted, intermediate Blender images, and then cropes them down to the desired resolution)
-* Test by comparing the generated images with the reference real images `./images/lens_img1_real.jpg` and `./images/lens_img2_real.png`
 * Writes the distorted data to a .hdf5 container
+* Test by comparing the generated images with the reference real images `./images/lens_img1_real.jpg` and `./images/lens_img2_real.png`
 
 ## Implementation
 
