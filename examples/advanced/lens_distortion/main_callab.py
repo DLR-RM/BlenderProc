@@ -74,7 +74,6 @@ img_gene = np.asarray(Image.fromarray(data['colors'][0]).convert('L'))
 img_real = np.asarray(Image.open(real_path).convert('RGB').convert('L'))
 assert img_gene.shape == img_real.shape
 result = match_template(img_gene, img_real[3:-3,3:-3], pad_input=False)
-#print(np.round(result, 3))
 if result.argmax()==24: # center of the (7,7) correlation window
     print(f"The generated image is not biased w.r.t. the reference real image.")
     if result.max()>norm_corr_limit:
