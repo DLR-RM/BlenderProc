@@ -218,7 +218,7 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
 
 def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
                         output_key: str = "depth", convert_to_distance: bool = False):
-    """ Enables writing non-antialiased depth images.
+    """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
 
