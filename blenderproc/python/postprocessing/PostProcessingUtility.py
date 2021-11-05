@@ -4,6 +4,8 @@ import numpy as np
 
 import bpy
 
+import blenderproc.python.camera.CameraUtility as CameraUtility
+
 
 def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """
@@ -15,19 +17,10 @@ def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
 
     if isinstance(dist, list) or hasattr(dist, "shape") and len(dist.shape) > 2:
         return [dist2depth(img) for img in dist]
-
-    height, width = dist.shape
-
-    cam_ob = bpy.context.scene.camera
-    cam = cam_ob.data
-
-    max_resolution = max(width, height)
-
-    # Compute Intrinsics from Blender attributes (can change)
-    f = width / (2 * np.tan(cam.angle / 2.))
-    cx = (width - 1.0) / 2. - cam.shift_x * max_resolution
-    cy = (height - 1.0) / 2. + cam.shift_y * max_resolution
-
+    
+    K = CameraUtility.get_intrinsics_as_K_matrix()
+    f, cx, cy = K[0,0], K[0,2], K[1,2]
+    
     xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
 
     # coordinate distances to principal point
@@ -52,17 +45,8 @@ def depth2dist(depth: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     if isinstance(depth, list) or hasattr(depth, "shape") and len(depth.shape) > 2:
         return [depth2dist(img) for img in depth]
 
-    height, width = depth.shape
-
-    cam_ob = bpy.context.scene.camera
-    cam = cam_ob.data
-
-    max_resolution = max(width, height)
-
-    # Compute Intrinsics from Blender attributes (can change)
-    f = width / (2 * np.tan(cam.angle / 2.))
-    cx = (width - 1.0) / 2. - cam.shift_x * max_resolution
-    cy = (height - 1.0) / 2. + cam.shift_y * max_resolution
+    K = CameraUtility.get_intrinsics_as_K_matrix()
+    f, cx, cy = K[0,0], K[0,2], K[1,2]
 
     xs, ys = np.meshgrid(np.arange(depth.shape[1]), np.arange(depth.shape[0]))
 
