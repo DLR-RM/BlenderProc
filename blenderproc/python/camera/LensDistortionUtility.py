@@ -34,13 +34,33 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     This function has to be used together with bproc.postprocessing.apply_lens_distortion(), else only the 
     resolution is increased but the image(s) will not be distorted.
 
-    :param k1: First radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
-    :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
-    :param k3: Third radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
-    :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
-               Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
-    :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
-               Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
+    :param k1: First radial distortion parameter (of 3rd degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+            Note that undistorted-to-distorted means that the distortion parameters are multiplied
+            by undistorted, normalized camera projections to yield distorted projections, that are in
+            turn digitized by the intrinsic camera matrix.
+    :param k2: Second radial distortion parameter (of 5th degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform
+            to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+    :param k3: Third radial distortion parameter (of 7th degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+            The use of this parameter is discouraged unless the angular field of view is too high,
+            rendering it necessary, and the parameter allows for a distorted projection in the whole
+            sensor size (which isn't always given by features-driven camera calibration).
+    :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p2; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
+    :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p1; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
     :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global storage (backward compat for configs)
     :return: mapping coordinates from distorted to undistorted image pixels
     """
@@ -346,4 +366,3 @@ def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, rea
         cam2world = change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
         CameraUtility.add_camera_pose(cam2world)
     return extracted_camera_parameters["width"], extracted_camera_parameters["height"], mapping_coords
-
