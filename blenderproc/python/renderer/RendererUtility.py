@@ -218,7 +218,7 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
         "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
         "version": "2.0.0",
         "trim_redundant_channels": True,
-        "convert_to_distance": convert_to_depth
+        "convert_to_depth": convert_to_depth
     })
 
 
