@@ -9,6 +9,7 @@ import numpy as np
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
@@ -152,8 +153,8 @@ def set_samples(samples: int):
     bpy.context.scene.cycles.samples = samples
 
 def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
-                           output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
-                           distance_falloff: str = "LINEAR", convert_to_depth: bool = False):
+                           output_key: str = "distance", antialiasing_distance_max: float = DefaultConfig.antialiasing_distance_max,
+                           convert_to_depth: bool = False):
     """ Enables writing distance images.
 
     Distance images will be written in the form of .exr files during the next rendering.
@@ -162,11 +163,8 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the distance output.
-    :param distance_start: Starting distance of the distance, measured from the camera. Only if activate_antialiasing is True.
-    :param distance_range: Total distance in which the distance is measured. \
-                           distance_end = distance_start + distance_range. Only if activate_antialiasing is True.
-    :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC] \
-                             Only if activate_antialiasing is True.
+    :param antialiasing_distance_max: Max distance in which the distance is measured. \
+                            Only if activate_antialiasing is True.
     :param convert_to_depth: If this is true, while loading a postprocessing step is executed to convert this distance\
                              image to a depth image
     """
@@ -185,7 +183,7 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
 
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
-    GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
+    GlobalStorage.add("renderer_distance_end", antialiasing_distance_max)
 
     tree = bpy.context.scene.node_tree
     links = tree.links
@@ -193,17 +191,17 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
     # Set mist pass limits
-    bpy.context.scene.world.mist_settings.start = distance_start
-    bpy.context.scene.world.mist_settings.depth = distance_range
-    bpy.context.scene.world.mist_settings.falloff = distance_falloff
+    bpy.context.scene.world.mist_settings.start = 0
+    bpy.context.scene.world.mist_settings.depth = antialiasing_distance_max
+    bpy.context.scene.world.mist_settings.falloff = "LINEAR"
 
     bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
     # Create a mapper node to map from 0-1 to SI units
     mapper_node = tree.nodes.new("CompositorNodeMapRange")
     links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
     # map the values 0-1 to range distance_start to distance_range
-    mapper_node.inputs['To Min'].default_value = distance_start
-    mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+    mapper_node.inputs['To Min'].default_value = 0
+    mapper_node.inputs['To Max'].default_value = antialiasing_distance_max
     final_output = mapper_node.outputs['Value']
 
     # Build output node
@@ -225,7 +223,8 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
 
 
 def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
-                        output_key: str = "depth", convert_to_distance: bool = False):
+                        output_key: str = "depth", antialiasing_distance_max: float = DefaultConfig.antialiasing_distance_max,
+                        convert_to_distance: bool = False):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
@@ -233,11 +232,13 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the depth output.
+    :param antialiasing_distance_max: Max distance in which the distance is measured. \
+                                      Only if activate_antialiasing is True.
     :param convert_to_distance: If this is true, while loading a postprocessing step is executed to convert this depth \
                                 image to a distance image
     """
     if activate_antialiasing:
-        return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_depth=True)
+        return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, antialiasing_distance_max, convert_to_depth=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
     if GlobalStorage.is_in_storage("depth_output_is_enabled"):

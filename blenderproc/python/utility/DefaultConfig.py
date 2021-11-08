@@ -33,6 +33,7 @@ class DefaultConfig:
     transmission_bounces = 0
     transparency_bounces = 8
     volume_bounces = 0
+    antialiasing_distance_max = 10000
 
     # Setup
     default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18", "scikit-image==0.18.3", "pypng==0.0.20", "scipy==1.7.1",
