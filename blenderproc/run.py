@@ -1,4 +1,4 @@
-# blender --background --python run.py  -- <config> [<args>]
+# blender --background --python cli.py  -- <config> [<args>]
 import sys
 import os
 from sys import platform

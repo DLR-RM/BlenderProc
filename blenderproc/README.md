@@ -10,7 +10,7 @@ Each module used in BlenderProc is defined in here. The folders structure the mo
 ## Overview
 
 As mentioned before, all of the source code relevant to the key features (i.e. modules) of BlenderProc is presented here.
-The [main](main) folder contains the Module base class and the Pipeline class, which gets executed by the run.py & debug.py
+The [main](main) folder contains the Module base class and the Pipeline class, which gets executed by the `blenderproc run` and `blenderproc debug`
 
 Existing modules are placed in use-case-dependent folders:
 * [camera](camera): camera loading and camera pose sampling.

@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXBUILD   = /home/${USER}/blender/blender-2.93.0-linux-x64/blender --background --python run.py --
+SPHINXBUILD   = /home/${USER}/blender/blender-2.93.0-linux-x64/blender --background --python cli.py --
 SPHINXPROJ    = BlenderProc
 SOURCEDIR     = source
 BUILDDIR      = build
