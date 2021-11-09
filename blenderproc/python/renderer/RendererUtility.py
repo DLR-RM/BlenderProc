@@ -153,7 +153,7 @@ def set_samples(samples: int):
     bpy.context.scene.cycles.samples = samples
 
 def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
-                           output_key: str = "distance", antialiasing_distance_max: float = DefaultConfig.antialiasing_distance_max,
+                           output_key: str = "distance", antialiasing_distance_max: float = None,
                            convert_to_depth: bool = False):
     """ Enables writing distance images.
 
@@ -171,6 +171,9 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
         return enable_depth_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_distance=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
+    if antialiasing_distance_max is None:
+        antialiasing_distance_max = DefaultConfig.antialiasing_distance_max
+
     if GlobalStorage.is_in_storage("distance_output_is_enabled"):
         msg = "The distance enable function can not be called twice. Either you called it twice or you used the " \
               "enable_depth_output with activate_antialiasing=True, which internally calls this function. This is " \
@@ -222,12 +225,13 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
 
 
 def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
-                        output_key: str = "depth", antialiasing_distance_max: float = DefaultConfig.antialiasing_distance_max,
+                        output_key: str = "depth", antialiasing_distance_max: float = None,
                         convert_to_distance: bool = False):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
 
+    :param activate_antialiasing: If this is True the final image will be antialiased
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the depth output.
@@ -240,6 +244,7 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
         return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, antialiasing_distance_max, convert_to_depth=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
+
     if GlobalStorage.is_in_storage("depth_output_is_enabled"):
         msg = "The depth enable function can not be called twice. Either you called it twice or you used the " \
               "enable_distance_output with activate_antialiasing=False, which internally calls this function. This is " \
