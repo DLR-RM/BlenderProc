@@ -157,13 +157,12 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
                            convert_to_depth: bool = False):
     """ Enables writing distance images.
 
-    Distance images will be written in the form of .exr files during the next rendering.
 
     :param activate_antialiasing: If this is True the final image will be antialiased
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the distance output.
-    :param antialiasing_distance_max: Max distance in which the distance is measured. \
+    :param antialiasing_distance_max: Max distance in which the distance is measured. Resolution decreases antiproportionally. \
                             Only if activate_antialiasing is True.
     :param convert_to_depth: If this is true, while loading a postprocessing step is executed to convert this distance\
                              image to a depth image
