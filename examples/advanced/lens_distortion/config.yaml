@@ -1,0 +1,113 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "intrinsics": {
+            "cam_K": [[349.554, 0.0, 336.84], [0.0, 349.554, 189.185], [0.0, 0.0, 1.0]],
+            "resolution_x": 640,
+            "resolution_y": 480,
+            "lens_distortion": {
+                "k1": -0.172992,
+                "k2": 0.0248708,
+                "k3": 0.00149384,
+                "p1": 0.000311976,
+                "p2": -9.62967e-5
+            }
+        },
+        "cam_poses": [
+          {
+            "number_of_samples": 2,
+            "location": {
+              "provider":"sampler.Uniform3d",
+              "max":[10, 10, 8],
+              "min":[-10, -10, 12]
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              },
+              "inplane_rot": {
+                "provider": "sampler.Value",
+                "type": "float",
+                "min": -0.7854,
+                "max": 0.7854
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True,
+        "normals_output_key": "normals",
+        "render_distance": True,
+        "distance_output_key": "distance"
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "colors": [
+            {
+              "module": "postprocessing.LensDistortion",
+            }
+          ],
+          "distance": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            },
+            {
+              "module": "postprocessing.LensDistortion",
+            }
+          ],
+          "normals": [
+            {
+              "module": "postprocessing.LensDistortion",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
