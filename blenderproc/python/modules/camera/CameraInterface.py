@@ -7,7 +7,7 @@ from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix, build_transformation_mat
-
+from blenderproc.python.camera.LensDistortionUtility import set_lens_distortion
 
 class CameraInterface(Module):
     """
@@ -144,6 +144,43 @@ class CameraInterface(Module):
         * - interocular_distance
           - Distance between the camera pair.
           - float
+        * - lens_distortion/k1
+          - k1 is the first radial distortion parameter (of 3rd degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+            Note that undistorted-to-distorted means that the distortion parameters are multiplied
+            by undistorted, normalized camera projections to yield distorted projections, that are in
+            turn digitized by the intrinsic camera matrix.
+          - float
+        * - lens_distortion/k2
+          - k2 is the second radial distortion parameter (of 5th degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform
+            to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+          - float
+        * - lens_distortion/k3
+          - k3 is the third radial distortion parameter (of 7th degree in radial distance) as defined
+            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+            The use of this parameter is discouraged unless the angular field of view is too high,
+            rendering it necessary, and the parameter allows for a distorted projection in the whole
+            sensor size (which isn't always given by features-driven camera calibration).
+          - float
+        * - lens_distortion/p1
+          - p1 is the first decentering distortion parameter as defined by the undistorted-to-distorted
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p2; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
+          - float
+        * - lens_distortion/p2
+          - p2 is the second decentering distortion parameter as defined by the undistorted-to-distorted
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p1; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
+          - float
         * - depth_of_field/focal_object
           - This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.
             Using this will automatically activate the depth of field mode. Can not be combined with
@@ -251,6 +288,12 @@ class CameraInterface(Module):
                 raise RuntimeError("The depth_of_field dict must contain either a focal_object definition or "
                                    "a depth_of_field_dist")
 
+        if config.has_param("lens_distortion"):
+            # get the used camera parameter intrinsics
+            k1, k2, k3 = config.get_float("lens_distortion/k1", 0.0), config.get_float("lens_distortion/k2", 0.0), \
+                         config.get_float("lens_distortion/k3", 0.0)
+            p1, p2 = config.get_float("lens_distortion/p1", 0.0), config.get_float("lens_distortion/p2", 0.0)
+            set_lens_distortion(k1, k2, k3, p1, p2, use_global_storage=True)
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.

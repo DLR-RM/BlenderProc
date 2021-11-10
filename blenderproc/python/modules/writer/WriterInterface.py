@@ -1,3 +1,4 @@
+
 import os
 import numpy as np
 
@@ -72,7 +73,7 @@ class WriterInterface(Module):
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes), world_frame_change=self.destination_frame)
         Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
             
-    def _apply_postprocessing(self, output_key, data, version):
+    def _apply_postprocessing(self, output_key: str, data: np.ndarray, version: str):
         """
         Applies all postprocessing modules registered for this output type.
 

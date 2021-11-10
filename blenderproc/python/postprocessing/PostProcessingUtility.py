@@ -1,7 +1,5 @@
 from typing import Union
-
 import numpy as np
-
 import bpy
 
 import blenderproc.python.camera.CameraUtility as CameraUtility
