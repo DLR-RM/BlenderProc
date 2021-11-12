@@ -4,7 +4,7 @@ import os
 import h5py
 import numpy as np
 
-from blenderproc.scripts.visHdf5Files import vis_data
+from .visHdf5Files import vis_data
 
 
 def save_array_as_image(array, key, file_path):
