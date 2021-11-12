@@ -19,6 +19,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
     Colors each object based on its local coordinates.
     The coordinates [-1, 1] are mapped into the [0, 1] colorspace.
     It is therefore, recommended that all local vertex coordinates are in range [-1, 1].
+    The world background is rendered transparent.
 
     :param output_dir: The directory to write images to. If None is given, the temp dir is used.
     :param file_prefix: The prefix to use for writing the images.
@@ -52,9 +53,9 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
         bpy.context.scene.cycles.filter_width = 0.0
 
         # Use exr as output format, as it uses a linear colorspace and uses float16
-        RendererUtility.set_output_format("OPEN_EXR", 16)
+        RendererUtility.set_output_format("OPEN_EXR", 16, enable_transparency=True)
         # Render and ret
-        return RendererUtility.render(output_dir, file_prefix, output_key, load_keys={output_key}, return_data=return_data)
+        return RendererUtility.render(output_dir, file_prefix, output_key, load_keys={output_key}, return_data=return_data, keys_with_alpha_channel={output_key})
 
 
 class NOCSRendererUtility:
