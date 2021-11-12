@@ -24,6 +24,8 @@ def shell(center: Union[Vector, np.ndarray, List[float]], radius_min: float, rad
     assert -180 <= azimuth_max <= 180, "azimuth_max must be in range [-180, 180]"
     assert -90 <= elevation_min <= 90, "elevation_min must be in range [-90, 90]"
     assert -90 <= elevation_min <= 90, "elevation_max must be in range [-90, 90]"
+    assert azimuth_min < azimuth_max, "azimuth_min must be smaller than azimuth_max"
+    assert elevation_min < elevation_max, "elevation_min must be smaller than elevation_max"
     
     if uniform_volume:
          
