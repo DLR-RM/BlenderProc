@@ -1,14 +1,12 @@
 from typing import Optional, Dict, List
 
+import bpy
 import numpy as np
 
 from blenderproc.python.material import MaterialLoaderUtility
-
 from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.renderer.RendererUtility import set_world_background
 from blenderproc.python.types.MaterialUtility import Material
-import bpy
-
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility
 
