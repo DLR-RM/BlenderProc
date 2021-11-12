@@ -1,6 +1,6 @@
 # NOCS
 <p align="center">
-<img src="../../../images/nocs_rendering.jpg" alt="Front readme image" width=1000>
+<img src="../../../images/nocs_rendering.jpg" alt="Front readme image" width=400>
 </p>
 
 The focus of this example is to show how to render the Normalized Object Coordinate Space (NOCS).
