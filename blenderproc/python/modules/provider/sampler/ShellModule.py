@@ -48,8 +48,8 @@ class ShellModule(Provider):
         * - elevation_max
           - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
           - float
-        * - uniform_elevation
-          - Uniformly sample elevation angles. Default: False
+        * - uniform_volume
+          - Uniformly sample volume between spheres. Default: False
           - bool
     """
 
@@ -70,7 +70,7 @@ class ShellModule(Provider):
         # Elevation angles
         elevation_min = self.config.get_float("elevation_min")
         elevation_max = self.config.get_float("elevation_max")
-        uniform_elevation = self.config.get_bool("uniform_elevation", False)
+        uniform_volume = self.config.get_bool("uniform_volume", False)
 
         return shell(
             center=center,
@@ -78,5 +78,5 @@ class ShellModule(Provider):
             radius_max=radius_max,
             elevation_min=elevation_min,
             elevation_max=elevation_max,
-            uniform_elevation=uniform_elevation
+            uniform_volume=uniform_volume
         )
