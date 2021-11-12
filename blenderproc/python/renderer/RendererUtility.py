@@ -519,3 +519,22 @@ def _disable_all_denoiser():
     """
     # Disable cycles denoiser
     bpy.context.view_layer.cycles.use_denoising = False
+
+
+def set_world_background(color: List[float], strength: float = 1):
+    """ Sets the color of blenders world background
+
+    :param color: A three dimensional list specifying the new color in floats.
+    :param strength: The strength of the emitted background light.
+    """
+    world = bpy.context.scene.world
+    world.use_nodes = True
+    nodes = world.node_tree.nodes
+    links = world.node_tree.links
+
+    # Unlink any incoming link that would overwrite the default value
+    if len(nodes.get("Background").inputs['Color'].links) > 0:
+        links.remove(nodes.get("Background").inputs['Color'].links[0])
+
+    nodes.get("Background").inputs['Strength'].default_value = strength
+    nodes.get("Background").inputs['Color'].default_value = color + [1]
