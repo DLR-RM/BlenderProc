@@ -5,16 +5,18 @@ from mathutils import Vector
 
 def shell(center: Union[Vector, np.ndarray, List[float]], radius_min: float, radius_max: float, elevation_min: float = -90,
           elevation_max: float = 90, azimuth_min: float = -180, azimuth_max: float = 180, uniform_volume: bool = False) -> np.ndarray:
-    """ Samples a point from the volume between two spheres (radius_min, radius_max). Optionally constrain the elevation and azimuth angles.
+    """ Samples a point from the volume between two spheres (radius_min, radius_max). Optionally the spheres can be constraint by setting 
+          elevation and azimuth angles. E.g. if you only want to sample in the upper hemisphere set elevation_min = 0.
 
     :param center: Center shared by both spheres.
-    :param radius_min: Radius of a smaller sphere.
-    :param radius_max: Radius of a bigger sphere.
+    :param radius_min: Radius of the smaller sphere.
+    :param radius_max: Radius of the bigger sphere.
     :param elevation_min: Minimum angle of elevation in degrees. Range: [-90, 90].
     :param elevation_max: Maximum angle of elevation in degrees. Range: [-90, 90].
     :param azimuth_min: Minimum angle of azimuth in degrees. Range: [-180, 180].
     :param azimuth_max: Maximum angle of azimuth in degrees. Range: [-180, 180].
     :param uniform_volume: Instead of sampling the angles and radius uniformly, sample the shell volume uniformly.
+                           As a result, there will be more samples at larger radii.
     :return: A sampled point.
     """
     
