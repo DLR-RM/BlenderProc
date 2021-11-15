@@ -38,7 +38,7 @@ def shell(center: Union[Vector, np.ndarray, List[float]], radius_min: float, rad
             direction_vector /= np.linalg.norm(direction_vector)
             
             # https://stackoverflow.com/questions/4116658/faster-numpy-cartesian-to-spherical-coordinate-conversion
-            xy = direction_vector[0]**2 + direction_vector[1]**2
+            xy = direction_vector[0]*direction_vector[0] + direction_vector[1]*direction_vector[1]
             elevation = np.arctan2(direction_vector[2], np.sqrt(xy))
             azimuth = np.arctan2(direction_vector[1], direction_vector[0])
 
