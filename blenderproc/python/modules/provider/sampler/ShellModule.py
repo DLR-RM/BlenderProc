@@ -49,7 +49,7 @@ class ShellModule(Provider):
           - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
           - float
         * - uniform_volume
-          - Uniformly sample volume between spheres. Default: False
+          - Uniformly sample points in the volume of the shell. Thereby, more points will be close to outer sphere. Default: False
           - bool
     """
 
