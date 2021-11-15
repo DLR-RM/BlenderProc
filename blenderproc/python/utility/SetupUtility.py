@@ -9,6 +9,7 @@ import zipfile
 import uuid
 from typing import List, Optional, Union
 import requests
+import json
 
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
@@ -16,6 +17,7 @@ from blenderproc.python.utility.DefaultConfig import DefaultConfig
 class SetupUtility:
     # Remember already installed packages, so we do not have to call pip freeze multiple times
     installed_packages = None
+    package_list_is_from_cache = False
     main_setup_called = False
 
     @staticmethod
@@ -126,6 +128,38 @@ class SetupUtility:
         # Init pip
         SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path)
 
+        # If the list of installed packages was read from cache
+        if SetupUtility.package_list_is_from_cache:
+            # Check if there would be any pip package updates based on the cache
+            found_package_to_install = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path, dry_run=True)
+            # If yes, reload the list of installed packages
+            if found_package_to_install:
+                SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path, force_update=True)
+
+        packages_were_installed = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path)
+
+        # Make sure to update the pip package list cache, if it does not exist or changes have been made
+        cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+        if packages_were_installed or not os.path.exists(cache_path):
+            with open(cache_path, "w") as f:
+                json.dump(SetupUtility.installed_packages, f)
+
+        # If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away
+        if packages_were_installed:
+            importlib.invalidate_caches()
+        return packages_path
+
+    @staticmethod
+    def _pip_install_packages(required_packages, python_bin, packages_path, reinstall_packages: bool = False, dry_run: bool = False):
+        """ Installs the list of given pip packages in the given python environment.
+
+        :param required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.
+        :param python_bin: Path to python binary.
+        :param packages_path: Path where our pip packages should be installed
+        :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        :param dry_run: If true, nothing will be installed and it will only be checked whether there are any potential packages to update/install.
+        :return: Returns True, if any packages were update/installed or - if dry_run=True - if there are any potential packages to update/install.
+        """
         # Install all packages
         packages_were_installed = False
         for package in required_packages:
@@ -176,15 +210,15 @@ class SetupUtility:
                 if os.getenv("BLENDER_PROC_NO_PIP_CACHE", 'False').lower() in ('true', '1', 't'):
                     extra_args.append("--no-cache-dir")
 
-                # Run pip install
-                subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
-                SetupUtility.installed_packages[package_name] = package_version
-                packages_were_installed = True
+                if not dry_run:
+                    # Run pip install
+                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                    SetupUtility.installed_packages[package_name] = package_version
+                    packages_were_installed = True
+                else:
+                    return True
 
-        # If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away
-        if packages_were_installed:
-            importlib.invalidate_caches()
-        return packages_path
+        return packages_were_installed
 
     @staticmethod
     def uninstall_pip_packages(package_names: List[str], blender_path: str, major_version: str):
@@ -201,14 +235,23 @@ class SetupUtility:
         subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
     @staticmethod
-    def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str):
+    def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str, force_update: bool = False):
         """ Make sure pip is installed and read in the already installed packages
 
         :param python_bin: Path to python binary.
         :param packages_path: Path where our pip packages should be installed
         :param pre_python_package_path: Path that contains blender's default pip packages
+        :param force_update: If True, the installed-packages-cache will be ignored and will be recollected based on the actually installed packages.
         """
         if SetupUtility.installed_packages is None:
+            if not force_update:
+                cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+                if os.path.exists(cache_path):
+                    with open(cache_path, "r") as f:
+                        SetupUtility.installed_packages = json.load(f)
+                        SetupUtility.package_list_is_from_cache = True
+                    return
+
             SetupUtility.installed_packages = {}
             subprocess.Popen([python_bin, "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH="")).wait()
             # Make sure pip is up-to-date
@@ -227,6 +270,19 @@ class SetupUtility:
             installed_packages_name = [ele[2:] if ele.startswith("b'") else ele for ele in installed_packages_name]
             installed_packages_versions = [ele[:-1] if ele.endswith("'") else ele for ele in installed_packages_versions]
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
+            SetupUtility.package_list_is_from_cache = False
+
+    @staticmethod
+    def clean_installed_packages_cache(blender_path, major_version):
+        """ Removes the json file containing a list of all installed pip packages (if it exists).
+
+        :param blender_path: The path to the blender main folder.
+        :param major_version: The major version string of the blender installation.
+        """
+        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
+        cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+        if os.path.exists(cache_path):
+            os.remove(cache_path)
 
     @staticmethod
     def extract_file(output_dir: str, file: str, mode: str = "ZIP"):

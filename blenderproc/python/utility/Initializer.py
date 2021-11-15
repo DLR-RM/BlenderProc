@@ -68,9 +68,8 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
     bpy.context.scene.frame_end = 0
 
     # Sets background color
+    RendererUtility.set_world_background(horizon_color)
     world = bpy.data.worlds['World']
-    world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs[0].default_value[:3] = horizon_color
     world["category_id"] = 0
 
     # Create the camera

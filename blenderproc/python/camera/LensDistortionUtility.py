@@ -155,14 +155,14 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     mapping_coords = np.vstack([v, u])
 
     # Find out the image resolution needed from Blender to generate filled-in distorted images of the desired resolution
-    min_und_column_needed = np.sign(np.min(u)) * np.ceil(np.abs(np.min(u)))
-    max_und_column_needed = np.sign(np.max(u)) * np.ceil(np.abs(np.max(u)))
-    min_und_row_needed = np.sign(np.min(v)) * np.ceil(np.abs(np.min(v)))
-    max_und_row_needed = np.sign(np.max(v)) * np.ceil(np.abs(np.max(v)))
-    columns_needed = max_und_column_needed - (min_und_column_needed - 1)
-    rows_needed = max_und_row_needed - (min_und_row_needed - 1)
-    cx_new = cx - (min_und_column_needed - 1)
-    cy_new = cy - (min_und_row_needed - 1)
+    min_und_column_needed = np.floor(np.min(u))
+    max_und_column_needed = np.ceil(np.max(u))
+    min_und_row_needed = np.floor(np.min(v))
+    max_und_row_needed = np.ceil(np.max(v))
+    columns_needed = max_und_column_needed + 1 - min_und_column_needed
+    rows_needed = max_und_row_needed + 1 - min_und_row_needed
+    cx_new = cx - min_und_column_needed
+    cy_new = cy - min_und_row_needed
     # To avoid spline boundary approximations at the border pixels ('mode' in map_coordinates() )
     columns_needed += 2
     rows_needed += 2

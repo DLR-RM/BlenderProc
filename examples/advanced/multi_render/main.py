@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('shapenet_path', help="Path to the downloaded shape net core v2 dataset, get it [here](http://www.shapenet.org/)")
 parser.add_argument('vhacd_path', nargs='?', default="blenderproc_resources/vhacd", help="The directory in which vhacd should be installed or is already installed.")
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/multi_render/output", help="Path to where the final files, will be saved")
-parser.add_argument('--runs', default=10, help="The number of times the objects should be repositioned and rendered using 2 to 5 random camera poses.")
+parser.add_argument('--runs', default=10, type=int, help="The number of times the objects should be repositioned and rendered using 2 to 5 random camera poses.")
 args = parser.parse_args()
 
 bproc.init()
