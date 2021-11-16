@@ -15,6 +15,7 @@ setup(name='blenderproc',
       url='https://github.com/DLR-RM/BlenderProc',
       author='German Aerospace Center (DLR) - Institute of Robotics and Mechatronics (RM)',
       packages=find_packages(exclude=['docs', 'examples', 'external', 'images', 'resources', 'scripts', 'tests']),
+      include_package_data=True,
       entry_points={
             'console_scripts': ['blenderproc=blenderproc.command_line:cli'],
       },
