@@ -12,6 +12,7 @@ default_flow_keys = ["forward_flow", "backward_flow"]
 default_segmap_keys = ["segmap", ".*_segmaps"]
 default_segcolormap_keys = ["segcolormap"]
 default_depth_keys = ["distance", "depth"]
+all_default_keys = default_rgb_keys + default_flow_keys + default_segmap_keys + default_segcolormap_keys + default_depth_keys
 default_depth_max = 20
 
 def key_matches(key, patterns, return_index=False):
@@ -109,6 +110,11 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
             plt.imshow(data)
         else:
             plt.imsave(save_to_file, data)
+    else:
+        if save_to_file is None:
+            plt.imshow(data)
+        else:
+            plt.imsave(save_to_file, data)
 
 
 def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap_keys=None, segcolormap_keys=None, depth_keys=None, depth_max=default_depth_max, save_to_path=None):
@@ -167,7 +173,7 @@ def cli():
     parser = argparse.ArgumentParser("Script to visualize hdf5 files")
 
     parser.add_argument('hdf5_paths', nargs='+', help='Path to hdf5 file/s')
-    parser.add_argument('--keys', nargs='+', help='Keys that should be visualized. If none is given, all keys are visualized.', default=None)
+    parser.add_argument('--keys', nargs='+', help='Keys that should be visualized. If none is given, all keys are visualized.', default=all_default_keys)
     parser.add_argument('--rgb_keys', nargs='+', help='Keys that should be interpreted as rgb data.', default=default_rgb_keys)
     parser.add_argument('--flow_keys', nargs='+', help='Keys that should be interpreted as optical flow data.', default=default_flow_keys)
     parser.add_argument('--segmap_keys', nargs='+', help='Keys that should be interpreted as segmentation data.', default=default_segmap_keys)
