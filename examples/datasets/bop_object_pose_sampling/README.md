@@ -77,7 +77,7 @@ bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent
                                 radius_max = 1.2,
                                 elevation_min = 1,
                                 elevation_max = 89,
-                                uniform_elevation = True)
+                                uniform_volume = False)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
         poi = bproc.object.compute_poi(bop_objs)
         # Compute rotation based on vector going from location towards poi

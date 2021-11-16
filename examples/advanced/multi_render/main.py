@@ -67,8 +67,7 @@ for r in range(args.runs):
                                        radius_min=3,
                                        radius_max=5,
                                        elevation_min=5,
-                                       elevation_max=89,
-                                       uniform_elevation=True)
+                                       elevation_max=89)
         # Compute rotation based on vector going from location towards poi
         rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
         # Add homog cam pose based on location an rotation

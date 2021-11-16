@@ -77,8 +77,7 @@
           "radius_min": 1,
           "radius_max": 5,
           "elevation_min": 1,
-          "elevation_max": 89,
-          "uniform_elevation": True
+          "elevation_max": 89
         },
         "color": {
           "provider": "sampler.Color",
@@ -124,8 +123,7 @@
           "radius_min": 1,
           "radius_max": 4,
           "elevation_min": 1,
-          "elevation_max": 89,
-          "uniform_elevation": True
+          "elevation_max": 89
         },
         "rotation": {
           "format": "look_at",
