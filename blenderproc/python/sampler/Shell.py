@@ -3,80 +3,62 @@ from typing import Union, List
 
 from mathutils import Vector
 
+def shell(center: Union[Vector, np.ndarray, List[float]], radius_min: float, radius_max: float, elevation_min: float = -90,
+          elevation_max: float = 90, azimuth_min: float = -180, azimuth_max: float = 180, uniform_volume: bool = False) -> np.ndarray:
+    """ Samples a point from the volume between two spheres (radius_min, radius_max). Optionally the spheres can be constraint by setting 
+          elevation and azimuth angles. E.g. if you only want to sample in the upper hemisphere set elevation_min = 0.
 
-def shell(center: Union[Vector, np.ndarray, List[float]], radius_min: float, radius_max: float, elevation_min: float,
-          elevation_max: float, uniform_elevation: bool = False) -> np.ndarray:
-    """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
-        of those two spheres. Has option for uniform elevation sampling.
-
-    Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
-    that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
-
-    .. code-block:: python
-
-        sampler.Shell(
-            center=[0, 0, -0.8],
-            radius_min=1,
-            radius_max=4,
-            elevation_min=40,
-            elevation_max=89
-        )
-
-    :param center: Center which is shared by both structure-defining spheres.
-    :param radius_min: Radius of a smaller sphere.
-    :param radius_max: Radius of a bigger sphere.
-    :param elevation_min: Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].
-    :param elevation_max: Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
-    :param uniform_elevation: Uniformly sample elevation angles.
+    :param center: Center shared by both spheres.
+    :param radius_min: Radius of the smaller sphere.
+    :param radius_max: Radius of the bigger sphere.
+    :param elevation_min: Minimum angle of elevation in degrees. Range: [-90, 90].
+    :param elevation_max: Maximum angle of elevation in degrees. Range: [-90, 90].
+    :param azimuth_min: Minimum angle of azimuth in degrees. Range: [-180, 180].
+    :param azimuth_max: Maximum angle of azimuth in degrees. Range: [-180, 180].
+    :param uniform_volume: Instead of sampling the angles and radius uniformly, sample the shell volume uniformly.
+                           As a result, there will be more samples at larger radii.
     :return: A sampled point.
     """
+    
     center = np.array(center)
+    
+    assert -180 <= azimuth_min <= 180, "azimuth_min must be in range [-180, 180]"
+    assert -180 <= azimuth_max <= 180, "azimuth_max must be in range [-180, 180]"
+    assert -90 <= elevation_min <= 90, "elevation_min must be in range [-90, 90]"
+    assert -90 <= elevation_min <= 90, "elevation_max must be in range [-90, 90]"
+    assert azimuth_min < azimuth_max, "azimuth_min must be smaller than azimuth_max"
+    assert elevation_min < elevation_max, "elevation_min must be smaller than elevation_max"
+    
+    if uniform_volume:
+         
+        radius = radius_min + (radius_max - radius_min) * np.cbrt(np.random.rand())
+        
+        # rejection sampling
+        constr_fulfilled = False
+        while not constr_fulfilled:
+            direction_vector = np.random.randn(3)
+            direction_vector /= np.linalg.norm(direction_vector)
+            
+            # https://stackoverflow.com/questions/4116658/faster-numpy-cartesian-to-spherical-coordinate-conversion
+            xy = direction_vector[0]*direction_vector[0] + direction_vector[1]*direction_vector[1]
+            elevation = np.arctan2(direction_vector[2], np.sqrt(xy))
+            azimuth = np.arctan2(direction_vector[1], direction_vector[0])
 
-    if uniform_elevation:
+            elev_constraint = np.deg2rad(elevation_min) < elevation < np.deg2rad(elevation_max)
+            azim_constraint = np.deg2rad(azimuth_min) < azimuth < np.deg2rad(azimuth_max)
+            constr_fulfilled = elev_constraint and azim_constraint
+    else:
         el_sampled = np.deg2rad(elevation_min + (elevation_max - elevation_min) * np.random.rand())
-        az_sampled = 2 * np.pi * np.random.rand()
+        az_sampled = np.deg2rad(azimuth_min + (azimuth_max - azimuth_min) * np.random.rand())
         # spherical to cartesian coordinates
         direction_vector = np.array([np.sin(np.pi / 2 - el_sampled) * np.cos(az_sampled),
                                      np.sin(np.pi / 2 - el_sampled) * np.sin(az_sampled),
                                      np.cos(np.pi / 2 - el_sampled)])
-    else:
-        if elevation_min == 0:
-            # here comes the magic number
-            elevation_min = 0.001
-        if elevation_max == 90:
-            # behold! magic number
-            elevation_max = 0.001
 
-        # Height of a sampling cone
-        cone_height = 1
-
-        # Sampling and rejection radius
-        r_sampling = cone_height / np.tan(np.deg2rad(elevation_min))
-        r_rejection = cone_height / np.tan(np.deg2rad(elevation_max))
-        # Init sampled point at the center of a sampling disk
-        sampled_2d = np.array([center[0], center[1]])
-
-        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling
-        # cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.
-
-        while np.sum((sampled_2d - center[:2]) ** 2) <= r_rejection ** 2:
-            # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
-            r = r_sampling * np.sqrt(np.random.uniform())
-            theta = np.random.uniform() * 2 * np.pi
-            sampled_2d[0] = center[0] + r * np.cos(theta)
-            sampled_2d[1] = center[1] + r * np.sin(theta)
-
-        # Sampled point in 3d
-        direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + cone_height])
-
-        # Getting vector, then unit vector that defines the direction
-        full_vector = direction_point - center
-
-        direction_vector = full_vector / np.maximum(np.linalg.norm(full_vector), np.finfo(np.float32).eps)
-
-    # Calculate the factor for the unit vector
-    factor = np.random.uniform(radius_min, radius_max, size=None)
+        # Calculate the uniform radius
+        radius = np.random.uniform(radius_min, radius_max)
+        
     # Get the coordinates of a sampled point inside the shell
-    position = direction_vector * factor + center
+    position = direction_vector * radius + center
 
     return position

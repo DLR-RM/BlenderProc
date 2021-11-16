@@ -292,8 +292,7 @@
             "radius_min": 1, # now depends on the bottom area of the box
             "radius_max": 1.5, # this one too
             "elevation_min": 5,
-            "elevation_max": 89,
-            "uniform_elevation": True
+            "elevation_max": 89
           },
           "color": {
             "provider": "sampler.Color",
@@ -328,8 +327,7 @@
             "radius_min": 0.35,
             "radius_max": 1.50,
             "elevation_min": 5,
-            "elevation_max": 89,
-            "uniform_elevation": True
+            "elevation_max": 89
           },
           "rotation": {
             "format": "look_at",

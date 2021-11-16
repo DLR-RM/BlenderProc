@@ -30,8 +30,7 @@ light.set_location(bproc.sampler.shell(
     radius_min=1,
     radius_max=5,
     elevation_min=1,
-    elevation_max=89,
-    uniform_elevation=True
+    elevation_max=89
 ))
 # Randomly set the color and energy
 light.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
@@ -49,8 +48,7 @@ while tries < 10000 and poses < 5:
         radius_min=1,
         radius_max=4,
         elevation_min=1,
-        elevation_max=89,
-        uniform_elevation=True
+        elevation_max=89
     )
     # Compute rotation based lookat point which is placed randomly around the object
     lookat_point = obj.get_location() + np.random.uniform([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])

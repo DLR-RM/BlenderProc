@@ -194,7 +194,7 @@ light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
 location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
-                        elevation_min = 5, elevation_max = 89, uniform_elevation = True)
+                        elevation_min = 5, elevation_max = 89, uniform_volume = False)
 light_point.set_location(location)
 ```
 
@@ -211,7 +211,7 @@ while poses < 10:
                             radius_max = 1.24,
                             elevation_min = 5,
                             elevation_max = 89,
-                            uniform_elevation = True)
+                            uniform_volume = False)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
     poi = bproc.object.compute_poi(np.random.choice(sampled_bop_objs, size=10))
     # Compute rotation based on vector going from location towards poi
