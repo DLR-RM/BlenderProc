@@ -8,11 +8,18 @@
 
 # Version History
 
-## Version 2.1.0a0 3rd Novemeber 2021
+## Version 2.1.0a0 17th Novemeber 2021
 - add new lens distortion module, adding the possibility to simulate `k1, k2, k3, p1` and `p2` parameters. 
+- improve usability of distance rendering, make it the default in all examples
+- distance and depth rendering can now be done antialiased and non-antialiased
+- add a nocs renderer: [paper](https://geometry.stanford.edu/projects/NOCS_CVPR2019/pub/NOCS_CVPR2019.pdf)
+- upgrade the shell sampler and rework the usage and documentation
 - move `run.py` to `cli.py` and support the same CLI arguments as for `blenderproc ...`
 - make caching of pip installs the default (faster start-up) and add option to reset them if needed
+- refactor the vishdf5 script using the same content now for saveAsImg
 - clean up the scripts folder and move it completely into blenderproc
+- include all packages (like vhacd) in the pip install package
+- fix bug with light internal blender_obj after an undo operation
 - add OPTIX as denoiser option
 - add possibility to read `jpeg` 
 - fix `use_ray_trace` in `bproc.sampler.upper_region`
