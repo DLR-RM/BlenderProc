@@ -47,7 +47,7 @@ shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02
 # Collect all beds
 beds = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
 # Sample the location of the ShapeNet object above a random bed
-shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3))
+shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3, use_ray_trace_check=True))
 
 # Make sure the ShapeNet object has a minimum thickness (this will increase the stability of the simulator)
 shapenet_obj.add_modifier("SOLIDIFY", thickness=0.0025)
@@ -83,9 +83,9 @@ while tries < 10000 and poses < 5:
         poses += 1
     tries += 1
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(150)
 

@@ -27,6 +27,7 @@ shapenet_obj = bproc.loader.load_shapenet(args.shape_net, used_synset_id="028019
 sample_point = bproc.sampler.upper_region(
     objects_to_sample_on=bed_objs,
     min_height=0.75,
+    use_ray_trace_check=True
 )
 # move the shapenet object to the sampled position
 shapenet_obj.set_location(sample_point)
@@ -55,9 +56,9 @@ for i in range(5):
 # set the number of samples to render for each object
 bproc.renderer.set_samples(150)
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 
 # render the whole pipeline
 data = bproc.renderer.render()

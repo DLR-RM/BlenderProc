@@ -44,17 +44,13 @@ while tries < 10000 and poses < 5:
         poses += 1
     tries += 1
 
-# activate distance rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 bproc.renderer.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
 # render the whole pipeline
 data = bproc.renderer.render()
-
-# post process the data and remove the redundant channels in the distance image
-data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
-del data["distance"]
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

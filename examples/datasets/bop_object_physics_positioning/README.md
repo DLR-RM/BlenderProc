@@ -49,7 +49,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Sample upright objects poses on surface.
 * Sample point light source.
 * Sample camera poses `bproc.add_camera_pose()`.
-* Render RGB and distance: `bproc.renderer`.
+* Render RGB and depth: `bproc.renderer`.
 * Write BOP data: `bproc.writer.write_bop`.
 
 
@@ -194,7 +194,7 @@ light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
 location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
-                        elevation_min = 5, elevation_max = 89, uniform_elevation = True)
+                        elevation_min = 5, elevation_max = 89, uniform_volume = False)
 light_point.set_location(location)
 ```
 
@@ -211,7 +211,7 @@ while poses < 10:
                             radius_max = 1.24,
                             elevation_min = 5,
                             elevation_max = 89,
-                            uniform_elevation = True)
+                            uniform_volume = False)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
     poi = bproc.object.compute_poi(np.random.choice(sampled_bop_objs, size=10))
     # Compute rotation based on vector going from location towards poi
@@ -234,17 +234,17 @@ while poses < 10:
 ### Rgb Renderer
 
 ```python
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 ```
-* Renders RGB using 50 `"samples"` and also outputs distance images. 
+* Renders RGB using 50 `"samples"` and also outputs depth images. 
 
 ### Bop Writer
 
 ```python
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset = args.bop_dataset_name,
-                       depths = bproc.postprocessing.dist2depth(data["distance"]),
+                       depths = data["depth"], 
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)
@@ -252,7 +252,6 @@ bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
 
 * Saves all pose and camera information that is provided in BOP datasets.
 * Only considers objects from the given `"dataset": "<args:1>"`
-* We use `bproc.postprocessing.dist2depth` to convert the distance images from Blender to actual depth images.
 * Saves the images as jpg
 
 ## More examples

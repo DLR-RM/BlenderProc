@@ -403,7 +403,7 @@ class MeshObject(Entity):
                  The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
                  The face index, -1 when original data isn’t available, int in [-inf, inf]
         """
-        result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction), max_distance)
+        result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction), distance=max_distance)
         return result, np.array(location), np.array(normal), index
 
     def add_uv_mapping(self, projection: str, overwrite: bool = False):

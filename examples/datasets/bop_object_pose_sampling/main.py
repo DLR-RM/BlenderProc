@@ -27,7 +27,7 @@ for j, obj in enumerate(bop_objs):
 light_point = bproc.types.Light()
 light_point.set_energy(500)
 location = bproc.sampler.shell(center = [0, 0, -0.8], radius_min = 1, radius_max = 4,
-                        elevation_min = 40, elevation_max = 89, uniform_elevation = True)
+                        elevation_min = 40, elevation_max = 89, uniform_volume = False)
 light_point.set_location(location)
 
 # Define a function that samples 6-DoF poses
@@ -35,8 +35,8 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
-# activate distance rendering and set amount of samples for color rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering and set amount of samples for color rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 
 # Render five different scenes
@@ -59,7 +59,7 @@ for _ in range(5):
                                 radius_max = 1.2,
                                 elevation_min = 1,
                                 elevation_max = 89,
-                                uniform_elevation = True)
+                                uniform_volume = False)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
         poi = bproc.object.compute_poi(bop_objs)
         # Compute rotation based on vector going from location towards poi
@@ -82,7 +82,7 @@ for _ in range(5):
     # Write data to bop format
     bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                            dataset = args.bop_dataset_name,
-                           depths = bproc.postprocessing.dist2depth(data["distance"]),
+                           depths = data["depth"],
                            depth_scale = 1.0, 
                            colors = data["colors"], 
                            color_file_format = "JPEG", 

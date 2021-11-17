@@ -38,7 +38,7 @@ blenderproc vis hdf5 example/suncg_with_object_replacer/output/0.hdf5
 * Sample camera positions inside every room.
 * Automatically adds light sources inside each room.
 * Writes sampled camera poses to file.
-* Renders rgb, distance and normals.
+* Renders rgb, depth and normals.
 * Merges all into an `.hdf5` file.
 
 ## Python file (main.py)

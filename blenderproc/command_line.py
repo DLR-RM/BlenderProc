@@ -68,6 +68,7 @@ def cli():
         subparser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
         subparser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically. Type: string. Default: \"/dev/shm\" or \"/tmp/\" depending on which is available.")
         subparser.add_argument('--keep-temp-dir', dest='keep_temp_dir', action='store_true', help="If set, the temporary directory is not removed in the end.")
+        subparser.add_argument('--force-pip-update', dest='force_pip_update', action='store_true', help="If set, the cache of installed pip packages will be ignored and rebuild based on pip freeze.")
 
     # Setup common arguments of run, debug and pip mode
     for subparser in [parser_run, parser_debug, parser_pip]:
@@ -87,7 +88,7 @@ def cli():
 
         # Install blender, if not already done
         custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(is_config, args, unknown_args)
-        blender_run_path, _ = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
+        blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
 
         # Setup script path that should be executed
         if is_config:
@@ -105,6 +106,10 @@ def cli():
         used_environment = dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1")
         # this is done to enable the import of blenderproc inside of the blender internal python environment
         used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
+
+        # If pip update is forced, remove pip package cache
+        if args.force_pip_update:
+            SetupUtility.clean_installed_packages_cache(os.path.dirname(blender_run_path), major_version)
 
         # Run either in debug or in normal mode
         if args.mode == "debug":

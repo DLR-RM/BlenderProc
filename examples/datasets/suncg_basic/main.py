@@ -29,9 +29,9 @@ with open(args.camera, "r") as f:
 # makes Suncg objects emit light
 bproc.lighting.light_suncg_scene()
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline

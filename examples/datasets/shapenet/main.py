@@ -27,18 +27,14 @@ for i in range(5):
     cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-# Convert distance to depth data
-data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
-del data["distance"]
 
 # Collect the metadata of the shapenet object
 shapenet_state = {

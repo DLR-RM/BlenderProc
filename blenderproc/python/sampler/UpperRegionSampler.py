@@ -108,10 +108,10 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
             ret += dir * random.uniform(min_height, max_height)
             if use_ray_trace_check:
                 # transform the coords into the reference frame of the object
-                c_ret = inv_world_matrix @ ret
-                c_dir = inv_world_matrix @ (dir * -1.0)
+                c_ret = inv_world_matrix @ np.concatenate((ret, [1]), 0)
+                c_dir = inv_world_matrix @ np.concatenate((dir * -1.0, [0]), 0)
                 # check if the object was hit
-                hit, _, _, _ = obj.ray_cast(c_ret, c_dir)
+                hit, _, _, _ = obj.ray_cast(c_ret[:3], c_dir[:3])
                 if hit:  # if the object was hit return
                     break
             else:
