@@ -35,8 +35,8 @@ with open(args.camera, "r") as f:
 # Enable motion blur
 bproc.renderer.enable_motion_blur(motion_blur_length=0.5)
 
-# activate distance rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 

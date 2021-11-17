@@ -35,7 +35,7 @@ blenderproc vis hdf5 examples/basics/basic/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
+* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ### Setup
@@ -107,9 +107,9 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 #### Rgb rendering
 
 ```python
-# activate normal and distance rendering
+# activate normal and depth rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 
@@ -117,16 +117,16 @@ bproc.renderer.set_samples(350)
 data = bproc.renderer.render()
 ```
 
-First we enable that `blenderproc` also generates the `normals` and the `distance` for each color image, and then we set the amount of samples used for generating the color image.
+First we enable that `blenderproc` also generates the `normals` and the `depth` for each color image, and then we set the amount of samples used for generating the color image.
 A higher sample amount will reduce the noise in the image, but increase the rendering time. 
 The correct value depends on the complexity of your scene and the GPU budget you can spare.
 
 => Creates the files `rgb_0000.png` and `rgb_0001.png` in the temp folder.
 
-It also creates the normals and distance
+It also creates the normals and depth 
 
-* The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* Here, the distance image is antialiased, meaning that for each pixel the depth in this pixel is aggregated over its surface. If you want to render a z-buffer depth image without any smoothing effects use `bproc.renderer.enable_depth_output()` instead. While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
+* The normal and depth images are rendered using the `.exr` format which allows linear colorspace and higher precision
+* Here, the depth image is not antialiased, meaning that for each pixel the depth in this pixel is not aggregated over its surface. While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
@@ -151,7 +151,7 @@ The file `0.h5py` would therefore look like the following:
 ```yaml
 {
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
-  "distance": #<numpy array with pixel values read in from distance_0000.exr>,
+  "depth": #<numpy array with pixel values read in from depth_0000.exr>,
   "normals": #<numpy array with pixel values read in from normals_0000.exr>,
 }
 ``` 

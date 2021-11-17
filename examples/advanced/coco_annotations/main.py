@@ -34,9 +34,8 @@ with open(args.camera, "r") as f:
         matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
         bproc.camera.add_camera_pose(matrix_world)
 
-# activate normal and distance rendering
+# activate normal rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
 
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(50)

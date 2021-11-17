@@ -113,14 +113,14 @@ Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategor
 ```python
   bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                            dataset = args.bop_dataset_name,
-                           depths = bproc.postprocessing.dist2depth(data["distance"]),
+                           depths = data["depth"],
                            depth_scale = 1.0, 
                            colors = data["colors"], 
                            color_file_format = "JPEG", 
                            append_to_existing_output = True)
 ```
 
-Writes object to camera poses and intrinsics of the given `"dataset": "args.bop_dataset_name"` in BOP format. Converts Blender distance images to depth images. If output folder exists outputs are appended with `"append_to_existing_output": True`.
+Writes object to camera poses and intrinsics of the given `"dataset": "args.bop_dataset_name"` in BOP format. If output folder exists outputs are appended with `"append_to_existing_output": True`.
 
 `"depth_scale": 1.0`: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy and maximum depth value. Default value `"depth_scale": 1.0` corresponds to 65.54m maximum depth and 1mm accuracy. 
 

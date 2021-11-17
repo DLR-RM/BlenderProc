@@ -46,7 +46,7 @@ for i in range(2):
 
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_distance_output(activate_antialiasing=True)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 

@@ -86,17 +86,10 @@ class RendererInterface(Module):
         * - distance_output_key
           - The key which should be used for storing the distance in a merged file. Default: `"distance"`.
           - string
-        * - distance_start
-          - Starting distance of the distance, measured from the camera. Default: 0.1
-          - float
         * - distance_range
-          - Total distance in which the distance is measured. distance_end = distance_start + distance_range.
-            Default: 25.0
+          - Total distance in which the distance is measured.
+            Default: 10000.0
           - float
-        * - distance_falloff
-          - Type of transition used to fade distance. Default: "Linear". Available: [LINEAR, QUADRATIC,
-            INVERSE_QUADRATIC]
-          - string
         * - render_depth
           - If true, the z-buffer is also rendered to file. Default: False.
           - bool
@@ -186,16 +179,16 @@ class RendererInterface(Module):
         """
         if self.config.get_bool("render_distance", False):
             RendererUtility.enable_distance_output(
+                True,
                 self._determine_output_dir(),
                 self.config.get_string("distance_output_file_prefix", "distance_"),
                 self.config.get_string("distance_output_key", "distance"),
-                self.config.get_float("distance_start", 0.1),
-                self.config.get_float("distance_range", 25.0),
-                self.config.get_string("distance_falloff", "LINEAR")
+                self.config.get_float("distance_range", 10000.0)
             )
 
         if self.config.get_bool("render_depth", False):
             RendererUtility.enable_depth_output(
+                False,
                 self._determine_output_dir(),
                 self.config.get_string("depth_output_file_prefix", "depth_"),
                 self.config.get_string("depth_output_key", "depth")

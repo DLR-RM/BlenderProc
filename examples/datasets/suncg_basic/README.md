@@ -31,7 +31,7 @@ blenderproc vis hdf5 examples/datasets/suncg_basic/output/0.hdf5
 * Loads camera positions from a given file.
 * Automatically adds light sources inside each room.
 * Renders semantic segmentation map.
-* Renders rgb, distance and normals.
+* Renders rgb, depth and normals.
 * Merges all into an `.hdf5` file.
 
 ## Python file (main.py)

@@ -9,6 +9,7 @@ import numpy as np
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
@@ -171,28 +172,40 @@ def set_samples(samples: int):
     """
     bpy.context.scene.cycles.samples = samples
 
-
-def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = "distance_",
-                           output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
-                           distance_falloff: str = "LINEAR"):
+def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
+                           output_key: str = "distance", antialiasing_distance_max: float = None,
+                           convert_to_depth: bool = False):
     """ Enables writing distance images.
 
-    Distance images will be written in the form of .exr files during the next rendering.
 
+    :param activate_antialiasing: If this is True the final image will be antialiased
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the distance output.
-    :param distance_start: Starting distance of the distance, measured from the camera.
-    :param distance_range: Total distance in which the distance is measured. \
-                           distance_end = distance_start + distance_range.
-    :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]
+    :param antialiasing_distance_max: Max distance in which the distance is measured. Resolution decreases antiproportionally. \
+                            Only if activate_antialiasing is True.
+    :param convert_to_depth: If this is true, while loading a postprocessing step is executed to convert this distance\
+                             image to a depth image
     """
+    if not activate_antialiasing:
+        return enable_depth_output(activate_antialiasing, output_dir, file_prefix, output_key, convert_to_distance=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
+    if antialiasing_distance_max is None:
+        antialiasing_distance_max = DefaultConfig.antialiasing_distance_max
+
+    if GlobalStorage.is_in_storage("distance_output_is_enabled"):
+        msg = "The distance enable function can not be called twice. Either you called it twice or you used the " \
+              "enable_depth_output with activate_antialiasing=True, which internally calls this function. This is " \
+              "currently not supported, but there is an easy way to solve this, you can use the " \
+              "bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate " \
+              "the antialiased depth image yourself."
+        raise Exception(msg)
+    GlobalStorage.add("distance_output_is_enabled", True)
 
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
-    GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
+    GlobalStorage.add("renderer_distance_end", antialiasing_distance_max)
 
     tree = bpy.context.scene.node_tree
     links = tree.links
@@ -200,17 +213,17 @@ def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = 
     render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
     # Set mist pass limits
-    bpy.context.scene.world.mist_settings.start = distance_start
-    bpy.context.scene.world.mist_settings.depth = distance_range
-    bpy.context.scene.world.mist_settings.falloff = distance_falloff
+    bpy.context.scene.world.mist_settings.start = 0
+    bpy.context.scene.world.mist_settings.depth = antialiasing_distance_max
+    bpy.context.scene.world.mist_settings.falloff = "LINEAR"
 
     bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
     # Create a mapper node to map from 0-1 to SI units
     mapper_node = tree.nodes.new("CompositorNodeMapRange")
     links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
     # map the values 0-1 to range distance_start to distance_range
-    mapper_node.inputs['To Min'].default_value = distance_start
-    mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+    mapper_node.inputs['To Min'].default_value = 0
+    mapper_node.inputs['To Max'].default_value = antialiasing_distance_max
     final_output = mapper_node.outputs['Value']
 
     # Build output node
@@ -226,19 +239,42 @@ def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = 
         "key": output_key,
         "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
         "version": "2.0.0",
-        "trim_redundant_channels": True
+        "trim_redundant_channels": True,
+        "convert_to_depth": convert_to_depth
     })
 
 
-def enable_depth_output(output_dir: str, file_prefix: str = "depth_", output_key: str = "depth"):
+def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
+                        output_key: str = "depth", antialiasing_distance_max: float = None,
+                        convert_to_distance: bool = False):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
 
-    :param output_dir: The directory to write files to.
+    :param activate_antialiasing: If this is True the final image will be antialiased
+    :param output_dir: The directory to write files to, if this is None the temporary directory is used.
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the depth output.
+    :param antialiasing_distance_max: Max distance in which the distance is measured. \
+                                      Only if activate_antialiasing is True.
+    :param convert_to_distance: If this is true, while loading a postprocessing step is executed to convert this depth \
+                                image to a distance image
     """
+    if activate_antialiasing:
+        return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key, antialiasing_distance_max, convert_to_depth=True)
+    if output_dir is None:
+        output_dir = Utility.get_temporary_directory()
+
+    if GlobalStorage.is_in_storage("depth_output_is_enabled"):
+        msg = "The depth enable function can not be called twice. Either you called it twice or you used the " \
+              "enable_distance_output with activate_antialiasing=False, which internally calls this function. This is " \
+              "currently not supported, but there is an easy way to solve this, you can use the " \
+              "bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate " \
+              "the antialiased distance image yourself."
+        raise Exception(msg)
+    GlobalStorage.add("depth_output_is_enabled", True)
+
+
     bpy.context.scene.render.use_compositing = True
     bpy.context.scene.use_nodes = True
 
@@ -263,7 +299,8 @@ def enable_depth_output(output_dir: str, file_prefix: str = "depth_", output_key
         "key": output_key,
         "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
         "version": "2.0.0",
-        "trim_redundant_channels": True
+        "trim_redundant_channels": True,
+        "convert_to_distance": convert_to_distance
     })
 
 
@@ -449,7 +486,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
     if load_keys is None:
-        load_keys = {'colors', 'distance', 'normals', 'diffuse'}
+        load_keys = {'colors', 'distance', 'normals', 'diffuse', 'depth'}
         keys_with_alpha_channel = {'colors'} if bpy.context.scene.render.film_transparent else None
 
     if output_key is not None:
