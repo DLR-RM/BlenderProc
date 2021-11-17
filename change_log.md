@@ -8,7 +8,7 @@
 
 # Version History
 
-## Version 2.1.0a0 17th Novemeber 2021
+## Version 2.1.0 17th Novemeber 2021
 - add new lens distortion module, adding the possibility to simulate `k1, k2, k3, p1` and `p2` parameters. 
 - improve usability of distance rendering, make it the default in all examples
 - distance and depth rendering can now be done antialiased and non-antialiased
