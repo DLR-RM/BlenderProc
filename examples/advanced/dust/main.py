@@ -36,9 +36,9 @@ for i in range(5):
 for material in obj.get_materials():
     bproc.material.add_dust(material, strength=0.8, texture_scale=0.05)
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # set the amount of samples, which should be used for the color rendering
 bproc.renderer.set_samples(350)
 

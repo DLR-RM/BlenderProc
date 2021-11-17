@@ -64,7 +64,7 @@ light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
 location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
-                        elevation_min = 5, elevation_max = 89, uniform_elevation = True)
+                        elevation_min = 5, elevation_max = 89, uniform_volume = False)
 light_point.set_location(location)
 
 # sample CC Texture and assign to room planes
@@ -97,7 +97,7 @@ while poses < 10:
                             radius_max = 1.24,
                             elevation_min = 5,
                             elevation_max = 89,
-                            uniform_elevation = True)
+                            uniform_volume = False)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
     poi = bproc.object.compute_poi(np.random.choice(placed_objects, size=10))
     # Compute rotation based on vector going from location towards poi
@@ -111,8 +111,8 @@ while poses < 10:
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
 
-# activate distance rendering and set amount of samples for color rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering and set amount of samples for color rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 
 # render the whole pipeline
@@ -121,7 +121,7 @@ data = bproc.renderer.render()
 # Write data in bop format
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset = args.bop_dataset_name,
-                       depths = bproc.postprocessing.dist2depth(data["distance"]),
+                       depths = data["depth"],
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)

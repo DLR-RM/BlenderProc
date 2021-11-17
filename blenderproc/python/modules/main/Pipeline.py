@@ -13,7 +13,7 @@ class Pipeline:
         Inits the pipeline, by calling the constructors of all modules mentioned in the config.
 
         :param config_path: path to the config
-        :param args: arguments which were provided to the run.py and are specified in the config file
+        :param args: arguments which were provided to the cli.py and are specified in the config file
         :param temp_dir: the directory where to put temporary files during the execution
         :param avoid_output: if this is true, all modules (renderers and writers) skip producing output. With this it is possible to debug \
                                properly.

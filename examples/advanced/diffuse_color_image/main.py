@@ -30,9 +30,9 @@ for i in range(5):
     cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
-# activate normal and distance rendering
+# activate normal and depth rendering
 bproc.renderer.enable_normals_output()
-bproc.renderer.enable_distance_output()
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # Also enable the diffuse color image, which describes the base color of the textures
 bproc.renderer.enable_diffuse_color_output()
 # set the amount of samples, which should be used for the color rendering

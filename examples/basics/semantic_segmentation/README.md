@@ -37,7 +37,6 @@ This can be done manually by:
 ```python
 obj.set_cp("category_id", 0)
 ```
-
 ### SegMapRenderer
 
 ```python
@@ -59,17 +58,3 @@ Furthermore, if an instance image is used all other keys are stored in the .csv.
 For example, it would also be possible to use the key: `"location"`. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
 This can be avoided by providing a default value like: `default_values= {"location: [0,0,0]}`.
-
-### Hdf5 writing
-
-```python
-# Convert distance to depth
-data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
-del data["distance"]
-
-# write the data to a .hdf5 container
-bproc.writer.write_hdf5(args.output_dir, data)
-```
-
-We first map the distance to a depth image and delete the distance image from the data dictionary.
-At the end the rendered images are stored in `.hdf5` files.

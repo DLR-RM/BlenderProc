@@ -27,8 +27,8 @@ light_point = bproc.types.Light()
 light_point.set_energy(1000)
 light_point.set_location([0, 0, -0.8])
 
-# activate distance rendering and set amount of samples for color rendering
-bproc.renderer.enable_distance_output()
+# activate depth rendering and set amount of samples for color rendering
+bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_samples(50)
 
 # render the cameras of the current scene
@@ -37,6 +37,6 @@ data = bproc.renderer.render()
 # Write data to bop format
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset=args.bop_dataset_name,
-                       depths = bproc.postprocessing.dist2depth(data["distance"]),
+                       depths = data["depth"],
                        colors=data["colors"],
                        save_world2cam=False) # world coords are arbitrary in most real BOP datasets

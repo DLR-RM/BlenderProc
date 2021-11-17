@@ -41,7 +41,7 @@ blenderproc vis hdf5 examples/datasets/front_3d_with_improved_mat/output/0.hdf5
 * Loading the cc material: `bproc.loader.load_ccmaterials()`.
 * The material is filtered: `bproc.filter.by_attr()`.
 * Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials.
-* Enables normals and distance (rgb is enabled by default): `bproc.renderer.enable_normals_output()` `bproc.renderer.enable_distance_output()`.
+* Enables normals and depth (rgb is enabled by default): `bproc.renderer.enable_normals_output()` `bproc.renderer.enable_depth_output()`.
 * Renders all set camera poses: `bproc.renderer.render()`.
 * Writes the output to .hdf5 containers: `bproc.writer.write_hdf5()`.
 
