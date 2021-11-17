@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.types.MeshObjectUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.types.MeshObjectUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -472,8 +476,12 @@
 <span class="kn">import</span> <span class="nn">bmesh</span>
 <span class="kn">import</span> <span class="nn">mathutils</span>
 <span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">Matrix</span>
-<span class="kn">from</span> <span class="nn">blenderproc.external.vhacd.decompose</span> <span class="kn">import</span> <span class="n">convex_decomposition</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span>
 
+
+<span class="k">if</span> <span class="n">platform</span> <span class="o">!=</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="c1"># this is only supported under linux and mac os, the import itself already doesn&#39;t work under windows</span>
+    <span class="kn">from</span> <span class="nn">blenderproc.external.vhacd.decompose</span> <span class="kn">import</span> <span class="n">convex_decomposition</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.EntityUtility</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span><span class="p">,</span> <span class="n">resolve_path</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_blender_mesh_objects</span>
@@ -685,6 +693,9 @@
 <span class="sd">        :param temp_dir: The temp dir to use for storing the object files created by v-hacd.</span>
 <span class="sd">        :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This is currently not supported under Windows&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">temp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
 
@@ -863,7 +874,7 @@
 <span class="sd">                 The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]</span>
 <span class="sd">                 The face index, -1 when original data isn’t available, int in [-inf, inf]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">origin</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">max_distance</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">origin</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">distance</span><span class="o">=</span><span class="n">max_distance</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">location</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">normal</span><span class="p">),</span> <span class="n">index</span></div>
 
 <div class="viewcode-block" id="MeshObject.add_uv_mapping"><a class="viewcode-back" href="../../../../blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.add_uv_mapping">[docs]</a>    <span class="k">def</span> <span class="nf">add_uv_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projection</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>

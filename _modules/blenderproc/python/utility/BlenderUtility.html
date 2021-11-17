@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.BlenderUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.utility.BlenderUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -477,7 +481,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
-
+<span class="kn">import</span> <span class="nn">cv2</span>
 
 <div class="viewcode-block" id="add_object_only_with_vertices"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.add_object_only_with_vertices">[docs]</a><span class="k">def</span> <span class="nf">add_object_only_with_vertices</span><span class="p">(</span><span class="n">vertices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;NewVertexObject&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Object</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -605,38 +609,45 @@
 <span class="sd">    :param num_channels: Number of channels to return.</span>
 <span class="sd">    :return: The numpy array</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">imageio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">num_channels</span><span class="p">]</span>
-    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It seems the freeimage library which is necessary to read .exr files cannot be found on your computer.&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gonna try to download it automatically.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Since PEP 476 the certificate of https connections is verified per default.</span>
-        <span class="c1"># However, in the blender python env no local certificates seem to be found which makes certification impossible.</span>
-        <span class="c1"># Therefore, we have to switch certificate verification off for now.</span>
-        <span class="kn">import</span> <span class="nn">ssl</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ssl</span><span class="p">,</span> <span class="s1">&#39;_create_unverified_context&#39;</span><span class="p">):</span>
-            <span class="n">prev_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span>
-            <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span>
-
-        <span class="c1"># Download free image library</span>
-        <span class="n">imageio</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">freeimage</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
-
-        <span class="c1"># Undo certificate check changes</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ssl</span><span class="p">,</span> <span class="s1">&#39;_create_unverified_context&#39;</span><span class="p">):</span>
-            <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">prev_context</span>
-
+    <span class="n">file_ending</span> <span class="o">=</span> <span class="n">file_path</span><span class="p">[</span><span class="n">file_path</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">file_ending</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;exr&quot;</span><span class="p">,</span> <span class="s2">&quot;png&quot;</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># Try again</span>
             <span class="k">return</span> <span class="n">imageio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">num_channels</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;The automatic installation of the freeimage library failed, so you need to install the imageio .exr extension manually. This is quite simple: </span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot;Use a different python environment (not blenders internal environment), `pip install imageio`.</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">error</span> <span class="o">+=</span> <span class="s1">&#39;And then execute the following command in this env: </span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="n">error</span> <span class="o">+=</span> <span class="s1">&#39;`python -c &quot;import imageio; imageio.plugins.freeimage.download()&quot;`</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot;Now everything should work -&gt; run the pipeline again.&quot;</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">error</span><span class="p">)</span></div>
-
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;It seems the freeimage library which is necessary to read .exr files cannot be found on your computer.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gonna try to download it automatically.&quot;</span><span class="p">)</span>
+    
+            <span class="c1"># Since PEP 476 the certificate of https connections is verified per default.</span>
+            <span class="c1"># However, in the blender python env no local certificates seem to be found which makes certification impossible.</span>
+            <span class="c1"># Therefore, we have to switch certificate verification off for now.</span>
+            <span class="kn">import</span> <span class="nn">ssl</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ssl</span><span class="p">,</span> <span class="s1">&#39;_create_unverified_context&#39;</span><span class="p">):</span>
+                <span class="n">prev_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span>
+                <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span>
+    
+            <span class="c1"># Download free image library</span>
+            <span class="n">imageio</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">freeimage</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+    
+            <span class="c1"># Undo certificate check changes</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ssl</span><span class="p">,</span> <span class="s1">&#39;_create_unverified_context&#39;</span><span class="p">):</span>
+                <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">prev_context</span>
+    
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Try again</span>
+                <span class="k">return</span> <span class="n">imageio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">num_channels</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">error</span> <span class="o">=</span> <span class="s2">&quot;The automatic installation of the freeimage library failed, so you need to install the imageio .exr extension manually. This is quite simple: </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot;Use a different python environment (not blenders internal environment), `pip install imageio`.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">error</span> <span class="o">+=</span> <span class="s1">&#39;And then execute the following command in this env: </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="n">error</span> <span class="o">+=</span> <span class="s1">&#39;`python -c &quot;import imageio; imageio.plugins.freeimage.download()&quot;`</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="n">error</span> <span class="o">+=</span> <span class="s2">&quot;Now everything should work -&gt; run the pipeline again.&quot;</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_ending</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;jpg&quot;</span><span class="p">]:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>  <span class="c1"># reads an image in the BGR format</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;File with ending &quot;</span> <span class="o">+</span> <span class="n">file_ending</span> <span class="o">+</span> <span class="s2">&quot; cannot be loaded.&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="collect_all_orphan_datablocks"><a class="viewcode-back" href="../../../../blenderproc.python.utility.BlenderUtility.html#blenderproc.python.utility.BlenderUtility.collect_all_orphan_datablocks">[docs]</a><span class="k">def</span> <span class="nf">collect_all_orphan_datablocks</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot; Returns all orphan data blocks grouped by their type</span>

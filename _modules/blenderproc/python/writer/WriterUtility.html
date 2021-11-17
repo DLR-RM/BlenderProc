@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.writer.WriterUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.writer.WriterUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -476,6 +480,7 @@
 <span class="kn">import</span> <span class="nn">h5py</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.postprocessing.PostProcessingUtility</span> <span class="kn">import</span> <span class="n">trim_redundant_channels</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.postprocessing.PostProcessingUtility</span> <span class="kn">import</span> <span class="n">dist2depth</span><span class="p">,</span> <span class="n">depth2dist</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.EntityUtility</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">load_image</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span><span class="p">,</span> <span class="n">Utility</span><span class="p">,</span> <span class="n">NumpyEncoder</span>
@@ -585,11 +590,13 @@
                             <span class="n">output_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                                 <span class="p">[</span><span class="n">WriterUtility</span><span class="o">.</span><span class="n">load_output_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">key_has_alpha_channel</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span>
                                  <span class="n">output_paths</span><span class="p">])</span>
-
                         <span class="c1"># For outputs like distance or depth, we automatically trim the last channel here</span>
                         <span class="k">if</span> <span class="s2">&quot;trim_redundant_channels&quot;</span> <span class="ow">in</span> <span class="n">reg_out</span> <span class="ow">and</span> <span class="n">reg_out</span><span class="p">[</span><span class="s2">&quot;trim_redundant_channels&quot;</span><span class="p">]:</span>
                             <span class="n">output_file</span> <span class="o">=</span> <span class="n">trim_redundant_channels</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
-
+                        <span class="k">if</span> <span class="s2">&quot;convert_to_depth&quot;</span> <span class="ow">in</span> <span class="n">reg_out</span> <span class="ow">and</span> <span class="n">reg_out</span><span class="p">[</span><span class="s2">&quot;convert_to_depth&quot;</span><span class="p">]:</span>
+                            <span class="n">output_file</span> <span class="o">=</span> <span class="n">dist2depth</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="s2">&quot;convert_to_distance&quot;</span> <span class="ow">in</span> <span class="n">reg_out</span> <span class="ow">and</span> <span class="n">reg_out</span><span class="p">[</span><span class="s2">&quot;convert_to_distance&quot;</span><span class="p">]:</span>
+                            <span class="n">output_file</span> <span class="o">=</span> <span class="n">depth2dist</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
                         <span class="n">output_data_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">reg_out</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># per run outputs</span>
@@ -627,7 +634,7 @@
 
         <span class="n">file_ending</span> <span class="o">=</span> <span class="n">file_path</span><span class="p">[</span><span class="n">file_path</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">file_ending</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;exr&quot;</span><span class="p">,</span> <span class="s2">&quot;png&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">file_ending</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;exr&quot;</span><span class="p">,</span> <span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="s2">&quot;jpg&quot;</span><span class="p">]:</span>
             <span class="c1"># num_channels is 4 if transparent_background is true in config</span>
             <span class="n">output</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">num_channels</span><span class="o">=</span><span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">load_alpha_channel</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">file_ending</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;npy&quot;</span><span class="p">,</span> <span class="s2">&quot;npz&quot;</span><span class="p">]:</span>

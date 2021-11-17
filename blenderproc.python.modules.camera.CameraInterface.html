@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.camera.CameraInterface module &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.modules.camera.CameraInterface module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -642,33 +646,75 @@ screen).</td>
 <td>Distance between the camera pair.</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>depth_of_field/focal_object</td>
+<tr class="row-even"><td>lens_distortion/k1</td>
+<td>k1 is the first radial distortion parameter (of 3rd degree in radial distance) as defined
+by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+Note that undistorted-to-distorted means that the distortion parameters are multiplied
+by undistorted, normalized camera projections to yield distorted projections, that are in
+turn digitized by the intrinsic camera matrix.</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>lens_distortion/k2</td>
+<td>k2 is the second radial distortion parameter (of 5th degree in radial distance) as defined
+by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform
+to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>lens_distortion/k3</td>
+<td>k3 is the third radial distortion parameter (of 7th degree in radial distance) as defined
+by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to
+the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+The use of this parameter is discouraged unless the angular field of view is too high,
+rendering it necessary, and the parameter allows for a distorted projection in the whole
+sensor size (which isn’t always given by features-driven camera calibration).</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>lens_distortion/p1</td>
+<td>p1 is the first decentering distortion parameter as defined by the undistorted-to-distorted
+Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+This parameter shares one degree of freedom (j1) with p2; as a consequence, either both
+parameters are given or none. The use of these parameters is discouraged since either current
+cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>lens_distortion/p2</td>
+<td>p2 is the second decentering distortion parameter as defined by the undistorted-to-distorted
+Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+This parameter shares one degree of freedom (j1) with p1; as a consequence, either both
+parameters are given or none. The use of these parameters is discouraged since either current
+cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>depth_of_field/focal_object</td>
 <td>This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.
 Using this will automatically activate the depth of field mode. Can not be combined with
 depth_of_field_dist.</td>
 <td>Provider</td>
 </tr>
-<tr class="row-odd"><td>depth_of_field/depth_of_field_dist</td>
+<tr class="row-even"><td>depth_of_field/depth_of_field_dist</td>
 <td>Instead of a focal_object it is possible to use a distance from the camera for the focal plane. More
 control over the scene can be achieved by using a focal_object.</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>depth_of_field/fstop</td>
+<tr class="row-odd"><td>depth_of_field/fstop</td>
 <td>The desired amount of blurring, a lower value means more blur and higher value less. Default: 2.4</td>
 <td>float</td>
 </tr>
-<tr class="row-odd"><td>depth_of_field/aperture_blades</td>
+<tr class="row-even"><td>depth_of_field/aperture_blades</td>
 <td>Amount of aperture polygon blades used, to change the shape of the blurred object. Minimum to see an effect
 is three. Default: 0</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>depth_of_field/aperture_ratio</td>
+<tr class="row-odd"><td>depth_of_field/aperture_ratio</td>
 <td>Change the amount of distortion to simulate the anamorphic bokeh effect. A setting of 1.0 shows no
 distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number
 will cause a vertical distortion. Default: 1.0</td>
 <td>float</td>
 </tr>
-<tr class="row-odd"><td>depth_of_field/aperture_rotation_in_rad</td>
+<tr class="row-even"><td>depth_of_field/aperture_rotation_in_rad</td>
 <td>Rotate the polygonal blades along the facing axis, and will rotate in a clockwise, and
 counter-clockwise fashion in radiant. Default: 0.0</td>
 <td>float</td>

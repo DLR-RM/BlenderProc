@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SUNCG scene with improved materials &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>SUNCG scene with improved materials &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -506,7 +510,7 @@ The procedure shown here could be done with every objects material as long as th
 <li>After that we change the materials three times, with different values.</li>
 <li>Writes sampled camera poses to file.</li>
 <li>Renders semantic segmentation map.</li>
-<li>Renders rgb, distance and normals.</li>
+<li>Renders rgb, depth and normals.</li>
 <li>Merges all into an <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file.</li>
 </ul>
 </div>
@@ -561,7 +565,7 @@ You can set any of those values there, even overwrite the <code class="docutils 
 <p>This last option adds displacement to your objects, so the object gets changed based on the color texture.
 This means that a dark spot in the image dents the object inwards at that point and outwards if it is bright.
 This make the surface more real looking as they do not look so flat.</p>
-<p>The distance rendering is not affected by this, the normal rendering is effected by this though.</p>
+<p>The depth rendering is not affected by this, the normal rendering is effected by this though.</p>
 <p>Finally, the mode specifies if the same values are used for all materials or if each material gets its own values.
 With <code class="docutils literal notranslate"><span class="pre">&quot;once_for_each&quot;</span></code> we decide that each object gets its own values.</p>
 </div>

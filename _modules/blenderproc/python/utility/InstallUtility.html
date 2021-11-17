@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.InstallUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.utility.InstallUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -467,10 +471,12 @@
   <h1>Source code for blenderproc.python.utility.InstallUtility</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
 <span class="kn">import</span> <span class="nn">tarfile</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">join</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
 <span class="kn">import</span> <span class="nn">signal</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span><span class="p">,</span> <span class="n">version_info</span>
@@ -478,6 +484,7 @@
 
 <span class="k">if</span> <span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+    <span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">URLError</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
     <span class="kn">import</span> <span class="nn">contextlib</span>
@@ -537,7 +544,7 @@
                           <span class="s2">&quot;on this machine.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/home_local&quot;</span><span class="p">,</span> <span class="n">user_name</span><span class="p">),</span> <span class="n">home_path</span><span class="p">))</span>
                     <span class="c1"># Replace the seperator from &#39;/&#39; to the os-specific one</span>
                     <span class="c1"># Since all example config files use &#39;/&#39; as seperator</span>
-                    <span class="n">blender_install_path</span> <span class="o">=</span> <span class="n">blender_install_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;/home_local&quot;</span><span class="p">,</span> <span class="n">user_name</span><span class="p">]),</span> <span class="n">home_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">blender_install_path</span> <span class="o">=</span> <span class="n">blender_install_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/home_local&quot;</span><span class="p">,</span> <span class="n">user_name</span><span class="p">),</span> <span class="n">home_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="n">blender_install_path</span> <span class="o">=</span> <span class="n">blender_install_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">blender_install_path</span> <span class="o">=</span> <span class="s2">&quot;blender&quot;</span>
@@ -584,28 +591,37 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This system is not supported yet: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">platform</span><span class="p">))</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="kn">import</span> <span class="nn">progressbar</span>
-                    <span class="k">class</span> <span class="nc">DownloadProgressBar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-                        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="kn">import</span> <span class="nn">progressbar</span>
+                        <span class="k">class</span> <span class="nc">DownloadProgressBar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+                            <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="kc">None</span>
 
-                        <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_num</span><span class="p">,</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">total_size</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="n">progressbar</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">(</span><span class="n">maxval</span><span class="o">=</span><span class="n">total_size</span><span class="p">)</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-                            <span class="n">downloaded</span> <span class="o">=</span> <span class="n">block_num</span> <span class="o">*</span> <span class="n">block_size</span>
-                            <span class="k">if</span> <span class="n">downloaded</span> <span class="o">&lt;</span> <span class="n">total_size</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">downloaded</span><span class="p">)</span>
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+                            <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_num</span><span class="p">,</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">total_size</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span> <span class="o">=</span> <span class="n">progressbar</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">(</span><span class="n">maxval</span><span class="o">=</span><span class="n">total_size</span><span class="p">)</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+                                <span class="n">downloaded</span> <span class="o">=</span> <span class="n">block_num</span> <span class="o">*</span> <span class="n">block_size</span>
+                                <span class="k">if</span> <span class="n">downloaded</span> <span class="o">&lt;</span> <span class="n">total_size</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">downloaded</span><span class="p">)</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">pbar</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
 
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading blender from &quot;</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span>
-                    <span class="n">file_tmp</span> <span class="o">=</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DownloadProgressBar</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Progressbar for downloading, can only be shown, &quot;</span>
-                          <span class="s2">&quot;when the python package </span><span class="se">\&quot;</span><span class="s2">progressbar</span><span class="se">\&quot;</span><span class="s2"> is installed&quot;</span><span class="p">)</span>
-                    <span class="n">file_tmp</span> <span class="o">=</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading blender from &quot;</span> <span class="o">+</span> <span class="n">url</span><span class="p">)</span>
+                        <span class="n">file_tmp</span> <span class="o">=</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">DownloadProgressBar</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Progressbar for downloading, can only be shown, &quot;</span>
+                              <span class="s2">&quot;when the python package </span><span class="se">\&quot;</span><span class="s2">progressbar</span><span class="se">\&quot;</span><span class="s2"> is installed&quot;</span><span class="p">)</span>
+                        <span class="n">file_tmp</span> <span class="o">=</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">except</span> <span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+                        <span class="c1"># on windows this is a known problem that the ssl certificates don&#39;t properly work</span>
+                        <span class="c1"># deactivate the ssl check</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYTHONHTTPSVERIFY&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ssl</span><span class="p">,</span> <span class="s1">&#39;_create_unverified_context&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                            <span class="n">ssl</span><span class="o">.</span><span class="n">_create_default_https_context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">_create_unverified_context</span>
+                        <span class="n">file_tmp</span> <span class="o">=</span> <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
                 <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;linux&quot;</span> <span class="ow">or</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;linux2&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                         <span class="n">SetupUtility</span><span class="o">.</span><span class="n">extract_file</span><span class="p">(</span><span class="n">blender_install_path</span><span class="p">,</span> <span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;TAR&quot;</span><span class="p">)</span>

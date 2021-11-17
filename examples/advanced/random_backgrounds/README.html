@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Random Backgrounds &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>Random Backgrounds &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="../diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="../dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="../entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="../lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="../nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="../object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -499,9 +503,8 @@ leads to inferior results compared to renderings of objects in actual 3D scenes.
 </div>
 <div class="section" id="paste-rendered-images-on-random-backgrounds">
 <h2>Paste rendered images on random backgrounds<a class="headerlink" href="#paste-rendered-images-on-random-backgrounds" title="Permalink to this headline">¶</a></h2>
-<p>To paste the rendered images onto random backgrounds, we make use of the <code class="docutils literal notranslate"><span class="pre">paste_images_on_backgrounds.py</span></code> script found
-in the <code class="docutils literal notranslate"><span class="pre">scripts</span></code> directory. To do so, execute:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">paste_images_on_backgrounds</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">images</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span> <span class="o">--</span><span class="n">backgrounds</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">background</span><span class="o">/</span><span class="n">images</span> <span class="o">--</span><span class="n">overwrite</span>
+<p>To paste the rendered images onto random backgrounds, we make use of the <code class="docutils literal notranslate"><span class="pre">paste_images_on_backgrounds.py</span></code> script. To do so, execute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">paste_images_on_backgrounds</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">images</span> <span class="n">examples</span><span class="o">/</span><span class="n">advanced</span><span class="o">/</span><span class="n">random_backgrounds</span><span class="o">/</span><span class="n">output</span><span class="o">/</span><span class="n">coco_data</span> <span class="o">--</span><span class="n">backgrounds</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">background</span><span class="o">/</span><span class="n">images</span> <span class="o">--</span><span class="n">overwrite</span>
 </pre></div>
 </div>
 <p>You need to provide a directory with random background images. A common choice are images from the VOC challenge or

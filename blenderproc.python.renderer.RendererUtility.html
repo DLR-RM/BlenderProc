@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.renderer.RendererUtility module &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.renderer.RendererUtility module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -484,7 +488,7 @@
 
 <dl class="function">
 <dt id="blenderproc.python.renderer.RendererUtility.enable_depth_output">
-<code class="descclassname">blenderproc.python.renderer.RendererUtility.</code><code class="descname">enable_depth_output</code><span class="sig-paren">(</span><em>output_dir</em>, <em>file_prefix='depth_'</em>, <em>output_key='depth'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/renderer/RendererUtility.html#enable_depth_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.renderer.RendererUtility.enable_depth_output" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.python.renderer.RendererUtility.</code><code class="descname">enable_depth_output</code><span class="sig-paren">(</span><em>activate_antialiasing</em>, <em>output_dir=None</em>, <em>file_prefix='depth_'</em>, <em>output_key='depth'</em>, <em>antialiasing_distance_max=None</em>, <em>convert_to_distance=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/renderer/RendererUtility.html#enable_depth_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.renderer.RendererUtility.enable_depth_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables writing depth images.</p>
 <p>Depth images will be written in the form of .exr files during the next rendering.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -492,9 +496,12 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The directory to write files to.</li>
+<li><strong>activate_antialiasing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True the final image will be antialiased</li>
+<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
 <li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
 <li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the depth output.</li>
+<li><strong>antialiasing_distance_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Max distance in which the distance is measured.                                       Only if activate_antialiasing is True.</li>
+<li><strong>convert_to_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is true, while loading a postprocessing step is executed to convert this depth                                 image to a distance image</li>
 </ul>
 </td>
 </tr>
@@ -524,20 +531,19 @@
 
 <dl class="function">
 <dt id="blenderproc.python.renderer.RendererUtility.enable_distance_output">
-<code class="descclassname">blenderproc.python.renderer.RendererUtility.</code><code class="descname">enable_distance_output</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>file_prefix='distance_'</em>, <em>output_key='distance'</em>, <em>distance_start=0.1</em>, <em>distance_range=25.0</em>, <em>distance_falloff='LINEAR'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/renderer/RendererUtility.html#enable_distance_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.renderer.RendererUtility.enable_distance_output" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.python.renderer.RendererUtility.</code><code class="descname">enable_distance_output</code><span class="sig-paren">(</span><em>activate_antialiasing</em>, <em>output_dir=None</em>, <em>file_prefix='distance_'</em>, <em>output_key='distance'</em>, <em>antialiasing_distance_max=None</em>, <em>convert_to_depth=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/renderer/RendererUtility.html#enable_distance_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.renderer.RendererUtility.enable_distance_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables writing distance images.</p>
-<p>Distance images will be written in the form of .exr files during the next rendering.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>activate_antialiasing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True the final image will be antialiased</li>
 <li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
 <li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
 <li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the distance output.</li>
-<li><strong>distance_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Starting distance of the distance, measured from the camera.</li>
-<li><strong>distance_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Total distance in which the distance is measured.                            distance_end = distance_start + distance_range.</li>
-<li><strong>distance_falloff</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]</li>
+<li><strong>antialiasing_distance_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Max distance in which the distance is measured. Resolution decreases antiproportionally.                             Only if activate_antialiasing is True.</li>
+<li><strong>convert_to_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is true, while loading a postprocessing step is executed to convert this distance                             image to a depth image</li>
 </ul>
 </td>
 </tr>
@@ -669,7 +675,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “BLENDER” and None.                      If None is given, then no denoiser will be active.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “OPTIX”, “BLENDER” and None.                      If None is given, then no denoiser will be active.</td>
 </tr>
 </tbody>
 </table>
@@ -759,6 +765,24 @@ Default values are defined in DefaultConfig.py</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The horizontal tile size in pixels.</li>
 <li><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The vertical tile size in pixels.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.python.renderer.RendererUtility.set_world_background">
+<code class="descclassname">blenderproc.python.renderer.RendererUtility.</code><code class="descname">set_world_background</code><span class="sig-paren">(</span><em>color</em>, <em>strength=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/renderer/RendererUtility.html#set_world_background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.renderer.RendererUtility.set_world_background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of blenders world background</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – A three dimensional list specifying the new color in floats.</li>
+<li><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted background light.</li>
 </ul>
 </td>
 </tr>

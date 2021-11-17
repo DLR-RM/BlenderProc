@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.renderer.RendererUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.renderer.RendererUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -476,6 +480,7 @@
 <span class="kn">from</span> <span class="nn">blenderproc.python.camera</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.modules.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_blender_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.DefaultConfig</span> <span class="kn">import</span> <span class="n">DefaultConfig</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.writer.WriterUtility</span> <span class="kn">import</span> <span class="n">WriterUtility</span>
 
@@ -485,13 +490,17 @@
 
 <span class="sd">    Automatically disables all previously activated denoiser.</span>
 
-<span class="sd">    :param denoiser: The name of the denoiser which should be enabled. Options are &quot;INTEL&quot;, &quot;BLENDER&quot; and None. \</span>
+<span class="sd">    :param denoiser: The name of the denoiser which should be enabled. Options are &quot;INTEL&quot;, &quot;OPTIX&quot;, &quot;BLENDER&quot; and None. \</span>
 <span class="sd">                     If None is given, then no denoiser will be active.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Make sure there is no denoiser active</span>
     <span class="n">_disable_all_denoiser</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">denoiser</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">pass</span>
+    <span class="k">elif</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;OPTIX&quot;</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">denoiser</span> <span class="o">=</span> <span class="s2">&quot;OPTIX&quot;</span>
     <span class="k">elif</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;INTEL&quot;</span><span class="p">:</span>
         <span class="c1"># The intel denoiser is activated via the compositor</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
@@ -517,7 +526,9 @@
         <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;DiffCol&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Albedo&#39;</span><span class="p">])</span>
         <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;BLENDER&quot;</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">denoiser</span> <span class="o">=</span> <span class="s2">&quot;NLM&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No such denoiser: &quot;</span> <span class="o">+</span> <span class="n">denoiser</span><span class="p">)</span></div>
 
@@ -632,28 +643,40 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span></div>
 
-
-<div class="viewcode-block" id="enable_distance_output"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.enable_distance_output">[docs]</a><span class="k">def</span> <span class="nf">enable_distance_output</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance_&quot;</span><span class="p">,</span>
-                           <span class="n">output_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="n">distance_start</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">distance_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">25.0</span><span class="p">,</span>
-                           <span class="n">distance_falloff</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;LINEAR&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="enable_distance_output"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.enable_distance_output">[docs]</a><span class="k">def</span> <span class="nf">enable_distance_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance_&quot;</span><span class="p">,</span>
+                           <span class="n">output_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="n">antialiasing_distance_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="n">convert_to_depth</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Enables writing distance images.</span>
 
-<span class="sd">    Distance images will be written in the form of .exr files during the next rendering.</span>
 
+<span class="sd">    :param activate_antialiasing: If this is True the final image will be antialiased</span>
 <span class="sd">    :param output_dir: The directory to write files to, if this is None the temporary directory is used.</span>
 <span class="sd">    :param file_prefix: The prefix to use for writing the files.</span>
 <span class="sd">    :param output_key: The key to use for registering the distance output.</span>
-<span class="sd">    :param distance_start: Starting distance of the distance, measured from the camera.</span>
-<span class="sd">    :param distance_range: Total distance in which the distance is measured. \</span>
-<span class="sd">                           distance_end = distance_start + distance_range.</span>
-<span class="sd">    :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]</span>
+<span class="sd">    :param antialiasing_distance_max: Max distance in which the distance is measured. Resolution decreases antiproportionally. \</span>
+<span class="sd">                            Only if activate_antialiasing is True.</span>
+<span class="sd">    :param convert_to_depth: If this is true, while loading a postprocessing step is executed to convert this distance\</span>
+<span class="sd">                             image to a depth image</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">activate_antialiasing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">output_key</span><span class="p">,</span> <span class="n">convert_to_distance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">output_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">antialiasing_distance_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">antialiasing_distance_max</span> <span class="o">=</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">antialiasing_distance_max</span>
+
+    <span class="k">if</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;distance_output_is_enabled&quot;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The distance enable function can not be called twice. Either you called it twice or you used the &quot;</span> \
+              <span class="s2">&quot;enable_depth_output with activate_antialiasing=True, which internally calls this function. This is &quot;</span> \
+              <span class="s2">&quot;currently not supported, but there is an easy way to solve this, you can use the &quot;</span> \
+              <span class="s2">&quot;bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate &quot;</span> \
+              <span class="s2">&quot;the antialiased depth image yourself.&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;distance_output_is_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;renderer_distance_end&quot;</span><span class="p">,</span> <span class="n">distance_start</span> <span class="o">+</span> <span class="n">distance_range</span><span class="p">)</span>
+    <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;renderer_distance_end&quot;</span><span class="p">,</span> <span class="n">antialiasing_distance_max</span><span class="p">)</span>
 
     <span class="n">tree</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">links</span>
@@ -661,17 +684,17 @@
     <span class="n">render_layer_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeRLayers&#39;</span><span class="p">)</span>
 
     <span class="c1"># Set mist pass limits</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">distance_start</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">distance_range</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">falloff</span> <span class="o">=</span> <span class="n">distance_falloff</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">antialiasing_distance_max</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">falloff</span> <span class="o">=</span> <span class="s2">&quot;LINEAR&quot;</span>
 
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_mist</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Enable distance pass</span>
     <span class="c1"># Create a mapper node to map from 0-1 to SI units</span>
     <span class="n">mapper_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMapRange&quot;</span><span class="p">)</span>
     <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Mist&quot;</span><span class="p">],</span> <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">])</span>
     <span class="c1"># map the values 0-1 to range distance_start to distance_range</span>
-    <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span>
-    <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span> <span class="o">+</span> <span class="n">distance_range</span>
+    <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">antialiasing_distance_max</span>
     <span class="n">final_output</span> <span class="o">=</span> <span class="n">mapper_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">]</span>
 
     <span class="c1"># Build output node</span>
@@ -687,19 +710,42 @@
         <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">output_key</span><span class="p">,</span>
         <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;.exr&quot;</span><span class="p">,</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;trim_redundant_channels&quot;</span><span class="p">:</span> <span class="kc">True</span>
+        <span class="s2">&quot;trim_redundant_channels&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;convert_to_depth&quot;</span><span class="p">:</span> <span class="n">convert_to_depth</span>
     <span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="enable_depth_output"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.enable_depth_output">[docs]</a><span class="k">def</span> <span class="nf">enable_depth_output</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;depth_&quot;</span><span class="p">,</span> <span class="n">output_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;depth&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="enable_depth_output"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.enable_depth_output">[docs]</a><span class="k">def</span> <span class="nf">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;depth_&quot;</span><span class="p">,</span>
+                        <span class="n">output_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;depth&quot;</span><span class="p">,</span> <span class="n">antialiasing_distance_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">convert_to_distance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Enables writing depth images.</span>
 
 <span class="sd">    Depth images will be written in the form of .exr files during the next rendering.</span>
 
-<span class="sd">    :param output_dir: The directory to write files to.</span>
+<span class="sd">    :param activate_antialiasing: If this is True the final image will be antialiased</span>
+<span class="sd">    :param output_dir: The directory to write files to, if this is None the temporary directory is used.</span>
 <span class="sd">    :param file_prefix: The prefix to use for writing the files.</span>
 <span class="sd">    :param output_key: The key to use for registering the depth output.</span>
+<span class="sd">    :param antialiasing_distance_max: Max distance in which the distance is measured. \</span>
+<span class="sd">                                      Only if activate_antialiasing is True.</span>
+<span class="sd">    :param convert_to_distance: If this is true, while loading a postprocessing step is executed to convert this depth \</span>
+<span class="sd">                                image to a distance image</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">activate_antialiasing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">enable_distance_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">,</span> <span class="n">output_key</span><span class="p">,</span> <span class="n">antialiasing_distance_max</span><span class="p">,</span> <span class="n">convert_to_depth</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;depth_output_is_enabled&quot;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;The depth enable function can not be called twice. Either you called it twice or you used the &quot;</span> \
+              <span class="s2">&quot;enable_distance_output with activate_antialiasing=False, which internally calls this function. This is &quot;</span> \
+              <span class="s2">&quot;currently not supported, but there is an easy way to solve this, you can use the &quot;</span> \
+              <span class="s2">&quot;bproc.postprocessing.dist2depth and depth2dist function on the output of the renderer and generate &quot;</span> \
+              <span class="s2">&quot;the antialiased distance image yourself.&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;depth_output_is_enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -724,7 +770,8 @@
         <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">output_key</span><span class="p">,</span>
         <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;.exr&quot;</span><span class="p">,</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;trim_redundant_channels&quot;</span><span class="p">:</span> <span class="kc">True</span>
+        <span class="s2">&quot;trim_redundant_channels&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;convert_to_distance&quot;</span><span class="p">:</span> <span class="n">convert_to_distance</span>
     <span class="p">})</span></div>
 
 
@@ -741,6 +788,7 @@
     <span class="k">if</span> <span class="n">output_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
 
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_normal</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">tree</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span>
@@ -909,7 +957,7 @@
     <span class="k">if</span> <span class="n">output_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">load_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">load_keys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;colors&#39;</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="s1">&#39;diffuse&#39;</span><span class="p">}</span>
+        <span class="n">load_keys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;colors&#39;</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="s1">&#39;normals&#39;</span><span class="p">,</span> <span class="s1">&#39;diffuse&#39;</span><span class="p">,</span> <span class="s1">&#39;depth&#39;</span><span class="p">}</span>
         <span class="n">keys_with_alpha_channel</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;colors&#39;</span><span class="p">}</span> <span class="k">if</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">film_transparent</span> <span class="k">else</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">output_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1020,6 +1068,26 @@
 
             <span class="c1"># Finally remove the denoiser node</span>
             <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">denoiser_node</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="set_world_background"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_world_background">[docs]</a><span class="k">def</span> <span class="nf">set_world_background</span><span class="p">(</span><span class="n">color</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets the color of blenders world background</span>
+
+<span class="sd">    :param color: A three dimensional list specifying the new color in floats.</span>
+<span class="sd">    :param strength: The strength of the emitted background light.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+
+    <span class="c1"># Unlink any incoming link that would overwrite the default value</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Strength&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">strength</span>
+    <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">color</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
 </pre></div>
 
            </div>

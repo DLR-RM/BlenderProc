@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.provider.sampler.ShellModule &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.modules.provider.sampler.ShellModule &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -515,8 +519,8 @@
 <span class="sd">        * - elevation_max</span>
 <span class="sd">          - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].</span>
 <span class="sd">          - float</span>
-<span class="sd">        * - uniform_elevation</span>
-<span class="sd">          - Uniformly sample elevation angles. Default: False</span>
+<span class="sd">        * - uniform_volume</span>
+<span class="sd">          - Uniformly sample points in the volume of the shell. Thereby, more points will be close to outer sphere. Default: False</span>
 <span class="sd">          - bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -537,7 +541,7 @@
         <span class="c1"># Elevation angles</span>
         <span class="n">elevation_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;elevation_min&quot;</span><span class="p">)</span>
         <span class="n">elevation_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;elevation_max&quot;</span><span class="p">)</span>
-        <span class="n">uniform_elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;uniform_elevation&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">uniform_volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;uniform_volume&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">shell</span><span class="p">(</span>
             <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span>
@@ -545,7 +549,7 @@
             <span class="n">radius_max</span><span class="o">=</span><span class="n">radius_max</span><span class="p">,</span>
             <span class="n">elevation_min</span><span class="o">=</span><span class="n">elevation_min</span><span class="p">,</span>
             <span class="n">elevation_max</span><span class="o">=</span><span class="n">elevation_max</span><span class="p">,</span>
-            <span class="n">uniform_elevation</span><span class="o">=</span><span class="n">uniform_elevation</span>
+            <span class="n">uniform_volume</span><span class="o">=</span><span class="n">uniform_volume</span>
         <span class="p">)</span></div></div>
 </pre></div>
 

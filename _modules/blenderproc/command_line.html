@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.command_line &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.command_line &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -535,6 +539,7 @@
         <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--reinstall-blender&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;reinstall_blender&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;If given, the blender installation is deleted and reinstalled. Is ignored, if a &quot;custom_blender_path&quot; is configured in the configuration file.&#39;</span><span class="p">)</span>
         <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--temp-dir&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;temp_dir&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The path to a directory where all temporary output files should be stored. If it doesn&#39;t exist, it is created automatically. Type: string. Default: </span><span class="se">\&quot;</span><span class="s2">/dev/shm</span><span class="se">\&quot;</span><span class="s2"> or </span><span class="se">\&quot;</span><span class="s2">/tmp/</span><span class="se">\&quot;</span><span class="s2"> depending on which is available.&quot;</span><span class="p">)</span>
         <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--keep-temp-dir&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;keep_temp_dir&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If set, the temporary directory is not removed in the end.&quot;</span><span class="p">)</span>
+        <span class="n">subparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--force-pip-update&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;force_pip_update&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;If set, the cache of installed pip packages will be ignored and rebuild based on pip freeze.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Setup common arguments of run, debug and pip mode</span>
     <span class="k">for</span> <span class="n">subparser</span> <span class="ow">in</span> <span class="p">[</span><span class="n">parser_run</span><span class="p">,</span> <span class="n">parser_debug</span><span class="p">,</span> <span class="n">parser_pip</span><span class="p">]:</span>
@@ -554,7 +559,7 @@
 
         <span class="c1"># Install blender, if not already done</span>
         <span class="n">custom_blender_path</span><span class="p">,</span> <span class="n">blender_install_path</span> <span class="o">=</span> <span class="n">InstallUtility</span><span class="o">.</span><span class="n">determine_blender_install_path</span><span class="p">(</span><span class="n">is_config</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">unknown_args</span><span class="p">)</span>
-        <span class="n">blender_run_path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">InstallUtility</span><span class="o">.</span><span class="n">make_sure_blender_is_installed</span><span class="p">(</span><span class="n">custom_blender_path</span><span class="p">,</span> <span class="n">blender_install_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">reinstall_blender</span><span class="p">)</span>
+        <span class="n">blender_run_path</span><span class="p">,</span> <span class="n">major_version</span> <span class="o">=</span> <span class="n">InstallUtility</span><span class="o">.</span><span class="n">make_sure_blender_is_installed</span><span class="p">(</span><span class="n">custom_blender_path</span><span class="p">,</span> <span class="n">blender_install_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">reinstall_blender</span><span class="p">)</span>
 
         <span class="c1"># Setup script path that should be executed</span>
         <span class="k">if</span> <span class="n">is_config</span><span class="p">:</span>
@@ -572,6 +577,10 @@
         <span class="n">used_environment</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="n">repo_root_directory</span><span class="p">,</span> <span class="n">PYTHONNOUSERSITE</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
         <span class="c1"># this is done to enable the import of blenderproc inside of the blender internal python environment</span>
         <span class="n">used_environment</span><span class="p">[</span><span class="s2">&quot;INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+
+        <span class="c1"># If pip update is forced, remove pip package cache</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">force_pip_update</span><span class="p">:</span>
+            <span class="n">SetupUtility</span><span class="o">.</span><span class="n">clean_installed_packages_cache</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">blender_run_path</span><span class="p">),</span> <span class="n">major_version</span><span class="p">)</span>
 
         <span class="c1"># Run either in debug or in normal mode</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;debug&quot;</span><span class="p">:</span>

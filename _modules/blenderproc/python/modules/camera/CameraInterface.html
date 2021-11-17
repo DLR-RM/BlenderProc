@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.camera.CameraInterface &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.modules.camera.CameraInterface &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -474,7 +478,7 @@
 <span class="kn">from</span> <span class="nn">blenderproc.python.modules.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.EntityUtility</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.MathUtility</span> <span class="kn">import</span> <span class="n">change_coordinate_frame_of_point</span><span class="p">,</span> <span class="n">change_source_coordinate_frame_of_transformation_matrix</span><span class="p">,</span> <span class="n">change_target_coordinate_frame_of_transformation_matrix</span><span class="p">,</span> <span class="n">build_transformation_mat</span>
-
+<span class="kn">from</span> <span class="nn">blenderproc.python.camera.LensDistortionUtility</span> <span class="kn">import</span> <span class="n">set_lens_distortion</span>
 
 <div class="viewcode-block" id="CameraInterface"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">[docs]</a><span class="k">class</span> <span class="nc">CameraInterface</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -611,6 +615,43 @@
 <span class="sd">        * - interocular_distance</span>
 <span class="sd">          - Distance between the camera pair.</span>
 <span class="sd">          - float</span>
+<span class="sd">        * - lens_distortion/k1</span>
+<span class="sd">          - k1 is the first radial distortion parameter (of 3rd degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to</span>
+<span class="sd">            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">            Note that undistorted-to-distorted means that the distortion parameters are multiplied</span>
+<span class="sd">            by undistorted, normalized camera projections to yield distorted projections, that are in</span>
+<span class="sd">            turn digitized by the intrinsic camera matrix.</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - lens_distortion/k2</span>
+<span class="sd">          - k2 is the second radial distortion parameter (of 5th degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform</span>
+<span class="sd">            to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - lens_distortion/k3</span>
+<span class="sd">          - k3 is the third radial distortion parameter (of 7th degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to</span>
+<span class="sd">            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">            The use of this parameter is discouraged unless the angular field of view is too high,</span>
+<span class="sd">            rendering it necessary, and the parameter allows for a distorted projection in the whole</span>
+<span class="sd">            sensor size (which isn&#39;t always given by features-driven camera calibration).</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - lens_distortion/p1</span>
+<span class="sd">          - p1 is the first decentering distortion parameter as defined by the undistorted-to-distorted</span>
+<span class="sd">            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is</span>
+<span class="sd">            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.</span>
+<span class="sd">            This parameter shares one degree of freedom (j1) with p2; as a consequence, either both</span>
+<span class="sd">            parameters are given or none. The use of these parameters is discouraged since either current</span>
+<span class="sd">            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - lens_distortion/p2</span>
+<span class="sd">          - p2 is the second decentering distortion parameter as defined by the undistorted-to-distorted</span>
+<span class="sd">            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is</span>
+<span class="sd">            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.</span>
+<span class="sd">            This parameter shares one degree of freedom (j1) with p1; as a consequence, either both</span>
+<span class="sd">            parameters are given or none. The use of these parameters is discouraged since either current</span>
+<span class="sd">            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</span>
+<span class="sd">          - float</span>
 <span class="sd">        * - depth_of_field/focal_object</span>
 <span class="sd">          - This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.</span>
 <span class="sd">            Using this will automatically activate the depth of field mode. Can not be combined with</span>
@@ -716,8 +757,14 @@
                                                  <span class="n">aperture_rotation</span><span class="p">,</span> <span class="n">aperture_ratio</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The depth_of_field dict must contain either a focal_object definition or &quot;</span>
-                                   <span class="s2">&quot;a depth_of_field_dist&quot;</span><span class="p">)</span></div>
+                                   <span class="s2">&quot;a depth_of_field_dist&quot;</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;lens_distortion&quot;</span><span class="p">):</span>
+            <span class="c1"># get the used camera parameter intrinsics</span>
+            <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;lens_distortion/k1&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;lens_distortion/k2&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> \
+                         <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;lens_distortion/k3&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;lens_distortion/p1&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;lens_distortion/p2&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">set_lens_distortion</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">use_global_storage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CameraInterface._set_cam_extrinsics"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface._set_cam_extrinsics">[docs]</a>    <span class="k">def</span> <span class="nf">_set_cam_extrinsics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Sets camera extrinsics according to the config.</span>

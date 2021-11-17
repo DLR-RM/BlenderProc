@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.postprocessing\.LensDistortion module
+===================================================================
+
+.. automodule:: blenderproc.python.modules.postprocessing.LensDistortion
+    :members:
+    :undoc-members:
+    :show-inheritance:

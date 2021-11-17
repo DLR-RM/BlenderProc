@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.writer package &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.writer package &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -470,103 +474,6 @@
 <h1>blenderproc.writer package<a class="headerlink" href="#blenderproc-writer-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.writer">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.writer" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="blenderproc.writer.write_bop">
-<code class="descclassname">blenderproc.writer.</code><code class="descname">write_bop</code><span class="sig-paren">(</span><em>output_dir</em>, <em>depths=None</em>, <em>colors=None</em>, <em>color_file_format='PNG'</em>, <em>dataset=''</em>, <em>append_to_existing_output=True</em>, <em>depth_scale=1.0</em>, <em>jpg_quality=95</em>, <em>save_world2cam=True</em>, <em>ignore_dist_thres=100.0</em>, <em>m2mm=True</em>, <em>frames_per_chunk=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.writer.write_bop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the BOP data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path to the output directory.</li>
-<li><strong>depths</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]) – List of depth images in m to save</li>
-<li><strong>colors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]) – List of color images to save</li>
-<li><strong>color_file_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – File type to save color images. Available: “PNG”, “JPEG”</li>
-<li><strong>jpg_quality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – If color_file_format is “JPEG”, save with the given quality.</li>
-<li><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.</li>
-<li><strong>append_to_existing_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, the new frames will be appended to the existing ones.</li>
-<li><strong>depth_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy
-and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.</li>
-<li><strong>save_world2cam</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, camera to world transformations “cam_R_w2c”, “cam_t_w2c” are saved in scene_camera.json</li>
-<li><strong>ignore_dist_thres</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Distance between camera and object after which object is ignored. Mostly due to failed physics.</li>
-<li><strong>m2mm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
-is needed if BopLoader option mm2m is used.</li>
-<li><strong>frames_per_chunk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of frames saved in each chunk (called scene in BOP)</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.writer.write_coco_annotations">
-<code class="descclassname">blenderproc.writer.</code><code class="descname">write_coco_annotations</code><span class="sig-paren">(</span><em>output_dir</em>, <em>instance_segmaps=None</em>, <em>instance_attribute_maps=None</em>, <em>colors=None</em>, <em>color_file_format='PNG'</em>, <em>mask_encoding_format='rle'</em>, <em>supercategory='coco_annotations'</em>, <em>append_to_existing_output=True</em>, <em>segmap_output_key='segmap'</em>, <em>segcolormap_output_key='segcolormap'</em>, <em>rgb_output_key='colors'</em>, <em>jpg_quality=95</em>, <em>label_mapping=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.writer.write_coco_annotations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes coco annotations in the following steps:
-1. Locate the seg images
-2. Locate the rgb maps
-3. Locate the seg mappings
-4. Read color mappings
-5. For each frame write the coco annotation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Output directory to write the coco annotations</li>
-<li><strong>instance_segmaps</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]) – List of instance segmentation maps</li>
-<li><strong>instance_attribute_maps</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]) – per-frame mappings with idx, class and optionally supercategory/bop_dataset_name</li>
-<li><strong>colors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]) – List of color images</li>
-<li><strong>color_file_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Format to save color images in</li>
-<li><strong>mask_encoding_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Encoding format of the binary masks. Default: ‘rle’. Available: ‘rle’, ‘polygon’.</li>
-<li><strong>supercategory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – name of the dataset/supercategory to filter for, e.g. a specific BOP dataset set by ‘bop_dataset_name’ or
-any loaded object with specified ‘cp_supercategory’</li>
-<li><strong>append_to_existing_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true and if there is already a coco_annotations.json file in the output directory, the new coco
-annotations will be appended to the existing file. Also the rgb images will be named such that there are
-no collisions.</li>
-<li><strong>segmap_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The output key with which the segmentation images were registered. Should be the same as the output_key
-of the SegMapRenderer module. Default: segmap.</li>
-<li><strong>segcolormap_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The output key with which the csv file for object name/class correspondences was registered. Should be
-the same as the colormap_output_key of the SegMapRenderer module. Default: segcolormap.</li>
-<li><strong>rgb_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The output key with which the rgb images were registered. Should be the same as the output_key of the
-RgbRenderer module. Default: colors.</li>
-<li><strong>jpg_quality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The desired quality level of the jpg encoding</li>
-<li><strong>label_mapping</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping" title="blenderproc.python.utility.LabelIdMapping.LabelIdMapping"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelIdMapping</span></code></a>]) – The label mapping which should be used to label the categories based on their ids.
-If None, is given then the <cite>name</cite> field in the csv files is used or - if not existing - the category id itself is used.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.writer.write_hdf5">
-<code class="descclassname">blenderproc.writer.</code><code class="descname">write_hdf5</code><span class="sig-paren">(</span><em>output_dir_path</em>, <em>output_data_dict</em>, <em>append_to_existing_output=False</em>, <em>stereo_separate_keys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.writer.write_hdf5" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the information provided inside of the output_data_dict into a .hdf5 container</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The folder path in which the .hdf5 containers will be generated</li>
-<li><strong>output_data_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]]]) – The container, which keeps the different images, which should be saved to disc.
-Each key will be saved as its own key in the .hdf5 container.</li>
-<li><strong>append_to_existing_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True, the output_dir_path folder will be scanned for pre-existing
-.hdf5 containers and the numbering of the newly added containers, will start
-right where the last run left off.</li>
-<li><strong>stereo_separate_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True and the rendering was done in stereo mode, than the stereo images
-won’t be saved in one tensor [2, img_x, img_y, channels], where the img[0] is the
-left image and img[1] the right. They will be saved in separate keys: for example
-for colors in colors_0 and colors_1.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 

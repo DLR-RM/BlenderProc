@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Planned Features &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>Planned Features &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -477,6 +481,54 @@
 </div>
 <div class="section" id="version-history">
 <h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-1-0-17th-novemeber-2021">
+<h2>Version 2.1.0 17th Novemeber 2021<a class="headerlink" href="#version-2-1-0-17th-novemeber-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>add new lens distortion module, adding the possibility to simulate <code class="docutils literal notranslate"><span class="pre">k1,</span> <span class="pre">k2,</span> <span class="pre">k3,</span> <span class="pre">p1</span></code> and <code class="docutils literal notranslate"><span class="pre">p2</span></code> parameters.</li>
+<li>improve usability of distance rendering, make it the default in all examples</li>
+<li>distance and depth rendering can now be done antialiased and non-antialiased</li>
+<li>add a nocs renderer: <a class="reference external" href="https://geometry.stanford.edu/projects/NOCS_CVPR2019/pub/NOCS_CVPR2019.pdf">paper</a></li>
+<li>upgrade the shell sampler and rework the usage and documentation</li>
+<li>move <code class="docutils literal notranslate"><span class="pre">run.py</span></code> to <code class="docutils literal notranslate"><span class="pre">cli.py</span></code> and support the same CLI arguments as for <code class="docutils literal notranslate"><span class="pre">blenderproc</span> <span class="pre">...</span></code></li>
+<li>make caching of pip installs the default (faster start-up) and add option to reset them if needed</li>
+<li>refactor the vishdf5 script using the same content now for saveAsImg</li>
+<li>clean up the scripts folder and move it completely into blenderproc</li>
+<li>include all packages (like vhacd) in the pip install package</li>
+<li>fix bug with light internal blender_obj after an undo operation</li>
+<li>add OPTIX as denoiser option</li>
+<li>add possibility to read <code class="docutils literal notranslate"><span class="pre">jpeg</span></code></li>
+<li>fix <code class="docutils literal notranslate"><span class="pre">use_ray_trace</span></code> in <code class="docutils literal notranslate"><span class="pre">bproc.sampler.upper_region</span></code></li>
+<li>added an exception if not the correct python environment is used</li>
+</ul>
+</div>
+<div class="section" id="version-2-0-0a7-13th-october-2021">
+<h2>Version 2.0.0a7 13th October 2021<a class="headerlink" href="#version-2-0-0a7-13th-october-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>fix <code class="docutils literal notranslate"><span class="pre">Light</span></code> class to work properly with <code class="docutils literal notranslate"><span class="pre">bpy.types.Light</span></code> in <code class="docutils literal notranslate"><span class="pre">load_blend</span></code></li>
+<li>fix the stereo matching example add missing parameter to fct. call</li>
+</ul>
+</div>
+<div class="section" id="version-2-0-0a6-13th-october-2021">
+<h2>Version 2.0.0a6 13th October 2021<a class="headerlink" href="#version-2-0-0a6-13th-october-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>moved to a full python API support (<code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files are still supported)<ul>
+<li>blenderproc can now be installed via pip: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">blenderproc</span></code></li>
+<li>complete new structure to most of the files</li>
+<li>offer new command line interfaces: <code class="docutils literal notranslate"><span class="pre">blenderproc</span> <span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">blenderproc</span> <span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">blenderproc</span> <span class="pre">vis</span></code> and many more</li>
+<li>optional/flag arguments can now be used in the users python script</li>
+</ul>
+</li>
+<li>adds feature to render multiple times in one session (see example <code class="docutils literal notranslate"><span class="pre">advanced/multi_render</span></code>)</li>
+<li>added tutorials to get easy start with BlenderProc</li>
+<li>adjusted all examples to explain how the python API would be used there</li>
+<li>restructured the documentation</li>
+<li>fixed a bug with the view layer update, which wasn’t done before the scene coverage score was calculated, which caused problems in the 3D-FRONT examples.</li>
+<li>removed a lot of view layer update calls, which makes the whole execution faster, by manually calculation the <code class="docutils literal notranslate"><span class="pre">matrix_world</span></code>.</li>
+<li>vertex colors can now be used with a Principled BSDF shader</li>
+<li>all images are now moved into a seperate <code class="docutils literal notranslate"><span class="pre">image/</span></code> directory</li>
+<li>all functions now use type hints</li>
+</ul>
+</div>
 <div class="section" id="version-1-12-0-23th-july-2021">
 <h2>Version 1.12.0 23th July 2021<a class="headerlink" href="#version-1-12-0-23th-july-2021" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">

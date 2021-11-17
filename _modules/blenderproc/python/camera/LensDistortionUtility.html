@@ -1,0 +1,881 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>blenderproc.python.camera.LensDistortionUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/semantic_segmentation/README.html">semantic_segmentation</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Api</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.lighting.html#module-blenderproc.lighting">bproc.lighting</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.loader.html#module-blenderproc.loader">bproc.loader</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.material.html#module-blenderproc.material">bproc.material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.math.html#module-blenderproc.math">bproc.math</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.object.html#module-blenderproc.object">bproc.object</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.postprocessing.html#module-blenderproc.postprocessing">bproc.postprocessing</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.renderer.html#module-blenderproc.renderer">bproc.renderer</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.sampler.html#module-blenderproc.sampler">bproc.sampler</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.types.html#module-blenderproc.types">bproc.types</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.utility.html#module-blenderproc.utility">bproc.utility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Internal</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>blenderproc.python.camera.LensDistortionUtility</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for blenderproc.python.camera.LensDistortionUtility</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">map_coordinates</span>
+
+<span class="kn">from</span> <span class="nn">blenderproc.python.modules.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
+<span class="kn">import</span> <span class="nn">blenderproc.python.camera.CameraUtility</span> <span class="k">as</span> <span class="nn">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.MathUtility</span> <span class="kn">import</span> <span class="n">change_source_coordinate_frame_of_transformation_matrix</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file provides to functions to first set up the lens distortion used in this particular BlenderProc</span>
+<span class="sd">run and then to apply the said lens distortion parameters to an image rendered by Blender. Both functions must be</span>
+<span class="sd">called after each other to use the lens distortion feature correctly. The `set_lens_distortion` fct. has to be</span>
+<span class="sd">called before the rendering takes place and the `apply_lens_distortion` has to be applied to the rendered images.</span>
+
+<span class="sd">For more information on lens distortion see: https://en.wikipedia.org/wiki/Distortion_(optics)</span>
+<span class="sd">Note that, unlike in that wikipedia entry as of early 2021, we&#39;re here using the undistorted-to-distorted formulation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="set_lens_distortion"><a class="viewcode-back" href="../../../../blenderproc.python.camera.LensDistortionUtility.html#blenderproc.python.camera.LensDistortionUtility.set_lens_distortion">[docs]</a><span class="k">def</span> <span class="nf">set_lens_distortion</span><span class="p">(</span><span class="n">k1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">k3</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">use_global_storage</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function applies the lens distortion parameters to obtain an distorted-to-undistorted mapping for all</span>
+<span class="sd">    natural pixels coordinates of the goal distorted image into the real pixel coordinates of the undistorted</span>
+<span class="sd">    Blender image. Since such a mapping usually yields void image areas, this function suggests a different</span>
+<span class="sd">    (usually higher) image resolution for the generated Blender image. Eventually, the function</span>
+<span class="sd">    `apply_lens_distortion` will make us of this image to fill in the goal distorted image with valid color</span>
+<span class="sd">    values by interpolation. Note that when adapting the internal image resolution demanded from Blender, the</span>
+<span class="sd">    camera main point (cx,cy) of the K intrinsic matrix is (internally and temporarily) shifted.</span>
+
+<span class="sd">    This function has to be used together with bproc.postprocessing.apply_lens_distortion(), else only the </span>
+<span class="sd">    resolution is increased but the image(s) will not be distorted.</span>
+
+<span class="sd">    :param k1: First radial distortion parameter (of 3rd degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to</span>
+<span class="sd">            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">            Note that undistorted-to-distorted means that the distortion parameters are multiplied</span>
+<span class="sd">            by undistorted, normalized camera projections to yield distorted projections, that are in</span>
+<span class="sd">            turn digitized by the intrinsic camera matrix.</span>
+<span class="sd">    :param k2: Second radial distortion parameter (of 5th degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform</span>
+<span class="sd">            to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">    :param k3: Third radial distortion parameter (of 7th degree in radial distance) as defined</span>
+<span class="sd">            by the undistorted-to-distorted Brown-Conrady lens distortion model, which is conform to</span>
+<span class="sd">            the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations.</span>
+<span class="sd">            The use of this parameter is discouraged unless the angular field of view is too high,</span>
+<span class="sd">            rendering it necessary, and the parameter allows for a distorted projection in the whole</span>
+<span class="sd">            sensor size (which isn&#39;t always given by features-driven camera calibration).</span>
+<span class="sd">    :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted</span>
+<span class="sd">            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is</span>
+<span class="sd">            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.</span>
+<span class="sd">            This parameter shares one degree of freedom (j1) with p2; as a consequence, either both</span>
+<span class="sd">            parameters are given or none. The use of these parameters is discouraged since either current</span>
+<span class="sd">            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</span>
+<span class="sd">    :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted</span>
+<span class="sd">            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is</span>
+<span class="sd">            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.</span>
+<span class="sd">            This parameter shares one degree of freedom (j1) with p1; as a consequence, either both</span>
+<span class="sd">            parameters are given or none. The use of these parameters is discouraged since either current</span>
+<span class="sd">            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.</span>
+<span class="sd">    :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global storage (backward compat for configs)</span>
+<span class="sd">    :return: mapping coordinates from distorted to undistorted image pixels</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">,</span> <span class="n">k3</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># save the original image resolution (desired output resolution)</span>
+    <span class="n">original_image_resolution</span> <span class="o">=</span> <span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">)</span>
+
+    <span class="c1"># get the current K matrix (skew==0 in Blender)</span>
+    <span class="n">camera_K_matrix</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">()</span>
+    <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="o">=</span> <span class="n">camera_K_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">camera_K_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">camera_K_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">camera_K_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="c1"># Get row,column image coordinates for all pixels for row-wise image flattening</span>
+    <span class="c1"># The center of the upper-left pixel has coordinates [0,0] both in DLR CalDe and python/scipy</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">original_image_resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">original_image_resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">column</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">original_image_resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">original_image_resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># P_und is the undistorted pinhole projection at z==1 of all image pixels</span>
+    <span class="n">P_und</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">camera_K_matrix</span><span class="p">)</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">column</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">original_image_resolution</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))))</span>
+
+    <span class="c1"># P_und are then distorted by the lens, i.e. P_dis = dis(P_und)</span>
+    <span class="c1"># =&gt; Find mapping I_dis(row,column) -&gt; I_und(float,float)</span>
+    <span class="c1">#</span>
+    <span class="c1"># We aim at finding the brightness for every discrete pixel of the</span>
+    <span class="c1"># generated distorted image. In the original undistorted image these</span>
+    <span class="c1"># are located at real coordinates to be calculated. After that we can</span>
+    <span class="c1"># interpolate on the original undistorted image.</span>
+    <span class="c1"># Since dis() cannot be inverted, we iterate (up to ~10 times</span>
+    <span class="c1"># depending on the AOV and the distortion):</span>
+    <span class="c1"># 1) assume P_und~=P_dis</span>
+    <span class="c1"># 2) distort()</span>
+    <span class="c1"># 3) estimate distance between dist(P_und) and P_dis</span>
+    <span class="c1"># 4) subtract this distance from the estimated P_und,</span>
+    <span class="c1">#    perhaps with a factor (&gt;1 for accel, &lt;1 for stability at unstable distortion regions)</span>
+    <span class="c1"># 5) repeat until P_dis ~ dist(P_und)</span>
+    <span class="c1"># This works because translations in _dis and _und are approx. equivariant</span>
+    <span class="c1"># and the mapping is (hopefully) injective (1:1).</span>
+    <span class="c1">#</span>
+    <span class="c1"># An alternative, non-iterative approach is P_dis(float,float)=dis(P_und(row,column))</span>
+    <span class="c1"># and then interpolate on an irregular grid of distorted points. This is faster</span>
+    <span class="c1"># when generating the mapping matrix but much slower in inference.</span>
+
+    <span class="c1"># Init dist at undist</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e3</span><span class="p">]</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">factor</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">while</span> <span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.15</span><span class="p">:</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">radial_part</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">k1</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">+</span> <span class="n">k2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">+</span> <span class="n">k3</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r2</span> <span class="o">*</span> <span class="n">r2</span><span class="p">)</span>
+        <span class="n">x_</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">radial_part</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">p1</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">y_</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="n">radial_part</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">p1</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">p2</span> <span class="o">*</span> <span class="p">(</span><span class="n">r2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">fx</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_</span> <span class="o">-</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]),</span> <span class="n">fy</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_</span> <span class="o">-</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])))</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="n">it</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Take action if the optimization stalls or gets unstable</span>
+        <span class="c1"># (distortion models are tricky if badly parameterized, especially in outer regions)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">.99999</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The residual for the worst distorted pixel got unstable/stalled.&quot;</span><span class="p">)</span>
+            <span class="c1"># factor *= .5</span>
+            <span class="k">if</span> <span class="n">it</span> <span class="o">&gt;</span> <span class="mf">1e3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;The iterative distortion algorithm is unstable/stalled after 1000 iterations.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">error</span> <span class="o">&gt;</span> <span class="mf">1e9</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Some (corner) pixels of the desired image are not defined by the used lens distortion model.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;We invite you to double-check your distortion model.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The parameters k3,p1,p2 can easily overshoot for regions where the calibration software had no datapoints.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You can either:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- take more projections (ideally image-filling) at the image corners and repeat calibration,&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- reduce the # of released parameters to calibrate to k1,k2, or&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- reduce the target image size (subtract some lines and columns from the desired resolution&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  and subtract at most that number of lines and columns from the main point location).&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BlenderProc will not generate incomplete images with void regions since these are not useful for ML (data leakage).&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For that, you can use the Matlab code in robotic.de/callab, which robustifies against these unstable pixels.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The iterative distortion algorithm is unstable.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># update undistorted projection</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">x_</span> <span class="o">-</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># * factor</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">y_</span> <span class="o">-</span> <span class="n">P_und</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># * factor</span>
+
+    <span class="c1"># u and v are now the pixel coordinates on the undistorted image that</span>
+    <span class="c1"># will distort into the row,column coordinates of the distorted image</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="p">(</span><span class="n">fx</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">cx</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">fy</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">cy</span><span class="p">)</span>
+
+    <span class="c1"># Stacking this way for the interpolation in the undistorted image array</span>
+    <span class="n">mapping_coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">])</span>
+
+    <span class="c1"># Find out the image resolution needed from Blender to generate filled-in distorted images of the desired resolution</span>
+    <span class="n">min_und_column_needed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="n">max_und_column_needed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+    <span class="n">min_und_row_needed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">max_und_row_needed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">columns_needed</span> <span class="o">=</span> <span class="n">max_und_column_needed</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">min_und_column_needed</span>
+    <span class="n">rows_needed</span> <span class="o">=</span> <span class="n">max_und_row_needed</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">min_und_row_needed</span>
+    <span class="n">cx_new</span> <span class="o">=</span> <span class="n">cx</span> <span class="o">-</span> <span class="n">min_und_column_needed</span>
+    <span class="n">cy_new</span> <span class="o">=</span> <span class="n">cy</span> <span class="o">-</span> <span class="n">min_und_row_needed</span>
+    <span class="c1"># To avoid spline boundary approximations at the border pixels (&#39;mode&#39; in map_coordinates() )</span>
+    <span class="n">columns_needed</span> <span class="o">+=</span> <span class="mi">2</span>
+    <span class="n">rows_needed</span> <span class="o">+=</span> <span class="mi">2</span>
+    <span class="n">cx_new</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">cy_new</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># suggested resolution for Blender image generation</span>
+    <span class="n">new_image_resolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">columns_needed</span><span class="p">,</span> <span class="n">rows_needed</span><span class="p">])</span>
+
+    <span class="c1"># Adapt/shift the mapping function coordinates to the new_image_resolution resolution</span>
+    <span class="c1"># (if we didn&#39;t, the mapping would only be valid for same resolution mapping)</span>
+    <span class="c1"># (same resolution mapping yields undesired void image areas)</span>
+    <span class="n">mapping_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">cy_new</span> <span class="o">-</span> <span class="n">cy</span>
+    <span class="n">mapping_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">cx_new</span> <span class="o">-</span> <span class="n">cx</span>
+
+    <span class="n">camera_changed_K_matrix</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">()</span>
+    <span class="c1"># update cx and cy in the K matrix</span>
+    <span class="n">camera_changed_K_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cx_new</span>
+    <span class="n">camera_changed_K_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cy_new</span>
+
+    <span class="c1"># reuse the values, which have been set before</span>
+    <span class="n">clip_start</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_start</span>
+    <span class="n">clip_end</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">clip_end</span>
+
+    <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">camera_changed_K_matrix</span><span class="p">,</span> <span class="n">new_image_resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="n">new_image_resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">clip_start</span><span class="p">,</span> <span class="n">clip_end</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">use_global_storage</span><span class="p">:</span>
+        <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;_lens_distortion_is_used&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;mapping_coords&quot;</span><span class="p">:</span> <span class="n">mapping_coords</span><span class="p">,</span>
+                                                    <span class="s2">&quot;original_image_res&quot;</span><span class="p">:</span> <span class="n">original_image_resolution</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">mapping_coords</span></div>
+
+
+<div class="viewcode-block" id="apply_lens_distortion"><a class="viewcode-back" href="../../../../blenderproc.python.camera.LensDistortionUtility.html#blenderproc.python.camera.LensDistortionUtility.apply_lens_distortion">[docs]</a><span class="k">def</span> <span class="nf">apply_lens_distortion</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                          <span class="n">mapping_coords</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="n">orig_res_x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="n">orig_res_y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                          <span class="n">use_interpolation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This functions applies the lens distortion mapping that needs to be precalculated by `bproc.camera.set_lens_distortion()`.</span>
+
+<span class="sd">    Without calling this function the `set_lens_distortion` fct. only increases the image resolution and</span>
+<span class="sd">    changes the K matrix of the camera.</span>
+
+<span class="sd">    :param image: a list of images or an image to be distorted</span>
+<span class="sd">    :param mapping_coords: an array of pixel mappings from undistorted to distorted image</span>
+<span class="sd">    :param orig_res_x: original and output width resolution of the image</span>
+<span class="sd">    :param orig_res_y: original and output height resolution of the image</span>
+<span class="sd">    :param use_interpolation: if this is True, for each pixel an interpolation will be performed, if this is false the nearest pixel will be used</span>
+<span class="sd">    :return: a list of images or an image that have been distorted, now in the desired (original) resolution</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mapping_coords</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">orig_res_x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">orig_res_y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="c1"># if lens distortion was used apply it now</span>
+        <span class="k">if</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;_lens_distortion_is_used&quot;</span><span class="p">):</span>
+            <span class="c1"># extract the necessary params from the GlobalStorage</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_lens_distortion_is_used&quot;</span><span class="p">)</span>
+            <span class="n">mapping_coords</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;mapping_coords&quot;</span><span class="p">]</span>
+            <span class="n">orig_res_y</span><span class="p">,</span> <span class="n">orig_res_x</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;original_image_res&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Applying of a lens distortion is only possible after calling &quot;</span>
+                            <span class="s2">&quot;bproc.camera.set_lens_distortion(...) and pass &#39;mapping_coords&#39; and &quot;</span>
+                            <span class="s2">&quot;&#39;orig_res_x&#39; + &#39;orig_res_x&#39; to bproc.postprocessing.apply_lens_distortion(...). &quot;</span>
+                            <span class="s2">&quot;Previously this could also have been done via the CameraInterface module, &quot;</span>
+                            <span class="s2">&quot;see the example on lens_distortion.&quot;</span><span class="p">)</span>
+    <span class="n">interpolation_order</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">use_interpolation</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_internal_apply</span><span class="p">(</span><span class="n">input_image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Applies the distortion to the input image</span>
+<span class="sd">        :param input_image: input image, which will be distorted</span>
+<span class="sd">        :return: distorted input image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">amount_of_output_channels</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">amount_of_output_channels</span> <span class="o">=</span> <span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">image_distorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">orig_res_y</span><span class="p">,</span> <span class="n">orig_res_x</span><span class="p">,</span> <span class="n">amount_of_output_channels</span><span class="p">))</span>
+        <span class="n">used_dtpye</span> <span class="o">=</span> <span class="n">input_image</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">input_image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="c1"># Forward mapping in order to distort the undistorted image coordinates</span>
+        <span class="c1"># and reshape the arrays into the image shape grid.</span>
+        <span class="c1"># The reference frame for coords is as in DLR CalDe etc. (the upper-left pixel center is at [0,0])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image_distorted</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">image_distorted</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">map_coordinates</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">mapping_coords</span><span class="p">,</span>
+                                                                      <span class="n">order</span><span class="o">=</span><span class="n">interpolation_order</span><span class="p">,</span>
+                                                                      <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">),</span> <span class="n">image_distorted</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">image_distorted</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">map_coordinates</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mapping_coords</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">interpolation_order</span><span class="p">,</span>
+                                                                      <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">),</span>
+                                                      <span class="n">image_distorted</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="c1"># Other options are:</span>
+        <span class="c1"># - map_coordinates() in all channels at the same time (turns out to be slower)</span>
+        <span class="c1"># - use torch.nn.functional.grid_sample() instead to do it on the GPU (even in batches)</span>
+
+        <span class="k">if</span> <span class="n">used_dtpye</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
+            <span class="n">image_distorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">image_distorted</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">image_distorted</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">used_dtpye</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_internal_apply</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_internal_apply</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This type can not be worked with here: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="si">}</span><span class="s2">, only &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;np.ndarray or list of np.ndarray are supported&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="set_camera_parameters_from_config_file"><a class="viewcode-back" href="../../../../blenderproc.python.camera.LensDistortionUtility.html#blenderproc.python.camera.LensDistortionUtility.set_camera_parameters_from_config_file">[docs]</a><span class="k">def</span> <span class="nf">set_camera_parameters_from_config_file</span><span class="p">(</span><span class="n">camera_intrinsics_file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">read_the_extrinsics</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                           <span class="n">camera_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function sets the camera intrinsic parameters based on a config file, currently it only supports the</span>
+<span class="sd">    DLR-RMC camera calibration file format used in the &quot;DLR CalDe and DLR CalLab&quot; camera calibration toolbox.</span>
+<span class="sd">    The calibration file allows to use multiple cameras, but only one can be used inside of BlenderProc per run.</span>
+
+<span class="sd">    :param camera_intrinsics_file_path: Path to the calibration file</span>
+<span class="sd">    :param camera_index: Used camera index</span>
+<span class="sd">    :return: mapping coordinates from distorted to undistorted image pixels, as returned from set_lens_distortion()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">camera_intrinsics_file_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The camera intrinsics file does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">camera_intrinsics_file_path</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_is_number</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># check if the given string value is a digit (float or int)</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">camera_intrinsics_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">final_lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># add commas in between the numbers, which are seperated by spaces</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot; ; &quot;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;[ &quot;</span><span class="p">)</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot; ]&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">elements</span><span class="p">:</span>
+                    <span class="n">final_elements</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="c1"># add in commas between two elements if the current and the next element are numbers</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">final_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">_is_number</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="ow">and</span> <span class="n">_is_number</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]):</span>
+                            <span class="n">final_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                    <span class="n">final_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">final_elements</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;;&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="s2">&quot;[&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">and</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="c1"># this line contains a matrix</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">,</span> <span class="s2">&quot;[[&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="s2">&quot;]]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot;], [&quot;</span><span class="p">)</span>
+            <span class="c1"># convert it to yaml format</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;camera.&quot;</span><span class="p">):</span>
+                <span class="n">current_nr</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;camera.&quot;</span><span class="p">):</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="s2">&quot;camera.&quot;</span><span class="p">))]</span>
+                <span class="k">if</span> <span class="n">_is_number</span><span class="p">(</span><span class="n">current_nr</span><span class="p">):</span>
+                    <span class="c1"># remove all lines which are not focused around the selected camera index</span>
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">current_nr</span><span class="p">)</span> <span class="o">!=</span> <span class="n">camera_index</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># remove lines which are not specified to a certain camera</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;camera.</span><span class="si">{</span><span class="n">camera_index</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&quot;= </span><span class="si">{</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">final_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="n">extracted_camera_parameters</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">final_lines</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Interpreted intrinsics from DLR-RMC camera calibration file: </span><span class="si">{</span><span class="n">extracted_camera_parameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># check version and origin parameters</span>
+    <span class="k">if</span> <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The version tag is not set in the DLR-RMC camera calibration file!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Only version 2 is supported for the DLR-RMC camera calibration file, not </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;center&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The origin in the DLR-RMC camera calibration file has to be defined and set to center for BlenderProc distortion to work.&quot;</span><span class="p">)</span>
+    <span class="c1"># set intrinsics based on the yaml-read matrix called A and the yaml-read camera image size</span>
+    <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">),</span> <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span>
+                                               <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">])</span>
+    <span class="c1"># setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing</span>
+    <span class="n">mapping_coords</span> <span class="o">=</span> <span class="n">set_lens_distortion</span><span class="p">(</span><span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;k1&quot;</span><span class="p">],</span> <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;k2&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                                         <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;k3&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;p1&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                                         <span class="n">extracted_camera_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;p2&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">read_the_extrinsics</span><span class="p">:</span>
+        <span class="n">cam2world</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">cam2world</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">])</span>
+        <span class="n">cam2world</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span>
+        <span class="n">cam2world</span> <span class="o">=</span> <span class="n">change_source_coordinate_frame_of_transformation_matrix</span><span class="p">(</span><span class="n">cam2world</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">])</span>
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="n">extracted_camera_parameters</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span> <span class="n">mapping_coords</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

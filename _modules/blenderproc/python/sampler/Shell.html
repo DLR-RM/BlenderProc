@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.sampler.Shell &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.sampler.Shell &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -470,81 +474,63 @@
 
 <span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Vector</span>
 
+<div class="viewcode-block" id="shell"><a class="viewcode-back" href="../../../../blenderproc.python.sampler.Shell.html#blenderproc.python.sampler.Shell.shell">[docs]</a><span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Vector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">radius_min</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">elevation_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span>
+          <span class="n">elevation_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">90</span><span class="p">,</span> <span class="n">azimuth_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="n">azimuth_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span> <span class="n">uniform_volume</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Samples a point from the volume between two spheres (radius_min, radius_max). Optionally the spheres can be constraint by setting </span>
+<span class="sd">          elevation and azimuth angles. E.g. if you only want to sample in the upper hemisphere set elevation_min = 0.</span>
 
-<div class="viewcode-block" id="shell"><a class="viewcode-back" href="../../../../blenderproc.python.sampler.Shell.html#blenderproc.python.sampler.Shell.shell">[docs]</a><span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Vector</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">radius_min</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">radius_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">elevation_min</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-          <span class="n">elevation_max</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">uniform_elevation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Samples a point from the space in between two spheres with a double spherical angle with apex in the center</span>
-<span class="sd">        of those two spheres. Has option for uniform elevation sampling.</span>
-
-<span class="sd">    Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,</span>
-<span class="sd">    that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.</span>
-
-<span class="sd">    .. code-block:: python</span>
-
-<span class="sd">        sampler.Shell(</span>
-<span class="sd">            center=[0, 0, -0.8],</span>
-<span class="sd">            radius_min=1,</span>
-<span class="sd">            radius_max=4,</span>
-<span class="sd">            elevation_min=40,</span>
-<span class="sd">            elevation_max=89</span>
-<span class="sd">        )</span>
-
-<span class="sd">    :param center: Center which is shared by both structure-defining spheres.</span>
-<span class="sd">    :param radius_min: Radius of a smaller sphere.</span>
-<span class="sd">    :param radius_max: Radius of a bigger sphere.</span>
-<span class="sd">    :param elevation_min: Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].</span>
-<span class="sd">    :param elevation_max: Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].</span>
-<span class="sd">    :param uniform_elevation: Uniformly sample elevation angles.</span>
+<span class="sd">    :param center: Center shared by both spheres.</span>
+<span class="sd">    :param radius_min: Radius of the smaller sphere.</span>
+<span class="sd">    :param radius_max: Radius of the bigger sphere.</span>
+<span class="sd">    :param elevation_min: Minimum angle of elevation in degrees. Range: [-90, 90].</span>
+<span class="sd">    :param elevation_max: Maximum angle of elevation in degrees. Range: [-90, 90].</span>
+<span class="sd">    :param azimuth_min: Minimum angle of azimuth in degrees. Range: [-180, 180].</span>
+<span class="sd">    :param azimuth_max: Maximum angle of azimuth in degrees. Range: [-180, 180].</span>
+<span class="sd">    :param uniform_volume: Instead of sampling the angles and radius uniformly, sample the shell volume uniformly.</span>
+<span class="sd">                           As a result, there will be more samples at larger radii.</span>
 <span class="sd">    :return: A sampled point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center</span><span class="p">)</span>
+    
+    <span class="k">assert</span> <span class="o">-</span><span class="mi">180</span> <span class="o">&lt;=</span> <span class="n">azimuth_min</span> <span class="o">&lt;=</span> <span class="mi">180</span><span class="p">,</span> <span class="s2">&quot;azimuth_min must be in range [-180, 180]&quot;</span>
+    <span class="k">assert</span> <span class="o">-</span><span class="mi">180</span> <span class="o">&lt;=</span> <span class="n">azimuth_max</span> <span class="o">&lt;=</span> <span class="mi">180</span><span class="p">,</span> <span class="s2">&quot;azimuth_max must be in range [-180, 180]&quot;</span>
+    <span class="k">assert</span> <span class="o">-</span><span class="mi">90</span> <span class="o">&lt;=</span> <span class="n">elevation_min</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">&quot;elevation_min must be in range [-90, 90]&quot;</span>
+    <span class="k">assert</span> <span class="o">-</span><span class="mi">90</span> <span class="o">&lt;=</span> <span class="n">elevation_min</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">&quot;elevation_max must be in range [-90, 90]&quot;</span>
+    <span class="k">assert</span> <span class="n">azimuth_min</span> <span class="o">&lt;</span> <span class="n">azimuth_max</span><span class="p">,</span> <span class="s2">&quot;azimuth_min must be smaller than azimuth_max&quot;</span>
+    <span class="k">assert</span> <span class="n">elevation_min</span> <span class="o">&lt;</span> <span class="n">elevation_max</span><span class="p">,</span> <span class="s2">&quot;elevation_min must be smaller than elevation_max&quot;</span>
+    
+    <span class="k">if</span> <span class="n">uniform_volume</span><span class="p">:</span>
+         
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">radius_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">radius_max</span> <span class="o">-</span> <span class="n">radius_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cbrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
+        
+        <span class="c1"># rejection sampling</span>
+        <span class="n">constr_fulfilled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">constr_fulfilled</span><span class="p">:</span>
+            <span class="n">direction_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">direction_vector</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">direction_vector</span><span class="p">)</span>
+            
+            <span class="c1"># https://stackoverflow.com/questions/4116658/faster-numpy-cartesian-to-spherical-coordinate-conversion</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="n">direction_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">direction_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">direction_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">direction_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">direction_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xy</span><span class="p">))</span>
+            <span class="n">azimuth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">direction_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">direction_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">uniform_elevation</span><span class="p">:</span>
+            <span class="n">elev_constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation_min</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">elevation</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation_max</span><span class="p">)</span>
+            <span class="n">azim_constraint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth_min</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">azimuth</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth_max</span><span class="p">)</span>
+            <span class="n">constr_fulfilled</span> <span class="o">=</span> <span class="n">elev_constraint</span> <span class="ow">and</span> <span class="n">azim_constraint</span>
+    <span class="k">else</span><span class="p">:</span>
         <span class="n">el_sampled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">elevation_max</span> <span class="o">-</span> <span class="n">elevation_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
-        <span class="n">az_sampled</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+        <span class="n">az_sampled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">azimuth_max</span> <span class="o">-</span> <span class="n">azimuth_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">())</span>
         <span class="c1"># spherical to cartesian coordinates</span>
         <span class="n">direction_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">el_sampled</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">az_sampled</span><span class="p">),</span>
                                      <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">el_sampled</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">az_sampled</span><span class="p">),</span>
                                      <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">el_sampled</span><span class="p">)])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">elevation_min</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># here comes the magic number</span>
-            <span class="n">elevation_min</span> <span class="o">=</span> <span class="mf">0.001</span>
-        <span class="k">if</span> <span class="n">elevation_max</span> <span class="o">==</span> <span class="mi">90</span><span class="p">:</span>
-            <span class="c1"># behold! magic number</span>
-            <span class="n">elevation_max</span> <span class="o">=</span> <span class="mf">0.001</span>
 
-        <span class="c1"># Height of a sampling cone</span>
-        <span class="n">cone_height</span> <span class="o">=</span> <span class="mi">1</span>
-
-        <span class="c1"># Sampling and rejection radius</span>
-        <span class="n">r_sampling</span> <span class="o">=</span> <span class="n">cone_height</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation_min</span><span class="p">))</span>
-        <span class="n">r_rejection</span> <span class="o">=</span> <span class="n">cone_height</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation_max</span><span class="p">))</span>
-        <span class="c1"># Init sampled point at the center of a sampling disk</span>
-        <span class="n">sampled_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-
-        <span class="c1"># Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling</span>
-        <span class="c1"># cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.</span>
-
-        <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">sampled_2d</span> <span class="o">-</span> <span class="n">center</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">r_rejection</span> <span class="o">**</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="c1"># http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">r_sampling</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">())</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-            <span class="n">sampled_2d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-            <span class="n">sampled_2d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-
-        <span class="c1"># Sampled point in 3d</span>
-        <span class="n">direction_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">sampled_2d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sampled_2d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">center</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">cone_height</span><span class="p">])</span>
-
-        <span class="c1"># Getting vector, then unit vector that defines the direction</span>
-        <span class="n">full_vector</span> <span class="o">=</span> <span class="n">direction_point</span> <span class="o">-</span> <span class="n">center</span>
-
-        <span class="n">direction_vector</span> <span class="o">=</span> <span class="n">full_vector</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">full_vector</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span>
-
-    <span class="c1"># Calculate the factor for the unit vector</span>
-    <span class="n">factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">radius_min</span><span class="p">,</span> <span class="n">radius_max</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># Calculate the uniform radius</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">radius_min</span><span class="p">,</span> <span class="n">radius_max</span><span class="p">)</span>
+        
     <span class="c1"># Get the coordinates of a sampled point inside the shell</span>
-    <span class="n">position</span> <span class="o">=</span> <span class="n">direction_vector</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">+</span> <span class="n">center</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">direction_vector</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">+</span> <span class="n">center</span>
 
     <span class="k">return</span> <span class="n">position</span></div>
 </pre></div>

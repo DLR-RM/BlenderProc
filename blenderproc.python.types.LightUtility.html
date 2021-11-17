@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.types.LightUtility module &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.types.LightUtility module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -470,7 +474,7 @@
 <span id="blenderproc-python-types-lightutility-module"></span><h1>blenderproc.python.types.LightUtility module<a class="headerlink" href="#module-blenderproc.python.types.LightUtility" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="blenderproc.python.types.LightUtility.Light">
-<em class="property">class </em><code class="descclassname">blenderproc.python.types.LightUtility.</code><code class="descname">Light</code><span class="sig-paren">(</span><em>type='POINT'</em>, <em>name='light'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/LightUtility.html#Light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.LightUtility.Light" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">blenderproc.python.types.LightUtility.</code><code class="descname">Light</code><span class="sig-paren">(</span><em>type='POINT'</em>, <em>name='light'</em>, <em>blender_obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/LightUtility.html#Light"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.LightUtility.Light" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.EntityUtility.Entity</span></code></a></p>
 <dl class="method">
 <dt id="blenderproc.python.types.LightUtility.Light.get_color">
@@ -611,20 +615,6 @@
 <li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
 </ul>
 </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="blenderproc.python.types.LightUtility.Light.update_blender_ref">
-<code class="descname">update_blender_ref</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/LightUtility.html#Light.update_blender_ref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.LightUtility.Light.update_blender_ref" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the contained blender reference using the given name of the instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – The name of the instance which will be used to update its blender reference.</td>
 </tr>
 </tbody>
 </table>

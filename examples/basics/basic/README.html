@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic scene &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>Basic scene &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="../../advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="../../../blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -501,7 +505,7 @@
 <li>Loads <code class="docutils literal notranslate"><span class="pre">scene.obj</span></code>: <code class="docutils literal notranslate"><span class="pre">loader.ObjectLoader</span></code> module.</li>
 <li>Creates a point light : <code class="docutils literal notranslate"><span class="pre">lighting.LightLoader</span></code> module.</li>
 <li>Loads camera positions from <code class="docutils literal notranslate"><span class="pre">camera_positions</span></code>: <code class="docutils literal notranslate"><span class="pre">camera.CameraLoader</span></code> module.</li>
-<li>Renders rgb, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
+<li>Renders rgb, normals and depth: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
 <li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
 </ul>
 <div class="section" id="setup">
@@ -563,9 +567,9 @@ Be aware that each of these calls uses the created camera in the <code class="do
 </div>
 <div class="section" id="rgb-rendering">
 <h4>Rgb rendering<a class="headerlink" href="#rgb-rendering" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># activate normal and distance rendering</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># activate normal and depth rendering</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_normals_output</span><span class="p">()</span>
-<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_distance_output</span><span class="p">()</span>
 <span class="c1"># set the amount of samples, which should be used for the color rendering</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">350</span><span class="p">)</span>
 
@@ -573,14 +577,14 @@ Be aware that each of these calls uses the created camera in the <code class="do
 <span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>First we enable that <code class="docutils literal notranslate"><span class="pre">blenderproc</span></code> also generates the <code class="docutils literal notranslate"><span class="pre">normals</span></code> and the <code class="docutils literal notranslate"><span class="pre">distance</span></code> for each color image, and then we set the amount of samples used for generating the color image.
+<p>First we enable that <code class="docutils literal notranslate"><span class="pre">blenderproc</span></code> also generates the <code class="docutils literal notranslate"><span class="pre">normals</span></code> and the <code class="docutils literal notranslate"><span class="pre">depth</span></code> for each color image, and then we set the amount of samples used for generating the color image.
 A higher sample amount will reduce the noise in the image, but increase the rendering time.
 The correct value depends on the complexity of your scene and the GPU budget you can spare.</p>
 <p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">rgb_0000.png</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb_0001.png</span></code> in the temp folder.</p>
-<p>It also creates the normals and distance</p>
+<p>It also creates the normals and depth</p>
 <ul class="simple">
-<li>The normal and distance images are rendered using the <code class="docutils literal notranslate"><span class="pre">.exr</span></code> format which allows linear colorspace and higher precision</li>
-<li>Here, the distance image is antialiased, meaning that for each pixel the depth in this pixel is aggregated over its surface. If you want to render a z-buffer depth image without any smoothing effects use <code class="docutils literal notranslate"><span class="pre">bproc.renderer.enable_depth_output()</span></code> instead. While distance and depth images sound similar, they are not the same: In <a class="reference external" href="https://en.wikipedia.org/wiki/Range_imaging">distance images</a>, each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In <a class="reference external" href="https://en.wikipedia.org/wiki/Depth_map">depth images</a>, each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.</li>
+<li>The normal and depth images are rendered using the <code class="docutils literal notranslate"><span class="pre">.exr</span></code> format which allows linear colorspace and higher precision</li>
+<li>Here, the depth image is not antialiased, meaning that for each pixel the depth in this pixel is not aggregated over its surface. While distance and depth images sound similar, they are not the same: In <a class="reference external" href="https://en.wikipedia.org/wiki/Range_imaging">distance images</a>, each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In <a class="reference external" href="https://en.wikipedia.org/wiki/Depth_map">depth images</a>, each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.</li>
 </ul>
 <p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">normal_0000.exr</span></code> and <code class="docutils literal notranslate"><span class="pre">normal_0001.exr</span></code> and the files <code class="docutils literal notranslate"><span class="pre">distance_0000.exr</span></code> and <code class="docutils literal notranslate"><span class="pre">distance_0001.exr</span></code>.</p>
 <p>In this example all of these are temporary and are read in directly after rendering and deleted in the temp folder.
@@ -603,7 +607,7 @@ These are then packed into a dictionary and returned and saved in the <code clas
 <p>The file <code class="docutils literal notranslate"><span class="pre">0.h5py</span></code> would therefore look like the following:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
   <span class="s">&quot;colors&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from rgb_0000.png&gt;,</span>
-  <span class="s">&quot;distance&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from distance_0000.exr&gt;,</span>
+  <span class="s">&quot;depth&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from depth_0000.exr&gt;,</span>
   <span class="s">&quot;normals&quot;</span><span class="p p-Indicator">:</span> <span class="c1">#&lt;numpy array with pixel values read in from normals_0000.exr&gt;,</span>
 <span class="p p-Indicator">}</span>
 </pre></div>

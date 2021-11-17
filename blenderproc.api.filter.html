@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.filter package &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.filter package &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -470,194 +474,6 @@
 <h1>blenderproc.filter package<a class="headerlink" href="#blenderproc-filter-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.filter">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.filter" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="blenderproc.filter.all_with_type">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">all_with_type</code><span class="sig-paren">(</span><em>elements</em>, <em>filtered_data_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.all_with_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all elements from the given list having a given type.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">All mesh objects from the given list.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.by_attr">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">by_attr</code><span class="sig-paren">(</span><em>elements</em>, <em>attr_name</em>, <em>value</em>, <em>filtered_data_type=None</em>, <em>regex=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.by_attr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all elements from the given list whose specified attribute has the given value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the attribute to look for.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – The value the attribute should have.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-<li><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, string values will be matched via regex.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The elements from the given list that match the given value at the specified attribute.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.by_attr_in_interval">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">by_attr_in_interval</code><span class="sig-paren">(</span><em>elements</em>, <em>attr_name</em>, <em>min_value=None</em>, <em>max_value=None</em>, <em>filtered_data_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.by_attr_in_interval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all elements from the given list whose specified attribute has a value in the given interval (including the boundaries).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the attribute to look for.</li>
-<li><strong>min_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – The minimum value of the interval.</li>
-<li><strong>max_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – The maximum value of the interval.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The elements from the given list that match the given value at the specified attribute.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.by_attr_outside_interval">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">by_attr_outside_interval</code><span class="sig-paren">(</span><em>elements</em>, <em>attr_name</em>, <em>min_value=None</em>, <em>max_value=None</em>, <em>filtered_data_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.by_attr_outside_interval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all elements from the given list whose specified attribute has a value outside the given interval.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the attribute to look for.</li>
-<li><strong>min_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – The minimum value of the interval.</li>
-<li><strong>max_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]) – The maximum value of the interval.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The elements from the given list that match the given value at the specified attribute.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.by_cp">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">by_cp</code><span class="sig-paren">(</span><em>elements</em>, <em>cp_name</em>, <em>value</em>, <em>filtered_data_type=None</em>, <em>regex=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.by_cp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all elements from the given list whose specified custom property has the given value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>cp_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the custom property to look for.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – The value the custom property should have.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-<li><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, string values will be matched via regex.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The elements from the given list that match the given value at the specified custom property.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.one_by_attr">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">one_by_attr</code><span class="sig-paren">(</span><em>elements</em>, <em>attr_name</em>, <em>value</em>, <em>filtered_data_type=None</em>, <em>regex=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.one_by_attr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the one element from the given list whose specified attribute has the given value.</p>
-<p>An error is thrown is more than one or no element has been found.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the attribute to look for.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – The value the attribute should have.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-<li><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, string values will be matched via regex.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The one element from the given list that matches the given value at the specified attribute.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.filter.one_by_cp">
-<code class="descclassname">blenderproc.filter.</code><code class="descname">one_by_cp</code><span class="sig-paren">(</span><em>elements</em>, <em>cp_name</em>, <em>value</em>, <em>filtered_data_type=None</em>, <em>regex=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.filter.one_by_cp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the one element from the given list whose specified custom property has the given value.</p>
-<p>An error is thrown is more than one or no element has been found.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>elements</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]) – A list of elements.</li>
-<li><strong>cp_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the custom property to look for.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – The value the custom property should have.</li>
-<li><strong>filtered_data_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Type</span></code></a>[<a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a>]]) – If not None, only elements from the given type are returned.</li>
-<li><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, string values will be matched via regex.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">Struct</span></code></a></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The one element from the given list that matches the given value at the specified custom property.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 </div>
 

@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    blenderproc.python.modules.postprocessing.Dist2Depth
+   blenderproc.python.modules.postprocessing.LensDistortion
    blenderproc.python.modules.postprocessing.NoiseRemoval
    blenderproc.python.modules.postprocessing.OilPaintFilter
    blenderproc.python.modules.postprocessing.TrimRedundantChannels

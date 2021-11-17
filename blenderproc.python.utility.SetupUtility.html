@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.SetupUtility module &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.utility.SetupUtility module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -474,7 +478,7 @@
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="staticmethod">
 <dt id="blenderproc.python.utility.SetupUtility.SetupUtility._ensure_pip">
-<em class="property">static </em><code class="descname">_ensure_pip</code><span class="sig-paren">(</span><em>python_bin</em>, <em>packages_path</em>, <em>pre_python_package_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/SetupUtility.html#SetupUtility._ensure_pip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility._ensure_pip" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">_ensure_pip</code><span class="sig-paren">(</span><em>python_bin</em>, <em>packages_path</em>, <em>pre_python_package_path</em>, <em>force_update=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/SetupUtility.html#SetupUtility._ensure_pip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility._ensure_pip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make sure pip is installed and read in the already installed packages</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -484,7 +488,32 @@
 <li><strong>python_bin</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path to python binary.</li>
 <li><strong>packages_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path where our pip packages should be installed</li>
 <li><strong>pre_python_package_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path that contains blender’s default pip packages</li>
+<li><strong>force_update</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the installed-packages-cache will be ignored and will be recollected based on the actually installed packages.</li>
 </ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="blenderproc.python.utility.SetupUtility.SetupUtility._pip_install_packages">
+<em class="property">static </em><code class="descname">_pip_install_packages</code><span class="sig-paren">(</span><em>required_packages</em>, <em>python_bin</em>, <em>packages_path</em>, <em>reinstall_packages=False</em>, <em>dry_run=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/SetupUtility.html#SetupUtility._pip_install_packages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility._pip_install_packages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Installs the list of given pip packages in the given python environment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>required_packages</strong> – A list of pip packages that should be installed. The version number can be specified via the usual == notation.</li>
+<li><strong>python_bin</strong> – Path to python binary.</li>
+<li><strong>packages_path</strong> – Path where our pip packages should be installed</li>
+<li><strong>reinstall_packages</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Set to true, if all python packages should be reinstalled.</li>
+<li><strong>dry_run</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, nothing will be installed and it will only be checked whether there are any potential packages to update/install.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns True, if any packages were update/installed or - if dry_run=True - if there are any potential packages to update/install.</p>
 </td>
 </tr>
 </tbody>
@@ -501,6 +530,24 @@ exception is thrown. With an explanation that each python script has to start wi
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path_to_run_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – path to the used python script</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="blenderproc.python.utility.SetupUtility.SetupUtility.clean_installed_packages_cache">
+<em class="property">static </em><code class="descname">clean_installed_packages_cache</code><span class="sig-paren">(</span><em>blender_path</em>, <em>major_version</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/SetupUtility.html#SetupUtility.clean_installed_packages_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility.clean_installed_packages_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the json file containing a list of all installed pip packages (if it exists).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blender_path</strong> – The path to the blender main folder.</li>
+<li><strong>major_version</strong> – The major version string of the blender installation.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -595,12 +642,17 @@ can run on one system.</p>
 
 <dl class="attribute">
 <dt id="blenderproc.python.utility.SetupUtility.SetupUtility.installed_packages">
-<code class="descname">installed_packages</code><em class="property"> = {'alabaster': '0.7.12', 'babel': '2.9.1', 'certifi': '2021.10.8', 'charset-normalizer': '2.0.7', 'cycler': '0.10.0', 'docutils': '0.17.1', 'gitdb': '4.0.7', 'gitpython': '3.1.18', 'h5py': '3.4.0', 'human-body-prior': '0.9.3.0', 'idna': '3.2', 'imageio': '2.9.0', 'imagesize': '1.2.0', 'jinja2': '3.0.2', 'joblib': '1.0.1', 'kiwisolver': '1.3.2', 'm2r2': '0.2.7', 'markupsafe': '2.0.1', 'matplotlib': '3.4.3', 'mistune': '0.8.4', 'networkx': '2.6.3', 'numpy': '1.21.2', 'opencv-contrib-python': '4.5.3.56', 'packaging': '21.0', 'pillow': '8.3.2', 'pip': '21.3', 'pydevd-pycharm': '202.7660.27', 'pygments': '2.10.0', 'pyparsing': '2.4.7', 'pypng': '0.0.20', 'python-dateutil': '2.8.2', 'pytz': '2021.1', 'pywavelets': '1.1.1', 'pyyaml': '5.1.2', 'requests': '2.26.0', 'scikit-image': '0.18.3', 'scikit-learn': '0.24.2', 'scipy': '1.7.1', 'setuptools': '58.2.0', 'six': '1.16.0', 'smmap': '4.0.0', 'smplx': '0.1.24', 'snowballstemmer': '2.1.0', 'sphinx': '1.8.5', 'sphinx-autodoc-typehints': '1.6.0', 'sphinx-rtd-theme': '0.4.3', 'sphinxcontrib-applehelp': '1.0.2', 'sphinxcontrib-devhelp': '1.0.2', 'sphinxcontrib-htmlhelp': '2.0.0', 'sphinxcontrib-jsmath': '1.0.1', 'sphinxcontrib-qthelp': '1.0.3', 'sphinxcontrib-serializinghtml': '1.1.5', 'sphinxcontrib-websupport': '1.2.4', 'threadpoolctl': '3.0.0', 'tifffile': '2021.8.30', 'torch': '1.9.1', 'typing-extensions': '3.10.0.2', 'urllib3': '1.26.7', 'wheel': '0.37.0'}</em><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility.installed_packages" title="Permalink to this definition">¶</a></dt>
+<code class="descname">installed_packages</code><em class="property"> = {'alabaster': '0.7.12', 'babel': '2.9.1', 'certifi': '2021.10.8', 'charset-normalizer': '2.0.7', 'cycler': '0.10.0', 'docutils': '0.17.1', 'gitdb': '4.0.7', 'gitpython': '3.1.18', 'h5py': '3.4.0', 'idna': '3.3', 'imageio': '2.9.0', 'imagesize': '1.2.0', 'jinja2': '3.0.2', 'joblib': '1.1.0', 'kiwisolver': '1.3.2', 'm2r2': '0.2.7', 'markupsafe': '2.0.1', 'matplotlib': '3.4.3', 'mistune': '0.8.4', 'networkx': '2.6.3', 'numpy': '1.21.2', 'opencv-contrib-python': '4.5.3.56', 'packaging': '21.0', 'pillow': '8.3.2', 'pip': '21.3.1', 'pydevd-pycharm': '212.5457.59', 'pygments': '2.10.0', 'pyparsing': '2.4.7', 'pypng': '0.0.20', 'python-dateutil': '2.8.2', 'pytz': '2021.1', 'pywavelets': '1.1.1', 'pyyaml': '5.1.2', 'requests': '2.26.0', 'scikit-image': '0.18.3', 'scikit-learn': '0.24.2', 'scipy': '1.7.1', 'setuptools': '58.2.0', 'six': '1.16.0', 'smmap': '4.0.0', 'snowballstemmer': '2.1.0', 'sphinx': '1.8.5', 'sphinx-autodoc-typehints': '1.6.0', 'sphinx-rtd-theme': '0.4.3', 'sphinxcontrib-applehelp': '1.0.2', 'sphinxcontrib-devhelp': '1.0.2', 'sphinxcontrib-htmlhelp': '2.0.0', 'sphinxcontrib-jsmath': '1.0.1', 'sphinxcontrib-qthelp': '1.0.3', 'sphinxcontrib-serializinghtml': '1.1.5', 'sphinxcontrib-websupport': '1.2.4', 'threadpoolctl': '3.0.0', 'tifffile': '2021.10.12', 'urllib3': '1.26.7', 'wheel': '0.37.0'}</em><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility.installed_packages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="blenderproc.python.utility.SetupUtility.SetupUtility.main_setup_called">
 <code class="descname">main_setup_called</code><em class="property"> = True</em><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility.main_setup_called" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="blenderproc.python.utility.SetupUtility.SetupUtility.package_list_is_from_cache">
+<code class="descname">package_list_is_from_cache</code><em class="property"> = True</em><a class="headerlink" href="#blenderproc.python.utility.SetupUtility.SetupUtility.package_list_is_from_cache" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">

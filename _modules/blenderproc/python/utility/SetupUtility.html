@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.SetupUtility &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.utility.SetupUtility &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -476,6 +480,7 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.DefaultConfig</span> <span class="kn">import</span> <span class="n">DefaultConfig</span>
 
@@ -483,6 +488,7 @@
 <div class="viewcode-block" id="SetupUtility"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">[docs]</a><span class="k">class</span> <span class="nc">SetupUtility</span><span class="p">:</span>
     <span class="c1"># Remember already installed packages, so we do not have to call pip freeze multiple times</span>
     <span class="n">installed_packages</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">package_list_is_from_cache</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">main_setup_called</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="SetupUtility.setup"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility.setup">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -593,6 +599,38 @@
         <span class="c1"># Init pip</span>
         <span class="n">SetupUtility</span><span class="o">.</span><span class="n">_ensure_pip</span><span class="p">(</span><span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="n">pre_python_package_path</span><span class="p">)</span>
 
+        <span class="c1"># If the list of installed packages was read from cache</span>
+        <span class="k">if</span> <span class="n">SetupUtility</span><span class="o">.</span><span class="n">package_list_is_from_cache</span><span class="p">:</span>
+            <span class="c1"># Check if there would be any pip package updates based on the cache</span>
+            <span class="n">found_package_to_install</span> <span class="o">=</span> <span class="n">SetupUtility</span><span class="o">.</span><span class="n">_pip_install_packages</span><span class="p">(</span><span class="n">required_packages</span><span class="p">,</span> <span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># If yes, reload the list of installed packages</span>
+            <span class="k">if</span> <span class="n">found_package_to_install</span><span class="p">:</span>
+                <span class="n">SetupUtility</span><span class="o">.</span><span class="n">_ensure_pip</span><span class="p">(</span><span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="n">pre_python_package_path</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">packages_were_installed</span> <span class="o">=</span> <span class="n">SetupUtility</span><span class="o">.</span><span class="n">_pip_install_packages</span><span class="p">(</span><span class="n">required_packages</span><span class="p">,</span> <span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">)</span>
+
+        <span class="c1"># Make sure to update the pip package list cache, if it does not exist or changes have been made</span>
+        <span class="n">cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages_path</span><span class="p">,</span> <span class="s2">&quot;installed_packages_cache.json&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">packages_were_installed</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_path</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away</span>
+        <span class="k">if</span> <span class="n">packages_were_installed</span><span class="p">:</span>
+            <span class="n">importlib</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">packages_path</span></div>
+
+<div class="viewcode-block" id="SetupUtility._pip_install_packages"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility._pip_install_packages">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_pip_install_packages</span><span class="p">(</span><span class="n">required_packages</span><span class="p">,</span> <span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="n">reinstall_packages</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Installs the list of given pip packages in the given python environment.</span>
+
+<span class="sd">        :param required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.</span>
+<span class="sd">        :param python_bin: Path to python binary.</span>
+<span class="sd">        :param packages_path: Path where our pip packages should be installed</span>
+<span class="sd">        :param reinstall_packages: Set to true, if all python packages should be reinstalled.</span>
+<span class="sd">        :param dry_run: If true, nothing will be installed and it will only be checked whether there are any potential packages to update/install.</span>
+<span class="sd">        :return: Returns True, if any packages were update/installed or - if dry_run=True - if there are any potential packages to update/install.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Install all packages</span>
         <span class="n">packages_were_installed</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">required_packages</span><span class="p">:</span>
@@ -643,15 +681,15 @@
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BLENDER_PROC_NO_PIP_CACHE&quot;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;t&#39;</span><span class="p">):</span>
                     <span class="n">extra_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--no-cache-dir&quot;</span><span class="p">)</span>
 
-                <span class="c1"># Run pip install</span>
-                <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">python_bin</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="s2">&quot;--target&quot;</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="s2">&quot;--upgrade&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_args</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="n">packages_path</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-                <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span><span class="p">[</span><span class="n">package_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">package_version</span>
-                <span class="n">packages_were_installed</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">dry_run</span><span class="p">:</span>
+                    <span class="c1"># Run pip install</span>
+                    <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">python_bin</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;install&quot;</span><span class="p">,</span> <span class="n">package</span><span class="p">,</span> <span class="s2">&quot;--target&quot;</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="s2">&quot;--upgrade&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_args</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="n">packages_path</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                    <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span><span class="p">[</span><span class="n">package_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">package_version</span>
+                    <span class="n">packages_were_installed</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
 
-        <span class="c1"># If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away</span>
-        <span class="k">if</span> <span class="n">packages_were_installed</span><span class="p">:</span>
-            <span class="n">importlib</span><span class="o">.</span><span class="n">invalidate_caches</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">packages_path</span></div>
+        <span class="k">return</span> <span class="n">packages_were_installed</span></div>
 
 <div class="viewcode-block" id="SetupUtility.uninstall_pip_packages"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility.uninstall_pip_packages">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">uninstall_pip_packages</span><span class="p">(</span><span class="n">package_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">blender_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">major_version</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -668,14 +706,23 @@
         <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">python_bin</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;pip&quot;</span><span class="p">,</span> <span class="s2">&quot;uninstall&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">package_names</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="n">packages_path</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SetupUtility._ensure_pip"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility._ensure_pip">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_ensure_pip</span><span class="p">(</span><span class="n">python_bin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pre_python_package_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_ensure_pip</span><span class="p">(</span><span class="n">python_bin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pre_python_package_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Make sure pip is installed and read in the already installed packages</span>
 
 <span class="sd">        :param python_bin: Path to python binary.</span>
 <span class="sd">        :param packages_path: Path where our pip packages should be installed</span>
 <span class="sd">        :param pre_python_package_path: Path that contains blender&#39;s default pip packages</span>
+<span class="sd">        :param force_update: If True, the installed-packages-cache will be ignored and will be recollected based on the actually installed packages.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">force_update</span><span class="p">:</span>
+                <span class="n">cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages_path</span><span class="p">,</span> <span class="s2">&quot;installed_packages_cache.json&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_path</span><span class="p">):</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cache_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                        <span class="n">SetupUtility</span><span class="o">.</span><span class="n">package_list_is_from_cache</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">return</span>
+
             <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">python_bin</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="s2">&quot;ensurepip&quot;</span><span class="p">],</span> <span class="n">env</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">,</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
             <span class="c1"># Make sure pip is up-to-date</span>
@@ -693,7 +740,20 @@
             <span class="n">installed_packages_name</span><span class="p">,</span> <span class="n">installed_packages_versions</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">installed_packages</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()])</span>
             <span class="n">installed_packages_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">ele</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="k">if</span> <span class="n">ele</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;b&#39;&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ele</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">installed_packages_name</span><span class="p">]</span>
             <span class="n">installed_packages_versions</span> <span class="o">=</span> <span class="p">[</span><span class="n">ele</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">ele</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">ele</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">installed_packages_versions</span><span class="p">]</span>
-            <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">installed_packages_name</span><span class="p">,</span> <span class="n">installed_packages_versions</span><span class="p">))</span></div>
+            <span class="n">SetupUtility</span><span class="o">.</span><span class="n">installed_packages</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">installed_packages_name</span><span class="p">,</span> <span class="n">installed_packages_versions</span><span class="p">))</span>
+            <span class="n">SetupUtility</span><span class="o">.</span><span class="n">package_list_is_from_cache</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SetupUtility.clean_installed_packages_cache"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility.clean_installed_packages_cache">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">clean_installed_packages_cache</span><span class="p">(</span><span class="n">blender_path</span><span class="p">,</span> <span class="n">major_version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Removes the json file containing a list of all installed pip packages (if it exists).</span>
+
+<span class="sd">        :param blender_path: The path to the blender main folder.</span>
+<span class="sd">        :param major_version: The major version string of the blender installation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">python_bin</span><span class="p">,</span> <span class="n">packages_path</span><span class="p">,</span> <span class="n">pre_python_package_path</span> <span class="o">=</span> <span class="n">SetupUtility</span><span class="o">.</span><span class="n">determine_python_paths</span><span class="p">(</span><span class="n">blender_path</span><span class="p">,</span> <span class="n">major_version</span><span class="p">)</span>
+        <span class="n">cache_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages_path</span><span class="p">,</span> <span class="s2">&quot;installed_packages_cache.json&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">cache_path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SetupUtility.extract_file"><a class="viewcode-back" href="../../../../blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility.extract_file">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">extract_file</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ZIP&quot;</span><span class="p">):</span>

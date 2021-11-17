@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.sampler.Shell module &mdash; BlenderProc 2.0.0 documentation</title>
+  <title>blenderproc.python.sampler.Shell module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -122,9 +122,11 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/multi_render/README.html">multi_render</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/nocs/README.html">nocs</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
@@ -221,6 +223,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
@@ -349,6 +352,7 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
@@ -470,33 +474,25 @@
 <span id="blenderproc-python-sampler-shell-module"></span><h1>blenderproc.python.sampler.Shell module<a class="headerlink" href="#module-blenderproc.python.sampler.Shell" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="blenderproc.python.sampler.Shell.shell">
-<code class="descclassname">blenderproc.python.sampler.Shell.</code><code class="descname">shell</code><span class="sig-paren">(</span><em>center</em>, <em>radius_min</em>, <em>radius_max</em>, <em>elevation_min</em>, <em>elevation_max</em>, <em>uniform_elevation=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/sampler/Shell.html#shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.sampler.Shell.shell" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.python.sampler.Shell.</code><code class="descname">shell</code><span class="sig-paren">(</span><em>center</em>, <em>radius_min</em>, <em>radius_max</em>, <em>elevation_min=-90</em>, <em>elevation_max=90</em>, <em>azimuth_min=-180</em>, <em>azimuth_max=180</em>, <em>uniform_volume=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/sampler/Shell.html#shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.sampler.Shell.shell" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>Samples a point from the space in between two spheres with a double spherical angle with apex in the center</dt>
-<dd>of those two spheres. Has option for uniform elevation sampling.</dd>
+<dt>Samples a point from the volume between two spheres (radius_min, radius_max). Optionally the spheres can be constraint by setting </dt>
+<dd>elevation and azimuth angles. E.g. if you only want to sample in the upper hemisphere set elevation_min = 0.</dd>
 </dl>
-<p>Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
-that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sampler</span><span class="o">.</span><span class="n">Shell</span><span class="p">(</span>
-    <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">],</span>
-    <span class="n">radius_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">radius_max</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-    <span class="n">elevation_min</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-    <span class="n">elevation_max</span><span class="o">=</span><span class="mi">89</span>
-<span class="p">)</span>
-</pre></div>
-</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – Center which is shared by both structure-defining spheres.</li>
-<li><strong>radius_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of a smaller sphere.</li>
-<li><strong>radius_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of a bigger sphere.</li>
-<li><strong>elevation_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].</li>
-<li><strong>elevation_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].</li>
-<li><strong>uniform_elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Uniformly sample elevation angles.</li>
+<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – Center shared by both spheres.</li>
+<li><strong>radius_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of the smaller sphere.</li>
+<li><strong>radius_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of the bigger sphere.</li>
+<li><strong>elevation_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum angle of elevation in degrees. Range: [-90, 90].</li>
+<li><strong>elevation_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum angle of elevation in degrees. Range: [-90, 90].</li>
+<li><strong>azimuth_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum angle of azimuth in degrees. Range: [-180, 180].</li>
+<li><strong>azimuth_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum angle of azimuth in degrees. Range: [-180, 180].</li>
+<li><strong>uniform_volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Instead of sampling the angles and radius uniformly, sample the shell volume uniformly.
+As a result, there will be more samples at larger radii.</li>
 </ul>
 </td>
 </tr>

@@ -8,6 +8,7 @@ Submodules
 
    blenderproc.python.camera.CameraUtility
    blenderproc.python.camera.CameraValidation
+   blenderproc.python.camera.LensDistortionUtility
 
 Module contents
 ---------------
