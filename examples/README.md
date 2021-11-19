@@ -33,7 +33,7 @@ These examples introduce usage of advanced BlenderProc modules and/or of their c
 * [diffuse_color_image](advanced/diffuse_color_image/README.md): How to render a scene without any lighting or shading.
 * [dust](advanced/dust/README.md): How to add dust on top objects, to make them look more real.
 * [entity_displacement_modifier](advanced/entity_displacement_modifier/README.md): Using displacement modifiers with different textures.
-* [camera lens distortion generation and validation](advanced/lens_distortion/README.md): Add lens distortion from camera calibration to all output images.
+* [lens_distortion](advanced/lens_distortion/README.md): Add lens distortion from camera calibration to all output images.
 * [material_randomizer](advanced/material_randomizer/README.md): Randomization of materials of selected objects.
 * [motion_blur_rolling_shutter](advanced/motion_blur_rolling_shutter/README.md): Generating motion blur and a rolling shutter effects.
 * [object_pose_sampling](advanced/object_pose_sampling/README.md): Complex use of a 6D pose sampler.
