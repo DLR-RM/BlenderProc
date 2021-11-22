@@ -6,6 +6,3 @@ from blenderproc.command_line import cli
 
 # Run the actual CLI, this is just a fallback script
 cli()
-
-
-
