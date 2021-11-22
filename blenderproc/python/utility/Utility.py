@@ -265,7 +265,7 @@ class Utility:
 
         :param nodes: list of nodes of the current material
         :param node_type: node types
-        :param created_in_func: only return nodes belonging to function defined by custom property 'created_in_func'
+        :param created_in_func: only return nodes created by the specified function
         :return: list of nodes, which belong to the type
         """
         nodes_with_type = [node for node in nodes if node_type in node.bl_idname]
@@ -282,7 +282,7 @@ class Utility:
 
         :param nodes: list of nodes of the current material
         :param node_type: node types
-        :param created_in_func: only return node belonging to function defined by custom property 'created_in_func'
+        :param created_in_func: only return node created by the specified function
         :return: node of the node type
         """
         node = Utility.get_nodes_with_type(nodes, node_type, created_in_func)

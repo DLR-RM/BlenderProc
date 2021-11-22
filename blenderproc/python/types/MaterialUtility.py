@@ -45,7 +45,7 @@ class Material(Struct):
         This function will only work if there is only one of the nodes of this type.
 
         :param node_type: The node type to look for.
-        :param created_in_func: only return node belonging to function defined by custom property 'created_in_func'
+        :param created_in_func: only return node created by the specified function
         :return: The node.
         """
         return Utility.get_the_one_node_with_type(self.nodes, node_type, created_in_func)
@@ -54,7 +54,7 @@ class Material(Struct):
         """ Returns all nodes which are of the given node_type
 
         :param node_type: The note type to look for.
-        :param created_in_func: only return nodes belonging to function defined by custom property 'created_in_func'
+        :param created_in_func: only return nodes created by the specified function
         :return: The list of nodes with the given type.
         """
         return Utility.get_nodes_with_type(self.nodes, node_type, created_in_func)
@@ -62,7 +62,7 @@ class Material(Struct):
     def get_nodes_created_in_func(self, created_in_func: str) -> List[bpy.types.Node]:
         """ Returns all nodes which are of the given node_type
 
-        :param created_in_func: return nodes created in that function
+        :param created_in_func: return all nodes created in the given function
         :return: The list of nodes with the given type.
         """
         return Utility.get_nodes_created_in_func(self.nodes, created_in_func)
@@ -71,7 +71,8 @@ class Material(Struct):
         """ Creates a new node in the material's node tree.
 
         :param node_type: The desired type of the new node.
-        :param created_in_func: Set custom property
+        :param created_in_func: Save the function name in which this node was created as a custom property. 
+                                Allows to later retrieve and delete specific nodes again.
         :return: The new node.
         """
         new_node = self.nodes.new(node_type)
