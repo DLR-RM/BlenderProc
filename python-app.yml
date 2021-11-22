@@ -15,5 +15,5 @@ jobs:
         python-version: "3.10"
     - name: Pip install
       run: pip install pyyaml matplotlib numpy 
-    - name: Test
+    - name: Run BlenderProcHelper
       run: python /home/$USER/workspace/BlenderProcHelper/github_action.py
