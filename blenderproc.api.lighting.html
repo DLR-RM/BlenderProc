@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -474,6 +473,45 @@
 <h1>blenderproc.lighting package<a class="headerlink" href="#blenderproc-lighting-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.lighting">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.lighting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="blenderproc.lighting.light_suncg_scene">
+<code class="descclassname">blenderproc.lighting.</code><code class="descname">light_suncg_scene</code><span class="sig-paren">(</span><em>lightbulb_emission_strength=15</em>, <em>lampshade_emission_strength=7</em>, <em>ceiling_emission_strength=1.5</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.lighting.light_suncg_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes the lamps, windows and ceilings object emit light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>lightbulb_emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The emission strength that should be used for light bulbs. Default: 15</li>
+<li><strong>lampshade_emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The emission strength that should be used for lamp shades. Default: 7</li>
+<li><strong>ceiling_emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The emission strength that should be used for the ceiling. Default: 1.5</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.lighting.light_surface">
+<code class="descclassname">blenderproc.lighting.</code><code class="descname">light_surface</code><span class="sig-paren">(</span><em>objects</em>, <em>emission_strength=10.0</em>, <em>keep_using_base_color=False</em>, <em>emission_color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.lighting.light_surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add emission shader to the materials of the given objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – A list of mesh objects whose materials should emit light.</li>
+<li><strong>emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted light.</li>
+<li><strong>keep_using_base_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the base color of the material will be used as emission color.</li>
+<li><strong>emission_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – The color of the light to emit. Is ignored if keep_using_base_color is set to True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

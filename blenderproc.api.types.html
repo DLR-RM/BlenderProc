@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -474,6 +473,1457 @@
 <h1>blenderproc.types package<a class="headerlink" href="#blenderproc-types-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.types">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.types" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="blenderproc.types.Entity">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Entity</code><span class="sig-paren">(</span><em>bpy_object</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.StructUtility.Struct</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.Entity.apply_T">
+<code class="descname">apply_T</code><span class="sig-paren">(</span><em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.apply_T" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the given transformation to the pose of the entity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – A 4x4 matrix representing the transformation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the entity</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.deselect">
+<code class="descname">deselect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.deselect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deselects the entity.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.get_local2world_mat">
+<code class="descname">get_local2world_mat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.get_local2world_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the pose of the object in the form of a local2world matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The 4x4 local2world matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.get_location">
+<code class="descname">get_location</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.get_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the location of the entity in 3D world coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The location at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.get_parent">
+<code class="descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent of the entity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The parent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.get_rotation">
+<code class="descname">get_rotation</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.get_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rotation of the entity in euler angles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The rotation at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.get_scale">
+<code class="descname">get_scale</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.get_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the scale of the entity along all three axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The scale at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.is_empty">
+<code class="descname">is_empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the entity is from type “EMPTY”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True, if its an empty.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.select">
+<code class="descname">select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects the entity.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.set_local2world_mat">
+<code class="descname">set_local2world_mat</code><span class="sig-paren">(</span><em>matrix_world</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.set_local2world_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the pose of the object in the form of a local2world matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix_world</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – A 4x4 matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.set_location">
+<code class="descname">set_location</code><span class="sig-paren">(</span><em>location</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.set_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the location of the entity in 3D world coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The location to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.set_parent">
+<code class="descname">set_parent</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the parent of entity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parent</strong> (<a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>) – The parent entity to set.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.set_rotation_euler">
+<code class="descname">set_rotation_euler</code><span class="sig-paren">(</span><em>rotation_euler</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.set_rotation_euler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the rotation of the entity in euler angles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rotation_euler</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Euler</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The euler angles to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.set_scale">
+<code class="descname">set_scale</code><span class="sig-paren">(</span><em>scale</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.set_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the scale of the entity along all three axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]) – The scale to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Entity.update_blender_ref">
+<code class="descname">update_blender_ref</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity.update_blender_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the contained blender reference using the given name of the instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the instance which will be used to update its blender reference.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.types.Light">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Light</code><span class="sig-paren">(</span><em>type='POINT'</em>, <em>name='light'</em>, <em>blender_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.EntityUtility.Entity</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.Light.get_color">
+<code class="descname">get_color</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.get_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the RGB color of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The color at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.get_distance">
+<code class="descname">get_distance</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.get_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the falloff distance of the light (point where light is half the original intensity).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The falloff distance at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.get_energy">
+<code class="descname">get_energy</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.get_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the energy of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The energy at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.get_type">
+<code class="descname">get_type</code><span class="sig-paren">(</span><em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the type of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The type at the specified frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.set_color">
+<code class="descname">set_color</code><span class="sig-paren">(</span><em>color</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.set_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the color of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code>]) – The rgb color to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.set_distance">
+<code class="descname">set_distance</code><span class="sig-paren">(</span><em>distance</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.set_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the falloff distance of the light = point where light is half the original intensity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The falloff distance to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.set_energy">
+<code class="descname">set_energy</code><span class="sig-paren">(</span><em>energy</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.set_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the energy of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The energy to set. If the type is SUN this value is interpreted as Watt per square meter, otherwise it is interpreted as Watt.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.set_type">
+<code class="descname">set_type</code><span class="sig-paren">(</span><em>type</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.set_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the type of the light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The type to set, can be one of [POINT, SUN, SPOT, AREA].</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.types.Material">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Material</code><span class="sig-paren">(</span><em>material</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct" title="blenderproc.python.types.StructUtility.Struct"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.StructUtility.Struct</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.Material.duplicate">
+<code class="descname">duplicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicates the material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new material which is a copy of this one.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.get_node_connected_to_the_output_and_unlink_it">
+<code class="descname">get_node_connected_to_the_output_and_unlink_it</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.get_node_connected_to_the_output_and_unlink_it" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches for the OutputMaterial in the material and finds the connected node to it,
+removes the connection between this node and the output and returns this node and the material_output</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.get_nodes_with_type">
+<code class="descname">get_nodes_with_type</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.get_nodes_with_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all nodes which are of the given node_type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The note type to look for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of nodes with the given type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.get_principled_shader_value">
+<code class="descname">get_principled_shader_value</code><span class="sig-paren">(</span><em>input_name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.get_principled_shader_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the default value or the connected node socket to an input socket of the principled shader node of the material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the input socket of the principled shader node.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the connected socket to the input socket or the default_value of the given input_name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.get_the_one_node_with_type">
+<code class="descname">get_the_one_node_with_type</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.get_the_one_node_with_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the one node which is of the given node_type</p>
+<p>This function will only work if there is only one of the nodes of this type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The node type to look for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The node.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.get_users">
+<code class="descname">get_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.get_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of users of the material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The number of users.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.infuse_material">
+<code class="descname">infuse_material</code><span class="sig-paren">(</span><em>material</em>, <em>mode='mix'</em>, <em>mix_strength=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.infuse_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Infuse a material inside of another material. The given material, will be adapted and the used material, will
+be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
+this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>material</strong> (<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – Material to infuse.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – <dl class="docutils">
+<dt>The mode determines how the two materials are mixed. There are two options “mix” in which the</dt>
+<dd>preexisting material is mixed with the selected one in “used_material” or “add” in which they are just</dd>
+</dl>
+<p>added on top of each other. Available: [“mix”, “add”]</p>
+</li>
+<li><strong>mix_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – In the “mix” mode a strength can be set to determine how much of each material is going to be used.
+A strength of 1.0 means that the new material is going to be used completely.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.infuse_texture">
+<code class="descname">infuse_texture</code><span class="sig-paren">(</span><em>texture</em>, <em>mode='overlay'</em>, <em>connection='Base Color'</em>, <em>texture_scale=0.05</em>, <em>strength=0.5</em>, <em>invert_texture=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.infuse_texture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overlays the selected material with a texture, this can be either a color texture like for example dirt or
+it can be a texture, which is used as an input to the Principled BSDF of the given material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>texture</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Texture</span></code>) – A texture which should be infused in the material.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The mode determines how the texture is used. There are three options: “overlay” in which the selected
+texture is overlayed over a preexisting one. If there is none, nothing happens. The second option: “mix”
+is similar to overlay, just that the textures are mixed there. The last option: “set” replaces any existing
+texture and is even added if there was none before.</li>
+<li><strong>connection</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – By default the “Base Color” input of the principled shader will be used. This can be changed to any valid
+input of a principled shader. Default: “Base Color”. For available check the blender documentation.</li>
+<li><strong>texture_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The used texture can be scaled down or up by a factor, to make it match the preexisting UV mapping. Make
+sure that the object has a UV mapping beforehand.</li>
+<li><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength determines how much the newly generated texture is going to be used.</li>
+<li><strong>invert_texture</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – It might be sometimes useful to invert the input texture, this can be done by setting this to True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.insert_node_instead_existing_link">
+<code class="descname">insert_node_instead_existing_link</code><span class="sig-paren">(</span><em>source_socket</em>, <em>new_node_dest_socket</em>, <em>new_node_src_socket</em>, <em>dest_socket</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.insert_node_instead_existing_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the node between source_socket and dest_socket with a new node.</p>
+<p>Before: source_socket -&gt; dest_socket
+After: source_socket -&gt; new_node_dest_socket and new_node_src_socket -&gt; dest_socket</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The source socket.</li>
+<li><strong>new_node_dest_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The new destination for the link starting from source_socket.</li>
+<li><strong>new_node_src_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The new source for the link towards dest_socket.</li>
+<li><strong>dest_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The destination socket</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.link">
+<code class="descname">link</code><span class="sig-paren">(</span><em>source_socket</em>, <em>dest_socket</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new link between the two given sockets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The source socket.</li>
+<li><strong>dest_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The destination socket</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.make_emissive">
+<code class="descname">make_emissive</code><span class="sig-paren">(</span><em>emission_strength</em>, <em>replace=False</em>, <em>keep_using_base_color=True</em>, <em>emission_color=None</em>, <em>non_emissive_color_socket=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.make_emissive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes the material emit light.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted light.</li>
+<li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – When replace is set to True, the existing material will be completely replaced by the emission shader, otherwise it still looks the same, while emitting light.</li>
+<li><strong>keep_using_base_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the base color of the material will be used as emission color.</li>
+<li><strong>emission_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – The color of the light to emit. Is ignored if keep_using_base_color is set to True.</li>
+<li><strong>non_emissive_color_socket</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>]) – An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.map_vertex_color">
+<code class="descname">map_vertex_color</code><span class="sig-paren">(</span><em>layer_name='Col'</em>, <em>active_shading=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.map_vertex_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps existing vertex color to the base color of the principled bsdf node or a new background color node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>layer_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the vertex color layer. Type: string.</li>
+<li><strong>active_shading</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to keep the principled bsdf shader. If True, the material properties influence light
+reflections such as specularity, roughness, etc. alter the object’s appearance. Type: bool.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.new_node">
+<code class="descname">new_node</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.new_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new node in the material’s node tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The desired type of the new node.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The new node.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.remove_node">
+<code class="descname">remove_node</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.remove_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the node from the material’s node tree.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>) – The node to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.set_displacement_from_principled_shader_value">
+<code class="descname">set_displacement_from_principled_shader_value</code><span class="sig-paren">(</span><em>input_name</em>, <em>multiply_factor</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.set_displacement_from_principled_shader_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects the node that is connected to the specified input of the principled shader node
+with the displacement output of the material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the input socket of the principled shader node.</li>
+<li><strong>multiply_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – A factor by which the displacement should be multiplied.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.set_principled_shader_value">
+<code class="descname">set_principled_shader_value</code><span class="sig-paren">(</span><em>input_name</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.set_principled_shader_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets value of an input to the principled shader node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>input_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the input socket of the principled shader node.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>]) – The value to set. Can be a simple value to use as default_value, a socket which will be connected to the input or an image which will be used for a new TextureNode connected to the input.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.unlink">
+<code class="descname">unlink</code><span class="sig-paren">(</span><em>source_socket</em>, <em>dest_socket</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.unlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the link between the two given sockets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The source socket.</li>
+<li><strong>dest_socket</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>) – The destination socket</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Material.update_blender_ref">
+<code class="descname">update_blender_ref</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Material.update_blender_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the contained blender reference using the given name of the instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – The name of the instance which will be used to update its blender reference.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.types.MeshObject">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">MeshObject</code><span class="sig-paren">(</span><em>bpy_object</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.EntityUtility.Entity</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.add_displace_modifier">
+<code class="descname">add_displace_modifier</code><span class="sig-paren">(</span><em>texture</em>, <em>mid_level=0.5</em>, <em>strength=0.1</em>, <em>min_vertices_for_subdiv=10000</em>, <em>subdiv_level=2</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.add_displace_modifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a displace modifier with a texture to an object.</p>
+<p>If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>texture</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Texture</span></code>) – The texture that will be used to displace the vertices.</li>
+<li><strong>mid_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Texture value that gives no displacement. Parameter of displace modifier.</li>
+<li><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amount to displace geometry. Parameter of displace modifier.</li>
+<li><strong>min_vertices_for_subdiv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Checks if a subdivision is necessary. If the vertices of a object are less than
+‘min_vertices_for_subdiv’ a Subdivision modifier will be add to the object.</li>
+<li><strong>subdiv_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.add_material">
+<code class="descname">add_material</code><span class="sig-paren">(</span><em>material</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.add_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new material to the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>material</strong> (<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to add.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.add_modifier">
+<code class="descname">add_modifier</code><span class="sig-paren">(</span><em>name</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.add_modifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new modifier to the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name/type of the modifier to add.</li>
+<li><strong>kwargs</strong> – Additional attributes that should be set to the modifier.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.add_uv_mapping">
+<code class="descname">add_uv_mapping</code><span class="sig-paren">(</span><em>projection</em>, <em>overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.add_uv_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a UV mapping to the object based on the given projection type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>projection</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The kind of projection to use. Available: [“cube, “cylinder”, “smart”, “sphere”].</li>
+<li><strong>overwrite</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the uv mapping will be changed, even if the object already has an uv mapping.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.build_convex_decomposition_collision_shape">
+<code class="descname">build_convex_decomposition_collision_shape</code><span class="sig-paren">(</span><em>vhacd_path</em>, <em>temp_dir=None</em>, <em>cache_dir='blenderproc_resources/decomposition_cache'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.build_convex_decomposition_collision_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a collision shape of the object by decomposing it into near convex parts using V-HACD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vhacd_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The directory in which vhacd should be installed or is already installed.</li>
+<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The temp dir to use for storing the object files created by v-hacd.</li>
+<li><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.clear_materials">
+<code class="descname">clear_materials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.clear_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all materials from the object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.create_bvh_tree">
+<code class="descname">create_bvh_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.create_bvh_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a bvh tree based on the object’s mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new bvh tree</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.disable_rigidbody">
+<code class="descname">disable_rigidbody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.disable_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables the rigidbody element of the object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.duplicate">
+<code class="descname">duplicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicates the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new mesh object, which is a duplicate of this object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.edit_mode">
+<code class="descname">edit_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.edit_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch into edit mode of this mesh object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.enable_rigidbody">
+<code class="descname">enable_rigidbody</code><span class="sig-paren">(</span><em>active</em>, <em>collision_shape='CONVEX_HULL'</em>, <em>collision_margin=0.001</em>, <em>collision_mesh_source='FINAL'</em>, <em>mass=None</em>, <em>mass_factor=1</em>, <em>friction=0.5</em>, <em>angular_damping=0.1</em>, <em>linear_damping=0.04</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.enable_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the rigidbody component of the object which makes it participate in physics simulations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>active</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.</li>
+<li><strong>collision_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Collision shape of object in simulation. Default: ‘CONVEX_HULL’. Available: ‘BOX’, ‘SPHERE’, ‘CAPSULE’, ‘CYLINDER’, ‘CONE’, ‘CONVEX_HULL’, ‘MESH’, ‘COMPOUND’.</li>
+<li><strong>collision_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit.</li>
+<li><strong>collision_mesh_source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Source of the mesh used to create collision shape. Default: ‘FINAL’. Available: ‘BASE’, ‘DEFORM’, ‘FINAL’.</li>
+<li><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – The mass in kilogram the object should have. If None is given the mass is calculated based on its bounding box volume and the given <cite>mass_factor</cite>.</li>
+<li><strong>mass_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Scaling factor for mass. This is only considered if the given <cite>mass</cite> is None. Defines the linear function mass=bounding_box_volume*mass_factor (defines material density).</li>
+<li><strong>friction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Resistance of object to movement.</li>
+<li><strong>angular_damping</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amount of angular velocity that is lost over time.</li>
+<li><strong>linear_damping</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amount of linear velocity that is lost over time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_bound_box">
+<code class="descname">get_bound_box</code><span class="sig-paren">(</span><em>local_coords=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_bound_box" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">8x3 array describing the object aligned bounding box coordinates in world coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_bound_box_volume">
+<code class="descname">get_bound_box_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_bound_box_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the volume of the object aligned bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">volume of a bounding box.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_materials">
+<code class="descname">get_materials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the materials used by the mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>]]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of materials.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_mesh">
+<code class="descname">get_mesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the blender mesh of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The mesh.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_origin">
+<code class="descname">get_origin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_origin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the origin of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The origin in world coordinates.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_parent">
+<code class="descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The parent object, None if it has no parent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.get_rigidbody">
+<code class="descname">get_rigidbody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.get_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rigid body component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyObject</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The rigid body component of the object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.has_materials">
+<code class="descname">has_materials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.has_materials" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.has_rigidbody_enabled">
+<code class="descname">has_rigidbody_enabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.has_rigidbody_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether object has rigidbody element enabled</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if object has rigidbody element enabled</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.has_uv_mapping">
+<code class="descname">has_uv_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.has_uv_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns whether the mesh object has a valid uv mapping.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><em>hide_object=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the visibility of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hide_object</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object should be hidden in rendering.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.mesh_as_bmesh">
+<code class="descname">mesh_as_bmesh</code><span class="sig-paren">(</span><em>return_copy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.mesh_as_bmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a bmesh based on the object’s mesh.</p>
+<p>Independent of return_copy, changes to the returned bmesh only take into affect after calling update_from_bmesh().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>return_copy</strong> – If True, a copy of the objects bmesh will be returned, otherwise the bmesh owned by blender is returned (the object has to be in edit mode for that).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The bmesh</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.move_origin_to_bottom_mean_point">
+<code class="descname">move_origin_to_bottom_mean_point</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.move_origin_to_bottom_mean_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
+plane, which then makes the placement easier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.new_material">
+<code class="descname">new_material</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.new_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new material and adds it to the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the new material.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.object_mode">
+<code class="descname">object_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.object_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch back into object mode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.persist_transformation_into_mesh">
+<code class="descname">persist_transformation_into_mesh</code><span class="sig-paren">(</span><em>location=True</em>, <em>rotation=True</em>, <em>scale=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.persist_transformation_into_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the current transformation of the object, which are saved in the location, scale or rotation attributes
+to the mesh and sets them to their init values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s location should be persisted.</li>
+<li><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s rotation should be persisted.</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s scale should be persisted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.position_is_above_object">
+<code class="descname">position_is_above_object</code><span class="sig-paren">(</span><em>position</em>, <em>down_direction=None</em>, <em>check_no_objects_in_between=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.position_is_above_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure the given position is straight above the given object.</p>
+<p>If check_no_objects_in_between is True, this also checks that there are no other objects in between.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>position</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The position to check.</li>
+<li><strong>down_direction</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – A vector specifying the direction straight down. If None is given, a vector into -Z direction is used.</li>
+<li><strong>check_no_objects_in_between</strong> – If True, it is also checked that no other objects are in between position and object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True, if a ray sent into negative z-direction starting from the position hits the object first.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.ray_cast">
+<code class="descname">ray_cast</code><span class="sig-paren">(</span><em>origin</em>, <em>direction</em>, <em>max_distance=1.70141e+38</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.ray_cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cast a ray onto evaluated geometry, in object space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>origin</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Origin of the ray, in object space.</li>
+<li><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Direction of the ray, in object space.</li>
+<li><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum distance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Whether the ray successfully hit the geometry
+The hit location of this ray cast, float array of 3 items in [-inf, inf]
+The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
+The face index, -1 when original data isn’t available, int in [-inf, inf]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.replace_materials">
+<code class="descname">replace_materials</code><span class="sig-paren">(</span><em>material</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.replace_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces all materials of the object with the given new material.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>material</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code>) – A material that should exclusively be used as new material for the object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.set_material">
+<code class="descname">set_material</code><span class="sig-paren">(</span><em>index</em>, <em>material</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.set_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the given material at the given index of the objects material list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The index to set the material to.</li>
+<li><strong>material</strong> (<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to set.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.set_origin">
+<code class="descname">set_origin</code><span class="sig-paren">(</span><em>point=None</em>, <em>mode='POINT'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.set_origin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the origin of the object.</p>
+<p>This will not change the appearing pose of the object, as the vertex locations experience the inverse transformation applied to the origin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The point in world coordinates to which the origin should be set. This parameter is only relevent if mode is set to “POINT”.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The mode specifying how the origin should be set. Available options are: [“POINT”, “CENTER_OF_MASS”, “CENTER_OF_VOLUME”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new origin in world coordinates.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.set_parent">
+<code class="descname">set_parent</code><span class="sig-paren">(</span><em>new_parent</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the parent of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_parent</strong> (<a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>) – The new parent object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.set_shading_mode">
+<code class="descname">set_shading_mode</code><span class="sig-paren">(</span><em>mode</em>, <em>angle_value=30</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.set_shading_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the shading mode of all faces of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Desired mode of the shading. Available: [“FLAT”, “SMOOTH”, “AUTO”]. Type: str</li>
+<li><strong>angle_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Angle in degrees at which flat shading is activated in <cite>AUTO</cite> mode. Type: float</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.update_from_bmesh">
+<code class="descname">update_from_bmesh</code><span class="sig-paren">(</span><em>bm</em>, <em>free_bm_mesh=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.update_from_bmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the object’s mesh based on the given bmesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code>) – The bmesh to set.</li>
+<li><strong>free_bm_mesh</strong> – If True and the given bmesh is not owned by blender, it will be deleted in the end.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.types.Struct">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Struct</code><span class="sig-paren">(</span><em>bpy_object</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.Struct.clear_all_cps">
+<code class="descname">clear_all_cps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.clear_all_cps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all existing custom properties the struct has.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.del_cp">
+<code class="descname">del_cp</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.del_cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the custom property with the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key of the custom property to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.get_all_cps">
+<code class="descname">get_all_cps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.get_all_cps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all custom properties as key, value pairs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of key value pairs</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.get_attr">
+<code class="descname">get_attr</code><span class="sig-paren">(</span><em>attr_name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.get_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the attribute with the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the attribute.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of the attribute</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.get_cp">
+<code class="descname">get_cp</code><span class="sig-paren">(</span><em>key</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.get_cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the custom property with the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key of the custom property.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number at which the value should be returned. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the custom property.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.get_name">
+<code class="descname">get_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.get_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the struct.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.has_cp">
+<code class="descname">has_cp</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.has_cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether a custom property with the given key exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key of the custom property to check.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True, if the custom property exists.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.is_valid">
+<code class="descname">is_valid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the contained blender reference is valid.</p>
+<p>The reference might become invalid after an undo operation or when the referenced struct is deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True, if it is valid.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.set_cp">
+<code class="descname">set_cp</code><span class="sig-paren">(</span><em>key</em>, <em>value</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.set_cp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the custom property with the given key.</p>
+<p>Keyframes can be only set for custom properties for the types int, float or bool.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key of the custom property.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>) – The value to set.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The frame number which the value should be set to. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Struct.set_name">
+<code class="descname">set_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Struct.set_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the name of the struct.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The new name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 

@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -474,6 +473,107 @@
 <h1>blenderproc.math package<a class="headerlink" href="#blenderproc-math-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.math">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.math" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="blenderproc.math.build_transformation_mat">
+<code class="descclassname">blenderproc.math.</code><code class="descname">build_transformation_mat</code><span class="sig-paren">(</span><em>translation</em>, <em>rotation</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.math.build_transformation_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a transformation matrix from translation and rotation parts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>translation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]) – A (3,) vector representing the translation part.</li>
+<li><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – A 3x3 rotation matrix or Euler angles of shape (3,).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The 4x4 transformation matrix.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.math.change_coordinate_frame_of_point">
+<code class="descclassname">blenderproc.math.</code><code class="descname">change_coordinate_frame_of_point</code><span class="sig-paren">(</span><em>point</em>, <em>new_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.math.change_coordinate_frame_of_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the given point into another coordinate frame.</p>
+<p>Example: [1, 2, 3] and [“X”, “-Z”, “Y”] =&gt; [1, -3, 2]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]) – The point to convert in form of a np.ndarray, list or mathutils.Vector.</li>
+<li><strong>new_frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: “X”, “Y”, “Z”, “-X”, “-Y”, “-Z”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The converted point also in form of a np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.math.change_source_coordinate_frame_of_transformation_matrix">
+<code class="descclassname">blenderproc.math.</code><code class="descname">change_source_coordinate_frame_of_transformation_matrix</code><span class="sig-paren">(</span><em>matrix</em>, <em>new_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.math.change_source_coordinate_frame_of_transformation_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the coordinate frame the given transformation matrix is mapping from.</p>
+<p>Given a matrix $T_A^B$ that maps from A to B, this function can be used
+to change the axes of A into A’ and therefore end up with $T_A’^B$.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – The matrix to convert in form of a np.ndarray or mathutils.Matrix</li>
+<li><strong>new_frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: “X”, “Y”, “Z”, “-X”, “-Y”, “-Z”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The converted matrix is in form of a np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.math.change_target_coordinate_frame_of_transformation_matrix">
+<code class="descclassname">blenderproc.math.</code><code class="descname">change_target_coordinate_frame_of_transformation_matrix</code><span class="sig-paren">(</span><em>matrix</em>, <em>new_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.math.change_target_coordinate_frame_of_transformation_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the coordinate frame the given transformation matrix is mapping to.</p>
+<p>Given a matrix $T_A^B$ that maps from A to B, this function can be used
+to change the axes of B into B’ and therefore end up with $T_A^B’$.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>]) – The matrix to convert in form of a np.ndarray or mathutils.Matrix</li>
+<li><strong>new_frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: “X”, “Y”, “Z”, “-X”, “-Y”, “-Z”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The converted matrix is in form of a np.ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -474,6 +473,170 @@
 <h1>blenderproc.postprocessing package<a class="headerlink" href="#blenderproc-postprocessing-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.postprocessing">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.postprocessing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="blenderproc.postprocessing.apply_lens_distortion">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">apply_lens_distortion</code><span class="sig-paren">(</span><em>image</em>, <em>mapping_coords=None</em>, <em>orig_res_x=None</em>, <em>orig_res_y=None</em>, <em>use_interpolation=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.apply_lens_distortion" title="Permalink to this definition">¶</a></dt>
+<dd><p>This functions applies the lens distortion mapping that needs to be precalculated by <cite>bproc.camera.set_lens_distortion()</cite>.</p>
+<p>Without calling this function the <cite>set_lens_distortion</cite> fct. only increases the image resolution and
+changes the K matrix of the camera.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – a list of images or an image to be distorted</li>
+<li><strong>mapping_coords</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – an array of pixel mappings from undistorted to distorted image</li>
+<li><strong>orig_res_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – original and output width resolution of the image</li>
+<li><strong>orig_res_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – original and output height resolution of the image</li>
+<li><strong>use_interpolation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – if this is True, for each pixel an interpolation will be performed, if this is false the nearest pixel will be used</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of images or an image that have been distorted, now in the desired (original) resolution</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.depth2dist">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">depth2dist</code><span class="sig-paren">(</span><em>depth</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.depth2dist" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The depth data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The distance data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.dist2depth">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">dist2depth</code><span class="sig-paren">(</span><em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.dist2depth" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dist</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The distance data.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The depth data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.oil_paint_filter">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">oil_paint_filter</code><span class="sig-paren">(</span><em>image</em>, <em>filter_size=5</em>, <em>edges_only=True</em>, <em>rgb=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.oil_paint_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a replica
+of the other). This could be desired for corrupting rendered depth maps to appear more realistic. Also trims the
+redundant channels if they exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Input image or list of images</li>
+<li><strong>filter_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Filter size, should be an odd number.</li>
+<li><strong>edges_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, applies the filter on the edges only.</li>
+<li><strong>rgb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Apply the filter on an RGB image (if the image has 3 channels, they’re assumed to not be                     replicated).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">filtered image</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.remove_segmap_noise">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">remove_segmap_noise</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.remove_segmap_noise" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that takes an image and a few 2D indices, where these indices correspond to pixel values in
+segmentation maps, where these values are not real labels, but some deviations from the real labels, that were
+generated as a result of Blender doing some interpolation, smoothing, or other numerical operations.</p>
+<p>Assumes that noise pixel values won’t occur more than 100 times.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – ndarray of the .exr segmap</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The denoised segmap image</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.stereo_global_matching">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">stereo_global_matching</code><span class="sig-paren">(</span><em>color_images</em>, <em>depth_max=None</em>, <em>window_size=7</em>, <em>num_disparities=32</em>, <em>min_disparity=0</em>, <em>disparity_filter=True</em>, <em>depth_completion=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.stereo_global_matching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does the stereo global matching in the following steps:
+1. Collect camera object and its state,
+2. For each frame, load left and right images and call the <cite>sgm()</cite> methode.
+3. Write the results to a numpy file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>color_images</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – A list of stereo images, where each entry has the shape [2, height, width, 3].</li>
+<li><strong>depth_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – The maximum depth value for clipping the resulting depth values. If None, distance_start + distance_range that were configured for distance rendering are used.</li>
+<li><strong>window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Semi-global matching kernel size. Should be an odd number.</li>
+<li><strong>num_disparities</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Semi-global matching number of disparities. Should be &gt; 0 and divisible by 16.</li>
+<li><strong>min_disparity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Semi-global matching minimum disparity.</li>
+<li><strong>disparity_filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Applies post-processing of the generated disparity map using WLS filter.</li>
+<li><strong>depth_completion</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Applies basic depth completion using image processing techniques.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the computed depth and disparity images for all given frames.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.postprocessing.trim_redundant_channels">
+<code class="descclassname">blenderproc.postprocessing.</code><code class="descname">trim_redundant_channels</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.postprocessing.trim_redundant_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove redundant channels, this is useful to remove the two of the three channels created for a
+depth or distance image. This also works on a list of images. Be aware that there is no check performed,
+to ensure that all channels are really equal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>image</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Input image or list of images</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The trimmed image data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

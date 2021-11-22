@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.tests.TestsPathManager &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.run module &mdash; BlenderProc 2.1.0 documentation</title>
   
 
   
@@ -17,25 +17,25 @@
   
 
   
-  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
 
   
-  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
-    <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" /> 
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +49,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
+            <a href="index.html" class="icon icon-home"> BlenderProc
           
 
           
@@ -62,7 +62,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -235,9 +235,8 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2 current"><a class="reference external" href="#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -420,7 +419,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">BlenderProc</a>
+          <a href="index.html">BlenderProc</a>
         
       </nav>
 
@@ -449,14 +448,16 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../../../index.html">Module code</a> &raquo;</li>
-        
-      <li>blenderproc.python.tests.TestsPathManager</li>
+      <li>blenderproc.run module</li>
     
     
       <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/blenderproc.run.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -468,54 +469,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for blenderproc.python.tests.TestsPathManager</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">join</span><span class="p">,</span> <span class="n">exists</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span><span class="p">,</span> <span class="n">Utility</span>
+  <div class="section" id="blenderproc-run-module">
+<h1>blenderproc.run module<a class="headerlink" href="#blenderproc-run-module" title="Permalink to this headline">¶</a></h1>
+</div>
 
-
-<div class="viewcode-block" id="TestsPathManager"><a class="viewcode-back" href="../../../../blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">[docs]</a><span class="k">class</span> <span class="nc">TestsPathManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    The TestsPathManager keeps track of all used paths in the tests and allows setting them via environment variables.</span>
-<span class="sd">    To allow testing in environments, where the paths are not the default ones.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">blenderproc_root</span>
-
-        <span class="c1"># for the default resource folder, this one should always be available</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">example_resources</span> <span class="o">=</span> <span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span><span class="p">,</span> <span class="s2">&quot;examples/resources&quot;</span><span class="p">))</span>
-
-        <span class="c1"># for cc materials</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_parameter</span><span class="p">(</span><span class="s2">&quot;cc_materials&quot;</span><span class="p">,</span> <span class="s2">&quot;resources/cctextures&quot;</span><span class="p">,</span> <span class="s2">&quot;BP_CC_MATERIALS_PATH&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_parameter</span><span class="p">(</span><span class="s2">&quot;haven&quot;</span><span class="p">,</span> <span class="s2">&quot;resources/haven&quot;</span><span class="p">,</span> <span class="s2">&quot;BP_HAVEN_PATH&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="TestsPathManager._add_parameter"><a class="viewcode-back" href="../../../../blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager._add_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">_add_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">environment_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds an parameter to the object, the name of the parameter is defined by the param_name. The default_path is</span>
-<span class="sd">        only used if it exists, if it does not exists the environment_key is used. An error is thrown if both do</span>
-<span class="sd">        not exist.</span>
-
-<span class="sd">        :param param_name: Name of the new parameter</span>
-<span class="sd">        :param default_path: Default path used for this parameter</span>
-<span class="sd">        :param environment_key: Environment key which has to be set if the default path does not exist</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_main_folder</span><span class="p">,</span> <span class="n">default_path</span><span class="p">)))</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">environment_key</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">environment_key</span><span class="p">]))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)):</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The env variable: </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">environment_key</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> is empty or does not exist and the default &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;path does also not exist: </span><span class="si">{</span><span class="n">default_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
-
-
-<span class="n">test_path_manager</span> <span class="o">=</span> <span class="n">TestsPathManager</span><span class="p">()</span>
-
-
-</pre></div>
 
            </div>
            

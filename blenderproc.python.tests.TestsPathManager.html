@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2 current"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -470,37 +469,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-blenderproc.python.tests.TestsPathManager">
-<span id="blenderproc-python-tests-testspathmanager-module"></span><h1>blenderproc.python.tests.TestsPathManager module<a class="headerlink" href="#module-blenderproc.python.tests.TestsPathManager" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="blenderproc.python.tests.TestsPathManager.TestsPathManager">
-<em class="property">class </em><code class="descclassname">blenderproc.python.tests.TestsPathManager.</code><code class="descname">TestsPathManager</code><a class="reference internal" href="_modules/blenderproc/python/tests/TestsPathManager.html#TestsPathManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.tests.TestsPathManager.TestsPathManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>The TestsPathManager keeps track of all used paths in the tests and allows setting them via environment variables.
-To allow testing in environments, where the paths are not the default ones.</p>
-<dl class="method">
-<dt id="blenderproc.python.tests.TestsPathManager.TestsPathManager._add_parameter">
-<code class="descname">_add_parameter</code><span class="sig-paren">(</span><em>param_name</em>, <em>default_path</em>, <em>environment_key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/tests/TestsPathManager.html#TestsPathManager._add_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.tests.TestsPathManager.TestsPathManager._add_parameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds an parameter to the object, the name of the parameter is defined by the param_name. The default_path is
-only used if it exists, if it does not exists the environment_key is used. An error is thrown if both do
-not exist.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>param_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the new parameter</li>
-<li><strong>default_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Default path used for this parameter</li>
-<li><strong>environment_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Environment key which has to be set if the default path does not exist</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="blenderproc-python-tests-testspathmanager-module">
+<h1>blenderproc.python.tests.TestsPathManager module<a class="headerlink" href="#blenderproc-python-tests-testspathmanager-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

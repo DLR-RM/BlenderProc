@@ -237,7 +237,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
@@ -474,6 +473,359 @@
 <h1>blenderproc.sampler package<a class="headerlink" href="#blenderproc-sampler-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.sampler">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.sampler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="blenderproc.sampler.Front3DPointInRoomSampler">
+<em class="property">class </em><code class="descclassname">blenderproc.sampler.</code><code class="descname">Front3DPointInRoomSampler</code><span class="sig-paren">(</span><em>front3d_objects</em>, <em>amount_of_objects_needed_per_room=2</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.Front3DPointInRoomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.sampler.Front3DPointInRoomSampler.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><em>height</em>, <em>max_tries=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.Front3DPointInRoomSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a point inside one of the loaded Front3d rooms.</p>
+<p>The points are uniformly sampled along x/y over all rooms.
+The z-coordinate is set based on the given height value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The height above the floor to use for the z-component of the point.</li>
+<li><strong>max_tries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of times sampling above the floor should be tried.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The sampled point.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.sampler.ReplicaPointInRoomSampler">
+<em class="property">class </em><code class="descclassname">blenderproc.sampler.</code><code class="descname">ReplicaPointInRoomSampler</code><span class="sig-paren">(</span><em>replica_mesh</em>, <em>replica_floor</em>, <em>height_list_file_path</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.ReplicaPointInRoomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.sampler.ReplicaPointInRoomSampler.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><em>height</em>, <em>max_tries=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.ReplicaPointInRoomSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a point inside one of the loaded replica rooms.</p>
+<p>The points are uniformly sampled along x/y over all rooms.
+The z-coordinate is set based on the given height value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The height above the floor to use for the z-component of the point.</li>
+<li><strong>max_tries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of times sampling above the floor should be tried.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The sampled point.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.sampler.SuncgPointInRoomSampler">
+<em class="property">class </em><code class="descclassname">blenderproc.sampler.</code><code class="descname">SuncgPointInRoomSampler</code><span class="sig-paren">(</span><em>suncg_objects</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.SuncgPointInRoomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.sampler.SuncgPointInRoomSampler._find_floor">
+<code class="descname">_find_floor</code><span class="sig-paren">(</span><em>suncg_objects</em>, <em>room_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.SuncgPointInRoomSampler._find_floor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the floor object of the given room object.</p>
+<p>Goes through all children and returns the first one with type “Floor”.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>suncg_objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – </li>
+<li><strong>room_obj</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – The room object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The found floor object or None if none has been found.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.sampler.SuncgPointInRoomSampler.sample">
+<code class="descname">sample</code><span class="sig-paren">(</span><em>height</em>, <em>max_tries=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.SuncgPointInRoomSampler.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a point inside one of the loaded suncg rooms.</p>
+<p>The points are uniformly sampled along x/y over all rooms.
+The z-coordinate is set based on the given height value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The height above the floor to use for the z-component of the point.</li>
+<li><strong>max_tries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of times sampling above the floor should be tried.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The sampled point and the id of the room it was sampled in.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.disk">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">disk</code><span class="sig-paren">(</span><em>center</em>, <em>radius</em>, <em>rotation=None</em>, <em>sample_from='disk'</em>, <em>start_angle=0</em>, <em>end_angle=180</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.disk" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector</dt>
+<dd>with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.</dd>
+</dl>
+<p>Example 1: Sample a point from a 1-sphere.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Disk</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">sample_from</span><span class="o">=</span><span class="s2">&quot;circle&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Example 2: Sample a point from a sector.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Disk</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="n">radius</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">sample_from</span><span class="o">=</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span>
+    <span class="n">start_angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">end_angle</span><span class="o">=</span><span class="mi">90</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – Center (in 3d space) of a 2d geometrical shape to sample from.</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The radius of the disk.</li>
+<li><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used for
+sampling in 3d space.</li>
+<li><strong>sample_from</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample from.</li>
+<li><strong>start_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller than
+end_angle. Arc’s/sector’s inner angle (between start and end) must be less or equal than 180 degrees.
+Angle increases in the counterclockwise direction from the positive direction of X axis.</li>
+<li><strong>end_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than
+start_angle. Arc’s/sector’s inner angle (between start and end) must be less or equal than 180 degrees.
+Angle increases in the counterclockwise direction from the positive direction of X axis.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A random point sampled point on a circle/disk/arc/sector.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.part_sphere">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">part_sphere</code><span class="sig-paren">(</span><em>center</em>, <em>radius</em>, <em>mode</em>, <em>dist_above_center=0.0</em>, <em>part_sphere_dir_vector=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.part_sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a point from the surface or from the interior of solid sphere which is split in two parts.</p>
+<p><a class="reference external" href="https://math.stackexchange.com/a/87238">https://math.stackexchange.com/a/87238</a>
+<a class="reference external" href="https://math.stackexchange.com/a/1585996">https://math.stackexchange.com/a/1585996</a></p>
+<p>Example 1: Sample a point from the surface of the sphere that is split by a plane with displacement of 0.5
+above center and a normal of [1, 0, 0].</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PartSphere</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">part_sphere_vector</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;SURFACE&quot;</span><span class="p">,</span>
+    <span class="n">distance_above_center</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – Location of the center of the sphere.</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The radius of the sphere.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
+from the 2-sphere), INTERIOR (sampling from the 3-ball).</li>
+<li><strong>dist_above_center</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The distance above the center, which should be used. Default: 0.0 (half of the sphere).</li>
+<li><strong>part_sphere_dir_vector</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The direction in which the sphere should be split, the end point of the vector, will be in the middle of
+the sphere pointing towards the middle of the resulting surface. Default: [0, 0, 1].</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A random point lying inside or on the surface of a solid sphere.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.shell">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">shell</code><span class="sig-paren">(</span><em>center</em>, <em>radius_min</em>, <em>radius_max</em>, <em>elevation_min=-90</em>, <em>elevation_max=90</em>, <em>azimuth_min=-180</em>, <em>azimuth_max=180</em>, <em>uniform_volume=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.shell" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Samples a point from the volume between two spheres (radius_min, radius_max). Optionally the spheres can be constraint by setting </dt>
+<dd>elevation and azimuth angles. E.g. if you only want to sample in the upper hemisphere set elevation_min = 0.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – Center shared by both spheres.</li>
+<li><strong>radius_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of the smaller sphere.</li>
+<li><strong>radius_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Radius of the bigger sphere.</li>
+<li><strong>elevation_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum angle of elevation in degrees. Range: [-90, 90].</li>
+<li><strong>elevation_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum angle of elevation in degrees. Range: [-90, 90].</li>
+<li><strong>azimuth_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum angle of azimuth in degrees. Range: [-180, 180].</li>
+<li><strong>azimuth_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum angle of azimuth in degrees. Range: [-180, 180].</li>
+<li><strong>uniform_volume</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Instead of sampling the angles and radius uniformly, sample the shell volume uniformly.
+As a result, there will be more samples at larger radii.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A sampled point.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.sphere">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">sphere</code><span class="sig-paren">(</span><em>center</em>, <em>radius</em>, <em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.sphere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a point from the surface or from the interior of solid sphere.</p>
+<p><a class="reference external" href="https://math.stackexchange.com/a/87238">https://math.stackexchange.com/a/87238</a>
+<a class="reference external" href="https://math.stackexchange.com/a/1585996">https://math.stackexchange.com/a/1585996</a></p>
+<p>Example 1: Sample a point from the surface of the solid sphere of a defined radius and center location.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Sphere</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">center</span><span class="o">=</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+    <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;SURFACE&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>]) – Location of the center of the sphere.</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The radius of the sphere.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
+from the 2-sphere), INTERIOR (sampling from the 3-ball).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.uniformSO3">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">uniformSO3</code><span class="sig-paren">(</span><em>around_x=True</em>, <em>around_y=True</em>, <em>around_z=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.uniformSO3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>around_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to rotate around X-axis.</li>
+<li><strong>around_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to rotate around Y-axis.</li>
+<li><strong>around_z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to rotate around Z-axis.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sampled rotation in euler angles.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.sampler.upper_region">
+<code class="descclassname">blenderproc.sampler.</code><code class="descname">upper_region</code><span class="sig-paren">(</span><em>objects_to_sample_on</em>, <em>face_sample_range=None</em>, <em>min_height=0.0</em>, <em>max_height=1.0</em>, <em>use_ray_trace_check=False</em>, <em>upper_dir=None</em>, <em>use_upper_dir=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.sampler.upper_region" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the</dt>
+<dd>defined upper direction. If “use_upper_dir” is False, samples along the face normal closest to “upper_dir”. The
+sampling volume results in a parallelepiped. “min_height” and “max_height” define the sampling distance from the face.</dd>
+</dl>
+<p>Example 1: Sample a location on the surface of the given objects with height above this
+surface in range of [1.5, 1.8].</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">UpperRegionSampler</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
+    <span class="n">objects_to_sample_on</span><span class="o">=</span><span class="n">objs</span><span class="p">,</span>
+    <span class="n">min_height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">max_height</span><span class="o">=</span><span class="mf">1.8</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>objects_to_sample_on</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]]) – Objects, on which to sample on.</li>
+<li><strong>face_sample_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
+both face vectors between which points are sampled. Default: [0.0, 1.0]</li>
+<li><strong>min_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum distance to the bounding box that a point is sampled on.</li>
+<li><strong>max_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum distance to the bounding box that a point is sampled on.</li>
+<li><strong>use_ray_trace_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
+position is the position accepted).</li>
+<li><strong>upper_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The ‘up’ direction of the sampling box. Default: [0.0, 0.0, 1.0].</li>
+<li><strong>use_upper_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
+position is the position accepted).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sampled value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 

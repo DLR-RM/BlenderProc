@@ -8,6 +8,7 @@ Submodules
 
    blenderproc.__main__
    blenderproc.command_line
+   blenderproc.run
    blenderproc.version
 
 Module contents
