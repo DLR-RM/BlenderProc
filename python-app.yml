@@ -16,4 +16,4 @@ jobs:
     - name: Pip install
       run: pip install pyyaml matplotlib numpy 
     - name: Test
-      run: python /home/$USER/workspace/BlenderProcHelper/test.py
+      run: python /home/$USER/workspace/BlenderProcHelper/github_action.py
