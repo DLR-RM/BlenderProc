@@ -22,6 +22,8 @@ class Material(Struct):
         :param name: The name of the instance which will be used to update its blender reference.
         """
         self.blender_obj = bpy.data.materials[name]
+        self.nodes = bpy.data.materials[name].node_tree.nodes
+        self.links = bpy.data.materials[name].node_tree.links
 
     def get_users(self) -> int:
         """ Returns the number of users of the material.
@@ -37,31 +39,46 @@ class Material(Struct):
         """
         return Material(self.blender_obj.copy())
 
-    def get_the_one_node_with_type(self, node_type: str) -> bpy.types.Node:
+    def get_the_one_node_with_type(self, node_type: str, created_in_func: str = "") -> bpy.types.Node:
         """ Returns the one node which is of the given node_type
 
         This function will only work if there is only one of the nodes of this type.
 
         :param node_type: The node type to look for.
+        :param created_in_func: only return node created by the specified function
         :return: The node.
         """
-        return Utility.get_the_one_node_with_type(self.nodes, node_type)
+        return Utility.get_the_one_node_with_type(self.nodes, node_type, created_in_func)
 
-    def get_nodes_with_type(self, node_type: str) -> List[bpy.types.Node]:
+    def get_nodes_with_type(self, node_type: str, created_in_func: str = "") -> List[bpy.types.Node]:
         """ Returns all nodes which are of the given node_type
 
         :param node_type: The note type to look for.
+        :param created_in_func: only return nodes created by the specified function
         :return: The list of nodes with the given type.
         """
-        return Utility.get_nodes_with_type(self.nodes, node_type)
+        return Utility.get_nodes_with_type(self.nodes, node_type, created_in_func)
+    
+    def get_nodes_created_in_func(self, created_in_func: str) -> List[bpy.types.Node]:
+        """ Returns all nodes which are of the given node_type
 
-    def new_node(self, node_type: str) -> bpy.types.Node:
+        :param created_in_func: return all nodes created in the given function
+        :return: The list of nodes with the given type.
+        """
+        return Utility.get_nodes_created_in_func(self.nodes, created_in_func)
+
+    def new_node(self, node_type: str, created_in_func: str = "") -> bpy.types.Node:
         """ Creates a new node in the material's node tree.
 
         :param node_type: The desired type of the new node.
+        :param created_in_func: Save the function name in which this node was created as a custom property. 
+                                Allows to later retrieve and delete specific nodes again.
         :return: The new node.
         """
-        return self.nodes.new(node_type)
+        new_node = self.nodes.new(node_type)
+        if created_in_func:
+            new_node["created_in_func"] = created_in_func
+        return new_node
 
     def remove_node(self, node: bpy.types.Node):
         """ Removes the node from the material's node tree.
@@ -132,7 +149,12 @@ class Material(Struct):
             else:
                 raise Exception("Material '{}' has no node connected to the output, "
                                 "which has as a 'Base Color' input.".format(self.blender_obj.name))
-
+    def remove_emissive(self):
+        """ Remove emissive part of the material.
+        """
+        for node in self.get_nodes_created_in_func(self.make_emissive.__name__):
+            self.remove_node(node)
+        
     def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True,
                       emission_color: List[float] = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
@@ -143,10 +165,12 @@ class Material(Struct):
         :param emission_color: The color of the light to emit. Is ignored if keep_using_base_color is set to True.
         :param non_emissive_color_socket: An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.
         """
+        self.remove_emissive()
+        
         output_node = self.get_the_one_node_with_type("OutputMaterial")
 
         if not replace:
-            mix_node = self.new_node('ShaderNodeMixShader')
+            mix_node = self.new_node('ShaderNodeMixShader', self.make_emissive.__name__)
             if non_emissive_color_socket is None:
                 principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
                 non_emissive_color_socket = principled_bsdf.outputs['BSDF']
@@ -156,13 +180,13 @@ class Material(Struct):
             # The light path node returns 1, if the material is hit by a ray coming from the camera, else it
             # returns 0. In this way the mix shader will use the principled shader for rendering the color of
             # the emitting surface itself, while using the emission shader for lighting the scene.
-            light_path_node = self.new_node('ShaderNodeLightPath')
+            light_path_node = self.new_node('ShaderNodeLightPath', self.make_emissive.__name__)
             self.link(light_path_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
             output_socket = mix_node.inputs[1]
         else:
             output_socket = output_node.inputs['Surface']
 
-        emission_node = self.new_node('ShaderNodeEmission')
+        emission_node = self.new_node('ShaderNodeEmission', self.make_emissive.__name__)
 
         if keep_using_base_color:
             principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")

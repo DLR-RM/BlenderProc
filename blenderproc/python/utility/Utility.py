@@ -259,18 +259,22 @@ class Utility:
         return node_connected_to_the_output, material_output
 
     @staticmethod
-    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str) -> List[bpy.types.Node]:
+    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str, created_in_func: str = "") -> List[bpy.types.Node]:
         """
         Returns all nodes which are of the given node_type
 
         :param nodes: list of nodes of the current material
         :param node_type: node types
+        :param created_in_func: only return nodes created by the specified function
         :return: list of nodes, which belong to the type
         """
-        return [node for node in nodes if node_type in node.bl_idname]
+        nodes_with_type = [node for node in nodes if node_type in node.bl_idname]
+        if created_in_func:
+            nodes_with_type = Utility.get_nodes_created_in_func(nodes_with_type, created_in_func)
+        return nodes_with_type
 
     @staticmethod
-    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str) -> bpy.types.Node:
+    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str, created_in_func: str = "") -> bpy.types.Node:
         """
         Returns the one nodes which is of the given node_type
 
@@ -278,13 +282,24 @@ class Utility:
 
         :param nodes: list of nodes of the current material
         :param node_type: node types
+        :param created_in_func: only return node created by the specified function
         :return: node of the node type
         """
-        node = Utility.get_nodes_with_type(nodes, node_type)
+        node = Utility.get_nodes_with_type(nodes, node_type, created_in_func)
         if node and len(node) == 1:
             return node[0]
         else:
             raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
+
+    @staticmethod
+    def get_nodes_created_in_func(nodes: List[bpy.types.Node], created_in_func: str) -> List[bpy.types.Node]:
+        """ Returns all nodes which are created in the given function
+        
+        :param nodes: list of nodes of the current material
+        :param created_in_func: return nodes created in that function
+        :return: The list of nodes with the given type.
+        """
+        return [node for node in nodes if "created_in_func" in node and node["created_in_func"] == created_in_func]
 
     @staticmethod
     def read_suncg_lights_windows_materials() -> Tuple[Dict[str, Tuple[List[str], List[str]]], List[str]]:

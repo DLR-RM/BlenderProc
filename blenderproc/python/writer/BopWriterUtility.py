@@ -202,6 +202,8 @@ class BopWriterUtility:
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_t_m2c = cam_H_m2c.to_translation()
 
+            assert "category_id" in obj, "{} object has no custom property 'category_id'".format(obj.get_name())
+            
             # ignore examples that fell through the plane
             if not np.linalg.norm(list(cam_t_m2c)) > ignore_dist_thres:
                 cam_t_m2c = list(cam_t_m2c * unit_scaling)
