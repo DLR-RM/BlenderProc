@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.BopLoader import load_bop
+from blenderproc.python.loader.BopLoader import load_bop_objs, load_bop_scene, load_bop_intrinsics
 
 
 class BopLoaderModule(LoaderInterface):
@@ -80,21 +80,35 @@ class BopLoaderModule(LoaderInterface):
             num_of_objs_to_sample = None
             obj_instances_limit = -1
 
-        loaded_objects = load_bop(
+        scene_id = self.config.get_int("scene_id", -1)
+        
+        if scene_id == -1:
+          loaded_objects = load_bop_objs(
+              bop_dataset_path=self.config.get_string("bop_dataset_path"),
+              model_type=self.config.get_string("model_type", ""),
+              obj_ids=self.config.get_list("obj_ids", []),
+              sample_objects=sample_objects,
+              num_of_objs_to_sample=num_of_objs_to_sample,
+              obj_instances_limit=obj_instances_limit,
+              move_origin_to_x_y_plane=self.config.get_bool("move_origin_to_x_y_plane", False),
+              mm2m=self.config.get_bool("mm2m", False),
+              temp_dir=self._temp_dir
+          )
+          load_bop_intrinsics(
             bop_dataset_path=self.config.get_string("bop_dataset_path"),
-            temp_dir=self._temp_dir,
-            sys_paths=self.config.get_list("sys_paths"),
-            model_type=self.config.get_string("model_type", ""),
-            cam_type=self.config.get_string("cam_type", ""),
             split=self.config.get_string("split", "test"),
-            scene_id=self.config.get_int("scene_id", -1),
-            obj_ids=self.config.get_list("obj_ids", []),
-            sample_objects=sample_objects,
-            num_of_objs_to_sample=num_of_objs_to_sample,
-            obj_instances_limit=obj_instances_limit,
-            move_origin_to_x_y_plane=self.config.get_bool("move_origin_to_x_y_plane", False),
-            source_frame=self.config.get_list("source_frame", ["X", "-Y", "-Z"]),
-            mm2m=self.config.get_bool("mm2m", False)
-        )
+            cam_type=self.config.get_string("cam_type", "")
+          )
+        else:  
+          loaded_objects = load_bop_scene(
+              bop_dataset_path=self.config.get_string("bop_dataset_path"),
+              scene_id=self.config.get_int("scene_id", -1),
+              model_type=self.config.get_string("model_type", ""),
+              cam_type=self.config.get_string("cam_type", ""),
+              split=self.config.get_string("split", "test"),
+              source_frame=self.config.get_list("source_frame", ["X", "-Y", "-Z"]),
+              mm2m=self.config.get_bool("mm2m", False),
+              temp_dir=self._temp_dir
+          )
 
         self._set_properties(loaded_objects)
