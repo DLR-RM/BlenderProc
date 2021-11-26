@@ -179,3 +179,4 @@ If you use BlenderProc in a research project, please cite as follows:
 <div align="center">
   <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="images/logo.svg" hspace="3%" vspace="60px"></a>
 </div>
+
