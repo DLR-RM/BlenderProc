@@ -1,5 +1,6 @@
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 from blenderproc.python.writer.BopWriterUtility import write_bop
+from blenderproc.python.type.MeshObjectUtility import MeshObject
 
 import os
 
@@ -68,10 +69,11 @@ class BopWriter(WriterInterface):
         if self._avoid_output:
             print("Avoid output is on, no output produced!")
         else:
+            MeshObject.get_all_mesh_objects()
             write_bop(output_dir = os.path.join(self._determine_output_dir(False), 'bop_data'),
-                                dataset = self._dataset, 
-                                append_to_existing_output = self._append_to_existing_output, 
-                                depth_scale = self._depth_scale, 
-                                save_world2cam = self._save_world2cam, 
-                                ignore_dist_thres = self._ignore_dist_thres, 
-                                m2mm = self._mm2m)
+                      dataset = self._dataset, 
+                      append_to_existing_output = self._append_to_existing_output, 
+                      depth_scale = self._depth_scale, 
+                      save_world2cam = self._save_world2cam, 
+                      ignore_dist_thres = self._ignore_dist_thres, 
+                      m2mm = self._mm2m)
