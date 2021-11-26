@@ -1,5 +1,5 @@
 {
-  "contributors": ["MartinSmeyer", "themasterlink", "cornerfarmer", "wboerdijk", "MarkusKnauer", "maximilianmuehlbauer", "wangg12", "alexander-soare", "heilaw"],
+  "contributors": ["MartinSmeyer", "themasterlink", "cornerfarmer", "wboerdijk", "MarkusKnauer", "maximilianmuehlbauer", "wangg12", "alexander-soare", "heilaw", "wboerdijk"],
   "message": "For contributing to BlenderProc you need to sign our Contributor License Agreement. As an individual please sign [CLA_individuals.pdf](https://github.com/DLR-RM/BlenderProc/blob/main/CLA_individuals.pdf), as a company please sign [CLA_entities.pdf](https://github.com/DLR-RM/BlenderProc/blob/main/CLA_entities.pdf) and send it to blenderproc@dlr.de",
   "label": "cla-signed"
 }
