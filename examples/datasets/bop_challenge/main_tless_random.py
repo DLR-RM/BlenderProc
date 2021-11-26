@@ -12,18 +12,18 @@ args = parser.parse_args()
 bproc.init()
 
 # load bop objects into the scene
-target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), mm2m = True)
+target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'), model_type = 'cad', mm2m = True)
 
 # load distractor bop objects
-tless_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'), model_type = 'cad', mm2m = True)
+itodd_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'itodd'), mm2m = True)
 ycbv_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'ycbv'), mm2m = True)
-tyol_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tyol'), mm2m = True)
+hb_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), mm2m = True)
 
 # load BOP datset intrinsics
-bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'))
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'))
 
 # set shading and hide objects
-for obj in (target_bop_objs + tless_dist_bop_objs + ycbv_dist_bop_objs + tyol_dist_bop_objs):
+for obj in (target_bop_objs + itodd_dist_bop_objs + ycbv_dist_bop_objs + hb_dist_bop_objs):
     obj.set_shading_mode('auto')
     obj.hide(True)
     
@@ -43,7 +43,7 @@ light_plane_material = bproc.material.create('light_material')
 
 # sample point light on shell
 light_point = bproc.types.Light()
-light_point.set_energy(200)
+light_point.set_energy(100)
 
 # load cc_textures
 cc_textures = bproc.loader.load_ccmaterials(args.cc_textures_path)
@@ -62,10 +62,10 @@ bproc.renderer.set_samples(50)
 for i in range(2000):
 
     # Sample bop objects for a scene
-    sampled_target_bop_objs = list(np.random.choice(target_bop_objs, size=20, replace=False))
-    sampled_distractor_bop_objs = list(np.random.choice(tless_dist_bop_objs, size=2, replace=False))
+    sampled_target_bop_objs = list(np.random.choice(target_bop_objs, size=20))
+    sampled_distractor_bop_objs = list(np.random.choice(itodd_dist_bop_objs, size=2, replace=False))
     sampled_distractor_bop_objs += list(np.random.choice(ycbv_dist_bop_objs, size=2, replace=False))
-    sampled_distractor_bop_objs += list(np.random.choice(tyol_dist_bop_objs, size=2, replace=False))
+    sampled_distractor_bop_objs += list(np.random.choice(hb_dist_bop_objs, size=2, replace=False))
 
     # Randomize materials and set physics
     for obj in (sampled_target_bop_objs + sampled_distractor_bop_objs):        
@@ -73,8 +73,12 @@ for i in range(2000):
         if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
             grey_col = np.random.uniform(0.1, 0.9)   
             mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
-        mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
-        mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+        mat.set_principled_shader_value("Roughness", np.random.uniform(0, 0.5))
+        if obj.get_cp("bop_dataset_name") == 'itodd':  
+            mat.set_principled_shader_value("Metallic", np.random.uniform(0.5, 1.0))
+        if obj.get_cp("bop_dataset_name") == 'tless':
+            mat.set_principled_shader_value("Specular", np.random.uniform(0.3, 1.0))
+            mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))
         obj.enable_rigidbody(True, mass=1.0, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
         obj.hide(False)
     
@@ -112,8 +116,8 @@ for i in range(2000):
     while cam_poses < 25:
         # Sample location
         location = bproc.sampler.shell(center = [0, 0, 0],
-                                radius_min = 0.44,
-                                radius_max = 1.42,
+                                radius_min = 0.65,
+                                radius_max = 0.94,
                                 elevation_min = 5,
                                 elevation_max = 89)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
@@ -135,7 +139,7 @@ for i in range(2000):
     # Write data in bop format
     bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                            target_objects = sampled_target_bop_objs,
-                           dataset = 'hb',
+                           dataset = 'tless',
                            depth_scale = 0.1,
                            depths = data["depth"],
                            colors = data["colors"], 

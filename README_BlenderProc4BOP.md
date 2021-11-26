@@ -39,9 +39,14 @@ The cameras are positioned to cover the distribution of the ground-truth object 
 * [bop_object_pose_sampling](datasets/examples/datasets/bop_object_pose_sampling): Loads BOP objects and samples the camera, light poses and object poses in a free space.
 
 
+## Results
+
+Results of the BOP Challenge 2020 and the superiority of training training with BlenderProc images over ordinary OpenGL images is shown in our paper `BOP Challenge 2020 on 6D Object Localization` [5].
+
 ## References
 
 [1] Hodaň, Michel et al.: [BOP: Benchmark for 6D Object Pose Estimation](http://cmp.felk.cvut.cz/~hodanto2/data/hodan2018bop.pdf), ECCV 2018.  
 [2] Hodaň et al.: [Photorealistic Image Synthesis for Object Instance Detection](https://arxiv.org/abs/1902.03334), ICIP 2019.  
 [3] Denninger, Sundermeyer et al.: [BlenderProc](https://arxiv.org/pdf/1911.01911.pdf), arXiv 2019.  
 [4] Pitteri, Ramamonjisoa et al.: [On Object Symmetries and 6D Pose Estimation from Images](https://arxiv.org/abs/1908.07640), CVPR 2020.  
+[5] Hodan, Sundermeyer et al.: [BOP Challenge 2020 on 6D Object Localization](https://arxiv.org/pdf/2009.07378.pdf), ECCVW2020

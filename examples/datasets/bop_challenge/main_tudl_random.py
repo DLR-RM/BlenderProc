@@ -12,18 +12,18 @@ args = parser.parse_args()
 bproc.init()
 
 # load bop objects into the scene
-target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), mm2m = True)
+target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tudl'), mm2m = True)
 
 # load distractor bop objects
 tless_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'), model_type = 'cad', mm2m = True)
 ycbv_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'ycbv'), mm2m = True)
-tyol_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tyol'), mm2m = True)
+hb_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), mm2m = True)
 
 # load BOP datset intrinsics
-bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'))
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, 'tudl'))
 
 # set shading and hide objects
-for obj in (target_bop_objs + tless_dist_bop_objs + ycbv_dist_bop_objs + tyol_dist_bop_objs):
+for obj in (target_bop_objs + tless_dist_bop_objs + ycbv_dist_bop_objs + hb_dist_bop_objs):
     obj.set_shading_mode('auto')
     obj.hide(True)
     
@@ -50,8 +50,8 @@ cc_textures = bproc.loader.load_ccmaterials(args.cc_textures_path)
 
 # Define a function that samples 6-DoF poses
 def sample_pose_func(obj: bproc.types.MeshObject):
-    min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
-    max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
+    min = np.random.uniform([-0.6, -0.6, 0.0], [-0.4, -0.4, 0.0])
+    max = np.random.uniform([0.4, 0.4, 0.4], [0.6, 0.6, 0.6])
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
@@ -62,10 +62,10 @@ bproc.renderer.set_samples(50)
 for i in range(2000):
 
     # Sample bop objects for a scene
-    sampled_target_bop_objs = list(np.random.choice(target_bop_objs, size=20, replace=False))
-    sampled_distractor_bop_objs = list(np.random.choice(tless_dist_bop_objs, size=2, replace=False))
-    sampled_distractor_bop_objs += list(np.random.choice(ycbv_dist_bop_objs, size=2, replace=False))
-    sampled_distractor_bop_objs += list(np.random.choice(tyol_dist_bop_objs, size=2, replace=False))
+    sampled_target_bop_objs = list(np.random.choice(target_bop_objs, size=3, replace=False))
+    sampled_distractor_bop_objs = list(np.random.choice(tless_dist_bop_objs, size=7, replace=False))
+    sampled_distractor_bop_objs += list(np.random.choice(ycbv_dist_bop_objs, size=7, replace=False))
+    sampled_distractor_bop_objs += list(np.random.choice(hb_dist_bop_objs, size=7, replace=False))
 
     # Randomize materials and set physics
     for obj in (sampled_target_bop_objs + sampled_distractor_bop_objs):        
@@ -112,12 +112,12 @@ for i in range(2000):
     while cam_poses < 25:
         # Sample location
         location = bproc.sampler.shell(center = [0, 0, 0],
-                                radius_min = 0.44,
-                                radius_max = 1.42,
+                                radius_min = 0.85,
+                                radius_max = 2.02,
                                 elevation_min = 5,
                                 elevation_max = 89)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
-        poi = bproc.object.compute_poi(np.random.choice(sampled_target_bop_objs, size=15, replace=False))
+        poi = bproc.object.compute_poi(np.random.choice(sampled_target_bop_objs, size=3))
         # Compute rotation based on vector going from location towards poi
         rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-3.14159, 3.14159))
         # Add homog cam pose based on location an rotation
@@ -135,7 +135,7 @@ for i in range(2000):
     # Write data in bop format
     bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                            target_objects = sampled_target_bop_objs,
-                           dataset = 'hb',
+                           dataset = 'tudl',
                            depth_scale = 0.1,
                            depths = data["depth"],
                            colors = data["colors"], 
