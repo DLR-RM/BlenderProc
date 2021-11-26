@@ -18,7 +18,6 @@ blenderproc download cc_textures
 blenderproc run examples/datasets/bop_object_physics_positioning/main.py
               <path_to_bop_data>
               <bop_dataset_name>
-              <path_to_bop_toolkit>
               resources/cctextures 
               examples/datasets/bop_object_physics_positioning/output
 ``` 
@@ -26,7 +25,6 @@ blenderproc run examples/datasets/bop_object_physics_positioning/main.py
 * `examples/datasets/bop_object_physics_positioning/main.py`: path to the python file with pipeline configuration.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets
 * `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. ycbv
-* `<path_to_bop_toolkit>`: path to the bop_toolkit folder
 * `resources/cctextures`: path to CCTextures folder
 * `examples/datasets/bop_object_physics_positioning/output`: path to an output folder
 
@@ -35,9 +33,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 ## Steps
 
-* Load T-LESS BOP models: `bproc.loader.load_bop()`.
-* Load LM BOP models: `bproc.loader.load_bop`.
-* Load `<args:1>` (YCB-V) BOP models: `bproc.loader.load_bop`.
+* Load T-LESS BOP models: `bproc.loader.load_bop_objs()`.
+* Load LM BOP models: `bproc.loader.load_bop_objs`.
+* Load `<args:1>` (YCB-V) BOP models: `bproc.loader.load_bop_objs`.
 * Sample colors for T-LESS models: `mat.set_principled_shader_value()`.
 * Sample roughness and specular values for all objects: `mat.set_principled_shader_value()`.
 * Construct planes: `bproc.object.create_primiative()`.
@@ -61,14 +59,12 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 # load distractor bop objects
 distractor_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
-                                     sys_paths = args.bop_toolkit_path,
                                      mm2m = True,
                                      sample_objects = True,
                                      num_of_objs_to_sample = 3)
 ```
 ```python
 distractor_bop_objs += bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
-                                      sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
                                       num_of_objs_to_sample = 3)
@@ -76,16 +72,17 @@ distractor_bop_objs += bproc.loader.load_bop(bop_dataset_path = os.path.join(arg
 ```python
 # load a random sample of bop objects into the scene
 sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                                         sys_paths = args.bop_toolkit_path,
                                          mm2m = True,
                                          sample_objects = True,
                                          num_of_objs_to_sample = 10)
+                                         
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))                                     
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
 * `"obj.set_shading_mode('auto')"` sets the shading for these corresponding objects to auto smoothing. This looks more realistic for meshes that have both sharp edges and curved surfaces like in YCB-V.
-* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
+* In this example, `args.bop_dataset_name`(ycbv) dataset intrinsics are used when rendering by `bproc.loader.load_bop_intrinsics()`
 
 
 ### Material Manipulator
