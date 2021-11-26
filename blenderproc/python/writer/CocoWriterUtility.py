@@ -21,7 +21,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                            mask_encoding_format: str = "rle", supercategory: str = "coco_annotations",
                            append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
                            segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors",
-                           jpg_quality: int = 95, label_mapping: LabelIdMapping = None):
+                           jpg_quality: int = 95, label_mapping: LabelIdMapping = None, file_prefix: str = ""):
     """ Writes coco annotations in the following steps:
     1. Locate the seg images
     2. Locate the rgb maps
@@ -49,6 +49,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
     :param jpg_quality: The desired quality level of the jpg encoding
     :param label_mapping: The label mapping which should be used to label the categories based on their ids.
                           If None, is given then the `name` field in the csv files is used or - if not existing - the category id itself is used.
+    :param file_prefix: Optional prefix for image file names
     """
     if instance_segmaps is None:
         instance_segmaps = []
@@ -124,11 +125,11 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
             color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
 
             if color_file_format == 'PNG':
-                target_base_path = 'images/{:06d}.png'.format(frame + image_offset)
+                target_base_path = 'images/{}{:06d}.png'.format(file_prefix, frame + image_offset)
                 target_path = os.path.join(output_dir, target_base_path)
                 cv2.imwrite(target_path, color_bgr)
             elif color_file_format == 'JPEG':
-                target_base_path = 'images/{:06d}.jpg'.format(frame + image_offset)
+                target_base_path = 'images/{}{:06d}.jpg'.format(file_prefix, frame + image_offset)
                 target_path = os.path.join(output_dir, target_base_path)
                 cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
             else:
@@ -136,7 +137,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
 
         else:
             source_path = rgb_output["path"] % frame
-            target_base_path = os.path.join('images', os.path.basename(rgb_output["path"] % (frame + image_offset)))
+            target_base_path = os.path.join('images', file_prefix + os.path.basename(rgb_output["path"] % (frame + image_offset)))
             target_path = os.path.join(output_dir, target_base_path)
             shutil.copyfile(source_path, target_path)
 
