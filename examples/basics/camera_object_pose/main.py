@@ -60,4 +60,4 @@ bproc.renderer.set_samples(100)
 data = bproc.renderer.render()
 
 # Write object poses, color and depth in bop format
-bproc.writer.write_bop(args.output_dir, data["depth"], data["colors"], m2mm=True, append_to_existing_output=True)
+bproc.writer.write_bop(args.output_dir, [obj], data["depth"], data["colors"], m2mm=True, append_to_existing_output=True)
