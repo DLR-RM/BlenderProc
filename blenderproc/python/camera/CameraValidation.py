@@ -150,7 +150,8 @@ def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_
             # Send ray from the camera position through the current point on the plane
             _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
             # Add hit object to set
-            visible_objects.add(MeshObject(hit_object))
+            if hit_object:
+                visible_objects.add(MeshObject(hit_object))
 
     return visible_objects
 
