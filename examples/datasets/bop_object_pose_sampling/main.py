@@ -14,7 +14,6 @@ bproc.init()
 # load specified bop objects into the scene
 bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           mm2m = True,
-                          split = 'val', # careful, some BOP datasets only have test sets
                           obj_ids = [1, 1, 3])
 
 # load BOP datset intrinsics

@@ -53,7 +53,6 @@ blenderproc vis coco /path/to/output_dir
 ```python
 bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           mm2m = True,
-                          split = 'val', # careful, some BOP datasets only have test sets
                           obj_ids = [1, 1, 3])
 
 bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))  
