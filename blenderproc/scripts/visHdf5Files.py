@@ -129,7 +129,7 @@ def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap
 
                 # Select only a subset of keys if args.keys is given
                 if keys_to_visualize is not None:
-                    keys = [key for key in data.keys() if key in keys_to_visualize]
+                    keys = [key for key in data.keys() if key_matches(key, keys_to_visualize)]
                 else:
                     keys = [key for key in data.keys()]
 
