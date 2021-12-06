@@ -42,6 +42,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
 
     with Utility.UndoAfterExecution():
         RendererUtility._render_init()
+        # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)
         RendererUtility.set_noise_threshold(0)
         RendererUtility.set_denoiser(None)

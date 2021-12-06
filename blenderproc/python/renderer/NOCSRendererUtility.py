@@ -44,6 +44,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
 
         # Set all fast rendering parameters with only one ray per pixel
         RendererUtility._render_init()
+        # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)
         RendererUtility.set_noise_threshold(0)
         RendererUtility.set_denoiser(None)

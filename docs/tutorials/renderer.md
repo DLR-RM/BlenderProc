@@ -43,16 +43,18 @@ In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains 
 
 As blender uses a raytracer, the number of rays influences the required amount of computation and the noise in the rendered image.
 The more rays are computed, the longer the rendering takes, but the more accurate and less noisy the resulting image is.
-The number of rays can be controlled by using `bproc.renderer.set_max_amount_of_samples(num_samples)`.
-Hereby, `num_samples` sets the number of rays that are traced per pixel.
+The noise level can be controlled by using `brpoc.renderer.set_noise_threshold(noise_threshold)`.
+This means that for each pixel only so many rays are used to get below this noise threshold.
+Hereby, `noise_threshold` is a float value above `0` and below `0.1`. 
+A higher value means more noise per pixel, a lower value results in less noise but longer computation time.
+You can influence the maximum amount of samples per pixel with the `bproc.rendererset_max_amount_of_samples(max_amount_of_samples)` fct.
 For more information about how blenders renderer works visit the [blender docu](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html).
 
-The required amount of samples is unfortunately quite high to achieve a smooth result and therefore rendering can take quite long.
-To reduce the number of required samples, blender offers Denoiser to reduce the noise in the resulting image.
+The required noise level is unfortunately quite low to achieve a smooth result and therefore rendering can take quite long.
+To reduce the number of required samples per pixel, blender offers Denoiser to reduce the noise in the resulting image.
 Set them via `bproc.renderer.set_denoiser`:
 
 * `bproc.renderer.set_denoiser("INTEL")`: Activates Intels [Open Image Denoiser](https://www.openimagedenoise.org/)
-* `bproc.renderer.set_denoiser("BLENDER")`: Uses blenders built-in denoiser.
 * `bproc.renderer.set_denoiser(None)`: Deactivates any denoiser.
 
 Per default "INTEL" is used. 
