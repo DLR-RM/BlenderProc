@@ -156,7 +156,13 @@ def set_noise_threshold(noise_threshold: float):
     """ Configures the adaptive sampling, the noise threshold is typically between 0.1 and 0.001.
     Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.
 
-    :param adaptive_threshold: Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled.
+    We do not recommend setting the noise threshold value to zero and therefore turning off the adaptive sampling.
+
+    For more information see the official documentation:
+    https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling
+
+    :param noise_threshold: Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled and only the
+                            max amount of samples is used.
     """
     if noise_threshold > 0:
         bpy.context.scene.cycles.use_adaptive_sampling = True
@@ -166,11 +172,14 @@ def set_noise_threshold(noise_threshold: float):
 
 
 def set_max_amount_of_samples(samples: int):
-    """ Sets the number of samples to render for each pixel.
+    """ Sets the maximum number of samples to render for each pixel.
+    This maximum amount is usually not reached if the noise threshold is low enough.
+    If the noise threshold was set to 0, then only the maximum number of samples is used (We do not recommend this).
 
-    :param samples: The number of samples per pixel
+    :param samples: The maximum number of samples per pixel
     """
     bpy.context.scene.cycles.samples = samples
+
 
 def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "distance_",
                            output_key: str = "distance", antialiasing_distance_max: float = None,
