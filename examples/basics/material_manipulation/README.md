@@ -13,12 +13,12 @@ In this example we demonstrate how to select materials in the scene using `gette
 Execute this in the BlenderProc main directory:
 
 ```
-blenderproc run examples/basics/material_manipulation/main.py examples/basics/material_manipulation/scene.obj examples/basics/material_manipulation examples/basics/material_manipulation/output
+blenderproc run examples/basics/material_manipulation/main.py examples/basics/material_manipulation/scene.obj images examples/basics/material_manipulation/output
 ```
 
 * `examples/basics/material_manipulation/main.py`: path to the python file.
 * `examples/basics/material_manipulation/scene.obj`: path to the object file with the basic scene.
-* `examples/basics/material_manipulation`: path to a folder with .jpg textures to be used in the sampling process.
+* `images`: path to a folder with .jpg textures to be used in the sampling process.
 * `examples/basics/material_manipulation/output`: path to the output directory.
 
 ## Visualization
