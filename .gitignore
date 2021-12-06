@@ -5,6 +5,7 @@ blender
 .vscode/
 output/
 debug/
+resources/AMASS
 resources/cctextures*
 resources/scenenet/*zip
 resources/scenenet/SceneNetData
