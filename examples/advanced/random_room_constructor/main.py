@@ -46,8 +46,6 @@ while tries < 10000 and poses < 5:
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_max_amount_of_samples(350)
 bproc.renderer.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
 # render the whole pipeline
 data = bproc.renderer.render()

@@ -44,8 +44,6 @@ bproc.object.sample_poses(
 
 # activate normal rendering
 bproc.renderer.enable_normals_output()
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_max_amount_of_samples(50)
 
 # render the whole pipeline
 data = bproc.renderer.render()

@@ -45,9 +45,6 @@ for mat in materials:
     # Set it as base color of the current material
     mat.set_principled_shader_value("Base Color", image)
 
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_max_amount_of_samples(350)
-
 # render the whole pipeline
 data = bproc.renderer.render()
 

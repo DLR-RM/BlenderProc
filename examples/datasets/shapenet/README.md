@@ -82,8 +82,6 @@ Each cameras rotation is such that it looks directly at the object and the camer
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_max_amount_of_samples(350)
 
 # render the whole pipeline
 data = bproc.renderer.render()
