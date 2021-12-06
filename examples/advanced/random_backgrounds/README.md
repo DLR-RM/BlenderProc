@@ -35,7 +35,7 @@ bproc.renderer.set_output_format(enable_transparency=True)
 To paste the rendered images onto random backgrounds, we make use of the `paste_images_on_backgrounds.py` script. To do so, execute:
 
 ```
-python examples/advanced/random_backgrounds/paste_images_on_backgrounds.py --images examples/advanced/random_backgrounds/output/coco_data --backgrounds path/to/background/images --overwrite
+python examples/advanced/random_backgrounds/paste_images_on_backgrounds.py --images examples/advanced/random_backgrounds/output/coco_data/images --backgrounds path/to/background/images --overwrite
 ```
 
 You need to provide a directory with random background images. A common choice are images from the VOC challenge or
