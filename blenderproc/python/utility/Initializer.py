@@ -117,8 +117,7 @@ class Initializer:
         # Init renderer
         RendererUtility._render_init()
         RendererUtility.set_max_amount_of_samples(DefaultConfig.samples)
-        addon_utils.enable("render_auto_tile_size")
-        RendererUtility.toggle_auto_tile_size(True)
+        RendererUtility.set_noise_threshold(DefaultConfig.sampling_noise_threshold)
 
         # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
         # cpu thread means GPU-only rendering)

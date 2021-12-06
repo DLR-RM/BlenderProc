@@ -95,28 +95,6 @@ def set_light_bounces(diffuse_bounces: Optional[int] = None, glossy_bounces: Opt
         bpy.context.scene.cycles.volume_bounces = volume_bounces
 
 
-def toggle_auto_tile_size(enable: bool):
-    """ Enables/Disables the automatic tile size detection via the render_auto_tile_size addon.
-
-    :param enable: True, if it should be enabled.
-    """
-    #bpy.context.scene.ats_settings.is_enabled = enable
-    pass
-
-
-def set_tile_size(tile_x: int, tile_y: int):
-    """ Sets the rendering tile size.
-
-    This will automatically disable the automatic tile size detection.
-
-    :param tile_x: The horizontal tile size in pixels.
-    :param tile_y: The vertical tile size in pixels.
-    """
-    toggle_auto_tile_size(False)
-    bpy.context.scene.render.tile_x = tile_x
-    bpy.context.scene.render.tile_y = tile_y
-
-
 def set_cpu_threads(num_threads: int):
     """ Sets the number of CPU cores to use simultaneously while rendering.
 
