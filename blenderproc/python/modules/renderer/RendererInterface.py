@@ -140,7 +140,7 @@ class RendererInterface(Module):
         RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", default_samples))
 
         if self.config.has_param("use_adaptive_sampling"):
-            RendererUtility.set_adaptive_sampling(self.config.get_float("use_adaptive_sampling"))
+            RendererUtility.set_noise_threshold(self.config.get_float("use_adaptive_sampling"))
 
         if self.config.get_bool("auto_tile_size", True):
             RendererUtility.toggle_auto_tile_size(True)

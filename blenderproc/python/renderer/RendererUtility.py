@@ -152,16 +152,15 @@ def set_simplify_subdivision_render(simplify_subdivision_render: int):
         bpy.context.scene.render.use_simplify = False
 
 
-def set_adaptive_sampling(adaptive_threshold: float):
-    """ Configures adaptive sampling.
-
+def set_noise_threshold(noise_threshold: float):
+    """ Configures the adaptive sampling, the noise threshold is typically between 0.1 and 0.001.
     Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.
 
     :param adaptive_threshold: Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled.
     """
-    if adaptive_threshold > 0:
+    if noise_threshold > 0:
         bpy.context.scene.cycles.use_adaptive_sampling = True
-        bpy.context.scene.cycles.adaptive_threshold = adaptive_threshold
+        bpy.context.scene.cycles.adaptive_threshold = noise_threshold
     else:
         bpy.context.scene.cycles.use_adaptive_sampling = False
 

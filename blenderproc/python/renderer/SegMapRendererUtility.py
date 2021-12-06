@@ -48,7 +48,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
     with Utility.UndoAfterExecution():
         RendererUtility._render_init()
         RendererUtility.set_max_amount_of_samples(1)
-        RendererUtility.set_adaptive_sampling(0)
+        RendererUtility.set_noise_threshold(0)
         RendererUtility.set_denoiser(None)
         RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
