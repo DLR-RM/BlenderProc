@@ -19,7 +19,7 @@ def set_denoiser(denoiser: Optional[str]):
 
     Automatically disables all previously activated denoiser.
 
-    :param denoiser: The name of the denoiser which should be enabled. Options are "INTEL", "OPTIX", "BLENDER" and None. \
+    :param denoiser: The name of the denoiser which should be enabled. Options are "INTEL", "OPTIX" and None. \
                      If None is given, then no denoiser will be active.
     """
     # Make sure there is no denoiser active
@@ -54,10 +54,6 @@ def set_denoiser(denoiser: Optional[str]):
 
         links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
         links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
-    elif denoiser.upper() == "BLENDER":
-        bpy.context.scene.cycles.use_denoising = True
-        bpy.context.view_layer.cycles.use_denoising = True
-        bpy.context.scene.cycles.denoiser = "NLM"
     else:
         raise Exception("No such denoiser: " + denoiser)
 
