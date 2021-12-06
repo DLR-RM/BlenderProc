@@ -54,7 +54,7 @@ for i in range(5):
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # set the number of samples to render for each object
-bproc.renderer.set_samples(150)
+bproc.renderer.set_max_amount_of_samples(150)
 
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()

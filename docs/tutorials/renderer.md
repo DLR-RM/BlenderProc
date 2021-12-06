@@ -43,7 +43,7 @@ In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains 
 
 As blender uses a raytracer, the number of rays influences the required amount of computation and the noise in the rendered image.
 The more rays are computed, the longer the rendering takes, but the more accurate and less noisy the resulting image is.
-The number of rays can be controlled by using `bproc.renderer.set_samples(num_samples)`.
+The number of rays can be controlled by using `bproc.renderer.set_max_amount_of_samples(num_samples)`.
 Hereby, `num_samples` sets the number of rays that are traced per pixel.
 For more information about how blenders renderer works visit the [blender docu](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html).
 

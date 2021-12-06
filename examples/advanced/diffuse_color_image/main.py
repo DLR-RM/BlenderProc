@@ -36,7 +36,7 @@ bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # Also enable the diffuse color image, which describes the base color of the textures
 bproc.renderer.enable_diffuse_color_output()
 # set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_samples(350)
+bproc.renderer.set_max_amount_of_samples(350)
 
 # render the whole pipeline
 data = bproc.renderer.render()

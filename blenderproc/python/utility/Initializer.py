@@ -116,7 +116,7 @@ class Initializer:
 
         # Init renderer
         RendererUtility._render_init()
-        RendererUtility.set_samples(DefaultConfig.samples)
+        RendererUtility.set_max_amount_of_samples(DefaultConfig.samples)
         addon_utils.enable("render_auto_tile_size")
         RendererUtility.toggle_auto_tile_size(True)
 

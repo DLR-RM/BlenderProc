@@ -137,7 +137,7 @@ class RendererInterface(Module):
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
         RendererUtility._render_init()
-        RendererUtility.set_samples(self.config.get_int("samples", default_samples))
+        RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", default_samples))
 
         if self.config.has_param("use_adaptive_sampling"):
             RendererUtility.set_adaptive_sampling(self.config.get_float("use_adaptive_sampling"))

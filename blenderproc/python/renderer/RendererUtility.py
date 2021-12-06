@@ -166,7 +166,7 @@ def set_adaptive_sampling(adaptive_threshold: float):
         bpy.context.scene.cycles.use_adaptive_sampling = False
 
 
-def set_samples(samples: int):
+def set_max_amount_of_samples(samples: int):
     """ Sets the number of samples to render for each pixel.
 
     :param samples: The number of samples per pixel

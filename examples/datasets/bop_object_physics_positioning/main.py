@@ -123,7 +123,7 @@ while poses < 10:
 
 # activate depth rendering and set amount of samples for color rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-bproc.renderer.set_samples(50)
+bproc.renderer.set_max_amount_of_samples(50)
 
 # render the whole pipeline
 data = bproc.renderer.render()
