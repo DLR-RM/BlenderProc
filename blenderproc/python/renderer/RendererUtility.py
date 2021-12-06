@@ -100,7 +100,8 @@ def toggle_auto_tile_size(enable: bool):
 
     :param enable: True, if it should be enabled.
     """
-    bpy.context.scene.ats_settings.is_enabled = enable
+    #bpy.context.scene.ats_settings.is_enabled = enable
+    pass
 
 
 def set_tile_size(tile_x: int, tile_y: int):

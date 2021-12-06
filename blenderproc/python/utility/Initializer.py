@@ -56,9 +56,8 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
             if found:
                 break
         # make sure that all visible GPUs are used
-        for group in prefs.get_devices():
-            for d in group:
-                d.use = True
+        for device in prefs.devices:
+            device.use = True
 
     # Set the Experimental features on/off
     if use_experimental_features:
