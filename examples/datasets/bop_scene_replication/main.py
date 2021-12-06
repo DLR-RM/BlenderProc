@@ -27,7 +27,7 @@ light_point = bproc.types.Light()
 light_point.set_energy(1000)
 light_point.set_location([0, 0, -0.8])
 
-# activate depth rendering and set amount of samples for color rendering
+# activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 
 # render the cameras of the current scene

@@ -110,14 +110,16 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 # activate normal and depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.enable_normals_output()
+bproc.renderer.set_noise_threshold(0.01)  # this is the default value
 
 # render the whole pipeline
 data = bproc.renderer.render()
 ```
 
-First we enable that `blenderproc` also generates the `normals` and the `depth` for each color image, and then we set the amount of samples used for generating the color image.
-A higher sample amount will reduce the noise in the image, but increase the rendering time. 
-The correct value depends on the complexity of your scene and the GPU budget you can spare.
+First we enable that `blenderproc` also generates the `normals` and the `distance` for each color image.
+Furthermore, we set the desired noise threshold in our image. 
+A lower noise threshold will reduce the noise in the image, but increase the rendering time. 
+The default value is `0.01`, this should work for most applications. 
 
 => Creates the files `rgb_0000.png` and `rgb_0001.png` in the temp folder.
 

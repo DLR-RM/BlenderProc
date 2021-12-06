@@ -46,7 +46,7 @@ class FlowRenderer(RendererInterface):
 
     def run(self):
         with Utility.UndoAfterExecution():
-            self._configure_renderer(default_samples=1)
+            self._configure_renderer(max_amount_of_samples=1)
 
             if not self._avoid_output:
                 render_optical_flow(

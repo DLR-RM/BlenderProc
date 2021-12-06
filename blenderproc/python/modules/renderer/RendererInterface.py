@@ -116,17 +116,17 @@ class RendererInterface(Module):
     def __init__(self, config: Config):
         Module.__init__(self, config)
 
-    def _configure_renderer(self, default_samples: int = 256, use_denoiser: bool = False,
+    def _configure_renderer(self, max_amount_of_samples: int = 1024, use_denoiser: bool = False,
                             default_denoiser: str = "Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
 
-        :param default_samples: Default number of samples to render for each pixel
+        :param max_amount_of_samples: Default maximum number of samples to render for each pixel
         :param use_denoiser: If true, a denoiser is used, only use this on color information
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
         RendererUtility._render_init()
-        RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", default_samples))
+        RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", max_amount_of_samples))
 
         if self.config.has_param("use_adaptive_sampling"):
             RendererUtility.set_noise_threshold(self.config.get_float("use_adaptive_sampling"))

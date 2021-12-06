@@ -76,7 +76,7 @@ Config file:
       "config": {
         "max_bounces": True,
         "cycles": {
-          "samples": 255
+          "value": 255
         }
       }
     }
@@ -87,7 +87,7 @@ Config file:
 Inside the `renderer.NewRenderer` module:
 
 ```python
-self.get_int("cycles/samples", 42)  
+self.get_int("cycles/value", 42)  
 # -> 255
 
 self.get_float("pixel_aspect_x") 
