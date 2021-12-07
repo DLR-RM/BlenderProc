@@ -63,10 +63,10 @@ bproc.writer.write_hdf5(args.output_dir, data)
 
 # test: compare generated image with real image
 if "img1" in os.path.basename(args.config_file):
-    real_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "images", "lens_img1_real.png")
+    real_path = os.path.join("images", "lens_img1_real.png")
     norm_corr_limit = 0.660  # low since the real background is large and different
 elif "img2" in os.path.basename(args.config_file):
-    real_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "images", "lens_img2_real.png")
+    real_path = os.path.join("images", "lens_img2_real.png")
     norm_corr_limit = 0.890  # less background
 else:
     raise Exception("Reference real image not found.")
