@@ -105,7 +105,7 @@ class FlowRendererUtility():
         # Flow settings (is called "vector" in blender)
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
+        bpy.context.view_layer.use_pass_vector = True
 
         # Adapt compositor to output vector field
         tree = bpy.context.scene.node_tree
