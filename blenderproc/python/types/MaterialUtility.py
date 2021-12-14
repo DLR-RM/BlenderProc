@@ -155,14 +155,13 @@ class Material(Struct):
         for node in self.get_nodes_created_in_func(self.make_emissive.__name__):
             self.remove_node(node)
         
-    def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True,
-                      emission_color: List[float] = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
+    def make_emissive(self, emission_strength: float, replace: bool = False, emission_color: List[float] = None, 
+                      non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
 
         :param emission_strength: The strength of the emitted light.
         :param replace: When replace is set to True, the existing material will be completely replaced by the emission shader, otherwise it still looks the same, while emitting light.
-        :param keep_using_base_color: If True, the base color of the material will be used as emission color.
-        :param emission_color: The color of the light to emit. Is ignored if keep_using_base_color is set to True.
+        :param emission_color: The color of the light to emit. Default: Color of the original object.
         :param non_emissive_color_socket: An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.
         """
         self.remove_emissive()
@@ -188,7 +187,7 @@ class Material(Struct):
 
         emission_node = self.new_node('ShaderNodeEmission', self.make_emissive.__name__)
 
-        if keep_using_base_color:
+        if emission_color is None:
             principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
             if len(principled_bsdf.inputs["Base Color"].links) == 1:
                 # get the node connected to the Base Color
@@ -196,7 +195,7 @@ class Material(Struct):
                 self.link(socket_connected_to_the_base_color, emission_node.inputs["Color"])
             else:
                 emission_node.inputs["Color"].default_value = principled_bsdf.inputs["Base Color"].default_value
-        elif emission_color is not None:
+        else:
             emission_node.inputs["Color"].default_value = emission_color
 
         # set the emission strength of the shader

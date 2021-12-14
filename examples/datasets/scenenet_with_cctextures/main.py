@@ -53,7 +53,7 @@ objs += new_ceilings
 
 # Make all lamp objects emit light
 lamps = bproc.filter.by_attr(objs, "name", ".*[l|L]amp.*", regex=True)
-bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
+bproc.lighting.light_surface(lamps, emission_strength=15)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = bproc.filter.by_attr(objs, "name", ".*[c|C]eiling.*", regex=True)
 bproc.lighting.light_surface(ceilings, emission_strength=2)
