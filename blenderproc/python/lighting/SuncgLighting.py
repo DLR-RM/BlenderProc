@@ -80,8 +80,7 @@ class SuncgLighting:
                         # If the material corresponds to a lampshade
                         emission_strength = lampshade_emission_strength
 
-                    m.make_emissive(emission_strength, keep_using_base_color=False,
-                                    emission_color=m.blender_obj.diffuse_color)
+                    m.make_emissive(emission_strength, emission_color=m.blender_obj.diffuse_color)
                     collection_of_mats["lamp"][old_mat_name] = m
 
     @staticmethod
@@ -119,7 +118,7 @@ class SuncgLighting:
                     transparent_node = m.new_node('ShaderNodeBsdfDiffuse')
                     transparent_node.inputs['Color'].default_value[:3] = (0.285, 0.5, 0.48)
 
-                    m.make_emissive(emission_strength=10, keep_using_base_color=False, emission_color=[1, 1, 1, 1],
+                    m.make_emissive(emission_strength=10, emission_color=[1, 1, 1, 1],
                                     non_emissive_color_socket=transparent_node.outputs['BSDF'])
 
                 collection_of_mats["window"][mat_name] = m
@@ -149,6 +148,5 @@ class SuncgLighting:
             m.set_name(m.get_name() + "_emission")
 
             if not m.get_nodes_with_type("Emission") and m.get_nodes_with_type("BsdfPrincipled"):
-                m.make_emissive(emission_strength=ceiling_emission_strength, emission_color=[1, 1, 1, 1],
-                                keep_using_base_color=False)
+                m.make_emissive(emission_strength=ceiling_emission_strength, emission_color=[1, 1, 1, 1])
                 collection_of_mats["ceiling"][mat_name] = m
