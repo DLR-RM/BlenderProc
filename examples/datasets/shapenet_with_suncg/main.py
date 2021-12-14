@@ -53,9 +53,6 @@ for i in range(5):
     cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
-# set the number of samples to render for each object
-bproc.renderer.set_samples(150)
-
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)

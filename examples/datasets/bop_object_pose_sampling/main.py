@@ -35,9 +35,8 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
-# activate depth rendering and set amount of samples for color rendering
+# activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-bproc.renderer.set_samples(50)
 
 # Render five different scenes
 for _ in range(5):
