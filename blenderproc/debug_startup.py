@@ -29,7 +29,7 @@ if is_config:
     text.filepath = str(Path(__file__).with_name("debug_temp.py").absolute())
 else:
     # Just load python script into blender text object
-    text = bpy.data.texts.load(argv[0])
+    text = bpy.data.texts.load(os.path.abspath(argv[0]))
 
 
 # Declare operator that runs the blender proc script

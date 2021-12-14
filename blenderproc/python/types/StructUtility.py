@@ -90,8 +90,12 @@ class Struct:
 
     def clear_all_cps(self):
         """ Removes all existing custom properties the struct has. """
-        keys = self.blender_obj.keys()
-        for key in keys:
+        # iterating over the keys is not possible as deleting them changes the structure of the
+        # underlying blender object -> to solve this we always remove only the first element until no element is left
+        while len(self.blender_obj.keys()) > 0:
+            # extract first element of the keys
+            key = list(self.blender_obj.keys())[0]
+            # delete this first element
             del self.blender_obj[key]
 
     def get_attr(self, attr_name: str) -> Any:
