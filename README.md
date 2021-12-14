@@ -162,12 +162,12 @@ You are now able to add breakpoints and go through the execution step by step.
 
 #### Debugging with PyCharm Professional
 
-In Pycharm, go to `Edit configurations...` and crate a new configuration based on `Python Debug Server`.
-The configuration will show you, specifically for your version, which pip packge to install and which code to add into the script.
+In Pycharm, go to `Edit configurations...` and create a [new configuration](https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#remote-debug-config) based on `Python Debug Server`.
+The configuration will show you, specifically for your version, which pip package to install and which code to add into the script.
 The following assumes Pycharm 2021.3:
 
 First, install the `pydevd-pycharm` package in blenders python environment.
-Unfortunately, the package cannot be installed into a custom separate packages folder, therefore, make sure to add `--not-use-custom-package-path`.
+Unfortunately, the package cannot be installed into our custom separate packages folder, therefore, make sure to add `--not-use-custom-package-path`.
 
 ```
 blenderproc pip install pydevd-pycharm~=212.5457.59 --not-use-custom-package-path
@@ -180,8 +180,8 @@ import pydevd_pycharm
 pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
 ```
 
-Now first run your `Python Debug Server` configuration in PyCharm and then run your blenderproc script as usual via the CLI.
-PyCharm should then be in debug mode, blocking the next code line.
+Then, first run your `Python Debug Server` configuration in PyCharm and then run your blenderproc script as usual via the CLI.
+PyCharm should then go in debug mode, blocking the next code line.
 You are now able to add breakpoints and go through the execution step by step.
 
 ## What to do next?
