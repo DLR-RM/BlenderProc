@@ -559,7 +559,7 @@ class MaterialManipulator(Module):
         :param material: Material to be modified.
         :param value: Light color and strength data.
         """
-        material.make_emissive(emission_strength=value["strength"], emission_color=value["color"], replace=True, keep_using_base_color=False)
+        material.make_emissive(emission_strength=value["strength"], emission_color=value["color"], replace=True)
 
     @staticmethod
     def _infuse_texture(material: Material, config: Config):
