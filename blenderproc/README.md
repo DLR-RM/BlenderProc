@@ -67,16 +67,16 @@ Config file:
       "config": {
         "global": {
           "output_dir": "/tmp/",
-          "auto_tile_size": False
+          "max_bounces": False
         }
       }
     },
     {
       "module": "renderer.NewRenderer",
       "config": {
-        "auto_tile_size": True,
+        "max_bounces": True,
         "cycles": {
-          "samples": 255
+          "value": 255
         }
       }
     }
@@ -87,7 +87,7 @@ Config file:
 Inside the `renderer.NewRenderer` module:
 
 ```python
-self.get_int("cycles/samples", 42)  
+self.get_int("cycles/value", 42)  
 # -> 255
 
 self.get_float("pixel_aspect_x") 
@@ -96,13 +96,13 @@ self.get_float("pixel_aspect_x")
 self.get_string("output_dir", "output/") 
 # -> /tmp/ this value is drawn from the GlobalStorage
 
-self.get_bool("auto_tile_size") 
+self.get_bool("max_bounces") 
 # -> True 
 
 self.config.get_int("resolution_x", 512)
 # ->  512
 
-self.config.get_int("tile_x") 
+self.config.get_int("example_value") 
 # -> throws an error
 ```
 

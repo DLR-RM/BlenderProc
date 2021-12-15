@@ -32,8 +32,6 @@ with open(args.camera, "r") as f:
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_samples(350)
 
 # render the whole pipeline
 data = bproc.renderer.render()

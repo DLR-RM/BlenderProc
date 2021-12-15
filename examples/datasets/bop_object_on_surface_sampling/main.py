@@ -111,9 +111,8 @@ while poses < 10:
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
 
-# activate depth rendering and set amount of samples for color rendering
+# activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-bproc.renderer.set_samples(50)
 
 # render the whole pipeline
 data = bproc.renderer.render()

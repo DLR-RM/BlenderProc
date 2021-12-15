@@ -74,8 +74,7 @@
             "name": ".*[l|L]amp.*"
           }
         },
-        "emission_strength": 15.0,
-        "keep_using_base_color": True
+        "emission_strength": 15.0
       }
     },
     {
@@ -89,6 +88,7 @@
           }
         },
         "emission_strength": 2.0,
+        "emission_color": [1, 1, 1, 1]
       }
     },
     {

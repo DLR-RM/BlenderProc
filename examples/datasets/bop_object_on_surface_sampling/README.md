@@ -218,9 +218,8 @@ while poses < 10:
 
 ```python
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-bproc.renderer.set_samples(50)
 ```
-* Renders RGB using 50 `"samples"` and also outputs depth images. 
+* Renders an RGB image and also outputs a depth images. 
 
 ### Bop Writer
 
