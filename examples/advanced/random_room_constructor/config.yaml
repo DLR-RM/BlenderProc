@@ -54,6 +54,7 @@
             "name": "Ceiling"
           },
           "emission_strength": 4.0
+          "emission_color": [1, 1, 1, 1]
         }
       }
     },
