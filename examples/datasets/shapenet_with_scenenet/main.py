@@ -39,7 +39,7 @@ lamps = bproc.filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
 bproc.lighting.light_surface(lamps, emission_strength=15)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = bproc.filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
-bproc.lighting.light_surface(ceilings, emission_strength=2)
+bproc.lighting.light_surface(ceilings, emission_strength=2, emission_color=[1,1,1,1])
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")

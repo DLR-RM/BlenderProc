@@ -21,7 +21,7 @@ objects = bproc.constructor.construct_random_room(used_floor_area=25, interior_o
                                                   materials=materials, amount_of_extrusions=5)
 
 # Bring light into the room
-bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
+bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0, emission_color=[1,1,1,1])
 
 # Init bvh tree containing all mesh objects
 bvh_tree = bproc.object.create_bvh_tree_multi_objects(objects)

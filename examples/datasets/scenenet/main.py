@@ -39,7 +39,7 @@ lamps = bproc.filter.by_attr(objs, "name", ".*[l|L]amp.*", regex=True)
 bproc.lighting.light_surface(lamps, emission_strength=15)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = bproc.filter.by_attr(objs, "name", ".*[c|C]eiling.*", regex=True)
-bproc.lighting.light_surface(ceilings, emission_strength=2)
+bproc.lighting.light_surface(ceilings, emission_strength=2, emission_color=[1,1,1,1])
 
 # Init bvh tree containing all mesh objects
 bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
