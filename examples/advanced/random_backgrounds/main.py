@@ -13,6 +13,7 @@ bproc.init()
 
 # load the objects into the scene
 obj = bproc.loader.load_obj(args.scene)[0]
+obj.set_cp("category_id", 1)
 
 # Randomly perturbate the material of the object
 mat = obj.get_materials()[0]
@@ -69,7 +70,7 @@ bproc.renderer.set_output_format(enable_transparency=True)
 data = bproc.renderer.render()
 
 # Render segmentation images
-seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
+seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 
 # Write data to coco file
 bproc.writer.write_coco_annotations(os.path.join(args.output_dir, 'coco_data'),
