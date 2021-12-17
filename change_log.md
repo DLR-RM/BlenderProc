@@ -1,12 +1,27 @@
-
 # Planned Features
 
-- Adding a complete python API and phasing out the `.yaml` files (Goal for 2.0.0)
-- Add support for all YCB objects (not just BOP)
+- Add URDF loader to define articulated objects and robots
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
-- Improve the documentation 
+- Support non-rigid physics simulation
+- Improve performance
+- Deprecate Global Storage
 
 # Version History
+
+## Version 2.2.0 17th Decemeber 2021
+- switch blender version to 3.0.0 instead of 2.93.0 
+  - we now rely on Cycles X, making the rendering much faster than before
+  - this also depreactes the usage of `bproc.renderer.set_samples()`, this is now replaced with `bproc.renderer.set_noise_threshold()`. This fcts allows to set the desired noise ration on a pixel basis, giving a much higher control to ensure a certain consistent noise level in the whole image. 
+  - it is still possible to limit the amount of samples per pixel with a new function named: `bproc.renderer.set_max_amount_of_samples()`
+  - as the whole image is now rendered at once we removed the auto-tile addon
+  - the BLENDER denoiser is no longer available, we recommend using the INTEL denoiser.
+- remove the argument `keep_using_base_color` from `bproc.lighting.light_surface()` and `Material.make_emissive()`, now either a emission color or the base color is used
+- changes for the bop integration
+  - install bop_toolkit automatically
+  - add BlenderProc2 python scripts for BOP challenge
+  - allow to pass list of objects to `write_bop` for which to save pose annotations
+  - divide `load_bop()` into `load_bop_objs()`, `load_bop_scene()` and `load_bop_intrinsics()` to decouple the functionalit
+- fix a bug after uninstalling pip packages they were not truly removed
 
 ## Version 2.1.0 17th Novemeber 2021
 - add new lens distortion module, adding the possibility to simulate `k1, k2, k3, p1` and `p2` parameters. 
