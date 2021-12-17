@@ -5,7 +5,7 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_scene_replication/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', nargs='?', help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 bproc.init()

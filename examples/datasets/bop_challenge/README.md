@@ -30,14 +30,16 @@ blenderpoc run examples/datasets/bop_challenge/main_<bop_dataset_name>_<random/u
                <path_to_bop_data> 
                resources/cctextures 
                examples/datasets/bop_challenge/output
+               --num_scenes=2000
 ``` 
 
 * `examples/datasets/bop_challenge/main_<bop_dataset_name>_<random/upright>.py`: path to the python file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `resources/cctextures`: path to CCTextures folder
 * `examples/datasets/bop_challenge/output`: path to an output folder where the bop_data will be saved
+* `--num_scenes`: How many scenes with 25 images each to generate
 
-Tip: If you have access to multiple GPUs, you can speedup the process by dividing the 2000 iterations of the outer loop in a multiple of 40 iterations. Then run the script multiple times with different output folders. At the end, rename and merge the scenes in a joint folder. For example, if you have 10 GPUs, set the outer iterations to 200 and run the script 10 times with different output folders.
+Tip: If you have access to multiple GPUs, you can speedup the process by dividing the 2000 scenes into multiples of 40 scenes (40 scenes * 25 images make up one chunk of 1000 images). Therefore run the script in parallel with different output folders. At the end, rename and merge the scenes in a joint folder. For example, if you have 10 GPUs, set `--num_scenes=200` and run the script 10 times with different output folders.
 
 ### Complete the BlenderProc4BOP datasets
 

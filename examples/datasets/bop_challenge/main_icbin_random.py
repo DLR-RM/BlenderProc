@@ -6,7 +6,8 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', help="Path to the bop datasets parent directory")
 parser.add_argument('cc_textures_path', default="resources/cctextures", help="Path to downloaded cc textures")
-parser.add_argument('output_dir', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', help="Path to where the final files will be saved ")
+parser.add_argument('--num_scenes', type=int, default=2000, help="How many scenes with 25 images each to generate")
 args = parser.parse_args()
 
 bproc.init()
@@ -56,7 +57,7 @@ def sample_pose_func(obj: bproc.types.MeshObject):
 # activate depth rendering without antialiasing and set amount of samples for color rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 
-for i in range(2000):
+for i in range(args.num_scenes):
 
     # Sample bop objects for a scene
     sampled_target_bop_objs = list(np.random.choice(target_bop_objs, size=20, replace=False))
