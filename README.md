@@ -149,7 +149,7 @@ Now add the following configuration to your vscode [launch.json](https://code.vi
 }
 ```
 
-Finally, add the following lines to the top of your blenderproc script which you want to debug.
+Finally, add the following lines to the top (after the imports) of your blenderproc script which you want to debug.
 
 ```python
 import debugpy
@@ -173,7 +173,7 @@ Unfortunately, the package cannot be installed into our custom separate packages
 blenderproc pip install pydevd-pycharm~=212.5457.59 --not-use-custom-package-path
 ```
 
-Now, add the following code to the top of your blenderproc script which you want to debug.
+Now, add the following code to the top (after the imports) of your blenderproc script which you want to debug.
 
 ```python
 import pydevd_pycharm
