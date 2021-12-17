@@ -60,6 +60,7 @@ def cli():
     format_dict = lambda d : '\n'.join("{}: {}".format(key, value) for key, value in d.items())
     parser_pip.add_argument('pip_mode', choices=options['pip'], help=format_dict(options['pip']))
     parser_pip.add_argument('pip_packages', metavar='pip_packages', nargs='*', help='A list of pip packages that should be installed/uninstalled. Packages versions can be determined via the `==` notation.')
+    parser_pip.add_argument('--not-use-custom-package-path', dest='not_use_custom_package_path', action='store_true', help='If set, the pip packages will not be installed into the separate custom package folder, but into blenders python site-packages folder. This should only be used, if a specific pip package cannot be installed into a custom package path.')
 
     # Setup all common arguments of run and debug mode
     for subparser in [parser_run, parser_debug]:
@@ -177,7 +178,7 @@ def cli():
         blender_path = os.path.dirname(blender_bin)
 
         if args.pip_mode == "install":
-            SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path, major_version=major_version)
+            SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path, major_version=major_version, use_custom_package_path=not args.not_use_custom_package_path, install_default_packages=False)
         elif args.pip_mode == "uninstall":
             SetupUtility.uninstall_pip_packages(args.pip_packages, blender_path=blender_path, major_version=major_version)
     else:
