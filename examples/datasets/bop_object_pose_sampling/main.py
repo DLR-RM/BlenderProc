@@ -6,18 +6,18 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
-parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_pose_sampling/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', nargs='?', help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 bproc.init()
 
 # load specified bop objects into the scene
-bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                          sys_paths = args.bop_toolkit_path,
+bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           mm2m = True,
-                          split = 'val', # careful, some BOP datasets only have test sets
                           obj_ids = [1, 1, 3])
+
+# load BOP datset intrinsics
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))  
 
 # set shading
 for j, obj in enumerate(bop_objs):

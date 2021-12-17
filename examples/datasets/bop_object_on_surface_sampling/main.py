@@ -6,32 +6,31 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
-parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
 parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures", help="Path to downloaded cc textures")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_on_surface_sampling/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', nargs='?', help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 bproc.init()
 
 # load a random sample of bop objects into the scene
-sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                                  sys_paths = args.bop_toolkit_path,
+sampled_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                                   mm2m = True,
                                   sample_objects = True,
                                   num_of_objs_to_sample = 10)
 
 # load distractor bop objects
-distractor_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
+distractor_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
-                                     sys_paths = args.bop_toolkit_path,
                                      mm2m = True,
                                      sample_objects = True,
                                      num_of_objs_to_sample = 3)
-distractor_bop_objs += bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
-                                      sys_paths = args.bop_toolkit_path,
+distractor_bop_objs += bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
                                       mm2m = True,
                                       sample_objects = True,
                                       num_of_objs_to_sample = 3)
+
+# load BOP datset intrinsics
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))
 
 # set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):

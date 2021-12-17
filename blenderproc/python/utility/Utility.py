@@ -296,7 +296,7 @@ class Utility:
         """ Returns all nodes which are created in the given function
         
         :param nodes: list of nodes of the current material
-        :param created_in_func: return nodes created in that function
+        :param created_in_func: return all nodes created in the given function
         :return: The list of nodes with the given type.
         """
         return [node for node in nodes if "created_in_func" in node and node["created_in_func"] == created_in_func]

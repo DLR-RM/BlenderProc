@@ -6,19 +6,18 @@ This example shows how to load BOP objects and alternatingly sample light poses,
 
 ## Usage
 
-First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
+First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure.
 
 In [examples/datasets/bop_object_pose_sampling/main.py](main.py) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory:  
 
 ```
-blenderproc run examples/datasets/bop_object_pose_sampling/main.py <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_object_pose_sampling/output
+blenderproc run examples/datasets/bop_object_pose_sampling/main.py <path_to_bop_data> <bop_dataset_name> examples/datasets/bop_object_pose_sampling/output
 ```
 * `examples/datasets/bop_object_pose_sampling/main.py`: path to the python file with pipeline configuration.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset, e.g. lm
-* `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
 * `examples/datasets/bop_object_pose_sampling/output`: path to the output directory.
 
 ## Visualization
@@ -35,7 +34,7 @@ blenderproc vis coco /path/to/output_dir
 
 ## Steps
 
-* Loads object models and camera intrinsics from specified BOP dataset: `bproc.loader.load_bop()`.
+* Loads object models and camera intrinsics from specified BOP dataset: `bproc.loader.load_bop_objs()`, `bproc.loader.load_bop_intrinsics()`.
 * Creates a point light sampled inside a shell
 * Loops over five times:
     * Sample Object Poses inside a cube with collision checks
@@ -48,14 +47,15 @@ blenderproc vis coco /path/to/output_dir
 
 ### BopLoader
 
-If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads all or the specified `obj_ids` from the BOP dataset given by `bop_dataset_path`. 
+`bproc.loader.load_bop_objs()` simply loads all or the specified `obj_ids` from the BOP dataset given by `bop_dataset_path`. 
+`bproc.loader.load_bop_intrinsics()` sets the intrinsics of the BOP dataset.
 
 ```python
-bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                          sys_paths = args.bop_toolkit_path,
+bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           mm2m = True,
-                          split = 'val', # careful, some BOP datasets only have test sets
                           obj_ids = [1, 1, 3])
+
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))  
 ```
 
 ### CameraObjectSampler
