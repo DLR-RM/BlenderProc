@@ -41,7 +41,7 @@ The cameras are positioned to cover the distribution of the ground-truth object 
 
 ## Results
 
-Results of the BOP Challenge 2020 and the superiority of training training with BlenderProc images over ordinary OpenGL images is shown in our paper `BOP Challenge 2020 on 6D Object Localization` [5].
+Results of the BOP Challenge 2020 and the superiority of training with BlenderProc images over ordinary OpenGL images is shown in our paper `BOP Challenge 2020 on 6D Object Localization` [5].
 
 ## References
 
