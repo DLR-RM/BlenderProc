@@ -143,17 +143,17 @@ class Link(Armature):
         return self.collisions
 
 
-class Robot(Entity):
-    def __init__(self, name: str, links: List[Link], other_xml: Union[urdfpy.URDF, None] = None):
-        super().__init__(bpy_object=links[0].blender_obj)  # allows full manipulation (translation, scale, rotation) of whole robot
+class URDFObject(Entity):
+    def __init__(self, name: str, links: List[Link], other_xml: Union["urdfpy.URDF", None] = None):
+        super().__init__(bpy_object=links[0].blender_obj)  # allows full manipulation (translation, scale, rotation) of whole urdf object
         object.__setattr__(self, "name", name)
         object.__setattr__(self, "links", links)
         object.__setattr__(self, "other_xml", other_xml)
 
-    def get_all_robot_objs(self) -> List[Union[Link, Inertial, MeshObject]]:
-        """ Returns a list of all robot-related objects.
+    def get_all_urdf_objs(self) -> List[Union[Link, Inertial, MeshObject]]:
+        """ Returns a list of all urdf-related objects.
 
-        :return: List of all robot-related objects.
+        :return: List of all urdf-related objects.
         """
         objs = []
         for link in self.links:
@@ -166,21 +166,21 @@ class Robot(Entity):
 
         :return: List of all collision objects.
         """
-        return [obj for obj in self.get_all_robot_objs() if 'collision' in obj.get_name()]
+        return [obj for obj in self.get_all_urdf_objs() if 'collision' in obj.get_name()]
 
     def get_all_inertial_objs(self) -> List[Inertial]:
         """ Returns a list of all inertial objects.
 
         :return: List of all inertial objects.
         """
-        return [obj for obj in self.get_all_robot_objs() if isinstance(obj, Inertial)]
+        return [obj for obj in self.get_all_urdf_objs() if isinstance(obj, Inertial)]
 
     def get_all_visual_objs(self) -> List[MeshObject]:
         """ Returns a list of all visual objects.
 
         :return: List of all visual objects.
         """
-        return [obj for obj in self.get_all_robot_objs() if 'visual' in obj.get_name()]
+        return [obj for obj in self.get_all_urdf_objs() if 'visual' in obj.get_name()]
 
     def hide_irrelevant_objs(self):
         """ Hides links and their respective collision and inertial objects from rendering. """
@@ -208,13 +208,13 @@ class Robot(Entity):
 
     def remove_link_by_index(self, index: int = 0):
         """ Removes a link and all its associated objects given an index. Also handles relationship of the link's child with its parent.
-        This is useful for removing a 'world link' which could be a simple flat surface, or if someone wants to shorten the robot.
+        This is useful for removing a 'world link' which could be a simple flat surface, or if someone wants to shorten the whole urdf object.
 
         :param index: Index of the joint to be removed.
         """
         assert index < len(self.links), f"Invalid index {index}. Index must be in range 0, {len(self.links)} (no. links: {len(self.links)})."
 
-        # remove link from robot instance and determine child / parent
+        # remove link from the urdf instance and determine child / parent
         parent = self.links[index - 1] if index != 0 else None
         child = self.links[index + 1] if index != len(self.links) else None
         link_to_be_removed = self.links.pop(index)
@@ -248,14 +248,14 @@ class Robot(Entity):
         link_to_be_removed.delete()
 
     def set_name(self, name: str):
-        """ Sets the name of the robot.
+        """ Sets the name of the urdf object.
 
         :param name: The new name.
         """
         self.name = name
 
     def get_name(self) -> str:
-        """ Returns the name of the robot.
+        """ Returns the name of the urdf object.
 
         :return: The name.
         """

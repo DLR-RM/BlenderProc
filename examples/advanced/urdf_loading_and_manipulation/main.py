@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 bproc.init()
 
-robot = bproc.loader.load_robot(urdf_file=args.urdf_file)
+robot = bproc.loader.load_urdf(urdf_file=args.urdf_file)
 
 robot.hide_irrelevant_objs()
 robot.remove_link_by_index(index=0)

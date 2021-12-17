@@ -12,23 +12,23 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
-from blenderproc.python.types.RobotUtility import Robot, Link, Inertial
+from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
 
 
-def load_robot(urdf_file: str) -> Robot:
-    """ Loads a robot from an URDF file.
+def load_urdf(urdf_file: str) -> URDFObject:
+    """ Loads a urdf object from an URDF file.
 
     :param urdf_file: Path to the URDF file.
-    :return: Robot instance.
+    :return: URDF object instance.
     """
     # load urdf tree representation
-    robot_tree = URDF.load(urdf_file)
+    urdf_tree = URDF.load(urdf_file)
 
     # create links
-    links = load_links(robot_tree.links)
+    links = load_links(urdf_tree.links)
 
     # recursively assign transformations depending on the local joint poses
-    for i, joint_tree in enumerate(robot_tree.joints):
+    for i, joint_tree in enumerate(urdf_tree.joints):
         child = links[i + 1]
         parent = links[i]
 
@@ -86,9 +86,9 @@ def load_robot(urdf_file: str) -> Robot:
         bpy.ops.object.posemode_toggle()
 
     # check that the first link is actually the base link, this is just an insanity check
-    assert links[0].get_name() == robot_tree.base_link.name
+    assert links[0].get_name() == urdf_tree.base_link.name
 
-    return Robot(name=robot_tree.name, links=links, other_xml=robot_tree.other_xml)
+    return URDFObject(name=urdf_tree.name, links=links, other_xml=urdf_tree.other_xml)
 
 
 def load_links(link_trees: List[urdfpy.Link]) -> List[Link]:
