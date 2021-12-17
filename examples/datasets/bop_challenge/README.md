@@ -16,7 +16,7 @@ For LineMOD, the objects are placed upright on a plane based on the [bop_object_
 
 Here, we explain the usage with the new python format introduced in BlenderProc2, for the original config files, check [below](#original-config-file-usage).
 
-Download the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/).
+Download the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/). Base archives and 3D models are sufficient.
 
 Execute in the BlenderProc main directory:
 
