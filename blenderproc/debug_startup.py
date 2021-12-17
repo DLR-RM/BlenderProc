@@ -51,7 +51,11 @@ class RunBlenderProcOperator(bpy.types.Operator):
             sys.path.append(import_path)
 
         # Run the script
-        bpy.ops.text.run_script()
+        try:
+            bpy.ops.text.run_script()
+        except RuntimeError:
+            # Skip irrelevant error messages (The relevant stacktrace+error has already been printed at this point)
+            pass
         return {"FINISHED"}
 
 bpy.utils.register_class(RunBlenderProcOperator)
