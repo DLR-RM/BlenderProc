@@ -43,7 +43,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
         child.set_joint_type(joint_type=joint_tree.joint_type)
 
         # traverse local poses
-        child.blender_obj.matrix_world = parent.blender_obj.matrix_world @ Matrix(joint_tree.origin)
+        child.set_local2world_mat(parent.get_local2world_mat() @ joint_tree.origin)
         for obj in child.get_children():
             obj.blender_obj.matrix_local = child.blender_obj.matrix_world @ obj.blender_obj.matrix_world
 
@@ -230,11 +230,11 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
 
     # set the pose of the object
     try:
-        obj.blender_obj.matrix_world = Matrix(viscol_tree.origin)
+        obj.set_local2world_mat(Matrix(viscol_tree.origin))
         print(f"Set matrix_local of {obj.get_name()} to \n{viscol_tree.origin}")
     except Exception as e:
         print(f"No origin found for {viscol_tree}: {e}. Setting origin to world origin.")
-        obj.blender_obj.matrix_world = Matrix.Identity(4)
+        obj.set_local2world_mat(Matrix.Identity(4))
 
     return obj
 
