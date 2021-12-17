@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.writer.CocoWriterUtility module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.writer.CocoWriterUtility module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -674,7 +674,7 @@ starts are included in the mask.
 
 <dl class="function">
 <dt id="blenderproc.python.writer.CocoWriterUtility.write_coco_annotations">
-<code class="descclassname">blenderproc.python.writer.CocoWriterUtility.</code><code class="descname">write_coco_annotations</code><span class="sig-paren">(</span><em>output_dir</em>, <em>instance_segmaps=None</em>, <em>instance_attribute_maps=None</em>, <em>colors=None</em>, <em>color_file_format='PNG'</em>, <em>mask_encoding_format='rle'</em>, <em>supercategory='coco_annotations'</em>, <em>append_to_existing_output=True</em>, <em>segmap_output_key='segmap'</em>, <em>segcolormap_output_key='segcolormap'</em>, <em>rgb_output_key='colors'</em>, <em>jpg_quality=95</em>, <em>label_mapping=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/writer/CocoWriterUtility.html#write_coco_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.writer.CocoWriterUtility.write_coco_annotations" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.python.writer.CocoWriterUtility.</code><code class="descname">write_coco_annotations</code><span class="sig-paren">(</span><em>output_dir</em>, <em>instance_segmaps=None</em>, <em>instance_attribute_maps=None</em>, <em>colors=None</em>, <em>color_file_format='PNG'</em>, <em>mask_encoding_format='rle'</em>, <em>supercategory='coco_annotations'</em>, <em>append_to_existing_output=True</em>, <em>segmap_output_key='segmap'</em>, <em>segcolormap_output_key='segcolormap'</em>, <em>rgb_output_key='colors'</em>, <em>jpg_quality=95</em>, <em>label_mapping=None</em>, <em>file_prefix=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/writer/CocoWriterUtility.html#write_coco_annotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.writer.CocoWriterUtility.write_coco_annotations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes coco annotations in the following steps:
 1. Locate the seg images
 2. Locate the rgb maps
@@ -706,6 +706,7 @@ RgbRenderer module. Default: colors.</li>
 <li><strong>jpg_quality</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The desired quality level of the jpg encoding</li>
 <li><strong>label_mapping</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping" title="blenderproc.python.utility.LabelIdMapping.LabelIdMapping"><code class="xref py py-class docutils literal notranslate"><span class="pre">LabelIdMapping</span></code></a>]) – The label mapping which should be used to label the categories based on their ids.
 If None, is given then the <cite>name</cite> field in the csv files is used or - if not existing - the category id itself is used.</li>
+<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Optional prefix for image file names</li>
 </ul>
 </td>
 </tr>

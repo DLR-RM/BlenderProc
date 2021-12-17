@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.lighting.SurfaceLightingModule &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.lighting.SurfaceLightingModule &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -477,8 +477,8 @@
 <div class="viewcode-block" id="SurfaceLightingModule"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">[docs]</a><span class="k">class</span> <span class="nc">SurfaceLightingModule</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds lighting to the scene, by adding emission shader nodes to surfaces of specified objects.</span>
-<span class="sd">    The speciality here is that the material can still look like before and now also emit light, this can be done</span>
-<span class="sd">    by setting `keep_using_base_color` to `True`. If the material should not be kept this can be set to `False` and</span>
+<span class="sd">    The speciality here is that the material can still look like before and now also emit light if emission_color is not set. </span>
+<span class="sd">    If the material should not be kept this can be set to `False` and</span>
 <span class="sd">    with the key `emission_color` a new color can be set, if none is given it will assume `[1, 1, 1]`, which is white.</span>
 
 <span class="sd">    **Configuration**:</span>
@@ -496,10 +496,6 @@
 <span class="sd">        * - emission_strength</span>
 <span class="sd">          - The strength of the emission shader. Default: 10.0.</span>
 <span class="sd">          - float</span>
-<span class="sd">        * - keep_using_base_color</span>
-<span class="sd">          - If this is True, the Base Color of the material is kept, this means if the material was yellow before. \</span>
-<span class="sd">            The light now is also yellow. This is also true, if a texture was used before. Default: False.</span>
-<span class="sd">          - bool</span>
 <span class="sd">        * - emission_color</span>
 <span class="sd">          - If `keep_using_case_color` is False it is possible to set the color of the light with an RGB value. All \</span>
 <span class="sd">            values have to be in the range from [0, 1]. Default: None.</span>
@@ -509,7 +505,6 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">):</span>
         <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emission_strength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;emission_strength&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keep_using_base_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;keep_using_base_color&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">emission_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_vector4d</span><span class="p">(</span><span class="s2">&quot;emission_color&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SurfaceLightingModule.run"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -522,7 +517,6 @@
         <span class="n">light_surface</span><span class="p">(</span>
             <span class="n">objects</span><span class="p">,</span>
             <span class="n">emission_strength</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emission_strength</span><span class="p">,</span>
-            <span class="n">keep_using_base_color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">keep_using_base_color</span><span class="p">,</span>
             <span class="n">emission_color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emission_color</span>
         <span class="p">)</span></div></div>
 </pre></div>

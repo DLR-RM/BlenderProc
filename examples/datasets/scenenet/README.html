@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SceneNet &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>SceneNet &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -524,7 +524,7 @@ By selecting random texture and putting them in this <code class="docutils liter
 <h3>SurfaceLighting<a class="headerlink" href="#surfacelighting" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make all lamp objects emit light</span>
 <span class="n">lamps</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">by_attr</span><span class="p">(</span><span class="n">objs</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;.*[l|L]amp.*&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_surface</span><span class="p">(</span><span class="n">lamps</span><span class="p">,</span> <span class="n">emission_strength</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">lighting</span><span class="o">.</span><span class="n">light_surface</span><span class="p">(</span><span class="n">lamps</span><span class="p">,</span> <span class="n">emission_strength</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The first function call will make the lamps in the scene emit light, while using the assigned material textures.</p>

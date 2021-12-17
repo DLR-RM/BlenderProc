@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.renderer.RendererInterface &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.renderer.RendererInterface &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -503,16 +503,6 @@
 <span class="sd">            This means pixel is sampled until the noise level is smaller than specified or the maximum amount of</span>
 <span class="sd">            samples were reached. Do not use this with Non-RGB-Renders! Only used if specified&quot; in config. Default: 0.0</span>
 <span class="sd">          - float</span>
-<span class="sd">        * - auto_tile_size</span>
-<span class="sd">          - If true, then the number of render tiles is set automatically using the render_auto_tile_size addon.</span>
-<span class="sd">            Default: True.</span>
-<span class="sd">          - bool</span>
-<span class="sd">        * - tile_x</span>
-<span class="sd">          - The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true. </span>
-<span class="sd">          - int</span>
-<span class="sd">        * - tile_y</span>
-<span class="sd">          - The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true. </span>
-<span class="sd">          - int</span>
 <span class="sd">        * - simplify_subdivision_render</span>
 <span class="sd">          - Global maximum subdivision level during rendering. Speeds up rendering. Default: 3</span>
 <span class="sd">          - int</span>
@@ -595,28 +585,21 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">):</span>
         <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-        <span class="n">addon_utils</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;render_auto_tile_size&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RendererInterface._configure_renderer"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface._configure_renderer">[docs]</a>    <span class="k">def</span> <span class="nf">_configure_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">use_denoiser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<div class="viewcode-block" id="RendererInterface._configure_renderer"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface._configure_renderer">[docs]</a>    <span class="k">def</span> <span class="nf">_configure_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_amount_of_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">,</span> <span class="n">use_denoiser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                             <span class="n">default_denoiser</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Intel&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets many different render parameters which can be adjusted via the config.</span>
 
-<span class="sd">        :param default_samples: Default number of samples to render for each pixel</span>
+<span class="sd">        :param max_amount_of_samples: Default maximum number of samples to render for each pixel</span>
 <span class="sd">        :param use_denoiser: If true, a denoiser is used, only use this on color information</span>
 <span class="sd">        :param default_denoiser: Either &quot;Intel&quot; or &quot;Blender&quot;, &quot;Intel&quot; performs much better in most cases</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">_render_init</span><span class="p">()</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="n">default_samples</span><span class="p">))</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_max_amount_of_samples</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="n">max_amount_of_samples</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;use_adaptive_sampling&quot;</span><span class="p">):</span>
-            <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_adaptive_sampling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;use_adaptive_sampling&quot;</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;auto_tile_size&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
-            <span class="n">RendererUtility</span><span class="o">.</span><span class="n">toggle_auto_tile_size</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">RendererUtility</span><span class="o">.</span><span class="n">toggle_auto_tile_size</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_tile_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;tile_x&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;tile_y&quot;</span><span class="p">))</span>
+            <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_noise_threshold</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;use_adaptive_sampling&quot;</span><span class="p">))</span>
 
         <span class="c1"># Set number of cpu cores used for rendering (1 thread is always used for coordination =&gt; 1</span>
         <span class="c1"># cpu thread means GPU-only rendering)</span>

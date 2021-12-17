@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.renderer.FlowRenderer &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.renderer.FlowRenderer &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -516,7 +516,7 @@
 
 <div class="viewcode-block" id="FlowRenderer.run"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">with</span> <span class="n">Utility</span><span class="o">.</span><span class="n">UndoAfterExecution</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_configure_renderer</span><span class="p">(</span><span class="n">default_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_configure_renderer</span><span class="p">(</span><span class="n">max_amount_of_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avoid_output</span><span class="p">:</span>
                 <span class="n">render_optical_flow</span><span class="p">(</span>

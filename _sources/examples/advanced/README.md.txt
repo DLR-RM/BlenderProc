@@ -1,5 +1,5 @@
 # Advanced Examples
-These examples introduce usage of advanced BlenderProc modules and/or of their combinations.
+These examples introduce the usage of advanced BlenderProc modules and/or their combinations.
 
 * [auto_shading](auto_shading/README.md): How to change the shading mode of an object.
 * [camera_depth_of_field](camera_depth_of_field/README.md): Setting an object as the camera depth of field focus point.
@@ -7,6 +7,7 @@ These examples introduce usage of advanced BlenderProc modules and/or of their c
 * [diffuse_color_image](diffuse_color_image/README.md): How to render a scene without any lighting or shading.
 * [dust](dust/README.md): How to add dust on top objects, to make them look more real.
 * [entity_displacement_modifier](entity_displacement_modifier/README.md): Using displacement modifiers with different textures.
+* [lens_distortion](lens_distortion/README.md): Add lens distortion from camera calibration to all output images.
 * [material_randomizer](material_randomizer/README.md): Randomization of materials of selected objects.
 * [motion_blur_rolling_shutter](motion_blur_rolling_shutter/README.md): Generating motion blur and a rolling shutter effects.
 * [object_pose_sampling](object_pose_sampling/README.md): Complex use of a 6D pose sampler.

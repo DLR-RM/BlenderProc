@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BOP Challenge 2020 Data Generation &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>BOP Challenge 2020 Data Generation &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -475,11 +475,69 @@
 <img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_tless_01.jpg" alt="Front readme image" width=250>
 <img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_01.jpg" alt="Front readme image" width=250>
 <img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_03.jpg" alt="Front readme image" width=250>
-</p><p>Here you find the official BlenderProc configs that we used to generate the <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">provided synthetic data</a> for the BOP Challenge 2020 (7 core datasets). The output datasets are saved in <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md">BOP Format</a> in chunks of 1000 images.</p>
-<p>The prerendered datasets with 50K images each are available <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">here</a>, where they are called “PBR-BlenderProc4BOP training images”. We ran every config file 2000 times with 25 random cameras per scene.</p>
-<p>For LineMOD, the objects are placed upright on a plane based on the <a class="reference internal" href="../bop_object_on_surface_sampling/README.html"><span class="doc">bop_object_on_surface_sampling</span></a> example. All other datasets are created by dropping objects using physics based on the <a class="reference internal" href="../bop_object_physics_positioning/README.html"><span class="doc">bop_object_physics_positioning</span></a> example. Make sure to read through them if you want to understand and adapt the configs.</p>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+</p><p>Here you find the official BlenderProc implementations that we used to generate the <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">provided synthetic data</a> for the BOP Challenge (7 core datasets). The output datasets are saved in <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md">BOP Format</a> in chunks of 1000 images.</p>
+<p>The prerendered datasets with 50K images each are available <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">here</a>, where they are called “PBR-BlenderProc4BOP training images”.</p>
+<p>For LineMOD, the objects are placed upright on a plane based on the <a class="reference internal" href="../bop_object_on_surface_sampling/README.html"><span class="doc">bop_object_on_surface_sampling</span></a> example. All other datasets are created by dropping objects using physics based on the <a class="reference internal" href="../bop_object_physics_positioning/README.html"><span class="doc">bop_object_physics_positioning</span></a> example.</p>
+<div class="section" id="instructions-to-generate-the-data">
+<h2>Instructions to generate the data<a class="headerlink" href="#instructions-to-generate-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Here, we explain the usage with the new python format introduced in BlenderProc2, for the original config files, check <span class="xref std std-ref">below</span>.</p>
+<p>Download the necessary <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP datasets</a>. Base archives and 3D models are sufficient.</p>
+<p>Execute in the BlenderProc main directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">download</span> <span class="n">cc_textures</span>
+</pre></div>
+</div>
+<p>The following command creates 50K training images in BOP format for the given dataset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderpoc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_challenge</span><span class="o">/</span><span class="n">main_</span><span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">random</span><span class="o">/</span><span class="n">upright</span><span class="o">&gt;.</span><span class="n">py</span>
+               <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span>
+               <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span>
+               <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_challenge</span><span class="o">/</span><span class="n">output</span>
+               <span class="o">--</span><span class="n">num_scenes</span><span class="o">=</span><span class="mi">2000</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_challenge/main_&lt;bop_dataset_name&gt;_&lt;random/upright&gt;.py</span></code>: path to the python file.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets.</li>
+<li><code class="docutils literal notranslate"><span class="pre">resources/cctextures</span></code>: path to CCTextures folder</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_challenge/output</span></code>: path to an output folder where the bop_data will be saved</li>
+<li><code class="docutils literal notranslate"><span class="pre">--num_scenes</span></code>: How many scenes with 25 images each to generate</li>
+</ul>
+<p>Tip: If you have access to multiple GPUs, you can speedup the process by dividing the 2000 scenes into multiples of 40 scenes (40 scenes * 25 images make up one chunk of 1000 images). Therefore run the script in parallel with different output folders. At the end, rename and merge the scenes in a joint folder. For example, if you have 10 GPUs, set <code class="docutils literal notranslate"><span class="pre">--num_scenes=200</span></code> and run the script 10 times with different output folders.</p>
+<div class="section" id="complete-the-blenderproc4bop-datasets">
+<h3>Complete the BlenderProc4BOP datasets<a class="headerlink" href="#complete-the-blenderproc4bop-datasets" title="Permalink to this headline">¶</a></h3>
+<p>To save some time and not copy functionality we use the bop_toolkit to generate the <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_masks.py">masks</a>, <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_info.py">scene_gt_info</a> and <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_coco.py">scene_gt_coco</a></p>
+<p>To install the <code class="docutils literal notranslate"><span class="pre">bop_toolkit</span></code> run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/thodan/bop_toolkit
+<span class="nb">cd</span> bop_toolkit
+pip install -r requirements.txt -e .
+</pre></div>
+</div>
+<p>Then at the top of the scripts mentioned above set the following parameters (keep other parameters unchanged):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1"># See dataset_params.py for options.</span>
+  <span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;bop_dataset_name&gt;&#39;</span><span class="p">,</span>
+
+  <span class="c1"># Dataset split. Options: &#39;train&#39;, &#39;val&#39;, &#39;test&#39;.</span>
+  <span class="s1">&#39;dataset_split&#39;</span><span class="p">:</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span>
+
+  <span class="c1"># Dataset split type. None = default. See dataset_params.py for options.</span>
+  <span class="s1">&#39;dataset_split_type&#39;</span><span class="p">:</span> <span class="s1">&#39;pbr&#39;</span><span class="p">,</span>
+
+  <span class="c1"># Folder containing the BOP datasets.</span>
+  <span class="s1">&#39;datasets_path&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;path/to/your/bop/datasets&gt;&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To complete your BOP datasets, finally run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/calc_gt_masks.py
+python scripts/calc_gt_info.py
+python scripts/calc_gt_coco.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="original-config-file-usage">
+<h2>Original Config file usage<a class="headerlink" href="#original-config-file-usage" title="Permalink to this headline">¶</a></h2>
+<p>Instead of running the python script once, we ran every config file 2000 times with 25 random cameras per scene. This has the disadvantage that objects need to be loaded at each run.</p>
 <p>Download the necessary <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP datasets</a> and the <a class="reference external" href="https://github.com/thodan/bop_toolkit">bop-toolkit</a>.</p>
 <p>Execute in the BlenderProc main directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">download</span> <span class="n">cc_textures</span>
@@ -502,11 +560,6 @@
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_challenge/output</span></code>: path to an output folder where the bop_data will be saved</li>
 </ul>
 <p>This creates 25 images of a single scene. To create a whole dataset, simply run the command multiple times.</p>
-<div class="section" id="note">
-<h3>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
-<p>To save some time and not copy functionality we use the bop_toolkit to generate the <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_masks.py">masks</a> and also the <a class="reference external" href="https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_info.py">scene_gt_info</a>. There, you will also find a Bop2coco annotations converter.</p>
-<p>Don’t forget to set the paths to your generated BOP dataset in bop_toolkit_lib/config.py.</p>
-</div>
 </div>
 </div>
 

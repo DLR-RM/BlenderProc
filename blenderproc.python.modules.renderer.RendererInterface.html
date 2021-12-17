@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.renderer.RendererInterface module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.renderer.RendererInterface module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -509,117 +509,104 @@ This means pixel is sampled until the noise level is smaller than specified or t
 samples were reached. Do not use this with Non-RGB-Renders! Only used if specified” in config. Default: 0.0</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>auto_tile_size</td>
-<td>If true, then the number of render tiles is set automatically using the render_auto_tile_size addon.
-Default: True.</td>
-<td>bool</td>
-</tr>
-<tr class="row-odd"><td>tile_x</td>
-<td>The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true.</td>
-<td>int</td>
-</tr>
-<tr class="row-even"><td>tile_y</td>
-<td>The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true.</td>
-<td>int</td>
-</tr>
-<tr class="row-odd"><td>simplify_subdivision_render</td>
+<tr class="row-even"><td>simplify_subdivision_render</td>
 <td>Global maximum subdivision level during rendering. Speeds up rendering. Default: 3</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>denoiser</td>
+<tr class="row-odd"><td>denoiser</td>
 <td>The denoiser to use. Set to “Blender”, if the Blender’s built-in denoiser should be used or set to
 “Intel”, if you want to use the Intel Open Image Denoiser, performs much better. Default: “Intel”
 Available: [“Intel”, “Blender”].</td>
 <td>string</td>
 </tr>
-<tr class="row-odd"><td>max_bounces</td>
+<tr class="row-even"><td>max_bounces</td>
 <td>Total maximum number of bounces. Default: 3</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>diffuse_bounces</td>
+<tr class="row-odd"><td>diffuse_bounces</td>
 <td>Maximum number of diffuse reflection bounces, bounded by total maximum. Default: 3</td>
 <td>int</td>
 </tr>
-<tr class="row-odd"><td>glossy_bounces</td>
+<tr class="row-even"><td>glossy_bounces</td>
 <td>Maximum number of glossy reflection bounces, bounded by total maximum. Be careful the default is set to
 zero to improve rendering time, but it removes all indirect glossy rays from the rendering process.
 Default: 0</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>ao_bounces_render</td>
+<tr class="row-odd"><td>ao_bounces_render</td>
 <td>Approximate indirect light with background tinted ambient occlusion at the specified bounce. Default: 3</td>
 <td>int</td>
 </tr>
-<tr class="row-odd"><td>transmission_bounces</td>
+<tr class="row-even"><td>transmission_bounces</td>
 <td>Maximum number of transmission bounces, bounded by total maximum. Be careful the default is set to zero
 to improve rendering time, but it removes all indirect transmission rays from the rendering process.
 Default: 0</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>transparency_bounces</td>
+<tr class="row-odd"><td>transparency_bounces</td>
 <td>Maximum number of transparency bounces, bounded by total maximum. A higher value helps if a lot of
 transparency objects are stacked after each other. Default: 8</td>
 <td>int</td>
 </tr>
-<tr class="row-odd"><td>volume_bounces</td>
+<tr class="row-even"><td>volume_bounces</td>
 <td>Maximum number of volumetric scattering events. Default: 0</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>render_distance</td>
+<tr class="row-odd"><td>render_distance</td>
 <td>If true, the distance is also rendered to file. Default: False.</td>
 <td>bool</td>
 </tr>
-<tr class="row-odd"><td>distance_output_file_prefix</td>
+<tr class="row-even"><td>distance_output_file_prefix</td>
 <td>The file prefix that should be used when writing distance to file. Default: <cite>“distance_”</cite></td>
 <td>string</td>
 </tr>
-<tr class="row-even"><td>distance_output_key</td>
+<tr class="row-odd"><td>distance_output_key</td>
 <td>The key which should be used for storing the distance in a merged file. Default: <cite>“distance”</cite>.</td>
 <td>string</td>
 </tr>
-<tr class="row-odd"><td>distance_range</td>
+<tr class="row-even"><td>distance_range</td>
 <td>Total distance in which the distance is measured.
 Default: 10000.0</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>render_depth</td>
+<tr class="row-odd"><td>render_depth</td>
 <td>If true, the z-buffer is also rendered to file. Default: False.</td>
 <td>bool</td>
 </tr>
-<tr class="row-odd"><td>depth_output_file_prefix</td>
+<tr class="row-even"><td>depth_output_file_prefix</td>
 <td>The file prefix that should be used when writing depth to file. Default: <cite>“depth_”</cite></td>
 <td>string</td>
 </tr>
-<tr class="row-even"><td>depth_output_key</td>
+<tr class="row-odd"><td>depth_output_key</td>
 <td>The key which should be used for storing the depth in a merged file. Default: <cite>“depth”</cite>.</td>
 <td>string</td>
 </tr>
-<tr class="row-odd"><td>use_alpha</td>
+<tr class="row-even"><td>use_alpha</td>
 <td>If true, the alpha channel stored in .png textures is used. Default: False</td>
 <td>bool</td>
 </tr>
-<tr class="row-even"><td>stereo</td>
+<tr class="row-odd"><td>stereo</td>
 <td>If true, renders a pair of stereoscopic images for each camera position. Default: False</td>
 <td>bool</td>
 </tr>
-<tr class="row-odd"><td>cpu_threads</td>
+<tr class="row-even"><td>cpu_threads</td>
 <td>Set number of cpu cores used for rendering (1 thread is always used for coordination if more than one
 cpu thread means GPU-only rendering). When 0 is set, the number of threads will be set automatically. Default: 0</td>
 <td>int</td>
 </tr>
-<tr class="row-even"><td>render_normals</td>
+<tr class="row-odd"><td>render_normals</td>
 <td>If true, the normals are also rendered. Default: False</td>
 <td>bool</td>
 </tr>
-<tr class="row-odd"><td>normals_output_file_prefix</td>
+<tr class="row-even"><td>normals_output_file_prefix</td>
 <td>The file prefix that should be used when writing normals. Default: <cite>“normals_”</cite></td>
 <td>string</td>
 </tr>
-<tr class="row-even"><td>normals_output_key</td>
+<tr class="row-odd"><td>normals_output_key</td>
 <td>The key which is used for storing the normal in a merged file. Default: <cite>“normal”</cite></td>
 <td>string</td>
 </tr>
-<tr class="row-odd"><td>render_diffuse_color</td>
+<tr class="row-even"><td>render_diffuse_color</td>
 <td>If true, the diffuse color image are also rendered. Default: False</td>
 <td>bool</td>
 </tr>
@@ -627,14 +614,14 @@ cpu thread means GPU-only rendering). When 0 is set, the number of threads will 
 </table>
 <dl class="method">
 <dt id="blenderproc.python.modules.renderer.RendererInterface.RendererInterface._configure_renderer">
-<code class="descname">_configure_renderer</code><span class="sig-paren">(</span><em>default_samples=256</em>, <em>use_denoiser=False</em>, <em>default_denoiser='Intel'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/modules/renderer/RendererInterface.html#RendererInterface._configure_renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.modules.renderer.RendererInterface.RendererInterface._configure_renderer" title="Permalink to this definition">¶</a></dt>
+<code class="descname">_configure_renderer</code><span class="sig-paren">(</span><em>max_amount_of_samples=1024</em>, <em>use_denoiser=False</em>, <em>default_denoiser='Intel'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/modules/renderer/RendererInterface.html#RendererInterface._configure_renderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.modules.renderer.RendererInterface.RendererInterface._configure_renderer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets many different render parameters which can be adjusted via the config.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>default_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Default number of samples to render for each pixel</li>
+<li><strong>max_amount_of_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Default maximum number of samples to render for each pixel</li>
 <li><strong>use_denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, a denoiser is used, only use this on color information</li>
 <li><strong>default_denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Either “Intel” or “Blender”, “Intel” performs much better in most cases</li>
 </ul>

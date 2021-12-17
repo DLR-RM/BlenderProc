@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Renderer &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Renderer &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -505,15 +505,17 @@ In <a class="reference external" href="https://en.wikipedia.org/wiki/Depth_map">
 <h3>Samples &amp; Denoiser<a class="headerlink" href="#samples-denoiser" title="Permalink to this headline">¶</a></h3>
 <p>As blender uses a raytracer, the number of rays influences the required amount of computation and the noise in the rendered image.
 The more rays are computed, the longer the rendering takes, but the more accurate and less noisy the resulting image is.
-The number of rays can be controlled by using <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_samples(num_samples)</span></code>.
-Hereby, <code class="docutils literal notranslate"><span class="pre">num_samples</span></code> sets the number of rays that are traced per pixel.
+The noise level can be controlled by using <code class="docutils literal notranslate"><span class="pre">brpoc.renderer.set_noise_threshold(noise_threshold)</span></code>.
+This means that for each pixel only so many rays are used to get below this noise threshold.
+Hereby, <code class="docutils literal notranslate"><span class="pre">noise_threshold</span></code> is a float value above <code class="docutils literal notranslate"><span class="pre">0</span></code> and below <code class="docutils literal notranslate"><span class="pre">0.1</span></code>.
+A higher value means more noise per pixel, a lower value results in less noise but longer computation time.
+You can influence the maximum amount of samples per pixel with the <code class="docutils literal notranslate"><span class="pre">bproc.rendererset_max_amount_of_samples(max_amount_of_samples)</span></code> fct.
 For more information about how blenders renderer works visit the <a class="reference external" href="https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html">blender docu</a>.</p>
-<p>The required amount of samples is unfortunately quite high to achieve a smooth result and therefore rendering can take quite long.
-To reduce the number of required samples, blender offers Denoiser to reduce the noise in the resulting image.
+<p>The required noise level is unfortunately quite low to achieve a smooth result and therefore rendering can take quite long.
+To reduce the number of required samples per pixel, blender offers Denoiser to reduce the noise in the resulting image.
 Set them via <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_denoiser</span></code>:</p>
 <ul class="simple">
 <li><cite>bproc.renderer.set_denoiser(“INTEL”)</cite>: Activates Intels [Open Image Denoiser](<a class="reference external" href="https://www.openimagedenoise.org/">https://www.openimagedenoise.org/</a>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_denoiser(&quot;BLENDER&quot;)</span></code>: Uses blenders built-in denoiser.</li>
 <li><code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_denoiser(None)</span></code>: Deactivates any denoiser.</li>
 </ul>
 <p>Per default “INTEL” is used.</p>

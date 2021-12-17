@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.Utility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.utility.Utility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -729,18 +729,22 @@
         <span class="k">return</span> <span class="n">node_connected_to_the_output</span><span class="p">,</span> <span class="n">material_output</span></div>
 
 <div class="viewcode-block" id="Utility.get_nodes_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.get_nodes_with_type">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all nodes which are of the given node_type</span>
 
 <span class="sd">        :param nodes: list of nodes of the current material</span>
 <span class="sd">        :param node_type: node types</span>
+<span class="sd">        :param created_in_func: only return nodes created by the specified function</span>
 <span class="sd">        :return: list of nodes, which belong to the type</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">]</span></div>
+        <span class="n">nodes_with_type</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">created_in_func</span><span class="p">:</span>
+            <span class="n">nodes_with_type</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_created_in_func</span><span class="p">(</span><span class="n">nodes_with_type</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nodes_with_type</span></div>
 
 <div class="viewcode-block" id="Utility.get_the_one_node_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.get_the_one_node_with_type">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the one nodes which is of the given node_type</span>
 
@@ -748,13 +752,24 @@
 
 <span class="sd">        :param nodes: list of nodes of the current material</span>
 <span class="sd">        :param node_type: node types</span>
+<span class="sd">        :param created_in_func: only return node created by the specified function</span>
 <span class="sd">        :return: node of the node type</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">)</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">node</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There is not only one node of this type: </span><span class="si">{}</span><span class="s2">, there are: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_type</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="Utility.get_nodes_created_in_func"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.get_nodes_created_in_func">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_nodes_created_in_func</span><span class="p">(</span><span class="n">nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">],</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Returns all nodes which are created in the given function</span>
+<span class="sd">        </span>
+<span class="sd">        :param nodes: list of nodes of the current material</span>
+<span class="sd">        :param created_in_func: return all nodes created in the given function</span>
+<span class="sd">        :return: The list of nodes with the given type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="s2">&quot;created_in_func&quot;</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">and</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;created_in_func&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">created_in_func</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Utility.read_suncg_lights_windows_materials"><a class="viewcode-back" href="../../../../blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.read_suncg_lights_windows_materials">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_suncg_lights_windows_materials</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.renderer package &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.renderer package &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -719,21 +719,6 @@ The world background is rendered transparent.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.renderer.set_adaptive_sampling">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_adaptive_sampling</code><span class="sig-paren">(</span><em>adaptive_threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_adaptive_sampling" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configures adaptive sampling.</p>
-<p>Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>adaptive_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="blenderproc.renderer.set_cpu_threads">
 <code class="descclassname">blenderproc.renderer.</code><code class="descname">set_cpu_threads</code><span class="sig-paren">(</span><em>num_threads</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_cpu_threads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the number of CPU cores to use simultaneously while rendering.</p>
@@ -756,7 +741,7 @@ The world background is rendered transparent.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “OPTIX”, “BLENDER” and None.                      If None is given, then no denoiser will be active.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “OPTIX” and None.                      If None is given, then no denoiser will be active.</td>
 </tr>
 </tbody>
 </table>
@@ -787,6 +772,41 @@ Default values are defined in DefaultConfig.py</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="blenderproc.renderer.set_max_amount_of_samples">
+<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_max_amount_of_samples</code><span class="sig-paren">(</span><em>samples</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_max_amount_of_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the maximum number of samples to render for each pixel.
+This maximum amount is usually not reached if the noise threshold is low enough.
+If the noise threshold was set to 0, then only the maximum number of samples is used (We do not recommend this).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of samples per pixel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.renderer.set_noise_threshold">
+<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_noise_threshold</code><span class="sig-paren">(</span><em>noise_threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_noise_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures the adaptive sampling, the noise threshold is typically between 0.1 and 0.001.
+Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.</p>
+<p>We do not recommend setting the noise threshold value to zero and therefore turning off the adaptive sampling.</p>
+<p>For more information see the official documentation:
+<a class="reference external" href="https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling">https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>noise_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled and only the
+max amount of samples is used.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="blenderproc.renderer.set_output_format">
 <code class="descclassname">blenderproc.renderer.</code><code class="descname">set_output_format</code><span class="sig-paren">(</span><em>file_format=None</em>, <em>color_depth=None</em>, <em>enable_transparency=None</em>, <em>jpg_quality=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_output_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the output format to use for rendering. Default values defined in DefaultConfig.py.</p>
@@ -807,20 +827,6 @@ Default values are defined in DefaultConfig.py</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.renderer.set_samples">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_samples</code><span class="sig-paren">(</span><em>samples</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_samples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the number of samples to render for each pixel.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of samples per pixel</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="blenderproc.renderer.set_simplify_subdivision_render">
 <code class="descclassname">blenderproc.renderer.</code><code class="descname">set_simplify_subdivision_render</code><span class="sig-paren">(</span><em>simplify_subdivision_render</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_simplify_subdivision_render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets global maximum subdivision level during rendering to speedup rendering.</p>
@@ -829,25 +835,6 @@ Default values are defined in DefaultConfig.py</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>simplify_subdivision_render</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum subdivision level. If 0 is given, simplification of scene is disabled.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.renderer.set_tile_size">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_tile_size</code><span class="sig-paren">(</span><em>tile_x</em>, <em>tile_y</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_tile_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the rendering tile size.</p>
-<p>This will automatically disable the automatic tile size detection.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>tile_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The horizontal tile size in pixels.</li>
-<li><strong>tile_y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The vertical tile size in pixels.</li>
-</ul>
-</td>
 </tr>
 </tbody>
 </table>
@@ -866,20 +853,6 @@ Default values are defined in DefaultConfig.py</p>
 <li><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted background light.</li>
 </ul>
 </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="blenderproc.renderer.toggle_auto_tile_size">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">toggle_auto_tile_size</code><span class="sig-paren">(</span><em>enable</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.toggle_auto_tile_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enables/Disables the automatic tile size detection via the render_auto_tile_size addon.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – True, if it should be enabled.</td>
 </tr>
 </tbody>
 </table>

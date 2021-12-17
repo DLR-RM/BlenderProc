@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.loader.BopLoader &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.loader.BopLoader &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -477,6 +477,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Vector</span>
 
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.SetupUtility</span> <span class="kn">import</span> <span class="n">SetupUtility</span>
 <span class="kn">import</span> <span class="nn">blenderproc.python.camera.CameraUtility</span> <span class="k">as</span> <span class="nn">CameraUtility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
@@ -484,167 +485,202 @@
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.MaterialUtility</span> <span class="kn">import</span> <span class="n">Material</span>
 
 
-<div class="viewcode-block" id="load_bop"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop">[docs]</a><span class="k">def</span> <span class="nf">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sys_paths</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span> <span class="n">temp_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">scene_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">obj_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">sample_objects</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">obj_instances_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">move_origin_to_x_y_plane</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">],</span> <span class="n">mm2m</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot; Loads the 3D models of any BOP dataset and allows replicating BOP scenes</span>
-
-<span class="sd">    - Interfaces with the bob_toolkit, allows loading of train, val and test splits</span>
-<span class="sd">    - Relative camera poses are loaded/computed with respect to a reference model</span>
-<span class="sd">    - Sets real camera intrinsics</span>
+<div class="viewcode-block" id="load_bop_objs"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_objs">[docs]</a><span class="k">def</span> <span class="nf">load_bop_objs</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">obj_ids</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">sample_objects</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">obj_instances_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">mm2m</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">move_origin_to_x_y_plane</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot; Loads all or a subset of 3D models of any BOP dataset</span>
 
 <span class="sd">    :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.</span>
-<span class="sd">    :param sys_paths: System paths to append. Can be a string or a list of strings.</span>
-<span class="sd">    :param temp_dir: A temp directory which is used for writing the temporary .ply file.</span>
-<span class="sd">    :param model_type: Optionally, specify type of BOP model.  Available: [reconst, cad or eval].</span>
-<span class="sd">    :param cam_type: Camera type. If not defined, dataset-specific default camera type is used.</span>
-<span class="sd">    :param split: Optionally, test or val split depending on BOP dataset.</span>
-<span class="sd">    :param scene_id: Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,</span>
-<span class="sd">                     only BOP Objects are loaded).</span>
-<span class="sd">    :param obj_ids: List of object ids to load. Default: [] (all objects from the given BOP dataset if scene_id is not</span>
-<span class="sd">                    specified).</span>
+<span class="sd">    :param model_type: Optionally, specify type of BOP model. Available: [reconst, cad or eval].</span>
+<span class="sd">    :param obj_ids: List of object ids to load. Default: [] (load all objects from the given BOP dataset)</span>
 <span class="sd">    :param sample_objects: Toggles object sampling from the specified dataset.</span>
 <span class="sd">    :param num_of_objs_to_sample: Amount of objects to sample from the specified dataset. If this amount is bigger than the dataset</span>
 <span class="sd">                                  actually contains, then all objects will be loaded.</span>
 <span class="sd">    :param obj_instances_limit: Limits the amount of object copies when sampling. Default: -1 (no limit).</span>
+<span class="sd">    :param mm2m: Specify whether to convert poses and models to meters.</span>
 <span class="sd">    :param move_origin_to_x_y_plane: Move center of the object to the lower side of the object, this will not work when used in combination with</span>
 <span class="sd">                                     pose estimation tasks! This is designed for the use-case where BOP objects are used as filler objects in</span>
 <span class="sd">                                     the background.</span>
-<span class="sd">    :param source_frame: Can be used if the given positions and rotations are specified in frames different from the blender</span>
-<span class="sd">                        frame. Has to be a list of three strings. Example: [&#39;X&#39;, &#39;-Z&#39;, &#39;Y&#39;]: Point (1,2,3) will be transformed</span>
-<span class="sd">                        to (1, -3, 2). Available: [&#39;X&#39;, &#39;Y&#39;, &#39;Z&#39;, &#39;-X&#39;, &#39;-Y&#39;, &#39;-Z&#39;].</span>
-<span class="sd">    :param mm2m: Specify whether to convert poses and models to meters.</span>
+<span class="sd">    :param temp_dir: A temp directory which is used for writing the temporary .ply file.</span>
 <span class="sd">    :return: The list of loaded mesh objects.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Make sure sys_paths is a list</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sys_paths</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">sys_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys_paths</span><span class="p">]</span>
 
-    <span class="k">for</span> <span class="n">sys_path</span> <span class="ow">in</span> <span class="n">sys_paths</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s1">&#39;bop_toolkit&#39;</span> <span class="ow">in</span> <span class="n">sys_path</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sys_path</span><span class="p">)</span>
-
+    <span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_setup_bop_toolkit</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
+    
+    <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">dataset_params</span>
+    <span class="n">model_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_model_params</span><span class="p">(</span><span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span> <span class="k">if</span> <span class="n">model_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    
+    <span class="c1"># temp_dir, scale, bop_dataset_name, has_external_texture, model_p = setup_bop(bop_dataset_path, temp_dir, model_type, mm2m)</span>
     <span class="k">if</span> <span class="n">temp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
-
+        
     <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="k">if</span> <span class="n">mm2m</span> <span class="k">else</span> <span class="mi">1</span>
-    <span class="n">bop_dataset_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
     <span class="n">has_external_texture</span> <span class="o">=</span> <span class="n">bop_dataset_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ycbv&quot;</span><span class="p">,</span> <span class="s2">&quot;ruapc&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">obj_ids</span> <span class="ow">or</span> <span class="n">sample_objects</span><span class="p">:</span>
-        <span class="n">allow_duplication</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">allow_duplication</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="n">datasets_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
-    <span class="n">dataset</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bob: </span><span class="si">{}</span><span class="s2">, dataset_path: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">,</span> <span class="n">datasets_path</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;dataset: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">dataset_params</span><span class="p">,</span> <span class="n">inout</span>
-    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR: Please download the bop_toolkit package and add it to sys_paths in config!&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;https://github.com/thodan/bop_toolkit&#39;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">error</span>
-
-    <span class="n">model_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_model_params</span><span class="p">(</span><span class="n">datasets_path</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span> <span class="k">if</span> <span class="n">model_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">cam_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_camera_params</span><span class="p">(</span><span class="n">datasets_path</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">cam_type</span><span class="o">=</span><span class="n">cam_type</span> <span class="k">if</span> <span class="n">cam_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">split_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_split_params</span><span class="p">(</span><span class="n">datasets_path</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong path or </span><span class="si">{}</span><span class="s2"> split does not exist in </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">dataset</span><span class="p">))</span>
-
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span> <span class="o">=</span> <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span> <span class="o">=</span> <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-
+    <span class="n">allow_duplication</span> <span class="o">=</span> <span class="n">obj_ids</span> <span class="ow">or</span> <span class="n">sample_objects</span>
+    
+    <span class="n">obj_ids</span> <span class="o">=</span> <span class="n">obj_ids</span> <span class="k">if</span> <span class="n">obj_ids</span> <span class="k">else</span> <span class="n">model_p</span><span class="p">[</span><span class="s1">&#39;obj_ids&#39;</span><span class="p">]</span>
+    
     <span class="n">loaded_objects</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># only load all/selected objects here, use other modules for setting poses</span>
-    <span class="c1"># e.g. camera.CameraSampler / object.ObjectPoseSampler</span>
-    <span class="k">if</span> <span class="n">scene_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-
-        <span class="c1"># TLESS exception because images are cropped</span>
-        <span class="k">if</span> <span class="n">bop_dataset_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;tless&#39;</span><span class="p">]:</span>
-            <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
-            <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
-
-        <span class="c1"># set camera intrinsics</span>
-        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
-        <span class="n">obj_ids</span> <span class="o">=</span> <span class="n">obj_ids</span> <span class="k">if</span> <span class="n">obj_ids</span> <span class="k">else</span> <span class="n">model_p</span><span class="p">[</span><span class="s1">&#39;obj_ids&#39;</span><span class="p">]</span>
-        <span class="c1"># if sampling is enabled</span>
-        <span class="k">if</span> <span class="n">sample_objects</span><span class="p">:</span>
-            <span class="n">loaded_ids</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">loaded_amount</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="n">obj_instances_limit</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">)</span> <span class="o">*</span> <span class="n">obj_instances_limit</span> <span class="o">&lt;</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&#39;s </span><span class="si">{}</span><span class="s2"> split contains </span><span class="si">{}</span><span class="s2"> objects, </span><span class="si">{}</span><span class="s2"> object where requested to sample with &quot;</span>
-                                   <span class="s2">&quot;an instances limit of </span><span class="si">{}</span><span class="s2">. Raise the limit amount or decrease the requested &quot;</span>
-                                   <span class="s2">&quot;amount of objects.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">,</span> <span class="n">split</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">),</span>
-                                                               <span class="n">num_of_objs_to_sample</span><span class="p">,</span>
-                                                               <span class="n">obj_instances_limit</span><span class="p">))</span>
-            <span class="k">while</span> <span class="n">loaded_amount</span> <span class="o">!=</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span>
-                <span class="n">random_id</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">random_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">loaded_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">loaded_ids</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">random_id</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-                <span class="c1"># if there is no limit or if there is one, but it is not reached for this particular object</span>
-                <span class="k">if</span> <span class="n">obj_instances_limit</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">obj_instances_limit</span><span class="p">:</span>
-                    <span class="n">cur_obj</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">random_id</span><span class="p">,</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">allow_duplication</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
-                    <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">loaded_amount</span> <span class="o">+=</span> <span class="mi">1</span>
-                    <span class="n">loaded_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_obj</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ID </span><span class="si">{}</span><span class="s2"> was loaded </span><span class="si">{}</span><span class="s2"> times with limit of </span><span class="si">{}</span><span class="s2">. Total loaded amount </span><span class="si">{}</span><span class="s2"> while </span><span class="si">{}</span><span class="s2"> are &quot;</span>
-                          <span class="s2">&quot;being requested&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">random_id</span><span class="p">,</span> <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">],</span> <span class="n">obj_instances_limit</span><span class="p">,</span>
-                                                   <span class="n">loaded_amount</span><span class="p">,</span> <span class="n">num_of_objs_to_sample</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">obj_id</span> <span class="ow">in</span> <span class="n">obj_ids</span><span class="p">:</span>
-                <span class="n">cur_obj</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">obj_id</span><span class="p">,</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">allow_duplication</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="c1"># if sampling is enabled</span>
+    <span class="k">if</span> <span class="n">sample_objects</span><span class="p">:</span>
+        <span class="n">loaded_ids</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">loaded_amount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">obj_instances_limit</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">)</span> <span class="o">*</span> <span class="n">obj_instances_limit</span> <span class="o">&lt;</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&#39;s </span><span class="si">{}</span><span class="s2"> split contains </span><span class="si">{}</span><span class="s2"> objects, </span><span class="si">{}</span><span class="s2"> object where requested to sample with &quot;</span>
+                               <span class="s2">&quot;an instances limit of </span><span class="si">{}</span><span class="s2">. Raise the limit amount or decrease the requested &quot;</span>
+                               <span class="s2">&quot;amount of objects.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">,</span> <span class="n">split</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">),</span>
+                                                           <span class="n">num_of_objs_to_sample</span><span class="p">,</span>
+                                                           <span class="n">obj_instances_limit</span><span class="p">))</span>
+        <span class="k">while</span> <span class="n">loaded_amount</span> <span class="o">!=</span> <span class="n">num_of_objs_to_sample</span><span class="p">:</span>
+            <span class="n">random_id</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">obj_ids</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">random_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">loaded_ids</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">loaded_ids</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">random_id</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+            <span class="c1"># if there is no limit or if there is one, but it is not reached for this particular object</span>
+            <span class="k">if</span> <span class="n">obj_instances_limit</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">obj_instances_limit</span><span class="p">:</span>
+                <span class="n">cur_obj</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">random_id</span><span class="p">,</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">allow_duplication</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+                <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">loaded_amount</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">loaded_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_obj</span><span class="p">)</span>
-
-    <span class="c1"># replicate scene: load scene objects, object poses, camera intrinsics and camera poses</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ID </span><span class="si">{}</span><span class="s2"> was loaded </span><span class="si">{}</span><span class="s2"> times with limit of </span><span class="si">{}</span><span class="s2">. Total loaded amount </span><span class="si">{}</span><span class="s2"> while </span><span class="si">{}</span><span class="s2"> are &quot;</span>
+                      <span class="s2">&quot;being requested&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">random_id</span><span class="p">,</span> <span class="n">loaded_ids</span><span class="p">[</span><span class="n">random_id</span><span class="p">],</span> <span class="n">obj_instances_limit</span><span class="p">,</span>
+                                               <span class="n">loaded_amount</span><span class="p">,</span> <span class="n">num_of_objs_to_sample</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sc_gt</span> <span class="o">=</span> <span class="n">inout</span><span class="o">.</span><span class="n">load_scene_gt</span><span class="p">(</span><span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;scene_gt_tpath&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;scene_id&#39;</span><span class="p">:</span> <span class="n">scene_id</span><span class="p">}))</span>
-        <span class="n">sc_camera</span> <span class="o">=</span> <span class="n">inout</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;scene_camera_tpath&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;scene_id&#39;</span><span class="p">:</span> <span class="n">scene_id</span><span class="p">}))</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">cam_id</span><span class="p">,</span> <span class="n">insts</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sc_gt</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-            <span class="n">cam_K</span><span class="p">,</span> <span class="n">cam_H_m2c_ref</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_get_ref_cam_extrinsics_intrinsics</span><span class="p">(</span><span class="n">sc_camera</span><span class="p">,</span> <span class="n">cam_id</span><span class="p">,</span> <span class="n">insts</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># define world = first camera</span>
-                <span class="n">cam_H_m2w_ref</span> <span class="o">=</span> <span class="n">cam_H_m2c_ref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-                <span class="n">cur_objs</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="c1"># load scene objects and set their poses</span>
-                <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
-                    <span class="n">cur_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">],</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">allow_duplication</span><span class="p">,</span> <span class="n">scale</span><span class="p">))</span>
-                    <span class="n">BopLoader</span><span class="o">.</span><span class="n">set_object_pose</span><span class="p">(</span><span class="n">cur_objs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">inst</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
-
-            <span class="n">cam_H_c2w</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_compute_camera_to_world_trafo</span><span class="p">(</span><span class="n">cam_H_m2w_ref</span><span class="p">,</span> <span class="n">cam_H_m2c_ref</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">)</span>
-            <span class="c1"># set camera intrinsics</span>
-            <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">cam_K</span><span class="p">,</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
-            <span class="c1"># set camera extrinsics as next frame</span>
-            <span class="n">frame_id</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam_H_c2w</span><span class="p">)</span>
-
-            <span class="c1"># Add key frame for camera shift, as it changes from frame to frame in the tless replication</span>
-            <span class="n">cam</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">data</span>
-            <span class="n">cam</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;shift_x&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame_id</span><span class="p">)</span>
-            <span class="n">cam</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;shift_y&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame_id</span><span class="p">)</span>
-
-            <span class="c1"># Copy object poses to key frame (to be sure)</span>
-            <span class="k">for</span> <span class="n">cur_obj</span> <span class="ow">in</span> <span class="n">cur_objs</span><span class="p">:</span>
-                <span class="n">BopLoader</span><span class="o">.</span><span class="n">_insert_key_frames</span><span class="p">(</span><span class="n">cur_obj</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
-
+        <span class="k">for</span> <span class="n">obj_id</span> <span class="ow">in</span> <span class="n">obj_ids</span><span class="p">:</span>
+            <span class="n">cur_obj</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">obj_id</span><span class="p">,</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="n">allow_duplication</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+            <span class="n">loaded_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_obj</span><span class="p">)</span>
     <span class="c1"># move the origin of the object to the world origin and on top of the X-Y plane</span>
     <span class="c1"># makes it easier to place them later on, this does not change the `.location`</span>
     <span class="c1"># This is only useful if the BOP objects are not used in a pose estimation scenario.</span>
     <span class="k">if</span> <span class="n">move_origin_to_x_y_plane</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
             <span class="n">obj</span><span class="o">.</span><span class="n">move_origin_to_bottom_mean_point</span><span class="p">()</span>
-
+            
     <span class="k">return</span> <span class="n">loaded_objects</span></div>
+    
+<div class="viewcode-block" id="load_bop_scene"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_scene">[docs]</a><span class="k">def</span> <span class="nf">load_bop_scene</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">scene_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">],</span> <span class="n">mm2m</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot; Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and extrinsics</span>
 
+<span class="sd">    - Interfaces with the bob_toolkit, allows loading of train, val and test splits</span>
+<span class="sd">    - Relative camera poses are loaded/computed with respect to a reference model</span>
+<span class="sd">    - Sets real camera intrinsics</span>
+
+<span class="sd">    :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.</span>
+<span class="sd">    :param scene_id: Specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,</span>
+<span class="sd">                     only BOP Objects are loaded).</span>
+<span class="sd">    :param model_type: Optionally, specify type of BOP model.  Available: [reconst, cad or eval].</span>
+<span class="sd">    :param cam_type: Camera type. If not defined, dataset-specific default camera type is used.</span>
+<span class="sd">    :param split: Optionally, test or val split depending on BOP dataset.</span>
+<span class="sd">    :param source_frame: Can be used if the given positions and rotations are specified in frames different from the blender</span>
+<span class="sd">                        frame. Has to be a list of three strings. Example: [&#39;X&#39;, &#39;-Z&#39;, &#39;Y&#39;]: Point (1,2,3) will be transformed</span>
+<span class="sd">                        to (1, -3, 2). Available: [&#39;X&#39;, &#39;Y&#39;, &#39;Z&#39;, &#39;-X&#39;, &#39;-Y&#39;, &#39;-Z&#39;].</span>
+<span class="sd">    :param mm2m: Specify whether to convert poses and models to meters.</span>
+<span class="sd">    :param temp_dir: A temp directory which is used for writing the temporary .ply file.</span>
+<span class="sd">    :return: The list of loaded mesh objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_setup_bop_toolkit</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
+    
+    <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">dataset_params</span><span class="p">,</span> <span class="n">inout</span>
+    <span class="n">model_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_model_params</span><span class="p">(</span><span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span> <span class="k">if</span> <span class="n">model_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">split_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_split_params</span><span class="p">(</span><span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">split_type</span><span class="o">=</span><span class="n">cam_type</span> <span class="k">if</span> <span class="n">cam_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong path or </span><span class="si">{}</span><span class="s2"> split does not exist in </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">))</span>
+    <span class="n">sc_gt</span> <span class="o">=</span> <span class="n">inout</span><span class="o">.</span><span class="n">load_scene_gt</span><span class="p">(</span><span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;scene_gt_tpath&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;scene_id&#39;</span><span class="p">:</span> <span class="n">scene_id</span><span class="p">}))</span>
+    <span class="n">sc_camera</span> <span class="o">=</span> <span class="n">inout</span><span class="o">.</span><span class="n">load_json</span><span class="p">(</span><span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;scene_camera_tpath&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;scene_id&#39;</span><span class="p">:</span> <span class="n">scene_id</span><span class="p">}))</span>
+    
+    <span class="k">if</span> <span class="n">temp_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">()</span>
+        
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="k">if</span> <span class="n">mm2m</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">has_external_texture</span> <span class="o">=</span> <span class="n">bop_dataset_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;ycbv&quot;</span><span class="p">,</span> <span class="s2">&quot;ruapc&quot;</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">cam_id</span><span class="p">,</span> <span class="n">insts</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sc_gt</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">cam_K</span><span class="p">,</span> <span class="n">cam_H_m2c_ref</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_get_ref_cam_extrinsics_intrinsics</span><span class="p">(</span><span class="n">sc_camera</span><span class="p">,</span> <span class="n">cam_id</span><span class="p">,</span> <span class="n">insts</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># define world = first camera</span>
+            <span class="n">cam_H_m2w_ref</span> <span class="o">=</span> <span class="n">cam_H_m2c_ref</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="n">cur_objs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># load scene objects and set their poses</span>
+            <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">insts</span><span class="p">:</span>
+                <span class="n">cur_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BopLoader</span><span class="o">.</span><span class="n">_load_mesh</span><span class="p">(</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">],</span> <span class="n">model_p</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">has_external_texture</span><span class="p">,</span> <span class="n">temp_dir</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">scale</span><span class="p">))</span>
+                <span class="n">BopLoader</span><span class="o">.</span><span class="n">set_object_pose</span><span class="p">(</span><span class="n">cur_objs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">inst</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+
+        <span class="n">cam_H_c2w</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_compute_camera_to_world_trafo</span><span class="p">(</span><span class="n">cam_H_m2w_ref</span><span class="p">,</span> <span class="n">cam_H_m2c_ref</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">)</span>
+        <span class="c1"># set camera intrinsics</span>
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">cam_K</span><span class="p">,</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># set camera extrinsics as next frame</span>
+        <span class="n">frame_id</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam_H_c2w</span><span class="p">)</span>
+
+        <span class="c1"># Add key frame for camera shift, as it changes from frame to frame in the tless replication</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">cam</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;shift_x&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame_id</span><span class="p">)</span>
+        <span class="n">cam</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;shift_y&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame_id</span><span class="p">)</span>
+
+        <span class="c1"># Copy object poses to key frame (to be sure)</span>
+        <span class="k">for</span> <span class="n">cur_obj</span> <span class="ow">in</span> <span class="n">cur_objs</span><span class="p">:</span>
+            <span class="n">BopLoader</span><span class="o">.</span><span class="n">_insert_key_frames</span><span class="p">(</span><span class="n">cur_obj</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cur_objs</span></div>
+
+<div class="viewcode-block" id="load_bop_intrinsics"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_intrinsics">[docs]</a><span class="k">def</span> <span class="nf">load_bop_intrinsics</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">cam_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load and set the camera matrix and image resolution of a specified BOP dataset</span>
+
+<span class="sd">    :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.</span>
+<span class="sd">    :param split: Optionally, train, test or val split depending on BOP dataset, defaults to &quot;test&quot;</span>
+<span class="sd">    :param cam_type: Camera type. If not defined, dataset-specific default camera type is used.</span>
+<span class="sd">    :returns: camera matrix K, W, H</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span> <span class="o">=</span> <span class="n">BopLoader</span><span class="o">.</span><span class="n">_setup_bop_toolkit</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>   
+    
+    <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">dataset_params</span>
+    <span class="n">cam_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_camera_params</span><span class="p">(</span><span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">cam_type</span><span class="o">=</span><span class="n">cam_type</span> <span class="k">if</span> <span class="n">cam_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">split_p</span> <span class="o">=</span> <span class="n">dataset_params</span><span class="o">.</span><span class="n">get_split_params</span><span class="p">(</span><span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="n">split</span><span class="p">,</span> <span class="n">split_type</span><span class="o">=</span><span class="n">cam_type</span> <span class="k">if</span> <span class="n">cam_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Wrong path or </span><span class="si">{}</span><span class="s2"> split does not exist in </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">bop_dataset_name</span><span class="p">))</span>
+    
+    <span class="c1"># TLESS exception because images are cropped</span>
+    <span class="k">if</span> <span class="n">bop_dataset_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;tless&#39;</span><span class="p">]:</span>
+        <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+
+    <span class="c1"># set camera intrinsics</span>
+    <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">cam_p</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">split_p</span><span class="p">[</span><span class="s1">&#39;im_size&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="BopLoader"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">[docs]</a><span class="k">class</span> <span class="nc">BopLoader</span><span class="p">:</span>
+
+<div class="viewcode-block" id="BopLoader._setup_bop_toolkit"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader._setup_bop_toolkit">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_setup_bop_toolkit</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Install the bop_toolkit from Github and set an environment variable pointing to the BOP datasets </span>
+
+<span class="sd">        :param cam_H_m2c_ref: (4x4) Homog trafo from object to camera coords.</span>
+<span class="sd">        :return (bop_path, bop_dataset_name): Path to BOP datasets and BOP dataset name</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bop_dataset_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
+        <span class="n">bop_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bob: </span><span class="si">{}</span><span class="s2">, dataset_path: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">,</span> <span class="n">bop_path</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;dataset: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_name</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bop_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;It seems the BOP dataset does not exist under the given path </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bop_dataset_path</span><span class="p">))</span>
+
+        <span class="c1"># Install bop_toolkit_lib</span>
+        <span class="n">SetupUtility</span><span class="o">.</span><span class="n">setup_pip</span><span class="p">([</span><span class="s2">&quot;git+https://github.com/thodan/bop_toolkit&quot;</span><span class="p">])</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BOP_PATH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bop_path</span>
+
+        <span class="k">return</span> <span class="n">bop_path</span><span class="p">,</span> <span class="n">bop_dataset_name</span> </div>
 
 <div class="viewcode-block" id="BopLoader._compute_camera_to_world_trafo"><a class="viewcode-back" href="../../../../blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader._compute_camera_to_world_trafo">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_compute_camera_to_world_trafo</span><span class="p">(</span><span class="n">cam_H_m2w_ref</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">cam_H_m2c_ref</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>

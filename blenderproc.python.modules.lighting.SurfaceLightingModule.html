@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.lighting.SurfaceLightingModule module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.lighting.SurfaceLightingModule module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -476,8 +476,8 @@
 <em class="property">class </em><code class="descclassname">blenderproc.python.modules.lighting.SurfaceLightingModule.</code><code class="descname">SurfaceLightingModule</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/modules/lighting/SurfaceLightingModule.html#SurfaceLightingModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module" title="blenderproc.python.modules.main.Module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.modules.main.Module.Module</span></code></a></p>
 <p>Adds lighting to the scene, by adding emission shader nodes to surfaces of specified objects.
-The speciality here is that the material can still look like before and now also emit light, this can be done
-by setting <cite>keep_using_base_color</cite> to <cite>True</cite>. If the material should not be kept this can be set to <cite>False</cite> and
+The speciality here is that the material can still look like before and now also emit light if emission_color is not set. 
+If the material should not be kept this can be set to <cite>False</cite> and
 with the key <cite>emission_color</cite> a new color can be set, if none is given it will assume <cite>[1, 1, 1]</cite>, which is white.</p>
 <p><strong>Configuration</strong>:</p>
 <table border="1" class="colwidths-given docutils">
@@ -501,11 +501,7 @@ with the key <cite>emission_color</cite> a new color can be set, if none is give
 <td>The strength of the emission shader. Default: 10.0.</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>keep_using_base_color</td>
-<td>If this is True, the Base Color of the material is kept, this means if the material was yellow before.             The light now is also yellow. This is also true, if a texture was used before. Default: False.</td>
-<td>bool</td>
-</tr>
-<tr class="row-odd"><td>emission_color</td>
+<tr class="row-even"><td>emission_color</td>
 <td>If <cite>keep_using_case_color</cite> is False it is possible to set the color of the light with an RGB value. All             values have to be in the range from [0, 1]. Default: None.</td>
 <td>mathutils.Vector</td>
 </tr>

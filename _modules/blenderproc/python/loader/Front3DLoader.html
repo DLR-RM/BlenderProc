@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.loader.Front3DLoader &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.loader.Front3DLoader &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -660,7 +660,7 @@
                         <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">used_image</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;normaltexture&quot;</span><span class="p">]:</span>
                             <span class="c1"># get the used image based on the normal texture path</span>
@@ -692,7 +692,7 @@
                         <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span>
                         <span class="c1"># if the object is a ceiling add some light output</span>
                         <span class="k">if</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">used_materials_based_on_color</span><span class="p">[</span><span class="n">used_hash</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat</span>
 

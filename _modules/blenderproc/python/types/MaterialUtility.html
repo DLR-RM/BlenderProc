@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.types.MaterialUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.types.MaterialUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -491,7 +491,9 @@
 
 <span class="sd">        :param name: The name of the instance which will be used to update its blender reference.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span></div>
 
 <div class="viewcode-block" id="Material.get_users"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_users">[docs]</a>    <span class="k">def</span> <span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Returns the number of users of the material.</span>
@@ -507,31 +509,46 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Material</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Material.get_the_one_node_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_the_one_node_with_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+<div class="viewcode-block" id="Material.get_the_one_node_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_the_one_node_with_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Returns the one node which is of the given node_type</span>
 
 <span class="sd">        This function will only work if there is only one of the nodes of this type.</span>
 
 <span class="sd">        :param node_type: The node type to look for.</span>
+<span class="sd">        :param created_in_func: only return node created by the specified function</span>
 <span class="sd">        :return: The node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Material.get_nodes_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes_with_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+<div class="viewcode-block" id="Material.get_nodes_with_type"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes_with_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot; Returns all nodes which are of the given node_type</span>
 
 <span class="sd">        :param node_type: The note type to look for.</span>
+<span class="sd">        :param created_in_func: only return nodes created by the specified function</span>
 <span class="sd">        :return: The list of nodes with the given type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Material.get_nodes_created_in_func"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_created_in_func">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes_created_in_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot; Returns all nodes which are of the given node_type</span>
 
-<div class="viewcode-block" id="Material.new_node"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.new_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
+<span class="sd">        :param created_in_func: return all nodes created in the given function</span>
+<span class="sd">        :return: The list of nodes with the given type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_created_in_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Material.new_node"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.new_node">[docs]</a>    <span class="k">def</span> <span class="nf">new_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">created_in_func</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot; Creates a new node in the material&#39;s node tree.</span>
 
 <span class="sd">        :param node_type: The desired type of the new node.</span>
+<span class="sd">        :param created_in_func: Save the function name in which this node was created as a custom property. </span>
+<span class="sd">                                Allows to later retrieve and delete specific nodes again.</span>
 <span class="sd">        :return: The new node.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">node_type</span><span class="p">)</span></div>
+        <span class="n">new_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">node_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">created_in_func</span><span class="p">:</span>
+            <span class="n">new_node</span><span class="p">[</span><span class="s2">&quot;created_in_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">created_in_func</span>
+        <span class="k">return</span> <span class="n">new_node</span></div>
 
 <div class="viewcode-block" id="Material.remove_node"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_node">[docs]</a>    <span class="k">def</span> <span class="nf">remove_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Removes the node from the material&#39;s node tree.</span>
@@ -602,21 +619,27 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Material &#39;</span><span class="si">{}</span><span class="s2">&#39; has no node connected to the output, &quot;</span>
                                 <span class="s2">&quot;which has as a &#39;Base Color&#39; input.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="Material.make_emissive"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.make_emissive">[docs]</a>    <span class="k">def</span> <span class="nf">make_emissive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emission_strength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                      <span class="n">emission_color</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">non_emissive_color_socket</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">NodeSocket</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Material.remove_emissive"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_emissive">[docs]</a>    <span class="k">def</span> <span class="nf">remove_emissive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Remove emissive part of the material.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_nodes_created_in_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_emissive</span><span class="o">.</span><span class="vm">__name__</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="Material.make_emissive"><a class="viewcode-back" href="../../../../blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.make_emissive">[docs]</a>    <span class="k">def</span> <span class="nf">make_emissive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">emission_strength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">emission_color</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+                      <span class="n">non_emissive_color_socket</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">NodeSocket</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Makes the material emit light.</span>
 
 <span class="sd">        :param emission_strength: The strength of the emitted light.</span>
 <span class="sd">        :param replace: When replace is set to True, the existing material will be completely replaced by the emission shader, otherwise it still looks the same, while emitting light.</span>
-<span class="sd">        :param keep_using_base_color: If True, the base color of the material will be used as emission color.</span>
-<span class="sd">        :param emission_color: The color of the light to emit. Is ignored if keep_using_base_color is set to True.</span>
+<span class="sd">        :param emission_color: The color of the light to emit. Default: Color of the original object.</span>
 <span class="sd">        :param non_emissive_color_socket: An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_emissive</span><span class="p">()</span>
+        
         <span class="n">output_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="s2">&quot;OutputMaterial&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">replace</span><span class="p">:</span>
-            <span class="n">mix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeMixShader&#39;</span><span class="p">)</span>
+            <span class="n">mix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeMixShader&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_emissive</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">non_emissive_color_socket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
                 <span class="n">non_emissive_color_socket</span> <span class="o">=</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;BSDF&#39;</span><span class="p">]</span>
@@ -626,15 +649,15 @@
             <span class="c1"># The light path node returns 1, if the material is hit by a ray coming from the camera, else it</span>
             <span class="c1"># returns 0. In this way the mix shader will use the principled shader for rendering the color of</span>
             <span class="c1"># the emitting surface itself, while using the emission shader for lighting the scene.</span>
-            <span class="n">light_path_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeLightPath&#39;</span><span class="p">)</span>
+            <span class="n">light_path_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeLightPath&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_emissive</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">light_path_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Is Camera Ray&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">])</span>
             <span class="n">output_socket</span> <span class="o">=</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">output_socket</span> <span class="o">=</span> <span class="n">output_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Surface&#39;</span><span class="p">]</span>
 
-        <span class="n">emission_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeEmission&#39;</span><span class="p">)</span>
+        <span class="n">emission_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeEmission&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_emissive</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">keep_using_base_color</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">emission_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># get the node connected to the Base Color</span>
@@ -642,7 +665,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">socket_connected_to_the_base_color</span><span class="p">,</span> <span class="n">emission_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">emission_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span>
-        <span class="k">elif</span> <span class="n">emission_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">emission_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">emission_color</span>
 
         <span class="c1"># set the emission strength of the shader</span>

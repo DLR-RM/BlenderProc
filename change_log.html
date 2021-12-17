@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Planned Features &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Planned Features &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -472,14 +472,37 @@
   <div class="section" id="planned-features">
 <h1>Planned Features<a class="headerlink" href="#planned-features" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Adding a complete python API and phasing out the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files (Goal for 2.0.0)</li>
-<li>Add support for all YCB objects (not just BOP)</li>
+<li>Add URDF loader to define articulated objects and robots</li>
 <li>Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)</li>
-<li>Improve the documentation</li>
+<li>Support non-rigid physics simulation</li>
+<li>Improve performance</li>
+<li>Deprecate Global Storage</li>
 </ul>
 </div>
 <div class="section" id="version-history">
 <h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-2-2-0-17th-decemeber-2021">
+<h2>Version 2.2.0 17th Decemeber 2021<a class="headerlink" href="#version-2-2-0-17th-decemeber-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>switch blender version to 3.0.0 instead of 2.93.0<ul>
+<li>we now rely on Cycles X, making the rendering much faster than before</li>
+<li>this also depreactes the usage of <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_samples()</span></code>, this is now replaced with <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_noise_threshold()</span></code>. This fcts allows to set the desired noise ration on a pixel basis, giving a much higher control to ensure a certain consistent noise level in the whole image.</li>
+<li>it is still possible to limit the amount of samples per pixel with a new function named: <code class="docutils literal notranslate"><span class="pre">bproc.renderer.set_max_amount_of_samples()</span></code></li>
+<li>as the whole image is now rendered at once we removed the auto-tile addon</li>
+<li>the BLENDER denoiser is no longer available, we recommend using the INTEL denoiser.</li>
+</ul>
+</li>
+<li>remove the argument <code class="docutils literal notranslate"><span class="pre">keep_using_base_color</span></code> from <code class="docutils literal notranslate"><span class="pre">bproc.lighting.light_surface()</span></code> and <code class="docutils literal notranslate"><span class="pre">Material.make_emissive()</span></code>, now either a emission color or the base color is used</li>
+<li>changes for the bop integration<ul>
+<li>install bop_toolkit automatically</li>
+<li>add BlenderProc2 python scripts for BOP challenge</li>
+<li>allow to pass list of objects to <code class="docutils literal notranslate"><span class="pre">write_bop</span></code> for which to save pose annotations</li>
+<li>divide <code class="docutils literal notranslate"><span class="pre">load_bop()</span></code> into <code class="docutils literal notranslate"><span class="pre">load_bop_objs()</span></code>, <code class="docutils literal notranslate"><span class="pre">load_bop_scene()</span></code> and <code class="docutils literal notranslate"><span class="pre">load_bop_intrinsics()</span></code> to decouple the functionalit</li>
+</ul>
+</li>
+<li>fix a bug after uninstalling pip packages they were not truly removed</li>
+</ul>
+</div>
 <div class="section" id="version-2-1-0-17th-novemeber-2021">
 <h2>Version 2.1.0 17th Novemeber 2021<a class="headerlink" href="#version-2-1-0-17th-novemeber-2021" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">

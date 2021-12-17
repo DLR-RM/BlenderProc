@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic scene &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Basic scene &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -569,16 +569,16 @@ Be aware that each of these calls uses the created camera in the <code class="do
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># activate normal and depth rendering</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_normals_output</span><span class="p">()</span>
-<span class="c1"># set the amount of samples, which should be used for the color rendering</span>
-<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">350</span><span class="p">)</span>
+<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_noise_threshold</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>  <span class="c1"># this is the default value</span>
 
 <span class="c1"># render the whole pipeline</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>First we enable that <code class="docutils literal notranslate"><span class="pre">blenderproc</span></code> also generates the <code class="docutils literal notranslate"><span class="pre">normals</span></code> and the <code class="docutils literal notranslate"><span class="pre">depth</span></code> for each color image, and then we set the amount of samples used for generating the color image.
-A higher sample amount will reduce the noise in the image, but increase the rendering time.
-The correct value depends on the complexity of your scene and the GPU budget you can spare.</p>
+<p>First we enable that <code class="docutils literal notranslate"><span class="pre">blenderproc</span></code> also generates the <code class="docutils literal notranslate"><span class="pre">normals</span></code> and the <code class="docutils literal notranslate"><span class="pre">distance</span></code> for each color image.
+Furthermore, we set the desired noise threshold in our image.
+A lower noise threshold will reduce the noise in the image, but increase the rendering time.
+The default value is <code class="docutils literal notranslate"><span class="pre">0.01</span></code>, this should work for most applications.</p>
 <p>=&gt; Creates the files <code class="docutils literal notranslate"><span class="pre">rgb_0000.png</span></code> and <code class="docutils literal notranslate"><span class="pre">rgb_0001.png</span></code> in the temp folder.</p>
 <p>It also creates the normals and depth</p>
 <ul class="simple">

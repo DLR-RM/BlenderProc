@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Index &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Index &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -682,10 +682,10 @@
 </li>
       <li><a href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer._init_material">_init_material() (blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader._insert_key_frames">_insert_key_frames() (blenderproc.python.loader.BopLoader.BopLoader static method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk._is_clockwise">_is_clockwise() (blenderproc.python.sampler.Disk.Disk static method)</a>
 </li>
       <li><a href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler._is_pose_valid">_is_pose_valid() (blenderproc.python.modules.camera.CameraSampler.CameraSampler method)</a>
@@ -831,6 +831,8 @@
 </li>
       </ul></li>
       <li><a href="blenderproc.python.renderer.SegMapRendererUtility.html#blenderproc.python.renderer.SegMapRendererUtility._set_world_background_color">_set_world_background_color() (in module blenderproc.python.renderer.SegMapRendererUtility)</a>
+</li>
+      <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader._setup_bop_toolkit">_setup_bop_toolkit() (blenderproc.python.loader.BopLoader.BopLoader static method)</a>
 </li>
       <li><a href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching._sgm">_sgm() (blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching static method)</a>
 </li>
@@ -2128,10 +2130,10 @@
 </li>
       <li><a href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config.get_matrix_3x3">get_matrix_3x3() (blenderproc.python.modules.utility.Config.Config method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config.get_matrix_4x4">get_matrix_4x4() (blenderproc.python.modules.utility.Config.Config method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_mesh">get_mesh() (blenderproc.python.types.MeshObjectUtility.MeshObject method)</a>
 
       <ul>
@@ -2152,6 +2154,14 @@
         <li><a href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.get_node_connected_to_the_output_and_unlink_it">(blenderproc.python.utility.Utility.Utility static method)</a>
 </li>
         <li><a href="blenderproc.api.types.html#blenderproc.types.Material.get_node_connected_to_the_output_and_unlink_it">(blenderproc.types.Material method)</a>
+</li>
+      </ul></li>
+      <li><a href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_created_in_func">get_nodes_created_in_func() (blenderproc.python.types.MaterialUtility.Material method)</a>
+
+      <ul>
+        <li><a href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.get_nodes_created_in_func">(blenderproc.python.utility.Utility.Utility static method)</a>
+</li>
+        <li><a href="blenderproc.api.types.html#blenderproc.types.Material.get_nodes_created_in_func">(blenderproc.types.Material method)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type">get_nodes_with_type() (blenderproc.python.types.MaterialUtility.Material method)</a>
@@ -2504,20 +2514,32 @@
         <li><a href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.load_blend">(in module blenderproc.python.loader.BlendLoader)</a>
 </li>
       </ul></li>
-      <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_bop">load_bop() (in module blenderproc.loader)</a>
+      <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_bop_intrinsics">load_bop_intrinsics() (in module blenderproc.loader)</a>
 
       <ul>
-        <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop">(in module blenderproc.python.loader.BopLoader)</a>
+        <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_intrinsics">(in module blenderproc.python.loader.BopLoader)</a>
 </li>
       </ul></li>
+      <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_bop_objs">load_bop_objs() (in module blenderproc.loader)</a>
+
+      <ul>
+        <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_objs">(in module blenderproc.python.loader.BopLoader)</a>
+</li>
+      </ul></li>
+      <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_bop_scene">load_bop_scene() (in module blenderproc.loader)</a>
+
+      <ul>
+        <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.load_bop_scene">(in module blenderproc.python.loader.BopLoader)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_ccmaterials">load_ccmaterials() (in module blenderproc.loader)</a>
 
       <ul>
         <li><a href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.load_ccmaterials">(in module blenderproc.python.loader.CCMaterialLoader)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.api.loader.html#blenderproc.loader.load_front3d">load_front3d() (in module blenderproc.loader)</a>
 
       <ul>
@@ -2844,6 +2866,12 @@
 </li>
       <li><a href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.register_output">register_output() (blenderproc.python.utility.Utility.Utility static method)</a>
 </li>
+      <li><a href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_emissive">remove_emissive() (blenderproc.python.types.MaterialUtility.Material method)</a>
+
+      <ul>
+        <li><a href="blenderproc.api.types.html#blenderproc.types.Material.remove_emissive">(blenderproc.types.Material method)</a>
+</li>
+      </ul></li>
       <li><a href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_node">remove_node() (blenderproc.python.types.MaterialUtility.Material method)</a>
 
       <ul>
@@ -3146,6 +3174,8 @@
       </ul></li>
       <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.samples">samples (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
 </li>
+      <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.sampling_noise_threshold">sampling_noise_threshold (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
+</li>
       <li><a href="blenderproc.api.camera.html#blenderproc.camera.scene_coverage_score">scene_coverage_score() (in module blenderproc.camera)</a>
 
       <ul>
@@ -3174,12 +3204,6 @@
 </li>
       <li><a href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage.set">set() (blenderproc.python.modules.main.GlobalStorage.GlobalStorage static method)</a>
 </li>
-      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_adaptive_sampling">set_adaptive_sampling() (in module blenderproc.python.renderer.RendererUtility)</a>
-
-      <ul>
-        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.set_adaptive_sampling">(in module blenderproc.renderer)</a>
-</li>
-      </ul></li>
       <li><a href="blenderproc.api.camera.html#blenderproc.camera.set_camera_parameters_from_config_file">set_camera_parameters_from_config_file() (in module blenderproc.camera)</a>
 
       <ul>
@@ -3278,10 +3302,22 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.set_material">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
+      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_max_amount_of_samples">set_max_amount_of_samples() (in module blenderproc.python.renderer.RendererUtility)</a>
+
+      <ul>
+        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.set_max_amount_of_samples">(in module blenderproc.renderer)</a>
+</li>
+      </ul></li>
       <li><a href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.set_name">set_name() (blenderproc.python.types.StructUtility.Struct method)</a>
 
       <ul>
         <li><a href="blenderproc.api.types.html#blenderproc.types.Struct.set_name">(blenderproc.types.Struct method)</a>
+</li>
+      </ul></li>
+      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_noise_threshold">set_noise_threshold() (in module blenderproc.python.renderer.RendererUtility)</a>
+
+      <ul>
+        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.set_noise_threshold">(in module blenderproc.renderer)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader.set_object_pose">set_object_pose() (blenderproc.python.loader.BopLoader.BopLoader static method)</a>
@@ -3292,6 +3328,8 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.set_origin">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_output_format">set_output_format() (in module blenderproc.python.renderer.RendererUtility)</a>
 
       <ul>
@@ -3308,8 +3346,6 @@
         <li><a href="blenderproc.api.types.html#blenderproc.types.MeshObject.set_parent">(blenderproc.types.MeshObject method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.set_principled_shader_value">set_principled_shader_value() (blenderproc.python.types.MaterialUtility.Material method)</a>
 
       <ul>
@@ -3328,12 +3364,6 @@
 
       <ul>
         <li><a href="blenderproc.api.types.html#blenderproc.types.Entity.set_rotation_euler">(blenderproc.types.Entity method)</a>
-</li>
-      </ul></li>
-      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_samples">set_samples() (in module blenderproc.python.renderer.RendererUtility)</a>
-
-      <ul>
-        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.set_samples">(in module blenderproc.renderer)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_scale">set_scale() (blenderproc.python.types.EntityUtility.Entity method)</a>
@@ -3358,12 +3388,6 @@
 
       <ul>
         <li><a href="blenderproc.python.camera.CameraUtility.html#blenderproc.python.camera.CameraUtility.set_stereo_parameters">(in module blenderproc.python.camera.CameraUtility)</a>
-</li>
-      </ul></li>
-      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_tile_size">set_tile_size() (in module blenderproc.python.renderer.RendererUtility)</a>
-
-      <ul>
-        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.set_tile_size">(in module blenderproc.renderer)</a>
 </li>
       </ul></li>
       <li><a href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.set_type">set_type() (blenderproc.python.types.LightUtility.Light method)</a>
@@ -3494,20 +3518,14 @@
 </li>
       <li><a href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule (class in blenderproc.python.modules.loader.TextureLoaderModule)</a>
 </li>
-      <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.toggle_auto_tile_size">toggle_auto_tile_size() (in module blenderproc.python.renderer.RendererUtility)</a>
-
-      <ul>
-        <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.toggle_auto_tile_size">(in module blenderproc.renderer)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.toggle_stereo">toggle_stereo() (in module blenderproc.python.renderer.RendererUtility)</a>
 
       <ul>
         <li><a href="blenderproc.api.renderer.html#blenderproc.renderer.toggle_stereo">(in module blenderproc.renderer)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.transmission_bounces">transmission_bounces (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>
 </li>
       <li><a href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig.transparency_bounces">transparency_bounces (blenderproc.python.utility.DefaultConfig.DefaultConfig attribute)</a>

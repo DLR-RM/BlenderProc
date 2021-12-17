@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BlenderProc2 &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>BlenderProc2 &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -584,8 +584,8 @@ pip install -e .
 </pre></div>
 </div>
 <p>Thats it! You rendered your first image with BlenderProc!</p>
-<div class="section" id="debugging">
-<span id="id7"></span><h3>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="debugging-in-the-blender-gui">
+<span id="id7"></span><h3>Debugging in the Blender GUI<a class="headerlink" href="#debugging-in-the-blender-gui" title="Permalink to this headline">¶</a></h3>
 <p>To understand what is actually going on, BlenderProc has the great feature of visualizing everything inside the blender UI.</p>
 <p>To do so, simply call your script with the <code class="docutils literal notranslate"><span class="pre">debug</span></code> instead of <code class="docutils literal notranslate"><span class="pre">run</span></code> subcommand:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc debug quickstart.py
@@ -600,12 +600,74 @@ pip install -e .
 
 </p><p>The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.</p>
 </div>
+<div class="section" id="breakpoint-debugging-in-ides">
+<span id="id8"></span><h3>Breakpoint-Debugging in IDEs<a class="headerlink" href="#breakpoint-debugging-in-ides" title="Permalink to this headline">¶</a></h3>
+<p>As blenderproc runs in blenders separate python environment, debugging your blenderproc script cannot be done in the same way as with any other python script.</p>
+<p>Therefore, remote debugging is necessary, which is explained for vscode and PyCharm in the following:</p>
+<div class="section" id="debugging-with-vscode">
+<span id="id9"></span><h4>Debugging with vscode<a class="headerlink" href="#debugging-with-vscode" title="Permalink to this headline">¶</a></h4>
+<p>First, install the <code class="docutils literal notranslate"><span class="pre">debugpy</span></code> package in blenders python environment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">debugpy</span>
+</pre></div>
+</div>
+<p>Now add the following configuration to your vscode <a class="reference external" href="https://code.visualstudio.com/docs/python/debugging#_initialize-configurations">launch.json</a>.</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Attach&quot;</span><span class="p">,</span>
+
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;python&quot;</span><span class="p">,</span>
+
+    <span class="nt">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;attach&quot;</span><span class="p">,</span>
+
+    <span class="nt">&quot;connect&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+        <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+
+        <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="mi">5678</span>
+
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally, add the following lines to the top (after the imports) of your blenderproc script which you want to debug.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">debugpy</span>
+
+<span class="n">debugpy</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5678</span><span class="p">)</span>
+
+<span class="n">debugpy</span><span class="o">.</span><span class="n">wait_for_client</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now run your blenderproc script as usual via the CLI and then start the added “Attach” configuration in vscode.</p>
+<p>You are now able to add breakpoints and go through the execution step by step.</p>
+</div>
+<div class="section" id="debugging-with-pycharm-professional">
+<span id="id10"></span><h4>Debugging with PyCharm Professional<a class="headerlink" href="#debugging-with-pycharm-professional" title="Permalink to this headline">¶</a></h4>
+<p>In Pycharm, go to <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">configurations...</span></code> and create a <a class="reference external" href="https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#remote-debug-config">new configuration</a> based on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">Debug</span> <span class="pre">Server</span></code>.</p>
+<p>The configuration will show you, specifically for your version, which pip package to install and which code to add into the script.</p>
+<p>The following assumes Pycharm 2021.3:</p>
+<p>First, install the <code class="docutils literal notranslate"><span class="pre">pydevd-pycharm</span></code> package in blenders python environment.</p>
+<p>Unfortunately, the package cannot be installed into our custom separate packages folder, therefore, make sure to add <code class="docutils literal notranslate"><span class="pre">--not-use-custom-package-path</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pydevd</span><span class="o">-</span><span class="n">pycharm</span><span class="o">~=</span><span class="mf">212.5457.59</span> <span class="o">--</span><span class="ow">not</span><span class="o">-</span><span class="n">use</span><span class="o">-</span><span class="n">custom</span><span class="o">-</span><span class="n">package</span><span class="o">-</span><span class="n">path</span>
+</pre></div>
+</div>
+<p>Now, add the following code to the top (after the imports) of your blenderproc script which you want to debug.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydevd_pycharm</span>
+
+<span class="n">pydevd_pycharm</span><span class="o">.</span><span class="n">settrace</span><span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">stdoutToServer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stderrToServer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, first run your <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">Debug</span> <span class="pre">Server</span></code> configuration in PyCharm and then run your blenderproc script as usual via the CLI.</p>
+<p>PyCharm should then go in debug mode, blocking the next code line.</p>
+<p>You are now able to add breakpoints and go through the execution step by step.</p>
+</div>
+</div>
 </div>
 <div class="section" id="what-to-do-next">
-<span id="id8"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
+<span id="id11"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
 <p>As you now ran your first BlenderProc script, your ready to learn the basics:</p>
 <div class="section" id="tutorials">
-<span id="id9"></span><h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
+<span id="id12"></span><h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
 <p>Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:</p>
 <ol class="arabic simple">
 <li><a class="reference internal" href="docs/tutorials/loader.html"><span class="doc">Loading and manipulating objects</span></a></li>
@@ -617,7 +679,7 @@ pip install -e .
 </ol>
 </div>
 <div class="section" id="examples">
-<span id="id10"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<span id="id13"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>We provide a lot of <a class="reference internal" href="examples/README.html"><span class="doc">examples</span></a> which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide support for some datasets.</p>
 <ul class="simple">
 <li><a class="reference internal" href="examples/basics/basic/README.html"><span class="doc">Basic scene</span></a>: Basic example, this is the ideal place to start for beginners</li>
@@ -633,15 +695,15 @@ pip install -e .
 </div>
 </div>
 <div class="section" id="contributions">
-<span id="id11"></span><h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<span id="id14"></span><h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
 <p>Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Start a PR. Check the <a class="reference internal" href="CONTRIBUTING.html"><span class="doc">contributions guidelines</span></a>.</p>
 </div>
 <div class="section" id="change-log">
-<span id="id12"></span><h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
+<span id="id15"></span><h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
 <p>See our <a class="reference internal" href="change_log.html"><span class="doc">change log</span></a>.</p>
 </div>
 <div class="section" id="citation">
-<span id="id13"></span><h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<span id="id16"></span><h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
 <p>If you use BlenderProc in a research project, please cite as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">denninger2019blenderproc</span><span class="p">,</span>
 

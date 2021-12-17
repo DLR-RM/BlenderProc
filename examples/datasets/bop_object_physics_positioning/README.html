@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BOP with object pose sampling and physics positioning &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>BOP with object pose sampling and physics positioning &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -483,7 +483,6 @@
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_physics_positioning</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span>
               <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span>
               <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span>
-              <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span>
               <span class="n">resources</span><span class="o">/</span><span class="n">cctextures</span>
               <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_physics_positioning</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
@@ -492,7 +491,6 @@
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_physics_positioning/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;bop_dataset_name&gt;</span></code>: name of BOP dataset for which ground truth should be saved, e.g. ycbv</li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_toolkit&gt;</span></code>: path to the bop_toolkit folder</li>
 <li><code class="docutils literal notranslate"><span class="pre">resources/cctextures</span></code>: path to CCTextures folder</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_physics_positioning/output</span></code>: path to an output folder</li>
 </ul>
@@ -504,9 +502,9 @@
 <div class="section" id="steps">
 <h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Load T-LESS BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop()</span></code>.</li>
-<li>Load LM BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop</span></code>.</li>
-<li>Load <code class="docutils literal notranslate"><span class="pre">&lt;args:1&gt;</span></code> (YCB-V) BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop</span></code>.</li>
+<li>Load T-LESS BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_objs()</span></code>.</li>
+<li>Load LM BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_objs</span></code>.</li>
+<li>Load <code class="docutils literal notranslate"><span class="pre">&lt;args:1&gt;</span></code> (YCB-V) BOP models: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_objs</span></code>.</li>
 <li>Sample colors for T-LESS models: <code class="docutils literal notranslate"><span class="pre">mat.set_principled_shader_value()</span></code>.</li>
 <li>Sample roughness and specular values for all objects: <code class="docutils literal notranslate"><span class="pre">mat.set_principled_shader_value()</span></code>.</li>
 <li>Construct planes: <code class="docutils literal notranslate"><span class="pre">bproc.object.create_primiative()</span></code>.</li>
@@ -529,14 +527,12 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load distractor bop objects</span>
 <span class="n">distractor_bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="s1">&#39;tless&#39;</span><span class="p">),</span>
                                      <span class="n">model_type</span> <span class="o">=</span> <span class="s1">&#39;cad&#39;</span><span class="p">,</span>
-                                     <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
                                      <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                      <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                      <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">distractor_bop_objs</span> <span class="o">+=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="s1">&#39;lm&#39;</span><span class="p">),</span>
-                                      <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
                                       <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                       <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                       <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
@@ -544,17 +540,18 @@
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># load a random sample of bop objects into the scene</span>
 <span class="n">sampled_bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
-                                         <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
                                          <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                          <span class="n">sample_objects</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                                          <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop_intrinsics</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">))</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li>Here we are sampling BOP objects from 3 different datasets.</li>
 <li>We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by <code class="docutils literal notranslate"><span class="pre">&quot;&lt;args:1&gt;&quot;</span></code> (e.g. ycbv in this case).</li>
 <li><code class="docutils literal notranslate"><span class="pre">&quot;obj.set_shading_mode('auto')&quot;</span></code> sets the shading for these corresponding objects to auto smoothing. This looks more realistic for meshes that have both sharp edges and curved surfaces like in YCB-V.</li>
-<li>Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent <code class="docutils literal notranslate"><span class="pre">BopLoader</span></code> overwrites these intrinsics. In this example, <code class="docutils literal notranslate"><span class="pre">&quot;&lt;args:1&gt;&quot;</span></code>(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting <code class="docutils literal notranslate"><span class="pre">resolution_x,</span> <span class="pre">resolution_y,</span> <span class="pre">cam_K</span></code> in the camera sampler or global config.</li>
+<li>In this example, <code class="docutils literal notranslate"><span class="pre">args.bop_dataset_name</span></code>(ycbv) dataset intrinsics are used when rendering by <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_intrinsics()</span></code></li>
 </ul>
 </div>
 <div class="section" id="material-manipulator">
@@ -712,11 +709,10 @@
 <div class="section" id="rgb-renderer">
 <h3>Rgb Renderer<a class="headerlink" href="#rgb-renderer" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Renders RGB using 50 <code class="docutils literal notranslate"><span class="pre">&quot;samples&quot;</span></code> and also outputs depth images.</li>
+<li>Renders an RGB image and also outputs a depth images.</li>
 </ul>
 </div>
 <div class="section" id="bop-writer">

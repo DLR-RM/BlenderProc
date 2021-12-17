@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.Initializer &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.utility.Initializer &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -526,9 +526,8 @@
             <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
                 <span class="k">break</span>
         <span class="c1"># make sure that all visible GPUs are used</span>
-        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">prefs</span><span class="o">.</span><span class="n">get_devices</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
-                <span class="n">d</span><span class="o">.</span><span class="n">use</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">prefs</span><span class="o">.</span><span class="n">devices</span><span class="p">:</span>
+            <span class="n">device</span><span class="o">.</span><span class="n">use</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># Set the Experimental features on/off</span>
     <span class="k">if</span> <span class="n">use_experimental_features</span><span class="p">:</span>
@@ -587,9 +586,8 @@
 
         <span class="c1"># Init renderer</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">_render_init</span><span class="p">()</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="n">DefaultConfig</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span>
-        <span class="n">addon_utils</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;render_auto_tile_size&quot;</span><span class="p">)</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">toggle_auto_tile_size</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_max_amount_of_samples</span><span class="p">(</span><span class="n">DefaultConfig</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_noise_threshold</span><span class="p">(</span><span class="n">DefaultConfig</span><span class="o">.</span><span class="n">sampling_noise_threshold</span><span class="p">)</span>
 
         <span class="c1"># Set number of cpu cores used for rendering (1 thread is always used for coordination =&gt; 1</span>
         <span class="c1"># cpu thread means GPU-only rendering)</span>

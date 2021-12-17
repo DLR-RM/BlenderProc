@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.types.StructUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.types.StructUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -560,8 +560,12 @@
 
 <div class="viewcode-block" id="Struct.clear_all_cps"><a class="viewcode-back" href="../../../../blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.clear_all_cps">[docs]</a>    <span class="k">def</span> <span class="nf">clear_all_cps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Removes all existing custom properties the struct has. &quot;&quot;&quot;</span>
-        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="c1"># iterating over the keys is not possible as deleting them changes the structure of the</span>
+        <span class="c1"># underlying blender object -&gt; to solve this we always remove only the first element until no element is left</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># extract first element of the keys</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># delete this first element</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Struct.get_attr"><a class="viewcode-back" href="../../../../blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.get_attr">[docs]</a>    <span class="k">def</span> <span class="nf">get_attr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>

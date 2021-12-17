@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Benchmark for 6D Object Pose Estimation (BOP) Sampling objects, cameras and lights &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Benchmark for 6D Object Pose Estimation (BOP) Sampling objects, cameras and lights &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -476,17 +476,16 @@
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p>First make sure that you have downloaded a <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP dataset</a> in the original folder structure. Also please clone the <a class="reference external" href="https://github.com/thodan/bop_toolkit">BOP toolkit</a>.</p>
+<p>First make sure that you have downloaded a <a class="reference external" href="https://bop.felk.cvut.cz/datasets/">BOP dataset</a> in the original folder structure.</p>
 <p>In <span class="xref std std-doc">examples/datasets/bop_object_pose_sampling/main.py</span> set the <code class="docutils literal notranslate"><span class="pre">blender_install_path</span></code> where Blender is or should be installed.</p>
 <p>Execute in the BlenderProc main directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">path_to_bop_toolkit</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">run</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">py</span> <span class="o">&lt;</span><span class="n">path_to_bop_data</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">bop_dataset_name</span><span class="o">&gt;</span> <span class="n">examples</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">bop_object_pose_sampling</span><span class="o">/</span><span class="n">output</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_pose_sampling/main.py</span></code>: path to the python file with pipeline configuration.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_data&gt;</span></code>: path to a folder containing BOP datasets.</li>
 <li><code class="docutils literal notranslate"><span class="pre">&lt;bop_dataset_name&gt;</span></code>: name of BOP dataset, e.g. lm</li>
-<li><code class="docutils literal notranslate"><span class="pre">&lt;path_to_bop_toolkit&gt;</span></code>: path to the BOP toolkit containing dataset parameters, etc.</li>
 <li><code class="docutils literal notranslate"><span class="pre">examples/datasets/bop_object_pose_sampling/output</span></code>: path to the output directory.</li>
 </ul>
 </div>
@@ -504,7 +503,7 @@
 <div class="section" id="steps">
 <h1>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Loads object models and camera intrinsics from specified BOP dataset: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop()</span></code>.</li>
+<li>Loads object models and camera intrinsics from specified BOP dataset: <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_objs()</span></code>, <code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_intrinsics()</span></code>.</li>
 <li>Creates a point light sampled inside a shell</li>
 <li>Loops over five times:<ul>
 <li>Sample Object Poses inside a cube with collision checks</li>
@@ -520,12 +519,13 @@
 <h1>Python file (main.py)<a class="headerlink" href="#python-file-main-py" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="boploader">
 <h2>BopLoader<a class="headerlink" href="#boploader" title="Permalink to this headline">¶</a></h2>
-<p>If <code class="docutils literal notranslate"><span class="pre">scene_id</span></code> is not specified (default = -1), <code class="docutils literal notranslate"><span class="pre">loader.BopLoader</span></code> simply loads all or the specified <code class="docutils literal notranslate"><span class="pre">obj_ids</span></code> from the BOP dataset given by <code class="docutils literal notranslate"><span class="pre">bop_dataset_path</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
-                          <span class="n">sys_paths</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_toolkit_path</span><span class="p">,</span>
+<p><code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_objs()</span></code> simply loads all or the specified <code class="docutils literal notranslate"><span class="pre">obj_ids</span></code> from the BOP dataset given by <code class="docutils literal notranslate"><span class="pre">bop_dataset_path</span></code>.
+<code class="docutils literal notranslate"><span class="pre">bproc.loader.load_bop_intrinsics()</span></code> sets the intrinsics of the BOP dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bop_objs</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop_objs</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">),</span>
                           <span class="n">mm2m</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                          <span class="n">split</span> <span class="o">=</span> <span class="s1">&#39;val&#39;</span><span class="p">,</span> <span class="c1"># careful, some BOP datasets only have test sets</span>
                           <span class="n">obj_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">bproc</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">load_bop_intrinsics</span><span class="p">(</span><span class="n">bop_dataset_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">bop_parent_path</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">bop_dataset_name</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>

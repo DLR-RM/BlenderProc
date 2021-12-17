@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.writer.BopWriterUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.writer.BopWriterUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -468,7 +468,8 @@
            <div itemprop="articleBody">
             
   <h1>Source code for blenderproc.python.writer.BopWriterUtility</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -485,13 +486,14 @@
 <span class="kn">from</span> <span class="nn">blenderproc.python.writer.WriterUtility</span> <span class="kn">import</span> <span class="n">WriterUtility</span>
 
 
-<div class="viewcode-block" id="write_bop"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.write_bop">[docs]</a><span class="k">def</span> <span class="nf">write_bop</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-              <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">append_to_existing_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-              <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="write_bop"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.write_bop">[docs]</a><span class="k">def</span> <span class="nf">write_bop</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_objects</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+              <span class="n">colors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> 
+              <span class="n">append_to_existing_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
               <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">m2mm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Write the BOP data</span>
 
 <span class="sd">    :param output_dir: Path to the output directory.</span>
+<span class="sd">    :param target_objects: Objects for which to save ground truth poses in BOP format. Default: Save all objects or from specified dataset</span>
 <span class="sd">    :param depths: List of depth images in m to save</span>
 <span class="sd">    :param colors: List of color images to save</span>
 <span class="sd">    :param color_file_format: File type to save color images. Available: &quot;PNG&quot;, &quot;JPEG&quot;</span>
@@ -523,17 +525,17 @@
     <span class="k">elif</span> <span class="ow">not</span> <span class="n">append_to_existing_output</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The output folder already exists: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">))</span>
 
-    <span class="n">all_mesh_objects</span> <span class="o">=</span> <span class="n">get_all_blender_mesh_objects</span><span class="p">()</span>
-
-    <span class="c1"># Select objects from the specified dataset.</span>
-    <span class="k">if</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="c1"># Select target objects or objects from the specified dataset or all objects</span>
+    <span class="k">if</span> <span class="n">target_objects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">[</span><span class="n">t_obj</span><span class="o">.</span><span class="n">blender_obj</span> <span class="k">for</span> <span class="n">t_obj</span> <span class="ow">in</span> <span class="n">target_objects</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">dataset</span><span class="p">:</span>
         <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">all_mesh_objects</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;bop_dataset_name&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_blender_mesh_objects</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;bop_dataset_name&quot;</span> <span class="ow">in</span> <span class="n">obj</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">hide_render</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;bop_dataset_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">:</span>
                     <span class="n">dataset_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="n">all_mesh_objects</span>
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="n">get_all_blender_mesh_objects</span><span class="p">()</span>
 
     <span class="c1"># Check if there is any object from the specified dataset.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset_objects</span><span class="p">:</span>
@@ -672,6 +674,8 @@
             <span class="n">cam_R_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_quaternion</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
             <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
 
+            <span class="k">assert</span> <span class="s2">&quot;category_id&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> object has no custom property &#39;category_id&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+            
             <span class="c1"># ignore examples that fell through the plane</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">ignore_dist_thres</span><span class="p">:</span>
                 <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span> <span class="o">*</span> <span class="n">unit_scaling</span><span class="p">)</span>

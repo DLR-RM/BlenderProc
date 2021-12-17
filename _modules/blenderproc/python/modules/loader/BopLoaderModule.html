@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.modules.loader.BopLoaderModule &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.modules.loader.BopLoaderModule &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -469,7 +469,7 @@
             
   <h1>Source code for blenderproc.python.modules.loader.BopLoaderModule</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">blenderproc.python.modules.loader.LoaderInterface</span> <span class="kn">import</span> <span class="n">LoaderInterface</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.loader.BopLoader</span> <span class="kn">import</span> <span class="n">load_bop</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.loader.BopLoader</span> <span class="kn">import</span> <span class="n">load_bop_objs</span><span class="p">,</span> <span class="n">load_bop_scene</span><span class="p">,</span> <span class="n">load_bop_intrinsics</span>
 
 
 <div class="viewcode-block" id="BopLoaderModule"><a class="viewcode-back" href="../../../../../blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">[docs]</a><span class="k">class</span> <span class="nc">BopLoaderModule</span><span class="p">(</span><span class="n">LoaderInterface</span><span class="p">):</span>
@@ -550,22 +550,36 @@
             <span class="n">num_of_objs_to_sample</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">obj_instances_limit</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-        <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">load_bop</span><span class="p">(</span>
+        <span class="n">scene_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;scene_id&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">scene_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+          <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">load_bop_objs</span><span class="p">(</span>
+              <span class="n">bop_dataset_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;bop_dataset_path&quot;</span><span class="p">),</span>
+              <span class="n">model_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+              <span class="n">obj_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;obj_ids&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+              <span class="n">sample_objects</span><span class="o">=</span><span class="n">sample_objects</span><span class="p">,</span>
+              <span class="n">num_of_objs_to_sample</span><span class="o">=</span><span class="n">num_of_objs_to_sample</span><span class="p">,</span>
+              <span class="n">obj_instances_limit</span><span class="o">=</span><span class="n">obj_instances_limit</span><span class="p">,</span>
+              <span class="n">move_origin_to_x_y_plane</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;move_origin_to_x_y_plane&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+              <span class="n">mm2m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;mm2m&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+              <span class="n">temp_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span>
+          <span class="p">)</span>
+          <span class="n">load_bop_intrinsics</span><span class="p">(</span>
             <span class="n">bop_dataset_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;bop_dataset_path&quot;</span><span class="p">),</span>
-            <span class="n">temp_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span><span class="p">,</span>
-            <span class="n">sys_paths</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;sys_paths&quot;</span><span class="p">),</span>
-            <span class="n">model_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-            <span class="n">cam_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;cam_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
             <span class="n">split</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;split&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">),</span>
-            <span class="n">scene_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;scene_id&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">obj_ids</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;obj_ids&quot;</span><span class="p">,</span> <span class="p">[]),</span>
-            <span class="n">sample_objects</span><span class="o">=</span><span class="n">sample_objects</span><span class="p">,</span>
-            <span class="n">num_of_objs_to_sample</span><span class="o">=</span><span class="n">num_of_objs_to_sample</span><span class="p">,</span>
-            <span class="n">obj_instances_limit</span><span class="o">=</span><span class="n">obj_instances_limit</span><span class="p">,</span>
-            <span class="n">move_origin_to_x_y_plane</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;move_origin_to_x_y_plane&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-            <span class="n">source_frame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;source_frame&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">]),</span>
-            <span class="n">mm2m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;mm2m&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-        <span class="p">)</span>
+            <span class="n">cam_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;cam_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+          <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  
+          <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">load_bop_scene</span><span class="p">(</span>
+              <span class="n">bop_dataset_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;bop_dataset_path&quot;</span><span class="p">),</span>
+              <span class="n">scene_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;scene_id&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+              <span class="n">model_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;model_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+              <span class="n">cam_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;cam_type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+              <span class="n">split</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;split&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">),</span>
+              <span class="n">source_frame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;source_frame&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">]),</span>
+              <span class="n">mm2m</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;mm2m&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+              <span class="n">temp_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span>
+          <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">)</span></div></div>
 </pre></div>

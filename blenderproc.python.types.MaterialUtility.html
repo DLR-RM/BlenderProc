@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.types.MaterialUtility module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.types.MaterialUtility module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -499,18 +499,42 @@ removes the connection between this node and the output and returns this node an
 </dd></dl>
 
 <dl class="method">
-<dt id="blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type">
-<code class="descname">get_nodes_with_type</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.get_nodes_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type" title="Permalink to this definition">¶</a></dt>
+<dt id="blenderproc.python.types.MaterialUtility.Material.get_nodes_created_in_func">
+<code class="descname">get_nodes_created_in_func</code><span class="sig-paren">(</span><em>created_in_func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.get_nodes_created_in_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.get_nodes_created_in_func" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all nodes which are of the given node_type</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The note type to look for.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – return all nodes created in the given function</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of nodes with the given type.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type">
+<code class="descname">get_nodes_with_type</code><span class="sig-paren">(</span><em>node_type</em>, <em>created_in_func=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.get_nodes_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all nodes which are of the given node_type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The note type to look for.</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – only return nodes created by the specified function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The list of nodes with the given type.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -536,18 +560,24 @@ removes the connection between this node and the output and returns this node an
 
 <dl class="method">
 <dt id="blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type">
-<code class="descname">get_the_one_node_with_type</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.get_the_one_node_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_the_one_node_with_type</code><span class="sig-paren">(</span><em>node_type</em>, <em>created_in_func=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.get_the_one_node_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the one node which is of the given node_type</p>
 <p>This function will only work if there is only one of the nodes of this type.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The node type to look for.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The node type to look for.</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – only return node created by the specified function</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The node.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The node.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -666,7 +696,7 @@ After: source_socket -&gt; new_node_dest_socket and new_node_src_socket -&gt; de
 
 <dl class="method">
 <dt id="blenderproc.python.types.MaterialUtility.Material.make_emissive">
-<code class="descname">make_emissive</code><span class="sig-paren">(</span><em>emission_strength</em>, <em>replace=False</em>, <em>keep_using_base_color=True</em>, <em>emission_color=None</em>, <em>non_emissive_color_socket=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.make_emissive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.make_emissive" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_emissive</code><span class="sig-paren">(</span><em>emission_strength</em>, <em>replace=False</em>, <em>emission_color=None</em>, <em>non_emissive_color_socket=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.make_emissive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.make_emissive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes the material emit light.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -675,8 +705,7 @@ After: source_socket -&gt; new_node_dest_socket and new_node_src_socket -&gt; de
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>emission_strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted light.</li>
 <li><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – When replace is set to True, the existing material will be completely replaced by the emission shader, otherwise it still looks the same, while emitting light.</li>
-<li><strong>keep_using_base_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the base color of the material will be used as emission color.</li>
-<li><strong>emission_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – The color of the light to emit. Is ignored if keep_using_base_color is set to True.</li>
+<li><strong>emission_color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – The color of the light to emit. Default: Color of the original object.</li>
 <li><strong>non_emissive_color_socket</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeSocket</span></code>]) – An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.</li>
 </ul>
 </td>
@@ -706,20 +735,33 @@ reflections such as specularity, roughness, etc. alter the object’s appearance
 
 <dl class="method">
 <dt id="blenderproc.python.types.MaterialUtility.Material.new_node">
-<code class="descname">new_node</code><span class="sig-paren">(</span><em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.new_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.new_node" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_node</code><span class="sig-paren">(</span><em>node_type</em>, <em>created_in_func=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.new_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.new_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new node in the material’s node tree.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The desired type of the new node.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The desired type of the new node.</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Save the function name in which this node was created as a custom property. 
+Allows to later retrieve and delete specific nodes again.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The new node.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new node.</p>
+</td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.python.types.MaterialUtility.Material.remove_emissive">
+<code class="descname">remove_emissive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MaterialUtility.html#Material.remove_emissive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.types.MaterialUtility.Material.remove_emissive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove emissive part of the material.</p>
 </dd></dl>
 
 <dl class="method">

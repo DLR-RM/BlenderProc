@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.renderer.FlowRendererUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.renderer.FlowRendererUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -512,8 +512,9 @@
 
     <span class="k">with</span> <span class="n">Utility</span><span class="o">.</span><span class="n">UndoAfterExecution</span><span class="p">():</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">_render_init</span><span class="p">()</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_adaptive_sampling</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># the amount of samples must be one and there can not be any noise threshold</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_max_amount_of_samples</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_noise_threshold</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_denoiser</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_light_bounces</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
@@ -574,7 +575,7 @@
         <span class="c1"># Flow settings (is called &quot;vector&quot; in blender)</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">view_layers</span><span class="p">[</span><span class="s2">&quot;View Layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">use_pass_vector</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_vector</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Adapt compositor to output vector field</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span>

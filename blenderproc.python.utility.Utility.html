@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.utility.Utility module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.utility.Utility module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -568,7 +568,7 @@ implement default like this:</p>
 
 <dl class="attribute">
 <dt id="blenderproc.python.utility.Utility.Utility.blenderproc_root">
-<code class="descname">blenderproc_root</code><em class="property"> = '/home/domin/Dokumente/moiz/BlenderProc/blenderproc/python/utility/../../..'</em><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.blenderproc_root" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blenderproc_root</code><em class="property"> = '/home/domin/Dokumente/BlenderProcPublic/blenderproc/python/utility/../../..'</em><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.blenderproc_root" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -701,8 +701,32 @@ removes the connection between this node and the output and returns this node an
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="blenderproc.python.utility.Utility.Utility.get_nodes_created_in_func">
+<em class="property">static </em><code class="descname">get_nodes_created_in_func</code><span class="sig-paren">(</span><em>nodes</em>, <em>created_in_func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#Utility.get_nodes_created_in_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.get_nodes_created_in_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all nodes which are created in the given function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]) – list of nodes of the current material</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – return all nodes created in the given function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The list of nodes with the given type.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="blenderproc.python.utility.Utility.Utility.get_nodes_with_type">
-<em class="property">static </em><code class="descname">get_nodes_with_type</code><span class="sig-paren">(</span><em>nodes</em>, <em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#Utility.get_nodes_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.get_nodes_with_type" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">get_nodes_with_type</code><span class="sig-paren">(</span><em>nodes</em>, <em>node_type</em>, <em>created_in_func=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#Utility.get_nodes_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.get_nodes_with_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all nodes which are of the given node_type</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -711,6 +735,7 @@ removes the connection between this node and the output and returns this node an
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]) – list of nodes of the current material</li>
 <li><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – node types</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – only return nodes created by the specified function</li>
 </ul>
 </td>
 </tr>
@@ -757,7 +782,7 @@ removes the connection between this node and the output and returns this node an
 
 <dl class="staticmethod">
 <dt id="blenderproc.python.utility.Utility.Utility.get_the_one_node_with_type">
-<em class="property">static </em><code class="descname">get_the_one_node_with_type</code><span class="sig-paren">(</span><em>nodes</em>, <em>node_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#Utility.get_the_one_node_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.get_the_one_node_with_type" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">get_the_one_node_with_type</code><span class="sig-paren">(</span><em>nodes</em>, <em>node_type</em>, <em>created_in_func=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/utility/Utility.html#Utility.get_the_one_node_with_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.get_the_one_node_with_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the one nodes which is of the given node_type</p>
 <p>This function will only work if there is only one of the nodes of this type.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -767,6 +792,7 @@ removes the connection between this node and the output and returns this node an
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>]) – list of nodes of the current material</li>
 <li><strong>node_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – node types</li>
+<li><strong>created_in_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – only return node created by the specified function</li>
 </ul>
 </td>
 </tr>
@@ -1010,7 +1036,7 @@ is ambiguous.</p>
 
 <dl class="attribute">
 <dt id="blenderproc.python.utility.Utility.Utility.temp_dir">
-<code class="descname">temp_dir</code><em class="property"> = '/home/domin/Dokumente/moiz/BlenderProc/docs/examples/debugging/temp'</em><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.temp_dir" title="Permalink to this definition">¶</a></dt>
+<code class="descname">temp_dir</code><em class="property"> = '/home/domin/Dokumente/BlenderProcPublic/docs/examples/debugging/temp'</em><a class="headerlink" href="#blenderproc.python.utility.Utility.Utility.temp_dir" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

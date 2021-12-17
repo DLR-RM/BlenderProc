@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Usage &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>Usage &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -545,8 +545,6 @@ Each cameras rotation is such that it looks directly at the object and the camer
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># activate normal and depth rendering</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_normals_output</span><span class="p">()</span>
 <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">enable_depth_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="c1"># set the amount of samples, which should be used for the color rendering</span>
-<span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">350</span><span class="p">)</span>
 
 <span class="c1"># render the whole pipeline</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>

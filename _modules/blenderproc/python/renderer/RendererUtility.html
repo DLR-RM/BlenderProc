@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.renderer.RendererUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.renderer.RendererUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -489,7 +489,7 @@
 
 <span class="sd">    Automatically disables all previously activated denoiser.</span>
 
-<span class="sd">    :param denoiser: The name of the denoiser which should be enabled. Options are &quot;INTEL&quot;, &quot;OPTIX&quot;, &quot;BLENDER&quot; and None. \</span>
+<span class="sd">    :param denoiser: The name of the denoiser which should be enabled. Options are &quot;INTEL&quot;, &quot;OPTIX&quot; and None. \</span>
 <span class="sd">                     If None is given, then no denoiser will be active.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Make sure there is no denoiser active</span>
@@ -524,10 +524,6 @@
 
         <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;DiffCol&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Albedo&#39;</span><span class="p">])</span>
         <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;BLENDER&quot;</span><span class="p">:</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">denoiser</span> <span class="o">=</span> <span class="s2">&quot;NLM&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No such denoiser: &quot;</span> <span class="o">+</span> <span class="n">denoiser</span><span class="p">)</span></div>
 
@@ -565,27 +561,6 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">volume_bounces</span> <span class="o">=</span> <span class="n">volume_bounces</span></div>
 
 
-<div class="viewcode-block" id="toggle_auto_tile_size"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.toggle_auto_tile_size">[docs]</a><span class="k">def</span> <span class="nf">toggle_auto_tile_size</span><span class="p">(</span><span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Enables/Disables the automatic tile size detection via the render_auto_tile_size addon.</span>
-
-<span class="sd">    :param enable: True, if it should be enabled.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ats_settings</span><span class="o">.</span><span class="n">is_enabled</span> <span class="o">=</span> <span class="n">enable</span></div>
-
-
-<div class="viewcode-block" id="set_tile_size"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_tile_size">[docs]</a><span class="k">def</span> <span class="nf">set_tile_size</span><span class="p">(</span><span class="n">tile_x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">tile_y</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Sets the rendering tile size.</span>
-
-<span class="sd">    This will automatically disable the automatic tile size detection.</span>
-
-<span class="sd">    :param tile_x: The horizontal tile size in pixels.</span>
-<span class="sd">    :param tile_y: The vertical tile size in pixels.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">toggle_auto_tile_size</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">tile_x</span> <span class="o">=</span> <span class="n">tile_x</span>
-    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">tile_y</span> <span class="o">=</span> <span class="n">tile_y</span></div>
-
-
 <div class="viewcode-block" id="set_cpu_threads"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_cpu_threads">[docs]</a><span class="k">def</span> <span class="nf">set_cpu_threads</span><span class="p">(</span><span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Sets the number of CPU cores to use simultaneously while rendering.</span>
 
@@ -621,26 +596,34 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_simplify</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="set_adaptive_sampling"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_adaptive_sampling">[docs]</a><span class="k">def</span> <span class="nf">set_adaptive_sampling</span><span class="p">(</span><span class="n">adaptive_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Configures adaptive sampling.</span>
-
+<div class="viewcode-block" id="set_noise_threshold"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_noise_threshold">[docs]</a><span class="k">def</span> <span class="nf">set_noise_threshold</span><span class="p">(</span><span class="n">noise_threshold</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Configures the adaptive sampling, the noise threshold is typically between 0.1 and 0.001.</span>
 <span class="sd">    Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.</span>
 
-<span class="sd">    :param adaptive_threshold: Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled.</span>
+<span class="sd">    We do not recommend setting the noise threshold value to zero and therefore turning off the adaptive sampling.</span>
+
+<span class="sd">    For more information see the official documentation:</span>
+<span class="sd">    https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling</span>
+
+<span class="sd">    :param noise_threshold: Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled and only the</span>
+<span class="sd">                            max amount of samples is used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">adaptive_threshold</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">noise_threshold</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_adaptive_sampling</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">adaptive_threshold</span> <span class="o">=</span> <span class="n">adaptive_threshold</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">adaptive_threshold</span> <span class="o">=</span> <span class="n">noise_threshold</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_adaptive_sampling</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="set_samples"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_samples">[docs]</a><span class="k">def</span> <span class="nf">set_samples</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Sets the number of samples to render for each pixel.</span>
+<div class="viewcode-block" id="set_max_amount_of_samples"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.set_max_amount_of_samples">[docs]</a><span class="k">def</span> <span class="nf">set_max_amount_of_samples</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Sets the maximum number of samples to render for each pixel.</span>
+<span class="sd">    This maximum amount is usually not reached if the noise threshold is low enough.</span>
+<span class="sd">    If the noise threshold was set to 0, then only the maximum number of samples is used (We do not recommend this).</span>
 
-<span class="sd">    :param samples: The number of samples per pixel</span>
+<span class="sd">    :param samples: The maximum number of samples per pixel</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">samples</span></div>
+
 
 <div class="viewcode-block" id="enable_distance_output"><a class="viewcode-back" href="../../../../blenderproc.python.renderer.RendererUtility.html#blenderproc.python.renderer.RendererUtility.enable_distance_output">[docs]</a><span class="k">def</span> <span class="nf">enable_distance_output</span><span class="p">(</span><span class="n">activate_antialiasing</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">file_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance_&quot;</span><span class="p">,</span>
                            <span class="n">output_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="n">antialiasing_distance_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

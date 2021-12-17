@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.loader.BopLoader module &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.loader.BopLoader module &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -636,6 +636,25 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="blenderproc.python.loader.BopLoader.BopLoader._setup_bop_toolkit">
+<em class="property">static </em><code class="descname">_setup_bop_toolkit</code><span class="sig-paren">(</span><em>bop_dataset_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#BopLoader._setup_bop_toolkit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.BopLoader._setup_bop_toolkit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install the bop_toolkit from Github and set an environment variable pointing to the BOP datasets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cam_H_m2c_ref</strong> – (4x4) Homog trafo from object to camera coords.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return (bop_path, bop_dataset_name):</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">Path to BOP datasets and BOP dataset name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="blenderproc.python.loader.BopLoader.BopLoader.set_object_pose">
 <em class="property">static </em><code class="descname">set_object_pose</code><span class="sig-paren">(</span><em>cur_obj</em>, <em>inst</em>, <em>scale</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#BopLoader.set_object_pose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.BopLoader.set_object_pose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set object pose for current obj</p>
@@ -657,9 +676,68 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="blenderproc.python.loader.BopLoader.load_bop">
-<code class="descclassname">blenderproc.python.loader.BopLoader.</code><code class="descname">load_bop</code><span class="sig-paren">(</span><em>bop_dataset_path, sys_paths, temp_dir=None, model_type='', cam_type='', split='test', scene_id=-1, obj_ids=[], sample_objects=False, num_of_objs_to_sample=None, obj_instances_limit=-1, move_origin_to_x_y_plane=False, source_frame=['X', '-Y', '-Z'], mm2m=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#load_bop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.load_bop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the 3D models of any BOP dataset and allows replicating BOP scenes</p>
+<dt id="blenderproc.python.loader.BopLoader.load_bop_intrinsics">
+<code class="descclassname">blenderproc.python.loader.BopLoader.</code><code class="descname">load_bop_intrinsics</code><span class="sig-paren">(</span><em>bop_dataset_path</em>, <em>split='test'</em>, <em>cam_type=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#load_bop_intrinsics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.load_bop_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and set the camera matrix and image resolution of a specified BOP dataset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bop_dataset_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Full path to a specific bop dataset e.g. /home/user/bop/tless.</li>
+<li><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Optionally, train, test or val split depending on BOP dataset, defaults to “test”</li>
+<li><strong>cam_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Camera type. If not defined, dataset-specific default camera type is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">camera matrix K, W, H</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.python.loader.BopLoader.load_bop_objs">
+<code class="descclassname">blenderproc.python.loader.BopLoader.</code><code class="descname">load_bop_objs</code><span class="sig-paren">(</span><em>bop_dataset_path</em>, <em>model_type=''</em>, <em>obj_ids=[]</em>, <em>sample_objects=False</em>, <em>num_of_objs_to_sample=None</em>, <em>obj_instances_limit=-1</em>, <em>mm2m=False</em>, <em>move_origin_to_x_y_plane=False</em>, <em>temp_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#load_bop_objs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.load_bop_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads all or a subset of 3D models of any BOP dataset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bop_dataset_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Full path to a specific bop dataset e.g. /home/user/bop/tless.</li>
+<li><strong>model_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Optionally, specify type of BOP model. Available: [reconst, cad or eval].</li>
+<li><strong>obj_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of object ids to load. Default: [] (load all objects from the given BOP dataset)</li>
+<li><strong>sample_objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Toggles object sampling from the specified dataset.</li>
+<li><strong>num_of_objs_to_sample</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Amount of objects to sample from the specified dataset. If this amount is bigger than the dataset
+actually contains, then all objects will be loaded.</li>
+<li><strong>obj_instances_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Limits the amount of object copies when sampling. Default: -1 (no limit).</li>
+<li><strong>mm2m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Specify whether to convert poses and models to meters.</li>
+<li><strong>move_origin_to_x_y_plane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Move center of the object to the lower side of the object, this will not work when used in combination with
+pose estimation tasks! This is designed for the use-case where BOP objects are used as filler objects in
+the background.</li>
+<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – A temp directory which is used for writing the temporary .ply file.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The list of loaded mesh objects.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.python.loader.BopLoader.load_bop_scene">
+<code class="descclassname">blenderproc.python.loader.BopLoader.</code><code class="descname">load_bop_scene</code><span class="sig-paren">(</span><em>bop_dataset_path, scene_id, model_type='', cam_type='', split='test', source_frame=['X', '-Y', '-Z'], mm2m=False, temp_dir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/loader/BopLoader.html#load_bop_scene"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.loader.BopLoader.load_bop_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and extrinsics</p>
 <ul class="simple">
 <li>Interfaces with the bob_toolkit, allows loading of train, val and test splits</li>
 <li>Relative camera poses are loaded/computed with respect to a reference model</li>
@@ -671,26 +749,16 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>bop_dataset_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Full path to a specific bop dataset e.g. /home/user/bop/tless.</li>
-<li><strong>sys_paths</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – System paths to append. Can be a string or a list of strings.</li>
-<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – A temp directory which is used for writing the temporary .ply file.</li>
+<li><strong>scene_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
+only BOP Objects are loaded).</li>
 <li><strong>model_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Optionally, specify type of BOP model.  Available: [reconst, cad or eval].</li>
 <li><strong>cam_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Camera type. If not defined, dataset-specific default camera type is used.</li>
 <li><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Optionally, test or val split depending on BOP dataset.</li>
-<li><strong>scene_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
-only BOP Objects are loaded).</li>
-<li><strong>obj_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of object ids to load. Default: [] (all objects from the given BOP dataset if scene_id is not
-specified).</li>
-<li><strong>sample_objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Toggles object sampling from the specified dataset.</li>
-<li><strong>num_of_objs_to_sample</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Amount of objects to sample from the specified dataset. If this amount is bigger than the dataset
-actually contains, then all objects will be loaded.</li>
-<li><strong>obj_instances_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Limits the amount of object copies when sampling. Default: -1 (no limit).</li>
-<li><strong>move_origin_to_x_y_plane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Move center of the object to the lower side of the object, this will not work when used in combination with
-pose estimation tasks! This is designed for the use-case where BOP objects are used as filler objects in
-the background.</li>
 <li><strong>source_frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – Can be used if the given positions and rotations are specified in frames different from the blender
 frame. Has to be a list of three strings. Example: [‘X’, ‘-Z’, ‘Y’]: Point (1,2,3) will be transformed
 to (1, -3, 2). Available: [‘X’, ‘Y’, ‘Z’, ‘-X’, ‘-Y’, ‘-Z’].</li>
 <li><strong>mm2m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Specify whether to convert poses and models to meters.</li>
+<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – A temp directory which is used for writing the temporary .ply file.</li>
 </ul>
 </td>
 </tr>

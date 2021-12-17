@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.camera.CameraValidation &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.camera.CameraValidation &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -620,7 +620,8 @@
             <span class="c1"># Send ray from the camera position through the current point on the plane</span>
             <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">evaluated_depsgraph_get</span><span class="p">(),</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
             <span class="c1"># Add hit object to set</span>
-            <span class="n">visible_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MeshObject</span><span class="p">(</span><span class="n">hit_object</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">hit_object</span><span class="p">:</span>
+                <span class="n">visible_objects</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MeshObject</span><span class="p">(</span><span class="n">hit_object</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">visible_objects</span></div>
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.renderer.NOCSRendererUtility &mdash; BlenderProc 2.1.0 documentation</title>
+  <title>blenderproc.python.renderer.NOCSRendererUtility &mdash; BlenderProc 2.2.0 documentation</title>
   
 
   
@@ -514,8 +514,9 @@
 
         <span class="c1"># Set all fast rendering parameters with only one ray per pixel</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">_render_init</span><span class="p">()</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_samples</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_adaptive_sampling</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># the amount of samples must be one and there can not be any noise threshold</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_max_amount_of_samples</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_noise_threshold</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_denoiser</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">RendererUtility</span><span class="o">.</span><span class="n">set_light_bounces</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">filter_width</span> <span class="o">=</span> <span class="mf">0.0</span>
