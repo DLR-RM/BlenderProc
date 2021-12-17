@@ -234,6 +234,9 @@ class SetupUtility:
         # Run pip uninstall
         subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
+        # Clear installed packages cache
+        SetupUtility.clean_installed_packages_cache(blender_path, major_version)
+
     @staticmethod
     def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str, force_update: bool = False):
         """ Make sure pip is installed and read in the already installed packages
