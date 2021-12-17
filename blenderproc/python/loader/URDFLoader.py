@@ -1,11 +1,10 @@
 from typing import List, Union
 import os
-import urdfpy
 from mathutils import Matrix, Vector
-from urdfpy import URDF
 
 import bpy
 
+from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.BlenderUtility import get_all_materials
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
@@ -21,6 +20,10 @@ def load_urdf(urdf_file: str) -> URDFObject:
     :param urdf_file: Path to the URDF file.
     :return: URDF object instance.
     """
+    # install urdfpy
+    SetupUtility.setup_pip(user_required_packages=["urdfpy==0.0.22", "networkx==2.5.1"])
+    from urdfpy import URDF
+
     # load urdf tree representation
     urdf_tree = URDF.load(urdf_file)
 
@@ -91,7 +94,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
     return URDFObject(name=urdf_tree.name, links=links, other_xml=urdf_tree.other_xml)
 
 
-def load_links(link_trees: List[urdfpy.Link]) -> List[Link]:
+def load_links(link_trees: List["urdfpy.Link"]) -> List[Link]:
     """ Loads links given a list of urdfpy.Link representations.
 
     :param link_trees: List of urdf representations of the links.
@@ -137,7 +140,7 @@ def load_links(link_trees: List[urdfpy.Link]) -> List[Link]:
     return links
 
 
-def load_geometry(geometry_tree: urdfpy.Geometry) -> MeshObject:
+def load_geometry(geometry_tree: "urdfpy.Geometry") -> MeshObject:
     """ Loads a geometric element from a urdf tree.
 
     :param geometry_tree: The urdf representation of the geometric element.
@@ -162,7 +165,7 @@ def load_geometry(geometry_tree: urdfpy.Geometry) -> MeshObject:
     return obj
 
 
-def load_viscol(viscol_tree: Union[urdfpy.Visual, urdfpy.Collision], name: str) -> MeshObject:
+def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str) -> MeshObject:
     """ Loads a visual / collision element from an urdf tree.
 
     :param viscol_tree: The urdf representation of the visual / collision element.
@@ -227,7 +230,7 @@ def load_viscol(viscol_tree: Union[urdfpy.Visual, urdfpy.Collision], name: str) 
     return obj
 
 
-def load_inertial(inertial_tree: urdfpy.Inertial, name: str):
+def load_inertial(inertial_tree: "urdfpy.Inertial", name: str):
     """ Loads an inertial element from an urdf tree.
 
     :param inertial_tree: The urdf representation of the inertial element.
@@ -248,7 +251,7 @@ def load_inertial(inertial_tree: urdfpy.Inertial, name: str):
     return inertial
 
 
-def get_size_from_geometry(geometry: urdfpy.Geometry) -> float:
+def get_size_from_geometry(geometry: "urdfpy.Geometry") -> float:
     """ Helper to derive the link size from the largest geometric element.
 
     :param geometry: The urdf representation of the geometric element.

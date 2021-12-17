@@ -1,7 +1,6 @@
 from typing import Union, List
 import numpy as np
 from mathutils import Matrix
-import urdfpy
 
 import bpy
 
