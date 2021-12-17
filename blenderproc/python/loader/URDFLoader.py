@@ -45,7 +45,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
         # traverse local poses
         child.set_local2world_mat(parent.get_local2world_mat() @ joint_tree.origin)
         for obj in child.get_children():
-            obj.blender_obj.matrix_local = child.blender_obj.matrix_world @ obj.blender_obj.matrix_world
+            obj.set_local2world_mat(child.get_local2world_mat() @ obj.get_local2world_mat())
 
         # we also rotate the armature so that we rotate always around the y axis
         bpy.ops.object.mode_set(mode='OBJECT')
@@ -170,7 +170,7 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
         obj = create_primitive(shape="SPHERE", radius=geometry_tree.sphere.radius)
     else:
         raise NotImplementedError(f"Unknown geometry in urdf_tree {geometry_tree}")
-    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True, properties=True)
+    obj.persist_transformation_into_mesh(location=False, rotation=False, scale=True)
     return obj
 
 
@@ -222,12 +222,7 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
             principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
             links.new(color_image.outputs["Color"], principled.inputs["Base Color"])
 
-            if obj.blender_obj.data.materials:
-                # assign to 1st material slot
-                obj.blender_obj.data.materials[0] = mat
-            else:
-                # no slots
-                obj.blender_obj.data.materials.append(mat)
+            obj.replace_materials(mat)
 
     # set the pose of the object
     try:
@@ -256,8 +251,7 @@ def load_inertial(inertial_tree: "urdfpy.Inertial", name: str):
     inertial.set_mass(mass=inertial_tree.mass)
     inertial.set_inertia(inertia=inertial_tree.inertia)
     primitive.blender_obj.dimensions = Vector([0.03, 0.03, 0.03])  # just small values to keep cubes small for debugging
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, properties=True)
-
+    primitive.persist_transformation_into_mesh(location=True, rotation=True, scale=True)
     return inertial
 
 
