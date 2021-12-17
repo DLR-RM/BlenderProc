@@ -21,7 +21,7 @@ objects = bproc.constructor.construct_random_room(used_floor_area=25, interior_o
                                                   materials=materials, amount_of_extrusions=5)
 
 # Bring light into the room
-bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
+bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0, emission_color=[1,1,1,1])
 
 # Init bvh tree containing all mesh objects
 bvh_tree = bproc.object.create_bvh_tree_multi_objects(objects)
@@ -46,8 +46,6 @@ while tries < 10000 and poses < 5:
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_samples(350)
 bproc.renderer.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
 # render the whole pipeline
 data = bproc.renderer.render()

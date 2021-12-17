@@ -36,10 +36,10 @@ room_objs += new_ceilings
 
 # Make all lamp objects emit light
 lamps = bproc.filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
-bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
+bproc.lighting.light_surface(lamps, emission_strength=15)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = bproc.filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
-bproc.lighting.light_surface(ceilings, emission_strength=2)
+bproc.lighting.light_surface(ceilings, emission_strength=2, emission_color=[1,1,1,1])
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")
@@ -86,8 +86,6 @@ while tries < 10000 and poses < 5:
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-# set the amount of samples, which should be used for the color rendering
-bproc.renderer.set_samples(150)
 
 # render the whole pipeline
 data = bproc.renderer.render()

@@ -1,3 +1,4 @@
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 import json
 import os
 import glob
@@ -15,13 +16,14 @@ from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 
-def write_bop(output_dir: str, depths: Optional[List[np.ndarray]] = None, colors: Optional[List[np.ndarray]] = None,
-              color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
-              depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
+def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None, depths: Optional[List[np.ndarray]] = None, 
+              colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG", dataset: str = "", 
+              append_to_existing_output: bool = True, depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
+    :param target_objects: Objects for which to save ground truth poses in BOP format. Default: Save all objects or from specified dataset
     :param depths: List of depth images in m to save
     :param colors: List of color images to save
     :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
@@ -53,17 +55,17 @@ def write_bop(output_dir: str, depths: Optional[List[np.ndarray]] = None, colors
     elif not append_to_existing_output:
         raise Exception("The output folder already exists: {}.".format(dataset_dir))
 
-    all_mesh_objects = get_all_blender_mesh_objects()
-
-    # Select objects from the specified dataset.
-    if dataset:
+    # Select target objects or objects from the specified dataset or all objects
+    if target_objects is not None:
+        dataset_objects = [t_obj.blender_obj for t_obj in target_objects]
+    elif dataset:
         dataset_objects = []
-        for obj in all_mesh_objects:
-            if "bop_dataset_name" in obj:
+        for obj in get_all_blender_mesh_objects():
+            if "bop_dataset_name" in obj and not obj.hide_render:
                 if obj["bop_dataset_name"] == dataset:
                     dataset_objects.append(obj)
     else:
-        dataset_objects = all_mesh_objects
+        dataset_objects = get_all_blender_mesh_objects()
 
     # Check if there is any object from the specified dataset.
     if not dataset_objects:
@@ -202,6 +204,8 @@ class BopWriterUtility:
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_t_m2c = cam_H_m2c.to_translation()
 
+            assert "category_id" in obj, "{} object has no custom property 'category_id'".format(obj.get_name())
+            
             # ignore examples that fell through the plane
             if not np.linalg.norm(list(cam_t_m2c)) > ignore_dist_thres:
                 cam_t_m2c = list(cam_t_m2c * unit_scaling)

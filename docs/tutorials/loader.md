@@ -28,7 +28,9 @@ objs = bproc.loader.load_obj("mymesh.obj")
 ### Dataset-specific loaders:
 
 * `bproc.loader.load_AMASS`: Loads objects from the AMASS Dataset.
-* `bproc.loader.load_bop`: Loads the 3D models of any BOP dataset and allows replicating BOP scenes.
+* `bproc.loader.load_bop_objs`: Loads the 3D models of any BOP dataset and allows replicating BOP scenes.
+* `bproc.loader.load_bop_scene`: Loads any real BOP scenes using 3D models.
+* `bproc.loader.load_bop_intrinsics`: Loads intrinsics of specified BOP dataset.
 * `bproc.loader.load_front3d`: Loads 3D-Front scenes.
 * `bproc.loader.load_ikea`: Loads objects from the IKEA dataset.
 * `bproc.loader.load_pix3d`: Loads Pix3D objects.
