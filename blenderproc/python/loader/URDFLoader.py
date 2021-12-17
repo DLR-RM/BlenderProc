@@ -28,7 +28,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
     urdf_tree = URDF.load(urdf_file)
 
     # create links
-    links = load_links(urdf_tree.links)
+    links = load_links(urdf_tree.links, urdf_path=urdf_file)
 
     # recursively assign transformations depending on the local joint poses
     for i, joint_tree in enumerate(urdf_tree.joints):
@@ -94,10 +94,11 @@ def load_urdf(urdf_file: str) -> URDFObject:
     return URDFObject(name=urdf_tree.name, links=links, other_xml=urdf_tree.other_xml)
 
 
-def load_links(link_trees: List["urdfpy.Link"]) -> List[Link]:
+def load_links(link_trees: List["urdfpy.Link"], urdf_path: Union[str, None] = None) -> List[Link]:
     """ Loads links given a list of urdfpy.Link representations.
 
     :param link_trees: List of urdf representations of the links.
+    :param urdf_path: Optional path of the urdf file for relative geometry files.
     :return: List of links.
     """
     if not isinstance(link_trees, list):
@@ -132,25 +133,32 @@ def load_links(link_trees: List["urdfpy.Link"]) -> List[Link]:
 
         # create geometric elements
         if link_tree.visuals:
-            link.set_visuals([load_viscol(visual_tree, name=f"{link.get_name()}_visual") for visual_tree in link_tree.visuals])
+            link.set_visuals([load_viscol(visual_tree, name=f"{link.get_name()}_visual", urdf_path=urdf_path) for visual_tree in link_tree.visuals])
         if link_tree.collisions:
-            link.set_collisions([load_viscol(collision_tree, name=f"{link.get_name()}_collision") for collision_tree in link_tree.collisions])
+            link.set_collisions([load_viscol(collision_tree, name=f"{link.get_name()}_collision", urdf_path=urdf_path) for collision_tree in link_tree.collisions])
 
         links.append(link)
     return links
 
 
-def load_geometry(geometry_tree: "urdfpy.Geometry") -> MeshObject:
+def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] = None) -> MeshObject:
     """ Loads a geometric element from a urdf tree.
 
     :param geometry_tree: The urdf representation of the geometric element.
+    :param urdf_path: Optional path of the urdf file for relative geometry files.
     :return: The respective MeshObject.
     """
     if geometry_tree.mesh is not None:
-        if not os.path.isfile(geometry_tree.mesh.filename):
-            print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename})")
-        else:
+        if os.path.isfile(geometry_tree.mesh.filename):
             obj = load_obj(filepath=geometry_tree.mesh.filename)[0]
+        elif urdf_path is not None and os.path.isfile(urdf_path):
+            relative_path = os.path.join('/'.join(urdf_path.split('/')[:-1]), geometry_tree.mesh.filename)
+            if os.path.isfile(relative_path):
+                obj = load_obj(filepath=relative_path)[0]
+            else:
+                print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf filename: {urdf_path})")
+        else:
+            print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename})")
     elif geometry_tree.box is not None:
         obj = create_primitive(shape="CUBE")
         obj.blender_obj.dimensions = Vector(geometry_tree.box.size)
@@ -165,13 +173,14 @@ def load_geometry(geometry_tree: "urdfpy.Geometry") -> MeshObject:
     return obj
 
 
-def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str) -> MeshObject:
+def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str, urdf_path: Union[str, None] = None) -> MeshObject:
     """ Loads a visual / collision element from an urdf tree.
 
     :param viscol_tree: The urdf representation of the visual / collision element.
+    :param urdf_path: Optional path of the urdf file for relative geometry files.
     :return: The respective MeshObject.
     """
-    obj = load_geometry(viscol_tree.geometry)
+    obj = load_geometry(viscol_tree.geometry, urdf_path=urdf_path)
     try:
         obj.set_name(name=viscol_tree.name)
     except Exception as e:
