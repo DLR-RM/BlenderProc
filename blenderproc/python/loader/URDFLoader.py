@@ -21,7 +21,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
     :return: URDF object instance.
     """
     # install urdfpy
-    SetupUtility.setup_pip(user_required_packages=["urdfpy==0.0.22", "networkx==2.5.1"])
+    SetupUtility.setup_pip(user_required_packages=["git+https://github.com/wboerdijk/urdfpy.git", "networkx==2.5.1"])
     from urdfpy import URDF
 
     # load urdf tree representation
