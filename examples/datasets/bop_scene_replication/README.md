@@ -6,19 +6,18 @@ This example shows how to synthetically recreate BOP scenes.
 
 ## Usage
 
-First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
+First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure.
 
 In [examples/datasets/bop_scene_replication/main.py](main.py) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory: 
 
 ```
-blenderproc run examples/datasets/bop_scene_replication/main.py <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_scene_replication/output
+blenderproc run examples/datasets/bop_scene_replication/main.py <path_to_bop_data> <bop_dataset_name> examples/datasets/bop_scene_replication/output
 ```
 * `examples/datasets/bop_scene_replication/main.py`: path to the python file with pipeline configuration.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset, e.g. tless
-* `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
 * `examples/datasets/bop_scene_replication/output`: path to the output directory.
 
 ## Visualization
@@ -31,7 +30,7 @@ blenderproc vis hdf5 example/bop_scene_replication/0.hdf5
 
 ## Steps
 
-* Loads BOP scene with object models, object poses, camera poses and camera intrinsics: `bproc.loader.load_bop()`.
+* Loads BOP scene with object models, object poses, camera poses and camera intrinsics: `bproc.loader.load_bop_scene()`.
 * Creates a point light sampled inside a shell.
 * Renders rgb: `bproc.renderer()`.
 * Renders instance segmentation masks: `bproc.renderer()`.
@@ -42,8 +41,7 @@ blenderproc vis hdf5 example/bop_scene_replication/0.hdf5
 ### BopLoader
 
 ```python
-bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                          sys_paths = args.bop_toolkit_path,
+bop_objs = bproc.loader.load_bop_scene(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           mm2m = True,
                           scene_id = 1,
                           split = 'test') # careful, some BOP datasets only have labeled 'val' sets

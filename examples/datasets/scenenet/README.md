@@ -60,7 +60,7 @@ By selecting random texture and putting them in this `unknown_texture_folder`, w
 ```python
 # Make all lamp objects emit light
 lamps = bproc.filter.by_attr(objs, "name", ".*[l|L]amp.*", regex=True)
-bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
+bproc.lighting.light_surface(lamps, emission_strength=15)
 ```
 
 The first function call will make the lamps in the scene emit light, while using the assigned material textures. 

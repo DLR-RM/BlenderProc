@@ -104,7 +104,7 @@ class SetupUtility:
         return python_bin, packages_path, pre_python_package_path
 
     @staticmethod
-    def setup_pip(user_required_packages: Optional[List[str]] = None, blender_path: Optional[str] = None, major_version: Optional[str] = None, reinstall_packages: bool = False) -> str:
+    def setup_pip(user_required_packages: Optional[List[str]] = None, blender_path: Optional[str] = None, major_version: Optional[str] = None, reinstall_packages: bool = False, use_custom_package_path: bool = True, install_default_packages: bool = True) -> str:
         """ Makes sure the given user required and the general required python packages are installed in the blender proc env
 
         At the first run all installed packages are collected via pip freeze.
@@ -114,11 +114,13 @@ class SetupUtility:
         :param blender_path: The path to the blender installation.
         :param major_version: The version number of the blender installation.
         :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        :param use_custom_package_path: If True, the python packages are installed into a custom folder, separate from blenders own python packages.
+        :param install_default_packages: If True, general required python packages are made sure to be installed.
         :return: Returns the path to the directory which contains all custom installed pip packages.
         """
         required_packages = []
         # Only install general required packages on first setup_pip call
-        if SetupUtility.installed_packages is None:
+        if SetupUtility.installed_packages is None and install_default_packages:
             required_packages += DefaultConfig.default_pip_packages
         if user_required_packages is not None:
             required_packages += user_required_packages
@@ -136,7 +138,7 @@ class SetupUtility:
             if found_package_to_install:
                 SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path, force_update=True)
 
-        packages_were_installed = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path)
+        packages_were_installed = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path, use_custom_package_path=use_custom_package_path)
 
         # Make sure to update the pip package list cache, if it does not exist or changes have been made
         cache_path = os.path.join(packages_path, "installed_packages_cache.json")
@@ -150,7 +152,7 @@ class SetupUtility:
         return packages_path
 
     @staticmethod
-    def _pip_install_packages(required_packages, python_bin, packages_path, reinstall_packages: bool = False, dry_run: bool = False):
+    def _pip_install_packages(required_packages, python_bin, packages_path, reinstall_packages: bool = False, dry_run: bool = False, use_custom_package_path: bool = True):
         """ Installs the list of given pip packages in the given python environment.
 
         :param required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.
@@ -158,6 +160,7 @@ class SetupUtility:
         :param packages_path: Path where our pip packages should be installed
         :param reinstall_packages: Set to true, if all python packages should be reinstalled.
         :param dry_run: If true, nothing will be installed and it will only be checked whether there are any potential packages to update/install.
+        :param use_custom_package_path: If True, the python packages are installed into a custom folder, separate from blenders own python packages.
         :return: Returns True, if any packages were update/installed or - if dry_run=True - if there are any potential packages to update/install.
         """
         # Install all packages
@@ -211,8 +214,10 @@ class SetupUtility:
                     extra_args.append("--no-cache-dir")
 
                 if not dry_run:
+                    if use_custom_package_path:
+                        extra_args.extend(["--target", packages_path])
                     # Run pip install
-                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                     SetupUtility.installed_packages[package_name] = package_version
                     packages_were_installed = True
                 else:
@@ -233,6 +238,9 @@ class SetupUtility:
 
         # Run pip uninstall
         subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+
+        # Clear installed packages cache
+        SetupUtility.clean_installed_packages_cache(blender_path, major_version)
 
     @staticmethod
     def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str, force_update: bool = False):

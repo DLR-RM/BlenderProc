@@ -29,7 +29,7 @@ if is_config:
     text.filepath = str(Path(__file__).with_name("debug_temp.py").absolute())
 else:
     # Just load python script into blender text object
-    text = bpy.data.texts.load(argv[0])
+    text = bpy.data.texts.load(os.path.abspath(argv[0]))
 
 
 # Declare operator that runs the blender proc script
@@ -51,7 +51,11 @@ class RunBlenderProcOperator(bpy.types.Operator):
             sys.path.append(import_path)
 
         # Run the script
-        bpy.ops.text.run_script()
+        try:
+            bpy.ops.text.run_script()
+        except RuntimeError:
+            # Skip irrelevant error messages (The relevant stacktrace+error has already been printed at this point)
+            pass
         return {"FINISHED"}
 
 bpy.utils.register_class(RunBlenderProcOperator)

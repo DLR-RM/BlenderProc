@@ -33,16 +33,6 @@ class RendererInterface(Module):
             This means pixel is sampled until the noise level is smaller than specified or the maximum amount of
             samples were reached. Do not use this with Non-RGB-Renders! Only used if specified" in config. Default: 0.0
           - float
-        * - auto_tile_size
-          - If true, then the number of render tiles is set automatically using the render_auto_tile_size addon.
-            Default: True.
-          - bool
-        * - tile_x
-          - The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true. 
-          - int
-        * - tile_y
-          - The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true. 
-          - int
         * - simplify_subdivision_render
           - Global maximum subdivision level during rendering. Speeds up rendering. Default: 3
           - int
@@ -125,28 +115,21 @@ class RendererInterface(Module):
 
     def __init__(self, config: Config):
         Module.__init__(self, config)
-        addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples: int = 256, use_denoiser: bool = False,
+    def _configure_renderer(self, max_amount_of_samples: int = 1024, use_denoiser: bool = False,
                             default_denoiser: str = "Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
 
-        :param default_samples: Default number of samples to render for each pixel
+        :param max_amount_of_samples: Default maximum number of samples to render for each pixel
         :param use_denoiser: If true, a denoiser is used, only use this on color information
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
         RendererUtility._render_init()
-        RendererUtility.set_samples(self.config.get_int("samples", default_samples))
+        RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", max_amount_of_samples))
 
         if self.config.has_param("use_adaptive_sampling"):
-            RendererUtility.set_adaptive_sampling(self.config.get_float("use_adaptive_sampling"))
-
-        if self.config.get_bool("auto_tile_size", True):
-            RendererUtility.toggle_auto_tile_size(True)
-        else:
-            RendererUtility.toggle_auto_tile_size(False)
-            RendererUtility.set_tile_size(self.config.get_int("tile_x"), self.config.get_int("tile_y"))
+            RendererUtility.set_noise_threshold(self.config.get_float("use_adaptive_sampling"))
 
         # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
         # cpu thread means GPU-only rendering)

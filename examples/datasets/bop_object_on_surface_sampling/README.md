@@ -18,7 +18,6 @@ blenderproc download cc_textures
 blenderproc run examples/datasets/bop_object_on_surface_sampling/main.py 
               <path_to_bop_data> 
               <bop_dataset_name> 
-              <path_to_bop_toolkit> 
               resources/cctextures 
               examples/datasets/bop_object_on_surface_sampling/output
 ``` 
@@ -26,7 +25,6 @@ blenderproc run examples/datasets/bop_object_on_surface_sampling/main.py
 * `examples/datasets/bop_object_on_surface_sampling/main.py`: path to the python file with pipeline configuration.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. lm
-* `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
 * `examples/datasets/bop_object_on_surface_sampling/output`: path to an output folder.
 
@@ -35,9 +33,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 ## Steps
 
-* Load T-LESS BOP models: `bproc.loader.load_bop()`.
-* Load LM BOP models: `bproc.loader.load_bop`.
-* Load `<args:1>` (YCB-V) BOP models: `bproc.loader.load_bop`.
+* Load T-LESS BOP models: `bproc.loader.load_bop_objs()`.
+* Load LM BOP models: `bproc.loader.load_bop_objs`.
+* Load `<args:1>` (YCB-V) BOP models: `bproc.loader.load_bop_objs`.
 * Sample colors for T-LESS models: `mat.set_principled_shader_value()`.
 * Sample roughness and specular values for all objects: `mat.set_principled_shader_value()`.
 * Construct planes: `bproc.object.create_primiative()`.
@@ -57,32 +55,31 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 ```python
 # load distractor bop objects
-distractor_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
+distractor_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
-                                     sys_paths = args.bop_toolkit_path,
                                      mm2m = True,
                                      sample_objects = True,
                                      num_of_objs_to_sample = 3)
 ```
 ```python
-distractor_bop_objs += bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
-                                      sys_paths = args.bop_toolkit_path,
+distractor_bop_objs += bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
                                       mm2m = True,
                                       sample_objects = True,
                                       num_of_objs_to_sample = 3)
 ```
 ```python
 # load a random sample of bop objects into the scene
-sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                                         sys_paths = args.bop_toolkit_path,
+sampled_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                                          mm2m = True,
                                          sample_objects = True,
                                          num_of_objs_to_sample = 10)
+                                         
+bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name))
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `args.bop_dataset_name` (e.g. ycbv in this case).
-* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `bproc.loader.load_bop` overwrites these intrinsics. In this example, `args.bop_dataset_name`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in `bproc.camera.set_intrinsics_from_K_matrix()`.
+* In this example, `args.bop_dataset_name`(ycbv) dataset intrinsics are used when rendering by `bproc.loader.load_bop_intrinsics()`
 
 ### Material Manipulator
 
@@ -218,9 +215,8 @@ while poses < 10:
 
 ```python
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
-bproc.renderer.set_samples(50)
 ```
-* Renders RGB using 50 `"samples"` and also outputs depth images. 
+* Renders an RGB image and also outputs a depth images. 
 
 ### Bop Writer
 

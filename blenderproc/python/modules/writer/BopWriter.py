@@ -69,9 +69,9 @@ class BopWriter(WriterInterface):
             print("Avoid output is on, no output produced!")
         else:
             write_bop(output_dir = os.path.join(self._determine_output_dir(False), 'bop_data'),
-                                dataset = self._dataset, 
-                                append_to_existing_output = self._append_to_existing_output, 
-                                depth_scale = self._depth_scale, 
-                                save_world2cam = self._save_world2cam, 
-                                ignore_dist_thres = self._ignore_dist_thres, 
-                                m2mm = self._mm2m)
+                      dataset = self._dataset, 
+                      append_to_existing_output = self._append_to_existing_output, 
+                      depth_scale = self._depth_scale, 
+                      save_world2cam = self._save_world2cam, 
+                      ignore_dist_thres = self._ignore_dist_thres, 
+                      m2mm = self._mm2m)

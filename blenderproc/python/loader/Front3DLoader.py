@@ -190,7 +190,7 @@ class Front3DLoader:
                         mat.set_principled_shader_value("Base Color", used_image)
 
                         if "ceiling" in used_obj_name.lower():
-                            mat.make_emissive(ceiling_light_strength, keep_using_base_color=False, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
+                            mat.make_emissive(ceiling_light_strength, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
 
                         if used_mat["normaltexture"]:
                             # get the used image based on the normal texture path
@@ -222,7 +222,7 @@ class Front3DLoader:
                         principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
                         # if the object is a ceiling add some light output
                         if "ceiling" in used_obj_name.lower():
-                            mat.make_emissive(ceiling_light_strength, keep_using_base_color=False, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
+                            mat.make_emissive(ceiling_light_strength, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
                         else:
                             used_materials_based_on_color[used_hash] = mat
 

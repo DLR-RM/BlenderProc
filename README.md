@@ -104,7 +104,7 @@ blenderproc vis hdf5 output/0.hdf5
 
 Thats it! You rendered your first image with BlenderProc!
 
-### Debugging
+### Debugging in the Blender GUI
 
 To understand what is actually going on, BlenderProc has the great feature of visualizing everything inside the blender UI.
 To do so, simply call your script with the `debug` instead of `run` subcommand:
@@ -121,6 +121,68 @@ As in the normal mode, print statements are still printed to the terminal.
 </p>
 
 The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.
+
+### Breakpoint-Debugging in IDEs
+
+As blenderproc runs in blenders separate python environment, debugging your blenderproc script cannot be done in the same way as with any other python script.
+Therefore, remote debugging is necessary, which is explained for vscode and PyCharm in the following:
+
+#### Debugging with vscode
+
+First, install the `debugpy` package in blenders python environment.
+
+```
+blenderproc pip install debugpy
+```
+
+Now add the following configuration to your vscode [launch.json](https://code.visualstudio.com/docs/python/debugging#_initialize-configurations).
+
+```json
+{                        
+    "name": "Attach",
+    "type": "python",
+    "request": "attach",
+    "connect": {
+        "host": "localhost",
+        "port": 5678
+    }
+}
+```
+
+Finally, add the following lines to the top (after the imports) of your blenderproc script which you want to debug.
+
+```python
+import debugpy
+debugpy.listen(5678)
+debugpy.wait_for_client()
+```
+
+Now run your blenderproc script as usual via the CLI and then start the added "Attach" configuration in vscode.
+You are now able to add breakpoints and go through the execution step by step.
+
+#### Debugging with PyCharm Professional
+
+In Pycharm, go to `Edit configurations...` and create a [new configuration](https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#remote-debug-config) based on `Python Debug Server`.
+The configuration will show you, specifically for your version, which pip package to install and which code to add into the script.
+The following assumes Pycharm 2021.3:
+
+First, install the `pydevd-pycharm` package in blenders python environment.
+Unfortunately, the package cannot be installed into our custom separate packages folder, therefore, make sure to add `--not-use-custom-package-path`.
+
+```
+blenderproc pip install pydevd-pycharm~=212.5457.59 --not-use-custom-package-path
+```
+
+Now, add the following code to the top (after the imports) of your blenderproc script which you want to debug.
+
+```python
+import pydevd_pycharm
+pydevd_pycharm.settrace('localhost', port=12345, stdoutToServer=True, stderrToServer=True)
+```
+
+Then, first run your `Python Debug Server` configuration in PyCharm and then run your blenderproc script as usual via the CLI.
+PyCharm should then go in debug mode, blocking the next code line.
+You are now able to add breakpoints and go through the execution step by step.
 
 ## What to do next?
 

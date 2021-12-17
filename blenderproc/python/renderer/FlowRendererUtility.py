@@ -42,8 +42,9 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
 
     with Utility.UndoAfterExecution():
         RendererUtility._render_init()
-        RendererUtility.set_samples(1)
-        RendererUtility.set_adaptive_sampling(0)
+        # the amount of samples must be one and there can not be any noise threshold
+        RendererUtility.set_max_amount_of_samples(1)
+        RendererUtility.set_noise_threshold(0)
         RendererUtility.set_denoiser(None)
         RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
@@ -104,7 +105,7 @@ class FlowRendererUtility():
         # Flow settings (is called "vector" in blender)
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
+        bpy.context.view_layer.use_pass_vector = True
 
         # Adapt compositor to output vector field
         tree = bpy.context.scene.node_tree

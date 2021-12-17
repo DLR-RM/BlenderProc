@@ -56,9 +56,8 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
             if found:
                 break
         # make sure that all visible GPUs are used
-        for group in prefs.get_devices():
-            for d in group:
-                d.use = True
+        for device in prefs.devices:
+            device.use = True
 
     # Set the Experimental features on/off
     if use_experimental_features:
@@ -117,9 +116,8 @@ class Initializer:
 
         # Init renderer
         RendererUtility._render_init()
-        RendererUtility.set_samples(DefaultConfig.samples)
-        addon_utils.enable("render_auto_tile_size")
-        RendererUtility.toggle_auto_tile_size(True)
+        RendererUtility.set_max_amount_of_samples(DefaultConfig.samples)
+        RendererUtility.set_noise_threshold(DefaultConfig.sampling_noise_threshold)
 
         # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
         # cpu thread means GPU-only rendering)
