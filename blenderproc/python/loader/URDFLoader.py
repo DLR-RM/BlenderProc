@@ -12,6 +12,7 @@ from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
+from blenderproc.python.filter.Filter import one_by_attr
 
 
 def load_urdf(urdf_file: str) -> URDFObject:
@@ -32,12 +33,8 @@ def load_urdf(urdf_file: str) -> URDFObject:
 
     # recursively assign transformations depending on the local joint poses
     for i, joint_tree in enumerate(urdf_tree.joints):
-        child = links[i + 1]
-        parent = links[i]
-
-        # convenient insanity check
-        assert child.get_name() == joint_tree.child
-        assert parent.get_name() == joint_tree.parent
+        child = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
+        parent = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
 
         # we also add some information to the link
         child.set_joint_type(joint_type=joint_tree.joint_type)
@@ -71,11 +68,14 @@ def load_urdf(urdf_file: str) -> URDFObject:
             print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
 
     # parent links with their children
-    for i, link in enumerate(links):
+    for i, joint_tree in enumerate(urdf_tree.joints):
+        link = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
         bpy.ops.object.select_all(action='DESELECT')
         link.select()
-        if i != len(links) - 1:  # select the next link
-            links[i + 1].select()
+
+        # also select next link
+        child = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
+        child.select()
 
         # select all visuals, collisions and inertial objects
         for obj in link.get_children():
@@ -86,8 +86,25 @@ def load_urdf(urdf_file: str) -> URDFObject:
 
         # parent object
         bpy.ops.object.posemode_toggle()
-        bpy.ops.object.parent_set(type="BONE")
+        bpy.ops.object.parent_set(type="BONE_RELATIVE")
         bpy.ops.object.posemode_toggle()
+
+    # also parent last link object
+    link = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
+    bpy.ops.object.select_all(action='DESELECT')
+    link.select()
+
+    # select all visuals, collisions and inertial objects
+    for obj in link.get_children():
+        obj.select()
+
+    # select which object to parent to
+    bpy.context.view_layer.objects.active = link.blender_obj
+
+    # parent object
+    bpy.ops.object.posemode_toggle()
+    bpy.ops.object.parent_set(type="BONE_RELATIVE")
+    bpy.ops.object.posemode_toggle()
 
     # check that the first link is actually the base link, this is just an insanity check
     assert links[0].get_name() == urdf_tree.base_link.name
