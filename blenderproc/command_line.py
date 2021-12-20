@@ -35,6 +35,7 @@ def cli():
     }
     
     parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic image generation.", formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-v', '--version', action='store_true', help='Version of BlenderProc')
     subparsers = parser.add_subparsers(dest='mode', help="Select a BlenderProc command to run:")
 
     # Setup different modes
@@ -78,7 +79,10 @@ def cli():
 
     args, unknown_args = parser.parse_known_args()
 
-    if args.mode in ["run", "debug"]:
+    if args.version:
+        from blenderproc import __version__
+        print(__version__)
+    elif args.mode in ["run", "debug"]:
         # Make sure a file is given
         if args.file is None:
             print(parser.format_help())
