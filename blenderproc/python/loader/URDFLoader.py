@@ -183,7 +183,7 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
         obj = create_primitive(shape="SPHERE", radius=geometry_tree.sphere.radius)
     else:
         raise NotImplementedError(f"Unknown geometry in urdf_tree {geometry_tree}")
-    obj.persist_transformation_into_mesh(location=False, rotation=False, scale=True)
+    obj.persist_transformation_into_mesh(location=True, rotation=True, scale=True)
     return obj
 
 
