@@ -190,7 +190,7 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
         obj.set_name(name=name)
 
     # load material - only valid for visuals
-    if hasattr(viscol_tree, "material"):
+    if hasattr(viscol_tree, "material") and viscol_tree.material is not None:
         # clear all existing materials
         obj.clear_materials()
 
