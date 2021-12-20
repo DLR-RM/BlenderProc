@@ -65,8 +65,6 @@ for frame in range(9):
     for link in robot.links:
         if link.joint_type == "revolute":
             link.set_rotation_euler(rotation_euler=0.1, mode="relative", frame=frame)
-    if frame > bpy.context.scene.frame_end:
-        bpy.context.scene.frame_end += 1
     robot_matrix_world.append(robot.get_all_local2world_mats())
 ```
 

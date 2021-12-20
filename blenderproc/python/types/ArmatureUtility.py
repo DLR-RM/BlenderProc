@@ -53,6 +53,8 @@ class Armature(Entity):
                 print(f"Relatively rotated armature {self.get_name()} for {rotation_euler} radians")
 
         Utility.insert_keyframe(bone, "rotation_euler", frame)
+        if frame > bpy.context.scene.frame_end:
+            bpy.context.scene.frame_end += 1
 
     def _determine_rotation_axis(self):
         """ Determines the single rotation axis and checks if the constraints are set well to have only one axis of freedom.
