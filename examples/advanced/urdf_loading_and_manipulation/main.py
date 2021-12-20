@@ -1,6 +1,5 @@
 import blenderproc as bproc
 import argparse
-import bpy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('urdf_file', nargs='?', default="./model.urdf", help="Path to the .urdf file")
