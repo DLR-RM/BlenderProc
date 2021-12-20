@@ -61,9 +61,11 @@ def load_urdf(urdf_file: str) -> URDFObject:
             child.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
             child.set_rotation_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
         elif joint_tree.joint_type == "revolute":
+            y_limits = None
             if joint_tree.limit is not None:
-                child.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                child.set_rotation_constraint(x_limits=[0., 0.], y_limits=[joint_tree.limit.lower, joint_tree.limit.upper], z_limits=[0., 0.])
+                y_limits = [joint_tree.limit.lower, joint_tree.limit.upper]
+            child.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+            child.set_rotation_constraint(x_limits=[0., 0.], y_limits=y_limits, z_limits=[0., 0.])
         else:
             print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
 
