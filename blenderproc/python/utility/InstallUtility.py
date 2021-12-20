@@ -200,7 +200,7 @@ class InstallUtility:
         elif platform == "darwin":
             blender_run_path = os.path.join(blender_path, "Contents", "MacOS", "Blender")
         elif platform == "win32":
-            blender_run_path = os.path.join(blender_install_path, "blender-windows64", "blender")
+            blender_run_path = os.path.join(blender_install_path, blender_version, "blender")
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
 
