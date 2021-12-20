@@ -67,7 +67,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
         else:
             print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
 
-    # parent links with their children
+    # establish connection between links
     for i, joint_tree in enumerate(urdf_tree.joints):
         link = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
         bpy.ops.object.select_all(action='DESELECT')
@@ -76,6 +76,19 @@ def load_urdf(urdf_file: str) -> URDFObject:
         # also select next link
         child = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
         child.select()
+
+        # select which object to parent to
+        bpy.context.view_layer.objects.active = link.blender_obj
+
+        # parent object
+        bpy.ops.object.posemode_toggle()
+        bpy.ops.object.parent_set(type="BONE_RELATIVE")
+        bpy.ops.object.posemode_toggle()
+
+    # parent all visuals, collisions and inertial objects of each link
+    for link in links:
+        bpy.ops.object.select_all(action='DESELECT')
+        link.select()
 
         # select all visuals, collisions and inertial objects
         for obj in link.get_children():
@@ -88,23 +101,6 @@ def load_urdf(urdf_file: str) -> URDFObject:
         bpy.ops.object.posemode_toggle()
         bpy.ops.object.parent_set(type="BONE_RELATIVE")
         bpy.ops.object.posemode_toggle()
-
-    # also parent last link object
-    link = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
-    bpy.ops.object.select_all(action='DESELECT')
-    link.select()
-
-    # select all visuals, collisions and inertial objects
-    for obj in link.get_children():
-        obj.select()
-
-    # select which object to parent to
-    bpy.context.view_layer.objects.active = link.blender_obj
-
-    # parent object
-    bpy.ops.object.posemode_toggle()
-    bpy.ops.object.parent_set(type="BONE_RELATIVE")
-    bpy.ops.object.posemode_toggle()
 
     # check that the first link is actually the base link, this is just an insanity check
     assert links[0].get_name() == urdf_tree.base_link.name
