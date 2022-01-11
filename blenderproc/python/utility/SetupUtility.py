@@ -89,10 +89,10 @@ class SetupUtility:
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
             pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.9", "site-packages")
         elif platform == "darwin":
-            python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
+            python_bin_folder = os.path.join(blender_path, "..", "Resources", major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python3.9")
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
-            pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.9", "site-packages")
+            pre_python_package_path = os.path.join(blender_path, "..", "Resources", major_version, "python", "lib", "python3.9", "site-packages")
         elif platform == "win32":
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python")
