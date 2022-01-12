@@ -79,14 +79,14 @@ Note that since the robot class inherits from bpy.types.Entity, you can directly
 
 This example relies on [urdfpy](https://pypi.org/project/urdfpy/0.0.22/).
 Currently (v0.0.22) you might need to format your `model.urdf` file:
-- Mesh file paths can be saved with a prefix `mesh:/` before the relative file name. Please replace this with the absolute file name to the mesh.
+- Mesh file paths can be saved with a prefix `mesh://` before the relative file name. Please replace this with the absolute (or relative) file name to the mesh.
 - Instead of
 ```xml
 <transmission name="..." type="...">
 ```
 please write
 ```xml
-<transmission name="">
+<transmission name="...">
   <type>...</type>
 ```
 
