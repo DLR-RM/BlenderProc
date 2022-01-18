@@ -516,12 +516,7 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
     else:
         raise Exception("No such shape: " + shape)
 
-    primitive = MeshObject(bpy.context.object)
-    # Blender bug: Scale is ignored by default. #1060
-    if 'scale' in kwargs:
-        primitive.set_scale(kwargs['scale'])
-
-    return primitive
+    return MeshObject(bpy.context.object)
 
 
 def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
