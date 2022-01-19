@@ -516,7 +516,12 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
     else:
         raise Exception("No such shape: " + shape)
 
-    return MeshObject(bpy.context.object)
+    primitive = MeshObject(bpy.context.object)
+    # Blender bug: Scale is ignored by default for planes and monkeys. #1060
+    if 'scale' in kwargs and shape in ["MONKEY", "PLANE"]:
+        primitive.set_scale(kwargs['scale'])
+
+    return primitive
 
 
 def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
