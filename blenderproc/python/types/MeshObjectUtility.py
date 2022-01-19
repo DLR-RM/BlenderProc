@@ -498,7 +498,7 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObje
 def create_primitive(shape: str, **kwargs) -> "MeshObject":
     """ Creates a new primitive mesh object.
 
-    :param shape: The name of the primitive to create. Available: ["CUBE"]
+    :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "MONKEY"]
     :return:
     """
     if shape == "CUBE":
