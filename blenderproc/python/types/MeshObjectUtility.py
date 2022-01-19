@@ -499,7 +499,7 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
     """ Creates a new primitive mesh object.
 
     :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "MONKEY"]
-    :return:
+    :return: The newly created MeshObject
     """
     if shape == "CUBE":
         bpy.ops.mesh.primitive_cube_add(**kwargs)
