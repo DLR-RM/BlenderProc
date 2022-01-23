@@ -1,6 +1,7 @@
 from typing import List, Union
 import os
 from mathutils import Matrix, Vector
+import numpy as np
 
 import bpy
 
@@ -13,6 +14,7 @@ from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
 from blenderproc.python.filter.Filter import one_by_attr
+from blenderproc.python.types.MeshObjectUtility import create_with_empty_mesh
 
 
 def load_urdf(urdf_file: str) -> URDFObject:
@@ -28,133 +30,169 @@ def load_urdf(urdf_file: str) -> URDFObject:
     # load urdf tree representation
     urdf_tree = URDF.load(urdf_file)
 
-    # create links
-    links = load_links(urdf_tree.links, urdf_path=urdf_file)
+    # create new empty armature
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.ops.object.armature_add()
+    armature = bpy.context.active_object
+    armature.name = urdf_tree.name
+    # remove initially created bone
+    bpy.ops.object.mode_set(mode='EDIT')
+    armature.data.edit_bones.remove(armature.data.edit_bones.values()[0])
+    bpy.ops.object.mode_set(mode='OBJECT')
 
-    # recursively assign transformations depending on the local joint poses
-    for i, joint_tree in enumerate(urdf_tree.joints):
-        child = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
-        parent = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
+    base_joints = get_joints_which_have_link_as_parent(urdf_tree.base_link.name, urdf_tree.joints)
+    import numpy as np
+    np.set_printoptions(4, suppress=True)
+    for base_joint in base_joints:
+        create_bone(armature, base_joint, urdf_tree.joints, parent_bone_name=None, create_recursive=True)
 
-        # we also add some information to the link
-        child.set_joint_type(joint_type=joint_tree.joint_type)
+    links = load_links(urdf_tree.links, urdf_tree.joints, armature, urdf_path=urdf_file)
 
-        # traverse local poses
-        child.set_local2world_mat(parent.get_local2world_mat() @ joint_tree.origin)
-        for obj in child.get_children():
-            obj.set_local2world_mat(child.get_local2world_mat() @ obj.get_local2world_mat())
+    for base_joint in base_joints:
+        propagate_pose(links, base_joint, urdf_tree.joints, armature)
 
-        # we also rotate the armature so that we rotate always around the y axis
-        bpy.ops.object.mode_set(mode='OBJECT')
-        bpy.ops.object.select_all(action='DESELECT')
-        bpy.context.view_layer.objects.active = child.blender_obj
-        child.select()
-        bpy.ops.object.mode_set(mode='EDIT')
-        editbone = child.blender_obj.data.edit_bones["Bone"]
-        length = editbone.length
-        axis = Vector(joint_tree.axis)
-        editbone.tail = editbone.head + axis.normalized() * length
-        bpy.ops.object.mode_set(mode='OBJECT')
-
-        # last but not least, we apply constraints
-        if joint_tree.joint_type == "fixed":
-            child.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-            child.set_rotation_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-        elif joint_tree.joint_type == "revolute":
-            y_limits = None
-            if joint_tree.limit is not None:
-                y_limits = [joint_tree.limit.lower, joint_tree.limit.upper]
-            child.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-            child.set_rotation_constraint(x_limits=[0., 0.], y_limits=y_limits, z_limits=[0., 0.])
-        else:
-            print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
-
-    # establish connection between links
-    for i, joint_tree in enumerate(urdf_tree.joints):
-        link = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
-        bpy.ops.object.select_all(action='DESELECT')
-        link.select()
-
-        # also select next link
-        child = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
-        child.select()
-
-        # select which object to parent to
-        bpy.context.view_layer.objects.active = link.blender_obj
-
-        # parent object
-        bpy.ops.object.posemode_toggle()
-        bpy.ops.object.parent_set(type="BONE_RELATIVE")
-        bpy.ops.object.posemode_toggle()
-
-    # parent all visuals, collisions and inertial objects of each link
     for link in links:
-        bpy.ops.object.select_all(action='DESELECT')
-        link.select()
+        link.parent_with_bone(weight_distribution='rigid')
 
-        # select all visuals, collisions and inertial objects
-        for obj in link.get_children():
-            obj.select()
+    # set to forward kinematics per default
+    for link in links:
+        link._switch_fk_ik_mode(mode="fk")
 
-        # select which object to parent to
-        bpy.context.view_layer.objects.active = link.blender_obj
-
-        # parent object
-        bpy.ops.object.posemode_toggle()
-        bpy.ops.object.parent_set(type="BONE_RELATIVE")
-        bpy.ops.object.posemode_toggle()
-
-    # check that the first link is actually the base link, this is just an insanity check
-    assert links[0].get_name() == urdf_tree.base_link.name
-
-    return URDFObject(name=urdf_tree.name, links=links, other_xml=urdf_tree.other_xml)
+    return URDFObject(armature, links=links, xml_tree=urdf_tree)
 
 
-def load_links(link_trees: List["urdfpy.Link"], urdf_path: Union[str, None] = None) -> List[Link]:
-    """ Loads links given a list of urdfpy.Link representations.
+def get_joints_which_have_link_as_parent(link_name, joint_trees):
+    return [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.parent == link_name]
 
-    :param link_trees: List of urdf representations of the links.
-    :param urdf_path: Optional path of the urdf file for relative geometry files.
-    :return: List of links.
-    """
-    if not isinstance(link_trees, list):
-        link_trees = list(link_trees)
+
+def get_joints_which_have_link_as_child(link_name, joint_trees):
+    valid_joint_trees = [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.child == link_name]
+    if valid_joint_trees == []:
+        # no joint for link
+        print(f"WARNING: There is no joint defined for the link {link_name}!")
+        return None
+    elif len(valid_joint_trees) == 1:
+        return valid_joint_trees[0]
+    else:
+        raise NotImplementedError(f"More than one ({len(valid_joint_trees)}) joints map onto a single link with name {link_name}")
+
+
+def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, create_recursive=False,
+                parent_origin=None, fk_offset=[0., -1., 0.]):
+    bpy.ops.object.select_all(action='DESELECT')
+    bpy.context.view_layer.objects.active = armature
+    bpy.ops.object.mode_set(mode='EDIT', toggle=False)
+    edit_bones = armature.data.edit_bones
+    editbone = edit_bones.new(joint_tree.name)
+
+    parent_joint = get_joints_which_have_link_as_child(joint_tree.parent, all_joint_trees)
+    if parent_joint is not None:
+        print("parent joint", parent_joint.name, joint_tree.name)
+
+    origin = joint_tree.origin
+    if parent_origin is not None:
+        origin = parent_origin @ origin
+
+    axis = Matrix(origin[:3, :3]) @ Vector(joint_tree.axis)
+    editbone.head = Vector(origin[:3, -1])
+    editbone.tail = editbone.head + axis.normalized() * 0.2
+
+    if parent_bone_name is not None:
+        parent_bone = edit_bones.get(parent_bone_name)
+        editbone.parent = parent_bone
+
+    # create fk bone
+    fk_bone = edit_bones.new(joint_tree.name + '.fk')
+
+    axis = Matrix(origin[:3, :3]) @ Vector(joint_tree.axis)
+    fk_bone.head = Vector(origin[:3, -1]) + Vector(fk_offset)
+    fk_bone.tail = fk_bone.head + axis.normalized() * 0.2
+
+    if parent_bone_name is not None:
+        parent_bone = edit_bones.get(parent_bone_name + '.fk')
+        fk_bone.parent = parent_bone
+
+    bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+    if create_recursive:
+        child_joints = get_joints_which_have_link_as_parent(link_name=joint_tree.child, joint_trees=all_joint_trees)
+
+        if child_joints != []:
+            for child_joint in child_joints:
+                create_bone(armature, child_joint, all_joint_trees, parent_bone_name=editbone.name,
+                            create_recursive=True, parent_origin=origin, fk_offset=fk_offset)
+
+    bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+
+def load_links(link_trees, joint_trees, armature, urdf_path):
     links = []
     for i, link_tree in enumerate(link_trees):
-        # create armature/bone
-        bpy.ops.object.select_all(action='DESELECT')
-        bpy.ops.object.armature_add()
-        link = Link(bpy_object=bpy.context.active_object)
-
-        # give a name to the link
-        if link_tree.name is not None:
-            link.set_name(name=link_tree.name)
-            print(f"Initialized link {link.get_name()}")
-        else:
-            link.set_name(name=f"link_{i}")
-            print(f"No link name defined for {link_tree}. Set name to link list index: {link.get_name()}")
-
-        # set size
-        if link_tree.visuals or link_tree.collisions:
-            scale = max(get_size_from_geometry(viscol.geometry) for viscol in link_tree.visuals + link_tree.collisions)
-        else:
-            scale = 0.2
-        link.set_scale(scale=[scale, scale, scale])
-        print(f"Set scale of {link.get_name()} to {scale}")
-        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True, properties=False)
-
-        # create inertial
-        if link_tree.inertial:
-            link.set_inertial(load_inertial(link_tree.inertial, name=f"{link.get_name()}_inertial"))
-
-        # create geometric elements
+        inertial, visuals, collisions = None, [], []
+        # if link_tree.inertial:
+        #    inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
         if link_tree.visuals:
-            link.set_visuals([load_viscol(visual_tree, name=f"{link.get_name()}_visual", urdf_path=urdf_path) for visual_tree in link_tree.visuals])
-        if link_tree.collisions:
-            link.set_collisions([load_viscol(collision_tree, name=f"{link.get_name()}_collision", urdf_path=urdf_path) for collision_tree in link_tree.collisions])
+            visuals = [load_viscol(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
+                       link_tree.visuals]
+        # if link_tree.collisions:
+        #    collisions = [load_viscol(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for collision_tree in link_tree.collisions]
+
+        # determine bone name
+        corresponding_joint = get_joints_which_have_link_as_child(link_tree.name, joint_trees)
+
+        link = Link(bpy_object=create_with_empty_mesh(
+            link_tree.name).blender_obj)  # todo is it good to create an empty object to inherit from entity
+        link.set_armature(armature)
+        link.set_visuals(visuals)
+        link.set_collisions(collisions)
+        link.set_inertial(inertial)
+        link.set_name(name=link_tree.name)
+
+        if corresponding_joint is not None:
+            # edit_bones = armature.data.edit_bones
+            link.set_bone(armature.pose.bones.get(corresponding_joint.name))
+            link.set_fk_bone(armature.pose.bones.get(corresponding_joint.name + '.fk'))
+            link.set_joint_type(corresponding_joint.joint_type)
+
+            # set constraints, if any
+            if corresponding_joint.joint_type == "fixed":
+                link.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+                link.set_location_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+                link.set_rotation_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+                link.set_rotation_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+            elif corresponding_joint.joint_type == "revolute":
+                if corresponding_joint.limit is not None:
+                    limits = np.array([corresponding_joint.limit.lower, corresponding_joint.limit.upper])
+
+                link.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+                link.set_location_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+                link.set_rotation_constraint(x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
+                link.set_rotation_constraint(bone=link.fk_bone, x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
+            else:
+                print(f"WARNING: No constraint implemented for joint type '{corresponding_joint.joint_type}'!")
+                # link.bone_name = corresponding_joint.name
+            print("setting bone fkbone", link.bone, link.bone.name, link.fk_bone.name)
+            link.set_copy_rotation_constraint(bone=link.bone, target_bone=link.fk_bone.name,
+                                              custom_constraint_name="copy_rotation.fk")
 
         links.append(link)
     return links
+
+
+def propagate_pose(links, joint_tree, joint_trees, armature, recursive=True):
+    child_link = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
+    parent_link = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
+
+    mat = Matrix(parent_link.get_local2world_mat()) @ Matrix(joint_tree.origin)
+    child_link.set_local2world_mat(mat)
+
+    for obj in child_link.get_all_objects():
+        obj.set_local2world_mat(Matrix(child_link.get_local2world_mat()) @ Matrix(obj.get_local2world_mat()))
+
+    if recursive:
+        child_joint_trees = get_joints_which_have_link_as_parent(child_link.get_name(), joint_trees)
+        for child_joint_tree in child_joint_trees:
+            propagate_pose(links, child_joint_tree, joint_trees, armature, recursive=True)
 
 
 def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] = None) -> MeshObject:
@@ -170,7 +208,7 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
         elif urdf_path is not None and os.path.isfile(urdf_path):
             relative_path = os.path.join('/'.join(urdf_path.split('/')[:-1]), geometry_tree.mesh.filename)
             if os.path.isfile(relative_path):
-                obj = load_obj(filepath=relative_path)[0]
+                obj = load_obj(filepath=relative_path, axis_forward='Y', axis_up='Z')[0]  # load in default coordinate system
             else:
                 print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf filename: {urdf_path})")
         else:
@@ -218,7 +256,10 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
             mat = MaterialLoaderUtility.create(name=viscol_tree.material.name)
             # create a principled node and set the default color
             principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
-            principled_node.inputs["Base Color"].default_value = viscol_tree.material.color
+            color = viscol_tree.material.color
+            if color is None:
+                color = Vector([1., 1., 1., 1.])
+            principled_node.inputs["Base Color"].default_value = color
         obj.replace_materials(mat)
 
         # check for textures
@@ -246,6 +287,12 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
     except Exception as e:
         print(f"No origin found for {viscol_tree}: {e}. Setting origin to world origin.")
         obj.set_local2world_mat(Matrix.Identity(4))
+
+    # set scale of the mesh
+    scale = get_size_from_geometry(viscol_tree.geometry)
+    if scale is not None:
+        obj.set_scale([scale, scale, scale])
+        obj.persist_transformation_into_mesh(location=False, rotation=False, scale=True)
 
     return obj
 
@@ -281,9 +328,13 @@ def get_size_from_geometry(geometry: "urdfpy.Geometry") -> float:
     elif geometry.cylinder is not None:
         return max(geometry.geometry.radius, geometry.geometry.length)
     elif geometry.mesh is not None:
-        return max(geometry.geometry.size) if hasattr(geometry.geometry, "size") else 0.2
+        if hasattr(geometry.geometry, "scale") and geometry.geometry.scale is not None:
+            return max(geometry.geometry.scale)
+        elif hasattr(geometry.geometry, "size") and geometry.geometry.size is not None:
+            return max(geometry.geometry.size)
+        return None
     elif geometry.sphere is not None:
         return geometry.geometry.radius
     else:
         print(f"Warning: Failed to derive size from geometry model {geometry}. Setting scale to 0.2!")
-        return 0.2
+        return None
