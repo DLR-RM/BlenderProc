@@ -107,8 +107,7 @@ class Link(Entity):
             bone = self.bone
 
         assert mode in ["absolute", "relative"]
-        if self.fk_ik_mode == "ik":
-            self._switch_fk_ik_mode(mode="fk")
+
         bpy.ops.object.select_all(action='DESELECT')
         # bone = self.blender_obj.pose.bones.get('Bone')
 
@@ -153,9 +152,11 @@ class Link(Entity):
         raise NotImplementedError("Please use 'set_location_ik()'!")
 
     def set_rotation_euler_fk(self, *args, **kwargs):
+        self.switch_fk_ik_mode(mode="fk")
         self._set_rotation_euler(bone=self.fk_bone, *args, **kwargs)
 
     def set_rotation_euler_ik(self, *args, **kwargs):
+        self.switch_fk_ik_mode(mode="ik")
         self._set_rotation_euler(bone=self.ik_bone_controller, *args, **kwargs)
 
     #def set_location_fk(self, bone, location):
@@ -170,12 +171,8 @@ class Link(Entity):
     def set_location_ik(self, location, frame=0):
         if not isinstance(location, Vector):
             location = Vector(location)
-        print("desired location", location)
         assert self.ik_bone_controller is not None, f"No ik bone chain created. Please run 'self.create_ik_bone()' first!"
-        if self.fk_ik_mode == "fk":
-            print("switching mode")
-            self._switch_fk_ik_mode(mode="ik")
-        print("desired location", location)
+        self.switch_fk_ik_mode(mode="ik")
 
         # first: determine offset to base frame
         self.ik_bone_controller.location = Vector([0., 0., 0.])
@@ -183,16 +180,13 @@ class Link(Entity):
         self.ik_bone_controller.rotation_euler = Vector([0., 0., 0.])
         bpy.context.view_layer.update()
         offset_mat = self.ik_bone_controller.matrix
-        print("offset mat", offset_mat)
 
         # offset location by ik offset to base bones
         location = location + (self.ik_bone.head - self.bone.head)
-        print("loc after offset", location)
         l = Vector([location[0], location[1], location[2], 1.])
 
         # move to current frame
         location = offset_mat.inverted() @ l
-        print("final location", location)
         self.ik_bone_controller.location = location[:3]
         bpy.context.view_layer.update()  # todo necessary with keyframe insert?
 
@@ -233,7 +227,7 @@ class Link(Entity):
         :param axis: Axis to check.
         :return: Clipped value if a constraint is set, else the initial value.
         """
-        c = self.get_constraint(bone=bone, constraint_name=constraint_name)
+        c = get_constraint(bone=bone, constraint_name=constraint_name)
         if c is not None:
             min_value = eval(f"c.min_{axis.lower()}")
             max_value = eval(f"c.max_{axis.lower()}")
@@ -271,7 +265,7 @@ class Link(Entity):
     def set_armature(self, armature):
         object.__setattr__(self, "armature", armature)
 
-    def set_fk_ik_mode(self, mode="fk"):
+    def _set_fk_ik_mode(self, mode="fk"):
         object.__setattr__(self, "fk_ik_mode", mode)
 
     def hide(self, hide_object=True):
@@ -369,11 +363,13 @@ class Link(Entity):
     def get_fk_ik_mode(self):
         return self.fk_ik_mode
 
-    def _switch_fk_ik_mode(self, mode="fk", keep_pose=True):
+    def switch_fk_ik_mode(self, mode="fk", keep_pose=True):
         if self.bone is None:
             return
         assert mode in ["fk", "ik"]
         if mode == "fk":  # turn off copy rotation constraints of fk bone and base bone
+            if self.get_fk_ik_mode() == "fk":
+                return True
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -387,9 +383,11 @@ class Link(Entity):
 
             if self.ik_bone_controller is not None:  # switch off ik constraint
                 self.ik_bone_constraint.constraints["IK"].influence = 0.
-            self.set_fk_ik_mode(mode="fk")
+            self._set_fk_ik_mode(mode="fk")
 
         else:  # turn off copy rotation constraints of ik bone and base bone
+            if self.get_fk_ik_mode() == "ik":
+                return True
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -399,7 +397,7 @@ class Link(Entity):
                 self.bone.constraints["copy_rotation.fk"].influence = 0.
                 self.bone.constraints["copy_rotation.ik"].influence = 1.
 
-            self.set_fk_ik_mode(mode="ik")
+            self._set_fk_ik_mode(mode="ik")
             if self.ik_bone_controller is not None:
                 bpy.context.view_layer.update()
                 location = np.array(self.armature.pose.bones[self.bone.name].head)  # or matrix?
@@ -581,7 +579,7 @@ class URDFObject(Entity):
     def switch_fk_ik_mode(self, mode="fk"):
         if self.fk_ik_mode != mode:
             for link in self.links:
-                link._switch_fk_ik_mode(mode=mode)
+                link.switch_fk_ik_mode(mode=mode)
             self._set_fk_ik_mode(mode=mode)
 
     def get_revolute_joints(self):

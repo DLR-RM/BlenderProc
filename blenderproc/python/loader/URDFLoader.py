@@ -57,7 +57,7 @@ def load_urdf(urdf_file: str) -> URDFObject:
 
     # set to forward kinematics per default
     for link in links:
-        link._switch_fk_ik_mode(mode="fk")
+        link.switch_fk_ik_mode(mode="fk")
 
     return URDFObject(armature, links=links, xml_tree=urdf_tree)
 
