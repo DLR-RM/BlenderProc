@@ -14,6 +14,7 @@ import bpy
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constraint, set_ik_limits_from_rotation_constraint
 
 
 class Inertial(Entity):
@@ -77,15 +78,22 @@ class Link(Entity):
         object.__setattr__(self, 'collisions', [])
         object.__setattr__(self, 'joint_type', None)
         object.__setattr__(self, 'bone', None)
-        object.__setattr__(self, 'bone_rot_vec', None)  # unit vector of axis of rotation; used to compare to ik pose
         object.__setattr__(self, 'ik_bone', None)
+        object.__setattr__(self, 'ik_bone_controller', None)
+        object.__setattr__(self, 'ik_bone_constraint', None)
         object.__setattr__(self, 'fk_bone', None)
-        object.__setattr__(self, '_ik_bone_offset', Vector([0., 0., 0.]))
         object.__setattr__(self, 'armature', None)
         object.__setattr__(self, 'fk_ik_mode', "fk")
 
-    def set_rotation_euler(self, rotation_euler: Union[float, list, Euler, np.ndarray], mode: str = "absolute",
-                           frame: int = 0):
+    def set_parent(self, parent):
+        assert isinstance(parent, Link)
+        object.__setattr__(self, "parent", parent)
+
+    def get_parent(self):
+        return self.parent
+
+    def _set_rotation_euler(self, bone, rotation_euler: Union[float, list, Euler, np.ndarray], mode: str = "absolute",
+                            frame: int = 0):
         """ Rotates the armature based on euler angles. Validates values with given constraints.
 
         :param rotation_euler: The amount of rotation (in radians). Either three floats for x, y and z axes, or a single float.
@@ -95,61 +103,110 @@ class Link(Entity):
                      For relative we don't - this will result in inverse motion after the constraint's limits have been reached.
         :param frame: Keyframe where to insert the respective rotations.
         """
+        if bone is None:
+            bone = self.bone
+
         assert mode in ["absolute", "relative"]
         if self.fk_ik_mode == "ik":
             self._switch_fk_ik_mode(mode="fk")
         bpy.ops.object.select_all(action='DESELECT')
         # bone = self.blender_obj.pose.bones.get('Bone')
-        self.fk_bone.bone.select = True
-        self.fk_bone.rotation_mode = 'XYZ'
+
+        bone.bone.select = True
+        bone.rotation_mode = 'XYZ'
 
         # in absolute mode we overwrite the rotation values of the armature
         if mode == "absolute":
             if isinstance(rotation_euler, float):
-                axis = self._determine_rotation_axis(bone=self.fk_bone)
-                rotation_euler = self._clip_value_from_constraint(bone=self.fk_bone, value=rotation_euler,
+                axis = self._determine_rotation_axis(bone=bone)
+                rotation_euler = self._clip_value_from_constraint(bone=bone, value=rotation_euler,
                                                                   constraint_name="Limit Rotation", axis=axis)
-                current_rotation_euler = self.fk_bone.rotation_euler
+                current_rotation_euler = bone.rotation_euler
                 current_rotation_euler[["X", "Y", "Z"].index(axis)] = rotation_euler
-                self.bone.rotation_euler = current_rotation_euler
-                print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
+                bone.rotation_euler = current_rotation_euler
+                print(f"Set rotation_euler of bone {bone.name} to {rotation_euler}")
             else:
-                self.bone.rotation_euler = Vector(
-                    [self._clip_value_from_constraint(bone=self.fk_bone, value=rot_euler,
-                                                      constraint_name="Limit Rotation", axis=axis)
+                bone.rotation_euler = Vector(
+                    [self._clip_value_from_constraint(bone=bone, value=rot_euler, constraint_name="Limit Rotation",
+                                                      axis=axis)
                      for rot_euler, axis in zip(rotation_euler, ["X", "Y", "Z"])])
-                print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
+                print(f"Set rotation_euler of bone {bone.name} to {rotation_euler}")
         # in relative mode we add the rotation to the current value
         elif mode == "relative":
             if isinstance(rotation_euler, float):
-                axis = self._determine_rotation_axis(bone=self.fk_bone)
-                self.fk_bone.rotation_euler.rotate_axis(axis, rotation_euler)
-                print(f"Relatively rotated armature {self.get_name()} around axis {axis} for {rotation_euler} radians")
+                axis = self._determine_rotation_axis(bone=bone)
+                bone.rotation_euler.rotate_axis(axis, rotation_euler)
+                print(f"Relatively rotated bone {bone.name} around axis {axis} for {rotation_euler} radians")
             else:
                 for axis, rotation in zip(["X", "Y", "Z"], rotation_euler):
-                    self.fk_bone.rotation_euler.rotate_axis(axis, rotation)
-                print(f"Relatively rotated armature {self.get_name()} for {rotation_euler} radians")
+                    bone.rotation_euler.rotate_axis(axis, rotation)
+                print(f"Relatively rotated {bone.name} for {rotation_euler} radians")
 
-        Utility.insert_keyframe(self.fk_bone, "rotation_euler", frame)
+        Utility.insert_keyframe(bone, "rotation_euler", frame)
         if frame > bpy.context.scene.frame_end:
             bpy.context.scene.frame_end += 1
 
-    def set_location(self, location):
-        assert self.ik_bone is not None, f"No ik bone chain created. Please run 'self.create_ik_bone()' first!"
+    def set_rotation_euler(self, *args, **kwargs):
+        raise NotImplementedError("Please use 'set_rotation_euler_fk()' or set_rotation_euler_ik()'!")
+
+    def set_location(self, *args, **kwargs):
+        raise NotImplementedError("Please use 'set_location_ik()'!")
+
+    def set_rotation_euler_fk(self, *args, **kwargs):
+        self._set_rotation_euler(bone=self.fk_bone, *args, **kwargs)
+
+    def set_rotation_euler_ik(self, *args, **kwargs):
+        self._set_rotation_euler(bone=self.ik_bone_controller, *args, **kwargs)
+
+    #def set_location_fk(self, bone, location):
+    #    # location for prismatic joints
+    #    raise NotImplementedError()
+
+    #def set_location_ik(self, *args, **kwargs):
+    #    self._set_location(bone=self.ik_bone_controller, *args, **kwargs)
+
+    # todo also separate as rotation above?
+    # difficult since we also need to switch modes
+    def set_location_ik(self, location, frame=0):
+        if not isinstance(location, Vector):
+            location = Vector(location)
+        print("desired location", location)
+        assert self.ik_bone_controller is not None, f"No ik bone chain created. Please run 'self.create_ik_bone()' first!"
         if self.fk_ik_mode == "fk":
+            print("switching mode")
             self._switch_fk_ik_mode(mode="ik")
-        bpy.ops.object.select_all(action='DESELECT')
-        self.ik_bone.bone.select = True
-        mat = Matrix(np.array([self.ik_bone.x_axis, self.ik_bone.y_axis, self.ik_bone.z_axis]).T)
-        self.ik_bone.location = (mat @ self.ik_bone.head) - (mat @ self._ik_bone_offset) + (location @ mat)
+        print("desired location", location)
+
+        # first: determine offset to base frame
+        self.ik_bone_controller.location = Vector([0., 0., 0.])
+        self.ik_bone_controller.rotation_mode = "XYZ"
+        self.ik_bone_controller.rotation_euler = Vector([0., 0., 0.])
         bpy.context.view_layer.update()
+        offset_mat = self.ik_bone_controller.matrix
+        print("offset mat", offset_mat)
+
+        # offset location by ik offset to base bones
+        location = location + (self.ik_bone.head - self.bone.head)
+        print("loc after offset", location)
+        l = Vector([location[0], location[1], location[2], 1.])
+
+        # move to current frame
+        location = offset_mat.inverted() @ l
+        print("final location", location)
+        self.ik_bone_controller.location = location[:3]
+        bpy.context.view_layer.update()  # todo necessary with keyframe insert?
+
+        # if frame is not None:  # when changing fk-ik mode the location will also be updated, but this doesn't need to be
+        Utility.insert_keyframe(self.ik_bone_controller, "rotation_euler", frame)
+        if frame > bpy.context.scene.frame_end:
+            bpy.context.scene.frame_end += 1
 
     def _determine_rotation_axis(self, bone=None):
         """ Determines the single rotation axis and checks if the constraints are set well to have only one axis of freedom.
 
         :return: The single rotation axis ('X', 'Y' or 'Z').
         """
-        c = self.get_constraint(bone=bone, constraint_name="Limit Rotation")
+        c = get_constraint(bone=bone, constraint_name="Limit Rotation")
         assert c is not None, f"Tried to determine the single rotation axis but no rotation constraints are set!"
 
         axes = ['X', 'Y', 'Z']
@@ -187,187 +244,6 @@ class Link(Entity):
                 return max_value
         return value
 
-    def add_constraint_if_not_existing(self, bone=None, constraint_name: str = "", custom_constraint_name: str = "",
-                                       add_to_existing: bool = False) -> bpy.types.Constraint:
-        """ Adds a new constraint.
-
-        :param constraint_name: Name of the desired constraint.
-        """
-        if bone is None:
-            bone = self.bone
-        if custom_constraint_name == "":
-            custom_constraint_name = constraint_name
-        if constraint_name not in bone.constraints.keys() or add_to_existing:
-            c = bone.constraints.new(constraint_name.upper().replace(' ', '_'))
-            c.name = custom_constraint_name
-            return c
-        else:
-            return None
-
-    def set_rotation_constraint(self, bone=None, x_limits: Union[List[float], None] = None,
-                                y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None,
-                                set_ik_limits: bool = True):
-        """ Sets rotation constraints on the armature's bone.
-
-        :param x_limits: A list of two float values specifying min/max radiant values along the x-axis or None if no constraint should be applied.
-        :param y_limits: A list of two float values specifying min/max radiant values along the y-axis or None if no constraint should be applied.
-        :param z_limits: A list of two float values specifying min/max radiant values along the z-axis or None if no constraint should be applied.
-        """
-        if x_limits is None and y_limits is None and z_limits is None:
-            return
-
-        if bone is None:
-            bone = self.bone
-
-        # add new constraint if it doesn't exist
-        constraint = self.add_constraint_if_not_existing(bone, constraint_name="Limit Rotation")
-
-        if x_limits is not None:
-            constraint.use_limit_x = True
-            constraint.min_x, constraint.max_x = x_limits
-        if y_limits is not None:
-            constraint.use_limit_y = True
-            constraint.min_y, constraint.max_y = y_limits
-        if z_limits is not None:
-            constraint.use_limit_z = True
-            constraint.min_z, constraint.max_z = z_limits
-        constraint.owner_space = "LOCAL"
-
-        if set_ik_limits:
-            self.set_ik_limits_from_rotation_constraint()  # todo try if necessary
-
-    def set_ik_limits_from_rotation_constraint(self, bone=None):
-        if bone is None:
-            bone = self.bone
-        c = self.get_rotation_constraint(bone=bone)
-
-        if c is not None:
-            if c.use_limit_x:
-                if c.min_x == c.max_x == 0:
-                    bone.lock_ik_x = True
-                else:
-                    bone.use_ik_limit_x = True
-                    bone.ik_min_x = c.min_x
-                    bone.ik_max_x = c.max_x
-            if c.use_limit_y:
-                if c.min_y == c.max_y == 0:
-                    bone.lock_ik_y = True
-                else:
-                    bone.use_ik_limit_y = True
-                    bone.ik_min_y = c.min_y
-                    bone.ik_max_y = c.max_y
-            if c.use_limit_z:
-                if c.min_z == c.max_z == 0:
-                    bone.lock_ik_z = True
-                else:
-                    bone.use_ik_limit_z = True
-                    bone.ik_min_z = c.min_z
-                    bone.ik_max_z = c.max_z
-
-    def copy_constraints(self, source_bone, target_bone, constraints_to_be_copied=[]):
-        # constraints_to_be_copied = [c.upper().replace(' ', '_') for c in constraints_to_be_copied]
-        for c in source_bone.constraints:
-            print(c.name, constraints_to_be_copied)
-            if constraints_to_be_copied != [] and c.name not in constraints_to_be_copied:
-                continue
-            c_copy = self.add_constraint_if_not_existing(target_bone, constraint_name=c.name)
-            for prop in dir(c):
-                try:
-                    setattr(c_copy, prop, getattr(c, prop))
-                except:
-                    pass
-
-    def set_ik_constraint(self):
-        target_bone_name = self.bone.name + '.ik'
-        c = self.add_constraint_if_not_existing(self.armature.pose.bones[target_bone_name], constraint_name="IK")
-        c.target = self.armature
-        print("ik bone name", self.ik_bone.name)
-        c.subtarget = self.ik_bone.name
-
-    def set_copy_rotation_constraint(self, bone=None, target_bone="", custom_constraint_name=""):
-        c = self.add_constraint_if_not_existing(bone, constraint_name="Copy Rotation",
-                                                custom_constraint_name=custom_constraint_name, add_to_existing=True)
-        c.target = self.armature
-        c.subtarget = target_bone
-        print("ASDFASDFASFD", c.target, c.subtarget)
-
-    def set_location_constraint(self, bone=None, x_limits: Union[List[float], None] = None,
-                                y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None):
-        """ Sets location constraints on the armature's bone.
-
-        :param x_limits: A list of two float values specifying min/max values along the x-axis or None if no constraint should be applied.
-        :param y_limits: A list of two float values specifying min/max values along the y-axis or None if no constraint should be applied.
-        :param z_limits: A list of two float values specifying min/max values along the z-axis or None if no constraint should be applied.
-        """
-        if x_limits is None and y_limits is None and z_limits is None:
-            return
-
-        if bone is None:
-            bone = self.bone
-
-        # add new constraint if it doesn't exist
-        constraint = self.add_constraint_if_not_existing(bone, constraint_name="Limit Location")
-
-        if x_limits is not None:
-            constraint.use_min_x = True
-            constraint.use_max_x = True
-            constraint.min_x, constraint.max_x = x_limits
-        if y_limits is not None:
-            constraint.use_min_y = True
-            constraint.use_max_y = True
-            constraint.min_y, constraint.max_y = y_limits
-        if z_limits is not None:
-            constraint.use_min_z = True
-            constraint.use_max_z = True
-            constraint.min_z, constraint.max_z = z_limits
-        constraint.owner_space = "LOCAL"
-
-    def get_constraint(self, bone=None, constraint_name: str = "") -> Union[bpy.types.Constraint, None]:
-        """ Returns the desired constraint if existing; otherwise None.
-
-        :param constraint_name: Name of the constraint.
-        :return: Constraint if it exists; else None.
-        """
-        if bone is None:
-            bone = self.bone
-        if constraint_name in bone.constraints.keys():
-            return bone.constraints[constraint_name]
-        return None
-
-    def get_location_constraint(self, bone=None) -> Union[bpy.types.Constraint, None]:
-        """ Returns the location constraint if existing; otherwise None.
-
-        :return: Location constraint if it exists; else None.
-        """
-        if bone is None:
-            bone = self.bone
-        return self.get_constraint(bone, constraint_name="Limit Location")
-
-    def get_rotation_constraint(self, bone=None) -> Union[bpy.types.Constraint, None]:
-        """ Returns the rotation constraint if existing; otherwise None.
-
-        :return: Rotation constraint if it exists; else None.
-        """
-        if bone is None:
-            bone = self.bone
-        return self.get_constraint(bone, constraint_name="Limit Rotation")
-
-    def remove_constraint(self, bone=None, constraint_key: str = ""):
-        """ Removes a specified constraint.
-
-        :param constraint_key: Key to be removed.
-        """
-        if bone is None:
-            bone = self.bone
-        bone.constraints.remove(self.bone.constraints[constraint_key])
-
-    def remove_constraints(self, bone=None):
-        """ Removes all constraints of the armature. """
-        if bone is None:
-            bone = self.bone
-        for constraint_key in bone.constraints.keys():
-            self.remove_constraint(bone=bone, constraint_key=constraint_key)
-
     def set_visuals(self, visuals):
         object.__setattr__(self, "visuals", visuals)
 
@@ -386,11 +262,22 @@ class Link(Entity):
     def set_fk_bone(self, bone):
         object.__setattr__(self, "fk_bone", bone)
 
+    def set_ik_bone_controller(self, bone):
+        object.__setattr__(self, "ik_bone_controller", bone)
+
+    def set_ik_bone_constraint(self, bone):
+        object.__setattr__(self, "ik_bone_constraint", bone)
+
     def set_armature(self, armature):
         object.__setattr__(self, "armature", armature)
 
     def set_fk_ik_mode(self, mode="fk"):
         object.__setattr__(self, "fk_ik_mode", mode)
+
+    def hide(self, hide_object=True):
+        self.hide(hide_object=hide_object)
+        for obj in self.get_all_objects():
+            obj.hide(hide_object=hide_object)
 
     def get_all_objects(self):
         return self.visuals + self.collisions + ([self.inertial] if self.inertial is not None else [])
@@ -411,7 +298,6 @@ class Link(Entity):
 
     def parent_with_bone(self, weight_distribution='envelope'):
         assert weight_distribution in ['envelope', 'automatic', 'rigid']
-        # armature = get_armature_from_bone(self.bone.name)
 
         if self.bone is None:
             # only set parent
@@ -422,8 +308,6 @@ class Link(Entity):
         if weight_distribution in ['envelope', 'automatic']:
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.ops.object.select_all(action="DESELECT")
-            # for link in links:
-            #    link.select()
             self.select()
             for obj in self.get_all_objects():
                 obj.select()
@@ -447,95 +331,40 @@ class Link(Entity):
                 obj.blender_obj.vertex_groups[0].add(vertices, 1.0, 'REPLACE')
         bpy.ops.object.select_all(action='DESELECT')
 
-    def create_ik_bone(self, offset=[0., 1., 0.], chain_length=0, start_bone=None, leave_following_untouched=False):
-        object.__setattr__(self, "_ik_bone_offset", Vector(offset))
+    def _create_ik_bone_controller(self, relative_location=Vector([0., 0., 0.]), chain_length=0):
         bpy.ops.object.select_all(action='DESELECT')
+        bpy.context.view_layer.objects.active = self.armature
         bpy.ops.object.mode_set(mode='EDIT')
         self.armature.select_set(True)
-        # determine all bones to copy
-
-        bpy.context.view_layer.objects.active = self.armature
-        parent_bones = self.bone.parent_recursive
-        if start_bone is not None:
-            parent_bone_names = [b.name for b in parent_bones]
-            if start_bone not in parent_bone_names:
-                print(
-                    f"Provided a start_bone {start_bone.name}, but this bone is not in the parent bones of the selected bone {self.bone.name}. Using no start bone!")
-            elif start_bone == parent_bone_names[-1]:
-                print(f"Cannot start from base frame as the first ik bone needs to have a parent!")
-            else:
-                parent_bones = parent_bones[:parent_bone_names.index(start_bone) + 2]
-        parent_bones.insert(0, self.bone)
-        print("types", parent_bones[0], parent_bones[-1])
-        for parent_bone in parent_bones:
-            print(parent_bone.name)
-        # copy bones
         edit_bones = self.armature.data.edit_bones
-        parent_name = parent_bones.pop(-1).name
-        base_name = parent_name
 
-        for parent_bone in parent_bones[::-1]:
-            # bpy.ops.object.select_all(action='DESELECT')
-            bpy.ops.object.mode_set(mode='EDIT')
-            self.armature.select_set(True)
-            print(f"Creating ik bone for {parent_bone.name}")
-            name = parent_bone.name + '.ik'  # + self.get_name()
-            editbone = edit_bones.new(name)
-            editbone.head = parent_bone.head + Vector(offset)
-            editbone.tail = parent_bone.tail + Vector(offset)
-            last_pose = Vector(editbone.tail)  # copy otherwise this will reset because of mode switch below
+        # we need two bones: a controll bone and a constraint bone
+        # the controll bone will be placed exactly where the current ik bone is
+        ik_bone_controller = edit_bones.new(self.ik_bone.name + '.controller')
+        ik_bone_controller.head = self.ik_bone.head
+        ik_bone_controller.tail = self.ik_bone.tail
+        ik_bone_controller.parent = edit_bones[self.bone.name].parent_recursive[-1]
 
-            if parent_name is not None:
-                editbone.parent = edit_bones[parent_name]
-                print(f"setting", parent_name, "as parent of", editbone.name)
+        # the constraint bone will be placed at the head of the ik bone
+        ik_bone_constraint = edit_bones.new(self.ik_bone.name + '.constraint')
+        ik_bone_constraint.tail = self.ik_bone.head + Vector(relative_location)
+        ik_bone_constraint.head = ik_bone_constraint.tail - (self.ik_bone.tail - self.ik_bone.head)
+        # we need to re-parent the pre- and successor of the constraint bone
+        ik_bone_constraint.parent = edit_bones[self.ik_bone.name].parent_recursive[0]
+        edit_bones[self.ik_bone.name].parent = edit_bones[ik_bone_constraint.name]
 
-            parent_name = name
-
+        # add the bones to the link
         bpy.ops.object.mode_set(mode='POSE')
-        for parent_bone in parent_bones[::-1]:
-            name = parent_bone.name + '.ik'  # + self.get_name()
-
-            # add constraints; this has to be done for a pose bone
-            self.copy_constraints(self.armature.pose.bones[parent_bone.name],
-                                  self.armature.pose.bones[name],
-                                  constraints_to_be_copied=["Limit Rotation", "Limit Location"])
-            # self.copy_constraints(, self.armature.pose.bones[name], constraints_to_be_copied=["Limit Rotation"])
-            # copy the rotation of the bone
-            self.set_copy_rotation_constraint(bone=self.armature.pose.bones[parent_bone.name], target_bone=name,
-                                              custom_constraint_name="copy_rotation.ik")
-
-            # fk bones should mimic jk bones, and vice versa
-            print("at", parent_bone.name)
-            self.set_copy_rotation_constraint(bone=self.armature.pose.bones[parent_bone.name + '.fk'], target_bone=name,
-                                              custom_constraint_name="copy_rotation.ik")
-            self.set_copy_rotation_constraint(bone=self.armature.pose.bones[parent_bone.name + '.ik'],
-                                              target_bone=parent_bone.name + '.fk',
-                                              custom_constraint_name="copy_rotation.fk")
-
-            self.set_ik_limits_from_rotation_constraint(bone=self.armature.pose.bones[name])
-            # bpy.ops.object.mode_set(mode='EDIT')
-            # bpy.ops.object.mode_set(mode='OBJECT')
-        bpy.ops.object.mode_set(mode='OBJECT')
-
-        # add ik bone
-        bpy.ops.object.mode_set(mode='EDIT')
-        print("after", last_pose)
-        ik_bone = edit_bones.new(self.get_name() + '.ik')
-        ik_bone.head = last_pose
-        ik_bone.tail = ik_bone.head + Vector([0., 0., 0.2])
-        ik_bone.parent = edit_bones[base_name]
-        bpy.ops.object.mode_set(mode='POSE')
-        self.set_ik_bone(self.armature.pose.bones.get(self.get_name() + '.ik'))
-
-        # remove location constraint for revolute joints
+        self.set_ik_bone_constraint(self.armature.pose.bones.get(self.ik_bone.name + '.constraint'))
+        self.set_ik_bone_controller(self.armature.pose.bones.get(self.ik_bone.name + '.controller'))
 
         # add ik constraint
-
-        self.set_ik_constraint()
-
-        # add copy_rotation constraint for revolute joints
+        set_ik_constraint(self.ik_bone_constraint, self.armature, self.ik_bone_controller.name)
+        set_ik_limits_from_rotation_constraint(self.ik_bone_constraint, constraint=self.bone.constraints["Limit Rotation"])
 
         bpy.ops.object.mode_set(mode='OBJECT')
+
+        return self.ik_bone_constraint, self.ik_bone_controller
 
     def get_fk_ik_mode(self):
         return self.fk_ik_mode
@@ -545,76 +374,58 @@ class Link(Entity):
             return
         assert mode in ["fk", "ik"]
         if mode == "fk":  # turn off copy rotation constraints of fk bone and base bone
-            from copy import copy
-            mat = copy(Matrix(self.fk_bone.matrix))
-            print("mat in fk", mat)
-            if self.ik_bone is not None:  # switch off ik constraint
-                self.armature.pose.bones[self.bone.name + ".ik"].constraints["IK"].influence = 0.
+            bpy.context.view_layer.update()
+
+            if keep_pose:
+                self.fk_bone.matrix = self.ik_bone.matrix
+            if self.joint_type == "revolute":
+                self.bone.constraints["copy_rotation.fk"].influence = 1.
+                self.bone.constraints["copy_rotation.ik"].influence = 0.
 
             if "copy_rotation.ik" in self.bone.constraints.keys():
                 self.bone.constraints["copy_rotation.ik"].influence = 0.  # otherwise skip
-            self.bone.constraints["copy_rotation.fk"].influence = 1.
-            if "copy_rotation.ik" in self.fk_bone.constraints.keys():
-                self.fk_bone.constraints["copy_rotation.ik"].influence = 0.
-            if self.bone.name + ".ik" in self.armature.pose.bones.keys():  # otherwise skip
-                self.armature.pose.bones[self.bone.name + ".ik"].constraints["copy_rotation.fk"].influence = 1.
-            if keep_pose:
-                self.fk_bone.matrix = mat
+
+            if self.ik_bone_controller is not None:  # switch off ik constraint
+                self.ik_bone_constraint.constraints["IK"].influence = 0.
             self.set_fk_ik_mode(mode="fk")
-            print("fk mat", self.get_name(), mat)
+
         else:  # turn off copy rotation constraints of ik bone and base bone
-            from copy import copy
-            # bpy.ops.object.mode_set(mode='OBJECT')
-            # bpy.ops.object.select_all(action='DESELECT')
-            # self.armature.select_set(True)
-            # bpy.ops.object.mode_set(mode='POSE')
-            mat = copy(Matrix(self.fk_bone.matrix))
+            bpy.context.view_layer.update()
 
-            print("mat before", mat)
+            if keep_pose:
+                self.ik_bone.matrix = self.fk_bone.matrix
 
-            if "copy_rotation.ik" in self.bone.constraints.keys():
-                self.bone.constraints["copy_rotation.ik"].influence = 1.  # otherwise skip
-            self.bone.constraints["copy_rotation.fk"].influence = 0.
-            if "copy_rotation.ik" in self.fk_bone.constraints.keys():
-                self.fk_bone.constraints["copy_rotation.ik"].influence = 1.
-            if self.bone.name + ".ik" in self.armature.pose.bones.keys():  # otherwise skip
-                self.armature.pose.bones[self.bone.name + ".ik"].constraints["copy_rotation.fk"].influence = 0.
-            if keep_pose and self.bone.name + ".ik" in self.armature.pose.bones.keys():
-                # keys = [k for k in self.armature.pose.bones.keys() if k.startswith(self.bone.name + '.ik')]
-                # print("found keys:", keys)
-                # if keys != []:
-                #    for key in keys:
-                self.armature.pose.bones[self.bone.name + ".ik"].matrix = mat
-                print("set to", mat)
-            # shift ik bone to tail of previous bone
+            if self.joint_type == "revolute":
+                self.bone.constraints["copy_rotation.fk"].influence = 0.
+                self.bone.constraints["copy_rotation.ik"].influence = 1.
+
             self.set_fk_ik_mode(mode="ik")
-            if self.ik_bone is not None:
-                print("got ik link", self.get_name(), self.ik_bone.name, self.bone.name)
-                print("tail of ik bone")
-                # bpy.ops.object.mode_set(mode='POSE')
+            if self.ik_bone_controller is not None:
+                bpy.context.view_layer.update()
+                location = np.array(self.armature.pose.bones[self.bone.name].head)  # or matrix?
+                print("desired ik location", location)
+                # location = Vector(np.array(mat)[:3, -1])
+                self.set_location_ik(location)
 
-                # location = self.armature.data.edit_bones[self.bone.name + ".ik"].tail
-                mat = np.array(self.armature.pose.bones[self.bone.name].matrix)
-                location = Vector(np.array(mat)[:3, -1])
+            if self.ik_bone_constraint is not None:
+                self.ik_bone_constraint.constraints["IK"].influence = 1.
+                fk_bone_mat = np.array(self.fk_bone.matrix)
+                fk_bone_mat[:3, -1] = np.array(self.ik_bone_controller.matrix)[:3, -1]
+                self.ik_bone_controller.matrix = Matrix(fk_bone_mat)
 
-                # add tail offset
-                tail_offset = np.array(self.armature.pose.bones[self.bone.name].tail) - np.array(
-                    self.armature.pose.bones[self.bone.name].head)
-                location += Vector(tail_offset)
-                print(location)
-                print("mat", mat)
-                # bpy.ops.object.mode_set(mode='OBJECT')
-                self.set_location(location)
-            if self.ik_bone is not None:  # switch on ik constraint, and move ik bone. important to do this AFTER setting matrix of ik link
-                self.armature.pose.bones[self.bone.name + ".ik"].constraints["IK"].influence = 1.
             bpy.ops.object.mode_set(mode='OBJECT')
 
 
 class URDFObject(Entity):
     def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Union["urdfpy.URDF", None] = None):
-        super().__init__(bpy_object=armature)  # allows full manipulation (translation, scale, rotation) of whole urdf object
+        super().__init__(
+            bpy_object=armature)  # allows full manipulation (translation, scale, rotation) of whole urdf object
         object.__setattr__(self, "links", links)
         object.__setattr__(self, "xml_tree", xml_tree)
+        object.__setattr__(self, "ik_bone_constraint", None)
+        object.__setattr__(self, "ik_bone_controller", None)
+        object.__setattr__(self, "fk_ik_mode", None)
+        object.__setattr__(self, "ik_link", None)
 
     def get_all_urdf_objs(self) -> List[Union[Link, Inertial, MeshObject]]:
         """ Returns a list of all urdf-related objects.
@@ -667,7 +478,8 @@ class URDFObject(Entity):
         if category_ids is None:
             category_ids = list(range(1, len(self.links) + 1))
 
-        assert len(category_ids) == len(self.links), f"Need equal amount of category ids for links. Got {len(category_ids)} and {len(self.links)}, respectively."
+        assert len(category_ids) == len(
+            self.links), f"Need equal amount of category ids for links. Got {len(category_ids)} and {len(self.links)}, respectively."
         for link, category_id in zip(self.links, category_ids):
             link.set_cp(key="category_id", value=category_id)
             for obj in link.get_children():
@@ -735,10 +547,68 @@ class URDFObject(Entity):
         """
         for link in self.links:
             link.hide(hide_object=hide_object)
-            for child in link.get_children():
-                child.hide(hide_object=hide_object)
 
     def get_all_local2world_mats(self):
         """ Returns all matrix_world matrices from every joint. """
 
         return np.stack([link.blender_obj.matrix_world for link in self.links])
+
+    def set_ik_bone_controller(self, bone):
+        object.__setattr__(self, "ik_bone_controller", bone)
+
+    def set_ik_bone_constraint(self, bone):
+        object.__setattr__(self, "ik_bone_constraint", bone)
+
+    def _set_fk_ik_mode(self, mode="fk"):
+        object.__setattr__(self, "fk_ik_mode", mode)
+
+    def set_ik_link(self, ik_link):
+        object.__setattr__(self, "ik_link", ik_link)
+
+    def create_ik_bone_controller(self, link=None, relative_location=[0., 0., 0.1], chain_length=0):
+        if self.ik_bone_controller is not None:
+            raise NotImplementedError(
+                f"URDFObject already has an ik bone controller. More than one ik controllers are currently not supported!")
+        if link is None:
+            link = self.links[-1]
+        ik_bone_controller, ik_bone_constraint = link._create_ik_bone_controller(relative_location=relative_location,
+                                                                                 chain_length=chain_length)
+        self.set_ik_bone_controller(ik_bone_controller)
+        self.set_ik_bone_constraint(ik_bone_constraint)
+        self.set_ik_link(link)
+        self.switch_fk_ik_mode(mode="ik")
+
+    def switch_fk_ik_mode(self, mode="fk"):
+        if self.fk_ik_mode != mode:
+            for link in self.links:
+                link._switch_fk_ik_mode(mode=mode)
+            self._set_fk_ik_mode(mode=mode)
+
+    def get_revolute_joints(self):
+        return [link for link in self.links if link.joint_type == "revolute"]
+
+    def set_rotation_euler(self, *args, **kwargs):
+        raise NotImplementedError("Please use 'set_rotation_euler_fk()' or 'set_rotation_euler_ik()'")
+
+    def set_rotation_euler_fk(self, link, rotation_euler, mode, frame=0):
+        self.switch_fk_ik_mode(mode="fk")
+        if link is not None:
+            link.set_rotation_euler_fk(rotation_euler=rotation_euler, mode=mode, frame=frame)
+        else:
+            revolute_joints = self.get_revolute_joints()
+            if len(revolute_joints) == len(rotation_euler):
+                for revolute_joint, rotation in zip(revolute_joints, rotation_euler):
+                    revolute_joint.set_rotation_euler_fk(rotation_euler=rotation, mode=mode, frame=frame)
+            else:
+                for revolute_joint in revolute_joints:
+                    revolute_joint.set_rotation_euler_fk(rotation_euler=rotation_euler, mode=mode, frame=frame)
+
+    def set_rotation_euler_ik(self, rotation_euler, mode, frame=0):
+        self.switch_fk_ik_mode(mode="ik")
+        assert self.ik_link is not None
+        self.ik_link.set_rotation_euler_ik(rotation_euler=rotation_euler, mode=mode, frame=frame)
+
+    def set_location_ik(self, location, frame=0):
+        self.switch_fk_ik_mode(mode="ik")
+        assert self.ik_link is not None
+        self.ik_link.set_location_ik(location=location, frame=frame)

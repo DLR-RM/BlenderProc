@@ -15,6 +15,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primit
 from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
 from blenderproc.python.filter.Filter import one_by_attr
 from blenderproc.python.types.MeshObjectUtility import create_with_empty_mesh
+from blenderproc.python.types.BoneUtility import set_location_constraint, set_rotation_constraint, set_copy_rotation_constraint
 
 
 def load_urdf(urdf_file: str) -> URDFObject:
@@ -78,10 +79,12 @@ def get_joints_which_have_link_as_child(link_name, joint_trees):
 
 
 def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, create_recursive=False,
-                parent_origin=None, fk_offset=[0., -1., 0.]):
+                parent_origin=None, fk_offset=[0., -1., 0.], ik_offset=[0., 1., 0.]):
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.objects.active = armature
     bpy.ops.object.mode_set(mode='EDIT', toggle=False)
+
+    # create initial bone
     edit_bones = armature.data.edit_bones
     editbone = edit_bones.new(joint_tree.name)
 
@@ -102,27 +105,78 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
         editbone.parent = parent_bone
 
     # create fk bone
-    fk_bone = edit_bones.new(joint_tree.name + '.fk')
-
+    fk_editbone = edit_bones.new(joint_tree.name + '.fk')
     axis = Matrix(origin[:3, :3]) @ Vector(joint_tree.axis)
-    fk_bone.head = Vector(origin[:3, -1]) + Vector(fk_offset)
-    fk_bone.tail = fk_bone.head + axis.normalized() * 0.2
+    fk_editbone.head = Vector(origin[:3, -1]) + Vector(fk_offset)
+    fk_editbone.tail = fk_editbone.head + axis.normalized() * 0.2
 
     if parent_bone_name is not None:
         parent_bone = edit_bones.get(parent_bone_name + '.fk')
-        fk_bone.parent = parent_bone
+        fk_editbone.parent = parent_bone
+
+    # create ik bone
+    ik_editbone = edit_bones.new(joint_tree.name + '.ik')
+    axis = Matrix(origin[:3, :3]) @ Vector(joint_tree.axis)
+    ik_editbone.head = Vector(origin[:3, -1]) + Vector(ik_offset)
+    ik_editbone.tail = ik_editbone.head + axis.normalized() * 0.2
+
+    if parent_bone_name is not None:
+        parent_bone = edit_bones.get(parent_bone_name + '.ik')
+        ik_editbone.parent = parent_bone
+
+    # this is necessary as after changing to object mode the string will be differently encoded?!
+    bone_name = editbone.name
+    fk_bone_name = fk_editbone.name
+    ik_bone_name = ik_editbone.name
 
     bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+    # derive posebones for constraints
+    bone = armature.pose.bones[bone_name]
+    fk_bone = armature.pose.bones[fk_bone_name]
+    ik_bone = armature.pose.bones[ik_bone_name]
+
+    # set rotation mode
+    bone.rotation_mode = "XYZ"
+    fk_bone.rotation_mode = "XYZ"
+    ik_bone.rotation_mode = "XYZ"
+
+    # manage constraints
+    if joint_tree.joint_type == "fixed":
+        set_location_constraint(bone=bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_location_constraint(bone=fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_location_constraint(bone=ik_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_rotation_constraint(bone=bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_rotation_constraint(bone=fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_rotation_constraint(bone=ik_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+    elif joint_tree.joint_type == "revolute":
+        limits = None
+        if joint_tree.limit is not None:
+            limits = np.array([joint_tree.limit.lower, joint_tree.limit.upper])
+
+        set_location_constraint(bone=bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_location_constraint(bone=fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_location_constraint(bone=ik_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
+        set_rotation_constraint(bone=bone, x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
+        set_rotation_constraint(bone=fk_bone, x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
+        set_rotation_constraint(bone=ik_bone, x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
+        set_copy_rotation_constraint(bone=bone, target=armature, target_bone=fk_bone.name,
+                                     custom_constraint_name="copy_rotation.fk")
+        set_copy_rotation_constraint(bone=bone, target=armature, target_bone=ik_bone.name,
+                                     custom_constraint_name="copy_rotation.ik",
+                                     influence=0.)  # start in fk mode per default
+
+    else:
+        print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
+        # link.bone_name = corresponding_joint.name
 
     if create_recursive:
         child_joints = get_joints_which_have_link_as_parent(link_name=joint_tree.child, joint_trees=all_joint_trees)
 
         if child_joints != []:
             for child_joint in child_joints:
-                create_bone(armature, child_joint, all_joint_trees, parent_bone_name=editbone.name,
-                            create_recursive=True, parent_origin=origin, fk_offset=fk_offset)
-
-    bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+                create_bone(armature, child_joint, all_joint_trees, parent_bone_name=bone.name, create_recursive=True,
+                            parent_origin=origin, fk_offset=fk_offset)
 
 
 def load_links(link_trees, joint_trees, armature, urdf_path):
@@ -152,28 +206,8 @@ def load_links(link_trees, joint_trees, armature, urdf_path):
             # edit_bones = armature.data.edit_bones
             link.set_bone(armature.pose.bones.get(corresponding_joint.name))
             link.set_fk_bone(armature.pose.bones.get(corresponding_joint.name + '.fk'))
+            link.set_ik_bone(armature.pose.bones.get(corresponding_joint.name + '.ik'))
             link.set_joint_type(corresponding_joint.joint_type)
-
-            # set constraints, if any
-            if corresponding_joint.joint_type == "fixed":
-                link.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                link.set_location_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                link.set_rotation_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                link.set_rotation_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-            elif corresponding_joint.joint_type == "revolute":
-                if corresponding_joint.limit is not None:
-                    limits = np.array([corresponding_joint.limit.lower, corresponding_joint.limit.upper])
-
-                link.set_location_constraint(x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                link.set_location_constraint(bone=link.fk_bone, x_limits=[0., 0.], y_limits=[0., 0.], z_limits=[0., 0.])
-                link.set_rotation_constraint(x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
-                link.set_rotation_constraint(bone=link.fk_bone, x_limits=[0, 0], y_limits=limits, z_limits=[0, 0])
-            else:
-                print(f"WARNING: No constraint implemented for joint type '{corresponding_joint.joint_type}'!")
-                # link.bone_name = corresponding_joint.name
-            print("setting bone fkbone", link.bone, link.bone.name, link.fk_bone.name)
-            link.set_copy_rotation_constraint(bone=link.bone, target_bone=link.fk_bone.name,
-                                              custom_constraint_name="copy_rotation.fk")
 
         links.append(link)
     return links
@@ -185,6 +219,7 @@ def propagate_pose(links, joint_tree, joint_trees, armature, recursive=True):
 
     mat = Matrix(parent_link.get_local2world_mat()) @ Matrix(joint_tree.origin)
     child_link.set_local2world_mat(mat)
+    child_link.set_parent(parent=parent_link)
 
     for obj in child_link.get_all_objects():
         obj.set_local2world_mat(Matrix(child_link.get_local2world_mat()) @ Matrix(obj.get_local2world_mat()))
