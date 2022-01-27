@@ -12,7 +12,7 @@ from mathutils import Vector, Euler, Color, Matrix, Quaternion
 
 import bpy
 
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, KeyFrame
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constraint, set_ik_limits_from_rotation_constraint
 
@@ -91,6 +91,33 @@ class Link(Entity):
 
     def get_parent(self):
         return self.parent
+    
+    def get_children(self):
+        children = self.collisions + self.visuals
+        if self.inertial is not None:
+            children.append(self.inertial)
+        return children
+
+    def get_rotation_euler(self, bone, frame: int = None):
+        """ Get current joint rotation based on euler angles.
+        :return: Current joint rotation in radians
+        """
+
+        if bone is None:
+            bone = self.bone
+        
+        bpy.ops.object.select_all(action='DESELECT')
+        # bone = self.blender_obj.pose.bones.get('Bone')
+
+        bone.bone.select = True
+        bone.rotation_mode = 'XYZ'
+        with KeyFrame(frame):
+            current_rotation_euler = bone.rotation_euler
+        
+        axis = self._determine_rotation_axis(bone=bone, allow_fixed=True)
+        if axis is None:
+            return 0.0
+        return current_rotation_euler[["X", "Y", "Z"].index(axis)]
 
     def _set_rotation_euler(self, bone, rotation_euler: Union[float, list, Euler, np.ndarray], mode: str = "absolute",
                             frame: int = 0):
@@ -195,7 +222,7 @@ class Link(Entity):
         if frame > bpy.context.scene.frame_end:
             bpy.context.scene.frame_end += 1
 
-    def _determine_rotation_axis(self, bone=None):
+    def _determine_rotation_axis(self, bone=None, allow_fixed=False):
         """ Determines the single rotation axis and checks if the constraints are set well to have only one axis of freedom.
 
         :return: The single rotation axis ('X', 'Y' or 'Z').
@@ -210,6 +237,8 @@ class Link(Entity):
             axes.pop(axes.index('Y'))
         if c.use_limit_z and c.min_z == c.max_z:
             axes.pop(axes.index('Z'))
+        if allow_fixed and len(axes) == 0:
+            return None
         assert len(axes) == 1, f"Constraints are set wrong for a rotation around a single axis. Only one axis should " \
                                f"be allowed to move, but found freedom in {len(axes)} axes of armature " \
                                f"{self.get_name()} (constraint: {c}, uses limits (xyz): " \
@@ -550,6 +579,10 @@ class URDFObject(Entity):
         """ Returns all matrix_world matrices from every joint. """
 
         return np.stack([link.blender_obj.matrix_world for link in self.links])
+    
+    def get_all_joint_angles(self):
+        """ Returns angles from every joint. """
+        return np.stack([link.get_rotation_euler(link.fk_bone) for link in self.links[1:]])
 
     def set_ik_bone_controller(self, bone):
         object.__setattr__(self, "ik_bone_controller", bone)
