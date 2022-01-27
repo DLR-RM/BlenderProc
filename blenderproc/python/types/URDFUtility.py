@@ -290,6 +290,7 @@ class Link(Entity):
             obj.hide(hide_object=hide_object)
 
     def get_visual_local2world_mats(self):
+        bpy.context.view_layer.update()
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
@@ -299,6 +300,7 @@ class Link(Entity):
             return None
 
     def get_collision_local2world_mats(self):
+        bpy.context.view_layer.update()
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
@@ -308,6 +310,7 @@ class Link(Entity):
             return None
 
     def get_inertial_local2world_mat(self):
+        bpy.context.view_layer.update()
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
