@@ -182,24 +182,28 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
 def load_links(link_trees, joint_trees, armature, urdf_path):
     links = []
     for i, link_tree in enumerate(link_trees):
-        inertial, visuals, collisions = None, [], []
-        # if link_tree.inertial:
-        #    inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
+        visuals, collisions, inertial = [], [], None
+
         if link_tree.visuals:
             visuals = [load_viscol(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
                        link_tree.visuals]
         # if link_tree.collisions:
         #    collisions = [load_viscol(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for collision_tree in link_tree.collisions]
 
+        # if link_tree.inertial:
+        #    inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
+
         # determine bone name
         corresponding_joint = get_joints_which_have_link_as_child(link_tree.name, joint_trees)
 
-        link = Link(bpy_object=create_with_empty_mesh(
-            link_tree.name).blender_obj)  # todo is it good to create an empty object to inherit from entity
+        link = Link(bpy_object=create_with_empty_mesh(link_tree.name).blender_obj)
         link.set_armature(armature)
         link.set_visuals(visuals)
+        link.set_visual_local2link_mats([Matrix(obj.get_local2world_mat()) for obj in visuals])  # todo invert here to stick with local2something convention
         link.set_collisions(collisions)
+        link.set_collision_local2link_mats([Matrix(obj.get_local2world_mat()) for obj in collisions])
         link.set_inertial(inertial)
+        link.set_inertial_local2link_mat(Matrix(inertial.get_local2world_mat()) if inertial is not None else None)
         link.set_name(name=link_tree.name)
 
         if corresponding_joint is not None:
@@ -223,6 +227,10 @@ def propagate_pose(links, joint_tree, joint_trees, armature, recursive=True):
 
     for obj in child_link.get_all_objects():
         obj.set_local2world_mat(Matrix(child_link.get_local2world_mat()) @ Matrix(obj.get_local2world_mat()))
+
+    # set link2bone mat
+    if child_link.bone is not None:
+        child_link.set_link2bone_mat(mat.inverted() @ child_link.bone.matrix)
 
     if recursive:
         child_joint_trees = get_joints_which_have_link_as_parent(child_link.get_name(), joint_trees)

@@ -84,6 +84,10 @@ class Link(Entity):
         object.__setattr__(self, 'fk_bone', None)
         object.__setattr__(self, 'armature', None)
         object.__setattr__(self, 'fk_ik_mode', "fk")
+        object.__setattr__(self, 'link2bone_mat', None)
+        object.__setattr__(self, 'visual_local2link_mats', [])
+        object.__setattr__(self, 'collision_local2link_mats', [])
+        object.__setattr__(self, 'inertial_local2link_mat', None)
 
     def set_parent(self, parent):
         assert isinstance(parent, Link)
@@ -268,10 +272,49 @@ class Link(Entity):
     def _set_fk_ik_mode(self, mode="fk"):
         object.__setattr__(self, "fk_ik_mode", mode)
 
+    def set_link2bone_mat(self, matrix):
+        object.__setattr__(self, "link2bone_mat", matrix)
+
+    def set_visual_local2link_mats(self, matrix_list):
+        object.__setattr__(self, "visual_local2link_mats", matrix_list)
+
+    def set_collision_local2link_mats(self, matrix_list):
+        object.__setattr__(self, "collision_local2link_mats", matrix_list)
+
+    def set_inertial_local2link_mat(self, matrix):
+        object.__setattr__(self, "inertial_local2link_mat", matrix)
+
     def hide(self, hide_object=True):
         self.hide(hide_object=hide_object)
         for obj in self.get_all_objects():
             obj.hide(hide_object=hide_object)
+
+    def get_visual_local2world_mats(self):
+        bone_mat = Matrix.Identity(4)
+        if self.bone is not None:
+            bone_mat = self.bone.matrix
+        if self.visuals != []:
+            return [bone_mat @ (self.link2bone_mat.inverted() @ visual_local2link_mat) for visual_local2link_mat in self.visual_local2link_mats]
+        else:
+            return None
+
+    def get_collision_local2world_mats(self):
+        bone_mat = Matrix.Identity(4)
+        if self.bone is not None:
+            bone_mat = self.bone.matrix
+        if self.collisions != []:
+            return [bone_mat @ (self.link2bone_mat.inverted() @ collision_local2link_mat) for collision_local2link_mat in self.collision_local2link_mats]
+        else:
+            return None
+
+    def get_inertial_local2world_mat(self):
+        bone_mat = Matrix.Identity(4)
+        if self.bone is not None:
+            bone_mat = self.bone.matrix
+        if self.inertial is not None:
+            return bone_mat @ (self.link2bone_mat.inverted() @ self.inertial_local2link_mat)
+        else:
+            return None
 
     def get_all_objects(self):
         return self.visuals + self.collisions + ([self.inertial] if self.inertial is not None else [])
@@ -577,6 +620,8 @@ class URDFObject(Entity):
         self.switch_fk_ik_mode(mode="ik")
 
     def switch_fk_ik_mode(self, mode="fk"):
+        if self.ik_bone_controller is None:
+            raise NotImplementedError("URDFObject doesn't have an ik bone controller. Please set up an ik bone first with 'urdf_object.create_ik_bone_controller()'")
         if self.fk_ik_mode != mode:
             for link in self.links:
                 link.switch_fk_ik_mode(mode=mode)
