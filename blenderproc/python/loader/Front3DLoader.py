@@ -15,6 +15,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_with_e
 from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
+import ipdb
 
 def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping,
                  ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0, 
@@ -46,20 +47,39 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
     with open(json_path, "r") as json_file:
         data = json.load(json_file)
 
+    mapping_from_json = {}
+    mapping_from_json_refined_cat = {}
+    with open(os.path.join(future_model_path,"model_info.json"), "r") as json_file:
+        category_info = json.load(json_file)
+        for c in category_info:
+            mapping_from_json[c['model_id']] = c['super-category']
+            mapping_from_json_refined_cat[c['model_id']] = c['category']
+
+    with open(os.path.join(front_3D_texture_path,"texture_info.json"), "r") as json_file:
+        category_info = json.load(json_file)
+        for c in category_info:
+            mapping_from_json[c['model_id']] = c['category']
+            mapping_from_json_refined_cat[c['model_id']] = c['category']
+
+
     if "scene" not in data:
         raise Exception("There is no scene data in this json file: {}".format(json_path))
 
     created_objects = Front3DLoader._create_mesh_objects_from_file(data, front_3D_texture_path,
-                                                                   ceiling_light_strength, label_mapping, json_path)
+                                                                   ceiling_light_strength, label_mapping, json_path, mapping_from_json, mapping_from_json_refined_cat)
 
-    all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
+    all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping, mapping_from_json, mapping_from_json_refined_cat)
 
     created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture, random_light_intensity, random_light_color)
 
     # add an identifier to the obj
+    bpy.ops.object.select_all(action='DESELECT')
     for obj in created_objects:
         obj.set_cp("is_3d_front", True)
-
+    for obj in bpy.data.objects:
+        if "camera" in obj.name.lower():
+            obj.select_set(True)
+    bpy.ops.object.delete()
     return created_objects
 
 class Front3DLoader:
@@ -122,7 +142,7 @@ class Front3DLoader:
 
     @staticmethod
     def _create_mesh_objects_from_file(data: dict, front_3D_texture_path: str, ceiling_light_strength: float,
-                                       label_mapping: LabelIdMapping, json_path: str) -> List[MeshObject]:
+                                       label_mapping: LabelIdMapping, json_path: str, mapping_from_json: dict, mapping_from_json_refined_cat: dict) -> List[MeshObject]:
         """
         This creates for a given data json block all defined meshes and assigns the correct materials.
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
@@ -134,6 +154,8 @@ class Front3DLoader:
         :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
         :param label_mapping: A dict which maps the names of the objects to ids.
         :param json_path: Path to the json file, where the house information is stored.
+        :param mapping_from_json: Mapping between the jids and the "parent" categories (see category.py).
+        :param mapping_from_json_refined_cat: Mapping between the jids and the specific categories (see category.py)
         :return: The list of loaded mesh objects.
         """
         # extract all used materials -> there are more materials defined than used
@@ -150,14 +172,19 @@ class Front3DLoader:
         used_materials_based_on_color = {}
         # materials based on texture to avoid recreating the same material over and over
         used_materials_based_on_texture = {}
+        refined_cat = ''
         for mesh_data in data["mesh"]:
             # extract the obj name, which also is used as the category_id name
-            used_obj_name = mesh_data["type"].strip()
-            if used_obj_name == "":
-                used_obj_name = "void"
-            if "material" not in mesh_data:
-                warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
-                continue
+            if mesh_data['jid'] in mapping_from_json:
+                used_obj_name = mapping_from_json[mesh_data['jid']].lower()
+                refined_cat = mapping_from_json_refined_cat[mesh_data['jid']].lower()
+            else:
+                used_obj_name = mesh_data["type"].strip()
+                if used_obj_name == "":
+                    used_obj_name = "void"
+                if "material" not in mesh_data:
+                    warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
+                    continue
             # create a new mesh
             obj = create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
@@ -165,6 +192,7 @@ class Front3DLoader:
             # set two custom properties, first that it is a 3D_future object and second the category_id
             obj.set_cp("is_3D_future", True)
             obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
+            obj.set_cp("semantic", refined_cat if refined_cat != '' else used_obj_name.lower())
 
             # get the material uid of the current mesh data
             current_mat = mesh_data["material"]
@@ -298,7 +326,8 @@ class Front3DLoader:
         return created_objects
 
     @staticmethod
-    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, label_mapping: LabelIdMapping) -> List[MeshObject]:
+    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, label_mapping: LabelIdMapping,  
+                             mapping_from_json: dict, mapping_from_json_refined_cat: dict) -> List[MeshObject]:
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
@@ -307,6 +336,8 @@ class Front3DLoader:
         :param future_model_path: Path to the models used in the 3D-Front dataset.
         :param lamp_light_strength: Strength of the emission shader used in each lamp.
         :param label_mapping: A dict which maps the names of the objects to ids.
+        :param mapping_from_json: Mapping between the jids and the "parent" categories (see category.py).
+        :param mapping_from_json_refined_cat: Mapping between the jids and the specific categories (see category.py)
         :return: The list of loaded mesh objects.
         """
         # collect all loaded furniture objects
@@ -323,24 +354,30 @@ class Front3DLoader:
                 objs = load_obj(filepath=obj_file)
                 # extract the name, which serves as category id
                 used_obj_name = ""
-                if "category" in ele:
+                refined_cat = ''
+                if ele['jid'] in mapping_from_json.keys():
+                    used_obj_name = mapping_from_json[ele['jid']]
+                    refined_cat = mapping_from_json_refined_cat[ele['jid']]
+                elif "category" in ele:
                     used_obj_name = ele["category"]
                 elif "title" in ele:
-                    used_obj_name = ele["title"]
-                    if "/" in used_obj_name:
-                        used_obj_name = used_obj_name.split("/")[0]
+                        used_obj_name = ele["title"]
+                        if "/" in used_obj_name:
+                            used_obj_name = used_obj_name.split("/")[0]
                 if used_obj_name == "":
                     used_obj_name = "others"
                 for obj in objs:
                     obj.set_name(used_obj_name)
                     # add some custom properties
                     obj.set_cp("uid", ele["uid"])
+                    
                     # this custom property determines if the object was used before
                     # is needed to only clone the second appearance of this object
                     obj.set_cp("is_used", False)
                     obj.set_cp("is_3D_future", True)
                     obj.set_cp("type", "Non-Object")  # is an non object used for the interesting score
                     # set the category id based on the used obj name
+                    obj.set_cp("semantic", refined_cat if refined_cat != '' else used_obj_name)
                     obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
                     # walk over all materials
                     for mat in obj.get_materials():
