@@ -1,0 +1,73 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py",
+      "python-dateutil==2.1",
+      "numpy",
+      "Pillow",
+      "opencv-contrib-python",
+      "scipy"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
+    },
+    {
+      "module": "loader.SuncgLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation/value _ _ _ _ _ _",
+        "world_frame_change": ["X", "-Z", "Y"],
+        "default_cam_param": {
+          "rotation": {
+            "format": "forward_vec"
+          }
+        },
+        "intrinsics": {
+          "interocular_distance": 0.05,
+          "stereo_convergence_mode": "PARALLEL",
+          "convergence_distance": 0.00001,
+          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
+          "resolution_x": 1280,
+          "resolution_y": 720
+        },
+      }
+    },
+    {
+      "module": "lighting.SuncgLighting",
+      "config": {}
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "render_distance": true,
+        "stereo": true,
+        "use_alpha": true,
+      }
+    },
+    {
+      "module": "writer.StereoGlobalMatchingWriter",
+      "config": {
+        "disparity_filter": false
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+    }
+  ]
+}
