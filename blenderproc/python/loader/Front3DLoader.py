@@ -7,6 +7,7 @@ import bpy
 import mathutils
 import numpy as np
 from urllib.request import urlretrieve
+import random
 
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
@@ -18,6 +19,8 @@ from blenderproc.python.loader.TextureLoader import load_texture
 
 def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping,
                  ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
+                 ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0, 
+                 random_light_color: bool = False, random_light_intensity: bool = False) -> List[MeshObject]:
     """ Loads the 3D-Front scene specified by the given json file.
 
     :param json_path: Path to the json file, where the house information is stored.
@@ -26,8 +29,10 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
     :param label_mapping: A dict which maps the names of the objects to ids.
     :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
     :param lamp_light_strength: Strength of the emission shader used in each lamp.
-    :return: The list of loaded mesh objects.
-    """
+    :param random_light_color: Random color of the emission used in each Point Light (added to each light). If False, white.
+    :param random_light_intensity: Random strength of the emission shader used in each Point Light (added to each light). If False, 100.
+    :return: The list of loaded mesh objects
+.    """
     json_path = resolve_path(json_path)
     future_model_path = resolve_path(future_model_path)
     front_3D_texture_path = resolve_path(front_3D_texture_path)
@@ -51,7 +56,7 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
 
     all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
 
-    created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
+    created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture, random_light_intensity, random_light_color)
 
     # add an identifier to the obj
     for obj in created_objects:
@@ -347,7 +352,6 @@ class Front3DLoader:
                         if "bed" in used_obj_name.lower() or "sofa" in used_obj_name.lower():
                             if len(principled_node) == 1:
                                 principled_node[0].inputs["Roughness"].default_value = 0.5
-                        is_lamp = "lamp" in used_obj_name.lower()
                         if len(principled_node) == 0 and is_lamp:
                             # this material has already been transformed
                             continue
@@ -367,9 +371,6 @@ class Front3DLoader:
                         base_image_path = os.path.join(folder_path, "texture.png")
                         image_node.image = bpy.data.images.load(base_image_path, check_existing=True)
                         mat.link(image_node.outputs['Color'], principled_node.inputs['Base Color'])
-                        # if the object is a lamp, do the same as for the ceiling and add an emission shader
-                        if is_lamp:
-                            mat.make_emissive(lamp_light_strength)
 
                 all_objs.extend(objs)
             elif "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
@@ -377,15 +378,20 @@ class Front3DLoader:
         return all_objs
 
     @staticmethod
-    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[MeshObject]:
+    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list,  random_light_intensity: bool, random_light_color: bool) -> List[MeshObject]:
         """
         Move and duplicate the furniture depending on the data in the data json dir.
         After loading each object gets a location based on the data in the json file. Some objects are used more than
         once these are duplicated and then placed.
 
         Merge objects based on multiple parts. Center the origin to the geometry center. 
+
+        Add Point lights.
+
         :param data: json data dir. Should contain "scene", which should contain "room"
         :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
+        :param random_light_intensity: Whether or not to use random light intensity
+        :param random_light_color: Wheter or not to use random light colors
         :return: The list of loaded mesh objects.
         """
         # this rotation matrix rotates the given quaternion into the blender coordinate system
@@ -447,4 +453,14 @@ class Front3DLoader:
                     print("JOINED")
                     bpy.ops.object.join()
 
+            used_obj_name = i[0].blender_obj.name
+            is_lamp = "lamp" in used_obj_name.lower() or "lighting" in used_obj_name.lower() 
+            if is_lamp:
+                #mat.make_emissive(lamp_light_strength)
+                light_data = bpy.data.lights.new(name="Lamp"+str(used_obj_name), type='POINT')
+                light_data.color = [0.0, 0.0, 0.0] if not random_light_color else [random.random(), random.random(), random.random()] # rgb / 255.0
+                light_data.energy = 100 if not random_light_intensity else random.randint(10,1000)
+                light_object = bpy.data.objects.new(name="Lamp"+str(used_obj_name), object_data=light_data)
+                bpy.context.collection.objects.link(light_object)
+                light_object.parent = i[0].blender_obj
         return created_objects
