@@ -383,6 +383,7 @@ class Front3DLoader:
         After loading each object gets a location based on the data in the json file. Some objects are used more than
         once these are duplicated and then placed.
 
+        Merge objects based on multiple parts. Center the origin to the geometry center. 
         :param data: json data dir. Should contain "scene", which should contain "room"
         :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
         :return: The list of loaded mesh objects.
@@ -390,6 +391,7 @@ class Front3DLoader:
         # this rotation matrix rotates the given quaternion into the blender coordinate system
         blender_rot_mat = mathutils.Matrix.Rotation(radians(-90), 4, 'X')
         created_objects = []
+                                
         # for each room
         for room_id, room in enumerate(data["scene"]["room"]):
             # for each object in that room
@@ -416,4 +418,29 @@ class Front3DLoader:
                             rotation_mat = mathutils.Quaternion(child["rot"]).to_euler().to_matrix().to_4x4()
                             # transform it into the blender coordinate system and then to an euler
                             new_obj.set_rotation_euler((blender_rot_mat @ rotation_mat).to_euler())
+                            
+                            if new_obj.get_cp("uid") == prev_uid:
+                                equal_objs[-1].append(new_obj)
+                            else:
+                                equal_objs.append([new_obj])
+                                prev_uid = new_obj.get_cp("uid")
+        for i in equal_objs:
+            if len(i) == 1:
+                created_objects.append(i[0])
+                bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
+
+            else:
+                for obj in bpy.context.selected_objects:
+                    obj.select_set(False)
+                
+                if i[0].blender_obj.type == "MESH":
+                    bpy.context.view_layer.objects.active = None
+                    print(i[0].blender_obj.name)
+                    for obj in i:
+                        obj.blender_obj.select_set(True)
+
+                    bpy.context.view_layer.objects.active = i[0].blender_obj
+                    bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
+
+                    created_objects.append(i[0])
         return created_objects
