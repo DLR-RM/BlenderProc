@@ -392,6 +392,8 @@ class Front3DLoader:
         blender_rot_mat = mathutils.Matrix.Rotation(radians(-90), 4, 'X')
         created_objects = []
                                 
+        equal_objs = []
+        prev_uid = ''
         # for each room
         for room_id, room in enumerate(data["scene"]["room"]):
             # for each object in that room
@@ -406,7 +408,6 @@ class Front3DLoader:
                             else:
                                 # if it is the first time use the object directly
                                 new_obj = obj
-                            created_objects.append(new_obj)
                             new_obj.set_cp("is_used", True)
                             new_obj.set_cp("room_id", room_id)
                             new_obj.set_cp("type", "Object")  # is an object used for the interesting score
@@ -443,4 +444,7 @@ class Front3DLoader:
                     bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
 
                     created_objects.append(i[0])
+                    print("JOINED")
+                    bpy.ops.object.join()
+
         return created_objects
