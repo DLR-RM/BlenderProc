@@ -16,9 +16,7 @@ from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
 
-
 def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping,
-                 ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
                  ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0, 
                  random_light_color: bool = False, random_light_intensity: bool = False) -> List[MeshObject]:
     """ Loads the 3D-Front scene specified by the given json file.

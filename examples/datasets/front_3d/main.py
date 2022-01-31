@@ -27,7 +27,9 @@ loaded_objects = bproc.loader.load_front3d(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
-    label_mapping=mapping
+    label_mapping=mapping,
+    random_light_color=True,
+    random_light_intensity=True
 )
 
 # Init sampler for sampling locations inside the loaded front3D house

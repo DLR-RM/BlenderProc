@@ -29,7 +29,9 @@ loaded_objects = bproc.loader.load_front3d(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
-    label_mapping=mapping
+    label_mapping=mapping,
+    random_light_color=True,
+    random_light_intensity=True
 )
 
 cc_materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
