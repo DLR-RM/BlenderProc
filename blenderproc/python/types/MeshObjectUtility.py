@@ -141,8 +141,6 @@ class MeshObject(Entity):
         Apply the current transformation of the object, which are saved in the location, scale or rotation attributes
         to the mesh and sets them to their init values.
 
-        :param location: Determines whether the object's location should be persisted.
-        :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
         bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location,
