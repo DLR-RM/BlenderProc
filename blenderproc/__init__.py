@@ -33,9 +33,16 @@ else:
     # this checks if blenderproc the command line tool or the cli.py script are used. If not an exception is thrown
     import traceback
     # extract the basename of the file, which is the first in the traceback
-    file_names_of_stack = [os.path.basename(file_summary.filename) for file_summary in traceback.extract_stack()]
-    first_file_name = file_names_of_stack[0]
-    # check if the name of this file is either blenderproc or if the "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the cli.py
-    is_correct_startup_script = first_file_name != "blenderproc" and first_file_name != "command_line.py"
-    if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ and is_correct_startup_script:
+    stack_summary = traceback.extract_stack()
+    file_names_of_stack = [os.path.basename(file_summary.filename) for file_summary in stack_summary]  
+    if sys.platform == "win32":
+        is_bproc_shell_called = file_names_of_stack[2] in ["metadata.py", "__main__.py"]
+        is_command_line_script_called = file_names_of_stack[0] == "command_line.py"
+        
+        is_correct_startup_command = is_bproc_shell_called or is_command_line_script_called
+    else:
+        first_file_name = file_names_of_stack[0]
+        # check if the name of this file is either blenderproc or if the "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the cli.py
+        is_correct_startup_command = first_file_name in ["blenderproc", "command_line.py"]
+    if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ and not is_correct_startup_command:
         raise Exception(f"\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:\n\tpython {sys.argv[0]}\ncall:\n\tblenderproc run {sys.argv[0]}\n###############")
