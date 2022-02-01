@@ -1,5 +1,7 @@
 __pycache__
 */__pycache__
+blenderproc.egg-info/
+build/
 blender
 .idea/
 .vscode/
