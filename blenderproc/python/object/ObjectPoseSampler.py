@@ -16,7 +16,7 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
     :param sample_pose_func: The function to use for sampling the pose of a given object.
     :param objects_to_check_collisions: A list of mesh objects who should not be considered when checking for collisions.
     :param max_tries: Amount of tries before giving up on an object and moving to the next one.
-    :param mode_on_failure: A string controlling the behavior of the function if the object could not be placed without collisions within max_tries attempts.
+    :param mode_on_failure: Define final state of objects that could not be placed without collisions within max_tries attempts. Options: 'last_pose', 'initial_pose'
 
     :return: A dict with the objects to sample as keys and a Tuple with the number of executed attempts to place the object as first element, and a bool whether it has been succesfully placed without collisions.
     """
