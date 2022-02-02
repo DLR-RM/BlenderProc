@@ -15,13 +15,23 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primit
 from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
 from blenderproc.python.filter.Filter import one_by_attr
 from blenderproc.python.types.MeshObjectUtility import create_with_empty_mesh
-from blenderproc.python.types.BoneUtility import set_location_constraint, set_rotation_constraint, set_copy_rotation_constraint
+from blenderproc.python.types.BoneUtility import set_location_constraint, set_rotation_constraint, \
+    set_copy_rotation_constraint
 
 
-def load_urdf(urdf_file: str) -> URDFObject:
+def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
+              fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
+              ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]) -> URDFObject:
     """ Loads a urdf object from an URDF file.
 
     :param urdf_file: Path to the URDF file.
+    :param weight_distribution: One of ['envelope', 'automatic', 'rigid']. For more information please see
+                                https://docs.blender.org/manual/en/latest/animation/armatures/skinning/parenting.html.
+    :param fk_offset: Offset between fk bone chain and link bone chain. This does not have any effect on the
+                      transformations, but can be useful for visualization in blender.
+    :param ik_offset: Offset between fk bone chain and link bone chain. Effects on the transformation (e.g.
+                      `urdf_object.set_location_ik()`) are being handled internally. Useful for visualization in
+                      blender.
     :return: URDF object instance.
     """
     # install urdfpy
@@ -41,19 +51,22 @@ def load_urdf(urdf_file: str) -> URDFObject:
     armature.data.edit_bones.remove(armature.data.edit_bones.values()[0])
     bpy.ops.object.mode_set(mode='OBJECT')
 
+    # recursively create bones, starting at the base bone(s)
     base_joints = get_joints_which_have_link_as_parent(urdf_tree.base_link.name, urdf_tree.joints)
-    import numpy as np
-    np.set_printoptions(4, suppress=True)
     for base_joint in base_joints:
-        create_bone(armature, base_joint, urdf_tree.joints, parent_bone_name=None, create_recursive=True)
+        create_bone(armature, base_joint, urdf_tree.joints, parent_bone_name=None, create_recursive=True,
+                    fk_offset=fk_offset, ik_offset=ik_offset)
 
+    # load links
     links = load_links(urdf_tree.links, urdf_tree.joints, armature, urdf_path=urdf_file)
 
+    # propagate poses through the links
     for base_joint in base_joints:
         propagate_pose(links, base_joint, urdf_tree.joints, armature)
 
+    # parent links with the bone
     for link in links:
-        link.parent_with_bone(weight_distribution='rigid')
+        link.parent_with_bone(weight_distribution=weight_distribution)
 
     # set to forward kinematics per default
     for link in links:
@@ -62,24 +75,42 @@ def load_urdf(urdf_file: str) -> URDFObject:
     return URDFObject(armature, links=links, xml_tree=urdf_tree)
 
 
-def get_joints_which_have_link_as_parent(link_name, joint_trees):
+def get_joints_which_have_link_as_parent(link_name: str, joint_trees: List["urdfpy.Joint"]) -> List["urdfpy.Joint"]:
+    """ Returns a list of joints which have a specific link as parent. """
     return [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.parent == link_name]
 
 
-def get_joints_which_have_link_as_child(link_name, joint_trees):
+def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfpy.Joint"]) -> Union["urdfpy.Joint", None]:
+    """ Returns the joint which is the parent of a specific link. """
     valid_joint_trees = [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.child == link_name]
-    if valid_joint_trees == []:
-        # no joint for link
+    if valid_joint_trees == []:  # happens for the very first link
         print(f"WARNING: There is no joint defined for the link {link_name}!")
         return None
     elif len(valid_joint_trees) == 1:
         return valid_joint_trees[0]
-    else:
-        raise NotImplementedError(f"More than one ({len(valid_joint_trees)}) joints map onto a single link with name {link_name}")
+    else:  # this should not happen - fault in the urdf file
+        raise NotImplementedError(f"More than one ({len(valid_joint_trees)}) joints map onto a single link with name "
+                                  f"{link_name}")
 
 
-def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, create_recursive=False,
-                parent_origin=None, fk_offset=[0., -1., 0.], ik_offset=[0., 1., 0.]):
+def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_joint_trees: List["urdfpy.Joint"],
+                parent_bone_name: Union[str, None] = None, create_recursive: bool = True,
+                parent_origin: Union[Matrix, None] = None, fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
+                ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]):
+    """ Creates deform, fk and ik bone for a specific joint. Can loop recursively through the child(ren).
+
+    :param armature: The armature which encapsulates all bones.
+    :param joint_tree: The urdf definition for the joint.
+    :param all_joint_trees: List of urdf definitions for all joints.
+    :param parent_bone_name: Name of the parent bone.
+    :param create_recursive: Whether to recursively create bones for the child(ren) of the link.
+    :param parent_origin: Pose of the parent.
+    :param fk_offset: Offset between fk bone chain and link bone chain. This does not have any effect on the
+                      transformations, but can be useful for visualization in blender.
+    :param ik_offset: Offset between fk bone chain and link bone chain. Effects on the transformation (e.g.
+                      `urdf_object.set_location_ik()`) are being handled internally. Useful for visualization in
+                      blender.
+    """
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.objects.active = armature
     bpy.ops.object.mode_set(mode='EDIT', toggle=False)
@@ -87,10 +118,6 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
     # create initial bone
     edit_bones = armature.data.edit_bones
     editbone = edit_bones.new(joint_tree.name)
-
-    parent_joint = get_joints_which_have_link_as_child(joint_tree.parent, all_joint_trees)
-    if parent_joint is not None:
-        print("parent joint", parent_joint.name, joint_tree.name)
 
     origin = joint_tree.origin
     if parent_origin is not None:
@@ -124,7 +151,6 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
         parent_bone = edit_bones.get(parent_bone_name + '.ik')
         ik_editbone.parent = parent_bone
 
-    # this is necessary as after changing to object mode the string will be differently encoded?!
     bone_name = editbone.name
     fk_bone_name = fk_editbone.name
     ik_bone_name = ik_editbone.name
@@ -165,10 +191,8 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
         set_copy_rotation_constraint(bone=bone, target=armature, target_bone=ik_bone.name,
                                      custom_constraint_name="copy_rotation.ik",
                                      influence=0.)  # start in fk mode per default
-
     else:
         print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
-        # link.bone_name = corresponding_joint.name
 
     if create_recursive:
         child_joints = get_joints_which_have_link_as_parent(link_name=joint_tree.child, joint_trees=all_joint_trees)
@@ -179,7 +203,16 @@ def create_bone(armature, joint_tree, all_joint_trees, parent_bone_name=None, cr
                             parent_origin=origin, fk_offset=fk_offset)
 
 
-def load_links(link_trees, joint_trees, armature, urdf_path):
+def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"], armature: bpy.types.Armature,
+               urdf_path: str) -> List[Link]:
+    """ Loads links and their visual, collision and inertial objects from a list of urdfpy.Link objects.
+
+    :param link_trees: List of urdf definitions for all links.
+    :param joint_trees: List of urdf definitions for all joints.
+    :param armature: The armature which encapsulates all bones.
+    :param urdf_path: Path to the URDF file.
+    :return: List of links.
+    """
     links = []
     for i, link_tree in enumerate(link_trees):
         visuals, collisions, inertial = [], [], None
@@ -187,27 +220,30 @@ def load_links(link_trees, joint_trees, armature, urdf_path):
         if link_tree.visuals:
             visuals = [load_viscol(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
                        link_tree.visuals]
-        # if link_tree.collisions:
-        #    collisions = [load_viscol(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for collision_tree in link_tree.collisions]
 
-        # if link_tree.inertial:
-        #    inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
+        if link_tree.collisions:
+            collisions = [load_viscol(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for
+                          collision_tree in link_tree.collisions]
+
+        if link_tree.inertial:
+            inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
 
         # determine bone name
         corresponding_joint = get_joints_which_have_link_as_child(link_tree.name, joint_trees)
 
+        # create link and set attributes
         link = Link(bpy_object=create_with_empty_mesh(link_tree.name).blender_obj)
         link.set_armature(armature)
         link.set_visuals(visuals)
-        link.set_visual_local2link_mats([Matrix(obj.get_local2world_mat()) for obj in visuals])  # todo invert here to stick with local2something convention
+        link.set_visual_local2link_mats([Matrix(obj.get_local2world_mat()) for obj in visuals])
         link.set_collisions(collisions)
         link.set_collision_local2link_mats([Matrix(obj.get_local2world_mat()) for obj in collisions])
         link.set_inertial(inertial)
         link.set_inertial_local2link_mat(Matrix(inertial.get_local2world_mat()) if inertial is not None else None)
         link.set_name(name=link_tree.name)
 
+        # if there exists a joint also set the corresponding bones to the link
         if corresponding_joint is not None:
-            # edit_bones = armature.data.edit_bones
             link.set_bone(armature.pose.bones.get(corresponding_joint.name))
             link.set_fk_bone(armature.pose.bones.get(corresponding_joint.name + '.fk'))
             link.set_ik_bone(armature.pose.bones.get(corresponding_joint.name + '.ik'))
@@ -217,15 +253,26 @@ def load_links(link_trees, joint_trees, armature, urdf_path):
     return links
 
 
-def propagate_pose(links, joint_tree, joint_trees, armature, recursive=True):
+def propagate_pose(links: List[Link], joint_tree: "urdfpy.Joint", joint_trees: List["urdfpy.Joint"],
+                   armature: bpy.types.Armature, recursive: bool = True):
+    """ Loads links and their visual, collision and inertial objects from a list of urdfpy.Link objects.
+
+    :param links: List of links.
+    :param joint_tree: The urdf definition for the joint.
+    :param joint_trees: List of urdf definitions for all joints.
+    :param armature: The armature which encapsulates all bones.
+    :param recursive: Whether to recursively create bones for the child(ren) of the link.
+    """
     child_link = one_by_attr(elements=links, attr_name="name", value=joint_tree.child)
     parent_link = one_by_attr(elements=links, attr_name="name", value=joint_tree.parent)
 
+    # determine full transformation matrix
     mat = Matrix(parent_link.get_local2world_mat()) @ Matrix(joint_tree.origin)
     child_link.set_local2world_mat(mat)
     child_link.set_parent(parent=parent_link)
+    parent_link.set_child(child=child_link)
 
-    for obj in child_link.get_all_objects():
+    for obj in child_link.get_all_objs():
         obj.set_local2world_mat(Matrix(child_link.get_local2world_mat()) @ Matrix(obj.get_local2world_mat()))
 
     # set link2bone mat
@@ -251,11 +298,14 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
         elif urdf_path is not None and os.path.isfile(urdf_path):
             relative_path = os.path.join('/'.join(urdf_path.split('/')[:-1]), geometry_tree.mesh.filename)
             if os.path.isfile(relative_path):
-                obj = load_obj(filepath=relative_path, axis_forward='Y', axis_up='Z')[0]  # load in default coordinate system
+                # load in default coordinate system
+                obj = load_obj(filepath=relative_path, axis_forward='Y', axis_up='Z')[0]
             else:
-                print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf filename: {urdf_path})")
+                print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf "
+                      f"filename: {urdf_path})")
         else:
-            print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename})")
+            raise NotImplementedError(f"Couldn't load mesh file for {geometry_tree} (filename: "
+                                      f"{geometry_tree.mesh.filename})")
     elif geometry_tree.box is not None:
         obj = create_primitive(shape="CUBE")
         obj.blender_obj.dimensions = Vector(geometry_tree.box.size)
@@ -270,10 +320,12 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
     return obj
 
 
-def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str, urdf_path: Union[str, None] = None) -> MeshObject:
+def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str,
+                urdf_path: Union[str, None] = None) -> MeshObject:
     """ Loads a visual / collision element from an urdf tree.
 
     :param viscol_tree: The urdf representation of the visual / collision element.
+    :param name: Name of the visual / collision element.
     :param urdf_path: Optional path of the urdf file for relative geometry files.
     :return: The respective MeshObject.
     """
@@ -315,7 +367,8 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
             color_image = nodes.new('ShaderNodeTexImage')
 
             if not os.path.exists(viscol_tree.material.texture.filename):
-                raise Exception(f"Couldn't load texture image for {viscol_tree} from {viscol_tree.material.texture.filename}")
+                raise Exception(f"Couldn't load texture image for {viscol_tree} from "
+                                f"{viscol_tree.material.texture.filename}")
             color_image.image = bpy.data.images.load(viscol_tree.material.texture.filename, check_existing=True)
 
             principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
@@ -340,10 +393,11 @@ def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: s
     return obj
 
 
-def load_inertial(inertial_tree: "urdfpy.Inertial", name: str):
+def load_inertial(inertial_tree: "urdfpy.Inertial", name: str) -> Inertial:
     """ Loads an inertial element from an urdf tree.
 
     :param inertial_tree: The urdf representation of the inertial element.
+    :param name: Name if the inertial element.
     :return: The respective Inertial object.
     """
     # create new primitive
@@ -360,7 +414,7 @@ def load_inertial(inertial_tree: "urdfpy.Inertial", name: str):
     return inertial
 
 
-def get_size_from_geometry(geometry: "urdfpy.Geometry") -> float:
+def get_size_from_geometry(geometry: "urdfpy.Geometry") -> Union[float, None]:
     """ Helper to derive the link size from the largest geometric element.
 
     :param geometry: The urdf representation of the geometric element.
