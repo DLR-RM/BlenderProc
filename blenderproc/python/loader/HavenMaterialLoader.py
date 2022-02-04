@@ -1,5 +1,6 @@
 import glob
 import os
+from re import U
 
 import addon_utils
 import bpy
@@ -7,6 +8,7 @@ import bpy
 from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
+
 
 def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
     """ Loads all specified haven textures from the given directory.
@@ -21,65 +23,72 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
     # makes the integration of complex materials easier
     addon_utils.enable("node_wrangler")
 
-    folder_path = resolve_path(folder_path)
+    textures_folder_path = resolve_path(folder_path)
 
     if preload and fill_used_empty_materials:
         raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
-    if os.path.exists(folder_path) and os.path.isdir(folder_path):
-        for asset in os.listdir(folder_path):
-            if used_assets:
-                skip_this_one = True
-                for used_asset in used_assets:
-                    if asset.startswith(used_asset):
-                        skip_this_one = False
-                        break
-                if skip_this_one:
-                    continue
-            current_path = os.path.join(folder_path, asset)
-            if os.path.isdir(current_path):
-                # find the current base_image_path by search for _diff_, this make it independent of the used res
-                all_paths = glob.glob(os.path.join(current_path, "*.jpg"))
-                base_image_path = ""
-                for path in all_paths:
-                    if "_diff_" in path:
-                        base_image_path = path
-                        break
-                if not os.path.exists(base_image_path):
-                    continue
+        
+    if not os.path.exists(textures_folder_path) or not os.path.isdir(textures_folder_path):
+        raise Exception("The folder path does not exist: {}".format(textures_folder_path))
 
-                # if the material was already created it only has to be searched
-                if fill_used_empty_materials:
-                    new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_cp)
-                else:
-                    new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_cp)
-                if preload:
-                    # if preload then the material is only created but not filled
-                    continue
-                elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
-                    # now only the materials, which have been used should be filled
-                    continue
+    texture_names = os.listdir(folder_path)
+    for texture_name in texture_names:       
+        if used_assets and not any(texture_name.startswith(asset) for asset in used_assets):
+            continue
 
-                # construct all image paths
-                # the images path contain the words named in this list, but some of them are differently
-                # capitalized, e.g. Nor, NOR, NoR, ...
-                used_elements = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
-                final_paths = {}
-                for ele in used_elements:
-                    new_path = base_image_path.replace("diff", ele).lower()
-                    found_path = ""
-                    for path in all_paths:
-                        if path.lower() == new_path:
-                            found_path = path
-                            break
-                    final_paths[ele] = found_path
+        texture_path = os.path.join(textures_folder_path, texture_name)
 
-                # create material based on these image paths
-                HavenMaterialLoader.create_material(new_mat, base_image_path, final_paths["ao"],
-                                                    final_paths["spec"], final_paths["rough"],
-                                                    final_paths["alpha"], final_paths["nor"],
-                                                    final_paths["disp"], final_paths["bump"])
-    else:
-        raise Exception("The folder path does not exist: {}".format(folder_path))
+        if not os.path.isdir(texture_path):
+            print(f"Ignoring {texture_path}, must be a folder.")
+            continue
+
+        # find the current base_image_path by search for _diff_, this make it independent of the used res
+        texture_map_paths = glob.glob(os.path.join(texture_path, "*.jpg"))
+        color_map_identifiers = ["_diff_", "_diffuse_", "_col_", "_albedo_"]
+
+        color_map_path = None
+        color_map_identifier = None
+        for map in texture_map_paths:
+            for identifier in color_map_identifiers:
+                if identifier in map:
+                    color_map_path = map
+                    color_map_identifier = identifier
+                    break
+        
+        if not color_map_path:
+            print(f"Ignoring {texture_path}, no color map could be identified.")
+            continue
+                
+
+        # if the material was already created it only has to be searched
+        if fill_used_empty_materials:
+            new_mat = MaterialLoaderUtility.find_cc_material_by_name(texture_name, add_cp)
+        else:
+            new_mat = MaterialLoaderUtility.create_new_cc_material(texture_name, add_cp)
+        if preload:
+            # if preload then the material is only created but not filled
+            continue
+        elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
+            # now only the materials, which have been used should be filled
+            continue
+
+        texture_map_types = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
+        texture_map_paths_by_type = {}
+
+        for type in texture_map_types:
+            texture_map_path_lowercase = color_map_path.replace(color_map_identifier, type)
+            # Account for different capitalization e.g. Nor, NOR, NoR, ...
+            for path in texture_map_paths:
+                if path.lower() == texture_map_path_lowercase:
+                    texture_map_paths_by_type[type] = path
+                    break
+            texture_map_paths_by_type[type] = "" # no map found for this type
+
+        # create material based on these image paths
+        HavenMaterialLoader.create_material(new_mat, color_map_path, texture_map_paths_by_type["ao"],
+                                            texture_map_paths_by_type["spec"], texture_map_paths_by_type["rough"],
+                                            texture_map_paths_by_type["alpha"], texture_map_paths_by_type["nor"],
+                                            texture_map_paths_by_type["disp"], texture_map_paths_by_type["bump"])
 
 
 class HavenMaterialLoader:
