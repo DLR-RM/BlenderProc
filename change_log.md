@@ -8,7 +8,7 @@
 
 # Version History
 
-## Version 2.2.0 17th Decemeber 2021
+## Version 2.2.0 17th December 2021
 - switch blender version to 3.0.0 instead of 2.93.0 
   - we now rely on Cycles X, making the rendering much faster than before
   - this also depreactes the usage of `bproc.renderer.set_samples()`, this is now replaced with `bproc.renderer.set_noise_threshold()`. This fcts allows to set the desired noise ration on a pixel basis, giving a much higher control to ensure a certain consistent noise level in the whole image. 
@@ -23,7 +23,7 @@
   - divide `load_bop()` into `load_bop_objs()`, `load_bop_scene()` and `load_bop_intrinsics()` to decouple the functionalit
 - fix a bug after uninstalling pip packages they were not truly removed
 
-## Version 2.1.0 17th Novemeber 2021
+## Version 2.1.0 17th November 2021
 - add new lens distortion module, adding the possibility to simulate `k1, k2, k3, p1` and `p2` parameters. 
 - improve usability of distance rendering, make it the default in all examples
 - distance and depth rendering can now be done antialiased and non-antialiased
