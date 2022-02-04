@@ -1,14 +1,11 @@
 import glob
 import os
-from re import U
-
 import addon_utils
 import bpy
 
 from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
-
 
 def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
     """ Loads all specified haven textures from the given directory.
@@ -44,13 +41,13 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
 
         # find the current base_image_path by search for _diff_, this make it independent of the used res
         texture_map_paths = glob.glob(os.path.join(texture_path, "*.jpg"))
-        color_map_identifiers = ["_diff_", "_diffuse_", "_col_", "_albedo_"]
+        color_map_identifiers = ["diff", "diffuse", "col", "albedo"]
 
         color_map_path = None
         color_map_identifier = None
         for map in texture_map_paths:
             for identifier in color_map_identifiers:
-                if identifier in map:
+                if f"_{identifier}_" in map:
                     color_map_path = map
                     color_map_identifier = identifier
                     break
@@ -59,7 +56,6 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
             print(f"Ignoring {texture_path}, no color map could be identified.")
             continue
                 
-
         # if the material was already created it only has to be searched
         if fill_used_empty_materials:
             new_mat = MaterialLoaderUtility.find_cc_material_by_name(texture_name, add_cp)
@@ -72,17 +68,17 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
             # now only the materials, which have been used should be filled
             continue
 
+        # TODO victorlouisdg: also allow variations such as nor_gl
         texture_map_types = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
-        texture_map_paths_by_type = {}
+        texture_map_paths_by_type = {type: "" for type in texture_map_types}
 
         for type in texture_map_types:
             texture_map_path_lowercase = color_map_path.replace(color_map_identifier, type)
-            # Account for different capitalization e.g. Nor, NOR, NoR, ...
+            # account for different capitalization e.g. Nor, NOR, NoR, ...
             for path in texture_map_paths:
                 if path.lower() == texture_map_path_lowercase:
                     texture_map_paths_by_type[type] = path
                     break
-            texture_map_paths_by_type[type] = "" # no map found for this type
 
         # create material based on these image paths
         HavenMaterialLoader.create_material(new_mat, color_map_path, texture_map_paths_by_type["ao"],

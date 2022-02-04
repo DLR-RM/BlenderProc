@@ -15,9 +15,7 @@ texture_names.sort()
 failures = 0
 for texture_name in texture_names:
     bproc.api.loader.load_haven_mat(haven_textures_folder, [texture_name])
-
     if texture_name not in bpy.data.materials:
-        print(f"{texture_name} failed to load.")
         failures += 1
 
 total = len(texture_names)
