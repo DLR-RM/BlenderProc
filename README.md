@@ -57,12 +57,18 @@ blenderproc run <your_python_script>
 ```
 
 In general, one run of your script first loads or constructs a 3D scene, then sets some camera poses inside this scene and renders different types of images (RGB, distance, semantic segmentation, etc.) for each of those camera poses.
-In the usual case, to create a big and diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.
-With a little more experience, it is also possible to render multiple times in one script call, read [here](docs/tutorials/key_frames.md#render-multiple-times) how this is done.
+Usually, you will run your script multiple times, each time producing a new scene and rendering e.g. 5-20 images from it.
+With a little more experience, it is also possible to change scenes during a single script call, read [here](docs/tutorials/key_frames.md#render-multiple-times) how this is done.
 
 ## Quickstart
 
-Create a python script `quickstart.py` with the following content:
+You can test your BlenderProc pip installation by running
+
+```bash
+blenderproc quickstart
+```
+
+This is an alias to `blenderproc run quickstart.py` where `quickstart.py` is:
 
 ```python
 import blenderproc as bproc
@@ -89,13 +95,7 @@ data = bproc.renderer.render()
 bproc.writer.write_hdf5("output/", data)
 ```
 
-Now run the script via:
-
-```bash
-blenderproc run quickstart.py
-```
-
-BlenderProc now creates the specified scene and renders the image into `output/0.hdf5`.
+BlenderProc creates the specified scene and renders the image into `output/0.hdf5`.
 To visualize that image, simply call:
 
 ```bash
