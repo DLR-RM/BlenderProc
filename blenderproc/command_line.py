@@ -103,7 +103,7 @@ def cli():
 
         # Setup script path that should be executed
         if args.mode == "quickstart":
-            path_src_run = os.path.join(repo_root_directory, "blenderproc/scripts/quickstart.py")
+            path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
             args.file = path_src_run
             print("'blenderproc quickstart' is an alias for 'blenderproc run {}'".format(path_src_run))
         elif is_config:
