@@ -82,8 +82,8 @@ bone.ik_min_y = -0.823795  # -47.3°
 bone.ik_max_y = 0.
 
 
-for i in range(10):
-    robot.set_location_ik(location=[0.05*np.sin(i/5 * np.pi % np.pi), 0., 0.0575], frame=i)
+for i in range(20):
+    robot.set_location_ik(location=[0.05*np.sin(i/20 * np.pi % np.pi), 0.05, 0.], frame=i)
     if robot.has_reached_ik_pose(location_error=0.01, rotation_error=0.01):
         print("Robot has reached pose!")
     else:
