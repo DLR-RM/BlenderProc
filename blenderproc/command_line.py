@@ -109,7 +109,7 @@ def cli():
         elif is_config:
             print("\033[33m" + "Warning: Running BlenderProc with config.yaml files is deprecated and will be removed in future releases.\n",
                 "Please switch to the more intuitive Python API introduced in BlenderProc 2.0. It's easy, you won't regret it." + "\033[0m")
-            path_src_run = os.path.join(repo_root_directory, "blenderproc/run.py")
+            path_src_run = os.path.join(repo_root_directory, "blenderproc", "run.py")
         else:
             path_src_run = args.file
             SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
