@@ -69,6 +69,7 @@ class Inertial(Entity):
         :param hide_object: Determines whether the object should be hidden in rendering.
         """
         self.blender_obj.hide_render = hide_object
+        self.blender_obj.hide_viewport = hide_object
 
 
 class Link(Entity):
@@ -619,7 +620,8 @@ class URDFObject(Entity):
         for link in self.links:
             for obj in link.get_all_objs():
                 if "collision" in obj.get_name() or "inertial" in obj.get_name():
-                    obj.hide()
+                    print("hiding ", obj.get_name())
+                    obj.hide(True)
 
     def set_ascending_category_ids(self, category_ids: Union[List[int], None] = None):
         """ Sets semantic categories to the links and their associated objects.
