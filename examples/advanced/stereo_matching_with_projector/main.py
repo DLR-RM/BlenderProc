@@ -26,7 +26,7 @@ bproc.camera.set_intrinsics_from_K_matrix(K, 1280, 720)
 # Enable stereo mode and set baseline
 bproc.camera.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
 
-# define a new light and set it as projector
+# Define a new light source and set it as projector
 light = bproc.types.Light()
 light.set_type('SPOT')
 light.set_energy(3000)

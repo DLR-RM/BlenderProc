@@ -1,33 +1,46 @@
-# Stereo Matching
-![](../../../images/stereo_matching_stereo_pair.jpg)
-![](../../../images/stereo_matching_stereo_depth.jpg)
+# Stereo Matching with Random Pattern Projector 
+![](../../../images/stereo_with_projector.png)
 
-In the first row we can see the rendered stereo RGB images, left and right respectively, and beneath them we can view
-the computed depth image using stereo matching. Note that due to a high discrepancy between the TV and the rest
-of the rendered scene, the visualization is not descriptive enough. This discrepancy or high depth values at the TV
-is due to a lack of gradient or useful features for stereo matching in this area. However, the depth values in other
-areas are consistent and close to the rendered depth images.
+On the left side we can see the rendered RGB image (right) without a pattern and the corresponding stereo depth estimation on the bottom. 
+On the right side we can see the rendered RGB image (right) with a projected random pattern adding 25600 points to the image and the corresponding stereo depth estimation on the bottom. 
+Adding a random pattern to the image increases available features for the stereo matching algorithm, making it easier to discern small details, such as the chair's arm rest. 
+Furthermore, the added random pattern is projected through a SPOT light source in blender, which loses intensity the further away from the source it gets. 
 
 ## Usage
 
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/stereo_matching/main.py <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output
+blenderproc run examples/advanced/stereo_matching_with_projector/main.py <path to cam_pose file> <path to house.json> <path to projector image> examples/advanced/stereo_matching/output
 ```
 
-* `examples/advanced/stereo_matching/main.py`: path to the main python file to run.
+* `examples/advanced/stereo_matching_with_projector/main.py`: path to the main python file to run.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
-* `examples/advanced/stereo_matching/output`: path to the output directory.
+* `<path to projector image>`: Path to image to be projected onto scene. Examples of random patterns are available in [/patterns](examples/advanced/stereo_matching_with_projector/patterns)
+* `examples/advanced/stereo_matching_with_projector/output`: path to the output directory.
 
 ## Visualizaton
 Visualize the generated data:
 ```
-blenderproc vis hdf5 examples/advanced/stereo_matching/output/1.hdf5
+blenderproc vis hdf5 examples/advanced/stereo_matching_with_projector/output/0.hdf5
 ```
 
 ## Implementation
+
+```python
+# Define a new light source and set it as projector
+light = bproc.types.Light()
+light.set_type('SPOT')
+light.set_energy(3000)
+light.setup_as_projector(args.projector)
+```
+Here we setup the projector: 
+* Setting the energy of the light source 
+* Using the spot light as projector for specified image file `args.projector`: 
+  * Set projector location to camera via `COPY TRANSFORMS`
+  * Link image as texture
+  > for further details see implementation at [blenderproc/python/types/LightUtility.py](blenderproc/python/types/LightUtility.py)
 
 ```python
 # Enable stereo mode and set baseline

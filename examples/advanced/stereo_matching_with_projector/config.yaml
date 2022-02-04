@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <pattern_path> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -17,7 +17,7 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:2>"
+          "output_dir": "<args:3>"
         }
       }
     },
@@ -46,6 +46,19 @@
           "resolution_x": 1280,
           "resolution_y": 720
         },
+      }
+    },
+    { # Projector Light (needs to be after camera loader)
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "SPOT",
+            "energy": 3000,
+            "use_projector": True,
+            "path": "<args:2>"
+          }
+        ]
       }
     },
     {
