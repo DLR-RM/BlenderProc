@@ -494,6 +494,8 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         bpy.ops.render.render(animation=True, write_still=True)
         # Revert changes
         bpy.context.scene.frame_end += 1
+    else:
+        raise Exception("No camera poses have been registered, therefore nothing can be rendered. A camera pose can be registered via bproc.camera.add_camera_pose().")
 
     return WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
 
