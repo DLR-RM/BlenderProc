@@ -7,6 +7,85 @@ from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
 
+"""Haven textures are stored as a directory with several texture maps .jpgs e.g:
+textures
+|- rock_01
+|  |- rock_01_ao_1k.jpg
+|  |- rock_01_diff_1k.jpg
+|  |- rock_01_disp_1k.jpg
+|  |- rock_01_nor_gl_1k.jpg
+|  |- rock_01_rough_1k.jpg
+|- rock_02
+| ...
+
+The general naming pattern of the texture maps is: {name}_{type}_{resolution}.jpg
+However, the type abbreviation is not consistent for all textures. E.g. for some textures the base color map is 
+identified with "diff" and for other with "col". The texture_map_identifiers dictionary tracks these variations.
+"""
+texture_map_identifiers = {
+    "base color": ["diff", "diffuse", "col", "albedo"],
+    "ambient occlusion": ["ao"],
+    "specular": ["spec"],
+    "roughness": ["rough"],
+    "normal": ["nor", "nor_gl"],
+    "displacement": ["disp", "displacement", "height"],
+    "bump": ["bump"],
+    "transparency": ["alpha"]
+}
+
+
+def identify_base_color_image_path(texture_map_paths):
+    """Finds the path to the base color image in a list of texture map paths.
+    We do this by looking for any of the "base color" identifiers in each path.
+    We also make sure to account for different capitalizations of the identifier.
+
+    :param texture_map_paths: paths to check
+    :type texture_map_paths: list of strings
+    :return: path to the base color image and the specific identifier
+    :rtype: tuple of 2 strings
+    """
+    for texture_map_path in texture_map_paths:
+        for identifier_lowercase in texture_map_identifiers["base color"]:
+            # We add one to identifier_start to account for the leading underscore.
+            identifier_start = texture_map_path.lower().find(f"_{identifier_lowercase}_") + 1
+            if identifier_start != -1:
+                identifier_end = identifier_start+len(identifier_lowercase)
+                identifier = texture_map_path[identifier_start:identifier_end]
+                return texture_map_path, identifier
+    return None, None
+
+
+def identify_texture_maps(texture_folder_path):
+    """Finds the paths of the different textures maps in a texture folder.
+
+    :param texture_folder_path: path to the texture folder
+    :type texture_folder_path: str
+    :return: dictionary that maps texture map types to their path when found, else it maps to an empty string
+    :rtype: dict
+    """
+    texture_map_paths = glob.glob(os.path.join(texture_folder_path, "*.jpg"))
+    color_path, color_identifier = identify_base_color_image_path(texture_map_paths)
+
+    if not color_path:
+        return None
+
+    texture_map_types = texture_map_identifiers.keys()
+    texture_map_paths_by_type = {type: "" for type in texture_map_types}
+    texture_map_paths_by_type["base color"] = color_path
+
+    # To find the other texture maps, we replace the color identifier, with the identifiers of the other texture map
+    # types. By comparing lowercase paths, we also account for different capitalizations e.g. Nor, NOR, NoR, ...
+    for type in texture_map_types:
+        for identifier in texture_map_identifiers[type]:
+            texture_map_path_lowercase = color_path.replace(color_identifier, identifier).lower()   
+            for path in texture_map_paths:
+                if path.lower() == texture_map_path_lowercase:
+                    texture_map_paths_by_type[type] = path
+                    break
+
+    return texture_map_paths_by_type
+
+
 def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
     """ Loads all specified haven textures from the given directory.
 
@@ -33,27 +112,14 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
         if used_assets and not any(texture_name.startswith(asset) for asset in used_assets):
             continue
 
-        texture_path = os.path.join(textures_folder_path, texture_name)
-
-        if not os.path.isdir(texture_path):
-            print(f"Ignoring {texture_path}, must be a folder.")
+        texture_folder_path = os.path.join(textures_folder_path, texture_name)
+        if not os.path.isdir(texture_folder_path):
+            print(f"Ignoring {texture_folder_path}, must be a folder.")
             continue
 
-        # find the current base_image_path by search for _diff_, this make it independent of the used res
-        texture_map_paths = glob.glob(os.path.join(texture_path, "*.jpg"))
-        color_map_identifiers = ["diff", "diffuse", "col", "albedo"]
-
-        color_map_path = None
-        color_map_identifier = None
-        for map in texture_map_paths:
-            for identifier in color_map_identifiers:
-                if f"_{identifier}_" in map:
-                    color_map_path = map
-                    color_map_identifier = identifier
-                    break
-        
-        if not color_map_path:
-            print(f"Ignoring {texture_path}, no color map could be identified.")
+        texture_map_paths_by_type = identify_texture_maps(texture_folder_path)
+        if texture_map_paths_by_type is None:
+            print(f"Ignoring {texture_name}, could not identify texture maps.")
             continue
                 
         # if the material was already created it only has to be searched
@@ -68,23 +134,16 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
             # now only the materials, which have been used should be filled
             continue
 
-        # TODO victorlouisdg: also allow variations such as nor_gl
-        texture_map_types = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
-        texture_map_paths_by_type = {type: "" for type in texture_map_types}
-
-        for type in texture_map_types:
-            texture_map_path_lowercase = color_map_path.replace(color_map_identifier, type)
-            # account for different capitalization e.g. Nor, NOR, NoR, ...
-            for path in texture_map_paths:
-                if path.lower() == texture_map_path_lowercase:
-                    texture_map_paths_by_type[type] = path
-                    break
-
-        # create material based on these image paths
-        HavenMaterialLoader.create_material(new_mat, color_map_path, texture_map_paths_by_type["ao"],
-                                            texture_map_paths_by_type["spec"], texture_map_paths_by_type["rough"],
-                                            texture_map_paths_by_type["alpha"], texture_map_paths_by_type["nor"],
-                                            texture_map_paths_by_type["disp"], texture_map_paths_by_type["bump"])
+        # create material based on the found image paths
+        HavenMaterialLoader.create_material(new_mat, 
+                                            texture_map_paths_by_type["base color"], 
+                                            texture_map_paths_by_type["ambient occlusion"],
+                                            texture_map_paths_by_type["specular"], 
+                                            texture_map_paths_by_type["roughness"],
+                                            texture_map_paths_by_type["transparency"], 
+                                            texture_map_paths_by_type["normal"],
+                                            texture_map_paths_by_type["displacement"], 
+                                            texture_map_paths_by_type["bump"])
 
 
 class HavenMaterialLoader:
