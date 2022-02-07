@@ -169,10 +169,10 @@ class MeshObject(Entity):
         if mode == "POINT":
             if point is None:
                 raise Exception("The parameter point is not given even though the mode is set to POINT.")
-            prev_cursor_location = bpy.context.scene.cursor.location
+            prev_cursor_location = bpy.context.scene.cursor.location.copy()
             bpy.context.scene.cursor.location = point
             bpy.ops.object.origin_set(context, type='ORIGIN_CURSOR')
-            bpy.context.scene.cursor.location = prev_cursor_location
+            bpy.context.scene.cursor.location = prev_cursor_location.copy()
         elif mode == "CENTER_OF_MASS":
             bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_MASS')
         elif mode == "CENTER_OF_VOLUME":
