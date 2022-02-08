@@ -46,9 +46,10 @@ def identify_base_color_image_path(texture_map_paths):
     """
     for texture_map_path in texture_map_paths:
         for identifier_lowercase in texture_map_identifiers["base color"]:
-            # We add one to identifier_start to account for the leading underscore.
-            identifier_start = texture_map_path.lower().find(f"_{identifier_lowercase}_") + 1
-            if identifier_start != -1:
+            search_string = f"_{identifier_lowercase}_"
+            search_start = texture_map_path.lower().find(search_string)
+            if search_start != -1:
+                identifier_start = search_start + 1
                 identifier_end = identifier_start+len(identifier_lowercase)
                 identifier = texture_map_path[identifier_start:identifier_end]
                 return texture_map_path, identifier
