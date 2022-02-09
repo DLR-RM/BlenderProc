@@ -111,6 +111,12 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
         mesh.update()
 
         objs.append(obj)
+
+    # add smoothing if requested
+    if use_smooth_shading:
+        for obj in objs:
+            obj.set_shading_mode("SMOOTH")
+
     return objs
 
 
