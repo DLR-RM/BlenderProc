@@ -34,7 +34,7 @@ texture_map_identifiers = {
 }
 
 
-def identify_base_color_image_path(texture_map_paths: list[str]):
+def identify_base_color_image_path(texture_map_paths: list[str]) -> tuple[str, str]:
     """Finds the path to the base color image in a list of texture map paths.
     We do this by looking for any of the "base color" identifiers in each path.
     We also make sure to account for different capitalizations of the identifier.
@@ -56,7 +56,7 @@ def identify_base_color_image_path(texture_map_paths: list[str]):
     return None, None
 
 
-def identify_texture_maps(texture_folder_path: str):
+def identify_texture_maps(texture_folder_path: str) -> dict[str, str]:
     """Finds the paths of the different textures maps in a texture folder.
 
     :param texture_folder_path: path to the texture folder
