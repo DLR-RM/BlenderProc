@@ -17,6 +17,9 @@ textures_to_ignore = [
 
 class UnitTestCheckHavenLoader(unittest.TestCase):
     def test_load_all_downloaded_haven_textures(self):
+        """Loads all downloaded Haven textures and check whether a corresponding Blender material was created. This 
+        test does not yet check whether all texture maps were loaded and does not ensure the matieral looks correct.
+        """
         haven_textures_folder = os.path.join(test_path_manager.haven, "textures")
         texture_names = os.listdir(haven_textures_folder)
         texture_names.sort()
