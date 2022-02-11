@@ -1,6 +1,4 @@
 # Stereo Matching
-<!-- ![](../../../images/stereo_matching_color_left.jpg)
-![](../../../images/stereo_matching_color_right.jpg) -->
 <p align="center">
 <img src="../../../images/stereo_matching_color_left.jpg" alt="Front readme image" width=400>
 <img src="../../../images/stereo_matching_color_right.jpg" alt="Front readme image" width=400>
