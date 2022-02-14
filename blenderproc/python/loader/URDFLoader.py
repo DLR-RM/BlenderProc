@@ -200,7 +200,7 @@ def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_jo
         if child_joints != []:
             for child_joint in child_joints:
                 create_bone(armature, child_joint, all_joint_trees, parent_bone_name=bone.name, create_recursive=True,
-                            parent_origin=origin, fk_offset=fk_offset)
+                            parent_origin=origin, fk_offset=fk_offset, ik_offset=ik_offset)
 
 
 def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"], armature: bpy.types.Armature,
