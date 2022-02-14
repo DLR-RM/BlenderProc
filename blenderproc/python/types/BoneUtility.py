@@ -160,6 +160,26 @@ def set_copy_rotation_constraint(bone: bpy.types.PoseBone, target: bpy.types.Pos
     c.influence = influence
 
 
+def set_copy_location_constraint(bone: bpy.types.PoseBone, target: bpy.types.Armature, target_bone: str,
+                                 custom_constraint_name: Union[str, None] = None, influence: float = 1.,
+                                 target_space: str = 'LOCAL', owner_space: str = 'LOCAL'):
+    """ Sets a copy_location constraint.
+
+    :param bone: The bone to set the constraint to.
+    :param target: The armature holding the bone.
+    :param target_bone: Name of the target bone which locations shall influence this bone.
+    :param custom_constraint_name: Custom name for the constraint. If not specified will use the default name.
+    :param influence: Influence of the constraint.
+     """
+    c = add_constraint_if_not_existing(bone, constraint_name="Copy Location",
+                                       custom_constraint_name=custom_constraint_name, add_to_existing=True)
+    c.target = target
+    c.subtarget = target_bone
+    c.influence = influence
+    c.target_space = target_space
+    c.owner_space = owner_space
+
+
 def set_location_constraint(bone: bpy.types.PoseBone, x_limits: Union[List[float], None] = None,
                             y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None):
     """ Sets a location constraint.
