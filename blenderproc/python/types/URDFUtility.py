@@ -498,8 +498,10 @@ class Link(Entity):
         # add ik constraint
         set_ik_constraint(self.ik_bone_constraint, self.armature, self.ik_bone_controller.name,
                           use_rotation=use_rotation, chain_length=chain_length)
-        set_ik_limits_from_rotation_constraint(self.ik_bone_constraint,
-                                               constraint=self.bone.constraints["Limit Rotation"])
+
+        if self.get_joint_type() == "revolute":
+            set_ik_limits_from_rotation_constraint(self.ik_bone_constraint,
+                                                   constraint=self.bone.constraints["Limit Rotation"])
 
         bpy.ops.object.mode_set(mode='OBJECT')
 
