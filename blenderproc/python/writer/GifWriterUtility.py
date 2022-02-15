@@ -1,8 +1,7 @@
 from typing import Dict, List, Union
 from PIL import Image
-import glob
+#import glob
 import os
-import tempfile
 from pathlib import Path
 
 import bpy
@@ -10,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from blenderproc.scripts.visHdf5Files import vis_data
+from blenderproc.python.utility.Utility import Utility
 
 
 def write_gif_animation(
@@ -109,37 +109,27 @@ class GifWriterUtility:
             if value.shape[0] == 2:
                 # stereo images
                 for index, perspective in enumerate(['_L', '_R']):
-                    tmp_dir = tempfile.TemporaryDirectory()
-                    print('Temporary directory for ' 
-                            + key 
-                            + perspective 
-                            + ': ' 
-                            + tmp_dir.name)
-                    to_animate[key + perspective] = tmp_dir
+                    to_animate[key + perspective] = []
                     for number, frame in enumerate(output_data_dict[key]):
+                        file_path = os.path.join(
+                                        Utility.get_temporary_directory(), 
+                                        f'{number}_{key}_{perspective}.png')
+                        to_animate[key + perspective].append(file_path)
                         vis_data(key=key,
                             data=frame[index], 
-                            save_to_file=os.path.join(tmp_dir.name, f'{number}.png'))
+                            save_to_file=file_path)
             else:
                 # non stereo images
-                tmp_dir = tempfile.TemporaryDirectory()
-                print('Temporary directory for ' + key + ': ' + tmp_dir.name)
-                to_animate.update({key: tmp_dir})
+                to_animate[key] = []
                 for number, frame in enumerate(output_data_dict[key]):
+                    file_path = os.path.join(
+                                    Utility.get_temporary_directory(), 
+                                    f'{number}_{key}.png')
+                    to_animate[key].append(file_path)
                     vis_data(key=key, 
                         data=frame, 
-                        save_to_file=os.path.join(tmp_dir.name, f'{number}.png'))
+                        save_to_file=file_path)
         return to_animate
-
-    @staticmethod
-    def _sort_method(path: str) -> int:
-        """ Order the images due to the file numbering """
-        file_number = Path(path).with_suffix("").name
-        if file_number.isnumeric():
-            return int(file_number)
-        else:
-            raise Exception("The input item is not"
-                             f"convertible to an int: {path}")
 
     @staticmethod
     def _look_for_existing_output(output_dir_path: str, 
@@ -161,7 +151,7 @@ class GifWriterUtility:
         return gif_number
 
     @staticmethod
-    def _write_to_gif(to_animate: Dict[str, str], 
+    def _write_to_gif(to_animate: Dict[str, list], 
                     output_dir_path: str, 
                     append_to_existing_output: bool, 
                     frame_duration_in_ms: int, 
@@ -170,26 +160,18 @@ class GifWriterUtility:
         loads all .png files from each specific temporary folder 
         and concatenates them to a single gif file respectively 
         """
-        for key, tmp_dir in to_animate.items():
-            print('gif for ' + key + ' at ' + tmp_dir.name)
-            frames = []
-            # Loads all .png images as paths to a list
-            frame_paths = glob.glob(tmp_dir.name + '/*.png')
-            # sorts list in size w.r.t. given key
-            frame_paths.sort(key = GifWriterUtility._sort_method, 
-                            reverse=reverse_animation)
-            
+        for key, frame_list in to_animate.items():
+            print('gif for ' + key)
+            if reverse_animation:
+                frame_list.reverse()
             # loads actual picture data as frames
-            for frame_path in frame_paths:
-                new_frame = Image.open(frame_path)
-                frames.append(new_frame)
+            frames = [Image.open(path) for path in frame_list]
 
-            name_ending = f"_{key}_animation.gif"
             gif_number = GifWriterUtility._look_for_existing_output(
                                             output_dir_path, 
                                             append_to_existing_output, 
-                                            name_ending)
-            file_name = str(gif_number) + name_ending
+                                            f"_{key}_animation.gif")
+            file_name = f"{gif_number}_{key}_animation.gif"
             file = os.path.join(output_dir_path, file_name)
             frames[0].save(file,
                             format ='GIF',
@@ -197,13 +179,3 @@ class GifWriterUtility:
                             save_all = True,
                             duration = frame_duration_in_ms,
                             loop = 0)
-            GifWriterUtility._delete_temp_dir(tmp_dir, key)
-
-    @staticmethod
-    def _delete_temp_dir(tmp_dir: str, key: str) -> None:
-        """
-        Deletes the temporary directory where the .png files
-        were stored 
-        """
-        tmp_dir.cleanup()
-        print('Deleted temporary' + key + ' directory: '+ tmp_dir.name)
