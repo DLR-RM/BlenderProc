@@ -3,23 +3,21 @@ from PIL import Image
 import glob
 import os
 import tempfile
+from pathlib import Path
 
 import bpy
 import numpy as np
 import matplotlib.pyplot as plt
 
-try:
-    from visHdf5Files import vis_data
-except ModuleNotFoundError:
-    from blenderproc.scripts.visHdf5Files import vis_data
+from blenderproc.scripts.visHdf5Files import vis_data
 
 
 def write_gif_animation(
         output_dir_path: str,
         output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
         append_to_existing_output: bool = True,
-        time_constant: int = 50,
-        time_direction: bool = False):
+        frame_duration_in_ms: int = 50,
+        reverse_animation: bool = False):
     """
     Generates a .gif file animation out of rendered frames
 
@@ -32,9 +30,9 @@ def write_gif_animation(
                             files of the name #_animation.gif 
                             and the number of newly added files will
                             start right where the last run left off.
-    :param time_constant: Duration of each frame in the animation 
+    :param frame_duration_in_ms: Duration of each frame in the animation 
                             in milliseconds.
-    :param time_direction: If this is True, the order of the frames
+    :param reverse_animation: If this is True, the order of the frames
                             will be reversed.
     """
 
@@ -62,8 +60,8 @@ def write_gif_animation(
     # Write the cache .png files to .gif files and delete cache
     GifWriterUtility._write_to_gif(to_animate, output_dir_path, 
                                     append_to_existing_output, 
-                                    time_constant, 
-                                    time_direction)
+                                    frame_duration_in_ms, 
+                                    reverse_animation)
 
 
 class GifWriterUtility:
@@ -82,15 +80,13 @@ class GifWriterUtility:
             output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]]
             ) -> List[str]:
         """ Sorts out keys which are just metadata and not plottable """
-        keys_to_use = []
-        for key in output_data_dict.keys():
-            value = output_data_dict[key][0]
-            value = np.array(value)
-            if np.issubdtype(value.dtype, np.string_) or len(value.shape) == 1:
-                pass # metadata
-            else:
-                keys_to_use.append(key)
-        return keys_to_use
+        def is_image(x: Union[np.ndarray, list, dict]) -> bool:
+            """ Checks if the input x is not a string and is not a vector """
+            x = np.array(x)
+            return not np.issubdtype(x.dtype, np.string_) and len(x.shape) != 1
+
+        return [key for key, value in output_data_dict.items() 
+                        if len(value) > 0 and is_image(value[0])]
 
     @staticmethod
     def _cache_png(keys_to_use: List[str], 
@@ -110,7 +106,7 @@ class GifWriterUtility:
             value = output_data_dict[key][0]
             value = np.array(value)
             # Check if frames are rendered in stereo vision
-            if value.shape[0] is 2:
+            if value.shape[0] == 2:
                 # stereo images
                 for index, perspective in enumerate(['_L', '_R']):
                     tmp_dir = tempfile.TemporaryDirectory()
@@ -119,11 +115,11 @@ class GifWriterUtility:
                             + perspective 
                             + ': ' 
                             + tmp_dir.name)
-                    to_animate.update({key + perspective: tmp_dir})
+                    to_animate[key + perspective] = tmp_dir
                     for number, frame in enumerate(output_data_dict[key]):
                         vis_data(key=key,
-                                data=frame[index], 
-                                save_to_file=tmp_dir.name + f'/{number}.png')
+                            data=frame[index], 
+                            save_to_file=os.path.join(tmp_dir.name, f'{number}.png'))
             else:
                 # non stereo images
                 tmp_dir = tempfile.TemporaryDirectory()
@@ -131,16 +127,19 @@ class GifWriterUtility:
                 to_animate.update({key: tmp_dir})
                 for number, frame in enumerate(output_data_dict[key]):
                     vis_data(key=key, 
-                            data=frame, 
-                            save_to_file=tmp_dir.name + f'/{number}.png')
+                        data=frame, 
+                        save_to_file=os.path.join(tmp_dir.name, f'{number}.png'))
         return to_animate
 
     @staticmethod
-    def _sort_method(item) -> int:
+    def _sort_method(path: str) -> int:
         """ Order the images due to the file numbering """
-        _, file_name = item.rsplit('/', maxsplit=1)
-        file_number, _ = file_name.split('.')
-        return int(file_number)
+        file_number = Path(path).with_suffix("").name
+        if file_number.isnumeric():
+            return int(file_number)
+        else:
+            raise Exception("The input item is not"
+                             f"convertible to an int: {path}")
 
     @staticmethod
     def _look_for_existing_output(output_dir_path: str, 
@@ -165,8 +164,8 @@ class GifWriterUtility:
     def _write_to_gif(to_animate: Dict[str, str], 
                     output_dir_path: str, 
                     append_to_existing_output: bool, 
-                    time_constant: int, 
-                    time_direction: bool) -> None:
+                    frame_duration_in_ms: int, 
+                    reverse_animation: bool) -> None:
         """
         loads all .png files from each specific temporary folder 
         and concatenates them to a single gif file respectively 
@@ -178,7 +177,7 @@ class GifWriterUtility:
             frame_paths = glob.glob(tmp_dir.name + '/*.png')
             # sorts list in size w.r.t. given key
             frame_paths.sort(key = GifWriterUtility._sort_method, 
-                            reverse=time_direction)
+                            reverse=reverse_animation)
             
             # loads actual picture data as frames
             for frame_path in frame_paths:
@@ -196,7 +195,7 @@ class GifWriterUtility:
                             format ='GIF',
                             append_images = frames[1:],
                             save_all = True,
-                            duration = time_constant,
+                            duration = frame_duration_in_ms,
                             loop = 0)
             GifWriterUtility._delete_temp_dir(tmp_dir, key)
 

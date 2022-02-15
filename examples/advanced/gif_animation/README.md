@@ -82,8 +82,8 @@ For adjustments, the `write_gif_animation` method comes with the following param
 * `output_dir_path`: The directory path in which the gif animation folder will be saved
 * `output_data_dict`: The data dictionary which was produced through the render method
 * `append_to_existing_output`: Leaves given `#_animation.gif` files in the output folder unaffected and stores the new ones named with higher numbers. This should e.g. be set True for loops over several animations with different settings.
-* `time_constant`: The duration time of each frame in the animation, which affects the speed of effects seen in the animation
-* `time_direction`: If set to True, the effects will happen backwards
+* `frame_duration_in_ms`: The duration time in milliseconds of each frame in the animation, which affects the speed of effects seen in the animation
+* `reverse_animation`: If set to True, the effects will happen backwards
 
 ## Further notes
 

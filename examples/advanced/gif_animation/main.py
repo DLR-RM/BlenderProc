@@ -10,7 +10,7 @@ args = parser.parse_args()
 bproc.init()
 
 # Set a global number of frames for your final animation
-frame_end = 5
+frame_end = 99
 
 # load the objects into the scene
 objs = bproc.loader.load_obj(args.scene)
@@ -66,7 +66,7 @@ for frame in range(frame_end):
 poi = bproc.object.compute_poi(objs)
 
 # define the camera resolution
-bproc.camera.set_resolution(100, 100)
+bproc.camera.set_resolution(512, 512)
 
 # Set time interval from 0 ... 1
 time = [t/frame_end for t in range(frame_end)]
