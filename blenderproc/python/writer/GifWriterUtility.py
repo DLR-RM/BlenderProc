@@ -15,7 +15,7 @@ from blenderproc.python.utility.Utility import Utility
 def write_gif_animation(
         output_dir_path: str,
         output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
-        append_to_existing_output: bool = True,
+        append_to_existing_output: bool = False,
         frame_duration_in_ms: int = 50,
         reverse_animation: bool = False):
     """
