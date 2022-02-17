@@ -48,16 +48,9 @@ light2.set_color([1,0,0])
 light2.set_location([-5,-5,5])
 
 # Define the rythm of the blinking
-frame = 0
-on_frames = []
-while frame < frame_end:
-    on_frames.append(frame)
-    frame += 1
-    if frame % 10 == 0:
-        frame += 10
-
 for frame in range(frame_end):
-    if frame in on_frames:
+    # this changes every ten frames from on to off and vice-versa
+    if (frame // 10) % 2 == 0:
         light2.set_energy(600, frame=frame)
     else:
         light2.set_energy(0, frame=frame)
