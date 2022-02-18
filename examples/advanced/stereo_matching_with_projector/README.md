@@ -11,13 +11,13 @@ Furthermore, the added random pattern is projected through a SPOT light source i
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/stereo_matching_with_projector/main.py <path to cam_pose file> <path to house.json> <path to projector image> examples/advanced/stereo_matching/output
+blenderproc run examples/advanced/stereo_matching_with_projector/main.py <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output <number of points>
 ```
 
 * `examples/advanced/stereo_matching_with_projector/main.py`: path to the main python file to run.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
-* `<path to projector image>`: Path to image to be projected onto scene. Examples of random patterns are available in [/patterns](examples/advanced/stereo_matching_with_projector/patterns)
+* `<number of points>`: Number of points for random pattern. Default = 2560.
 * `examples/advanced/stereo_matching_with_projector/output`: path to the output directory.
 
 ## Visualizaton
@@ -29,16 +29,23 @@ blenderproc vis hdf5 examples/advanced/stereo_matching_with_projector/output/0.h
 ## Implementation
 
 ```python
+# Genrate pattern image
+pattern_img = bproc.utility.generate_random_pattern_img(WIDTH, HEIGHT, args.points)
+
 # Define a new light source and set it as projector
 light = bproc.types.Light()
 light.set_type('SPOT')
 light.set_energy(3000)
-light.setup_as_projector(args.projector)
+fov = bproc.camera.get_fov()
+ratio = HEIGHT / WIDTH
+light.setup_as_projector(fov[0], ratio, pattern_img)
 ```
 Here we setup the projector: 
-* Setting the energy of the light source 
-* Using the spot light as projector for specified image file `args.projector`: 
+* Generate a pattern image to be projected onto the scene. 
+* Set new spot light with custom energy. 
+* Using the spot light as projector for specified pattern image `pattern_img`: 
   * Set projector location to camera via `COPY TRANSFORMS`
+  * Scale image based on field of view `fov` of camera and rendered image size `WIDTH, HEIGHT`
   * Link image as texture
   > for further details see implementation at [blenderproc/python/types/LightUtility.py](blenderproc/python/types/LightUtility.py)
 

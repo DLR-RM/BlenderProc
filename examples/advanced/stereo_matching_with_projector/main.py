@@ -6,10 +6,10 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file which describes one camera pose per line, here the output of scn2cam from the SUNCGToolbox can be used")
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
-parser.add_argument('projector', help="Path to the image, which should be projected onto the scene")
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_basic/output", help="Path to where the final files, will be saved")
+parser.add_argument('points', type=int, default=2560, help="Number of points for random pattern. Not always exact due to rounding errors.")
 args = parser.parse_args()
-#print(f"\nUsing {args.projector} as projector image\n")
+
 bproc.init()
 
 # load the objects into the scene
@@ -22,15 +22,22 @@ K = np.array([
     [0, 650.018, 355.984],
     [0, 0, 1]
 ])
-bproc.camera.set_intrinsics_from_K_matrix(K, 1280, 720)
+WIDTH, HEIGHT = 1280, 720
+bproc.camera.set_intrinsics_from_K_matrix(K, WIDTH, HEIGHT)
+
 # Enable stereo mode and set baseline
 bproc.camera.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
+
+# Genrate pattern image
+pattern_img = bproc.utility.generate_random_pattern_img(WIDTH, HEIGHT, args.points)
 
 # Define a new light source and set it as projector
 light = bproc.types.Light()
 light.set_type('SPOT')
 light.set_energy(3000)
-light.setup_as_projector(args.projector)
+fov = bproc.camera.get_fov()
+ratio = HEIGHT / WIDTH
+light.setup_as_projector(fov[0], ratio, pattern_img)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
