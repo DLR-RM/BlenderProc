@@ -20,14 +20,17 @@ def cli():
     }
 
     cc_texture_dir = args.output_dir
+    csv_file_path = os.path.join(cc_texture_dir, "full_info.csv")
     if not os.path.exists(cc_texture_dir):
         os.makedirs(cc_texture_dir)
     else:
-        raise Exception("The folder already exists!")
+        if os.path.isfile(csv_file_path):
+            print("Resume previous download")
+        else:
+            raise Exception("The folder already exists and does not contain cc_textures!")
 
     # download the csv file, which contains all the download links
     csv_url = "https://cc0textures.com/api/v1/downloads_csv"
-    csv_file_path = os.path.join(cc_texture_dir, "full_info.csv")
     request = requests.get(csv_url, headers=headers)
     with open(csv_file_path, "wb") as file:
         file.write(request.content)
@@ -53,11 +56,13 @@ def cli():
                 break
         if do_not_use:
             continue
-        print("Download asset: {} of {}/{}".format(asset, index, len(data)))
         current_folder =  os.path.join(cc_texture_dir, asset)
         if not os.path.exists(current_folder):
             os.makedirs(current_folder)
-        current_file_path = os.path.join(current_folder, "{}.zip".format(asset))
+        elif os.listdir(current_folder):
+            print("Already downloaded asset: {} of {}/{}".format(asset, index + 1, len(data)))
+            continue
+        print("Download asset: {} of {}/{}".format(asset, index + 1, len(data)))
         response = requests.get(link, headers=headers)
         SetupUtility.extract_from_response(current_folder, response)
 
