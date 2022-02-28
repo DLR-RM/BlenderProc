@@ -2,12 +2,12 @@ import numpy as np
 import random
 import cv2
 
-from typing import Tuple
 
-def generate_random_pattern_img(width: int, height: int, n_points: int) -> Tuple[int, int, int, int]:
-    """
-    Generate transparent image with random pattern.
-    :param width, height: width and height of image to be generated.
+def generate_random_pattern_img(width: int, height: int, n_points: int) -> np.ndarray:
+    """Generate transparent image with random pattern.
+
+    :param width: width of image to be generated.
+    :param height: height of image to be generated.
     :param n_points: number of white points uniformly placed on image.
     """
     pattern_img = np.zeros((height, width, 4), dtype=np.uint8)

@@ -35,9 +35,7 @@ pattern_img = bproc.utility.generate_random_pattern_img(WIDTH, HEIGHT, args.poin
 light = bproc.types.Light()
 light.set_type('SPOT')
 light.set_energy(3000)
-fov = bproc.camera.get_fov()
-ratio = HEIGHT / WIDTH
-light.setup_as_projector(fov[0], ratio, pattern_img)
+light.setup_as_projector(pattern_img)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:

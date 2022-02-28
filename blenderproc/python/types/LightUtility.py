@@ -63,13 +63,22 @@ class Light(Entity):
         self.blender_obj.data.type = type
         Utility.insert_keyframe(self.blender_obj.data, "type", frame)
 
-    def setup_as_projector(self, fov: float, ratio: float, pattern: int, frame: int = None):
+    def setup_as_projector(self, pattern: np.ndarray, frame: int = None):
+        """ Sets a spot light source up as projector.
+
+        :param pattern: pattern image as np.ndarray.
+        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        """
+        cam_ob = bpy.context.scene.camera
+        fov = cam_ob.data.angle     # field of view of current camera in radians
 
         focal_length = 2 * np.tan(fov / 2)
+        # Image aspect ratio = height / width
+        aspect_ratio = bpy.context.scene.render.resolution_y / bpy.context.scene.render.resolution_x
 
-        # Set location to camera -- COPY TRANSFORMS
+        # Set location of light source to camera -- COPY TRANSFORMS
         self.blender_obj.constraints.new('COPY_TRANSFORMS')
-        self.blender_obj.constraints['Copy Transforms'].target = bpy.context.scene.camera
+        self.blender_obj.constraints['Copy Transforms'].target = cam_ob
 
         # Setup nodes for projecting image
         self.blender_obj.data.use_nodes = True
@@ -100,7 +109,7 @@ class Light(Entity):
 
         fr_value = nodes.new(type="ShaderNodeValue")
         fr_value.label = 'Focal Length * Ratio'
-        fr_value.outputs[0].default_value = focal_length * ratio
+        fr_value.outputs[0].default_value = focal_length * aspect_ratio
 
         divide1 = nodes.new(type="ShaderNodeMath")
         divide1.label = 'X / ZF'
