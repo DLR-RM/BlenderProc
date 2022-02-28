@@ -64,9 +64,13 @@ class Light(Entity):
         Utility.insert_keyframe(self.blender_obj.data, "type", frame)
 
     def setup_as_projector(self, pattern: np.ndarray, frame: int = None):
-        """ Sets a spot light source up as projector.
+        """ Sets a spot light source as projector of a pattern image. Sets location and angle of projector to current
+        camera. Adjusts scale of pattern image to fit field-of-view of camera:
+        $(0.5 + \frac{X}{Z \cdot F}, 0.5 + \frac{X}{Z \cdot F \cdot r}, 0)$
+        where $F$ is focal length and $r$ aspect ratio.
+        WARNING: This should be done after the camera parameters are set!
 
-        :param pattern: pattern image as np.ndarray.
+        :param pattern: pattern image to be projected onto scene as np.ndarray.
         :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
         """
         cam_ob = bpy.context.scene.camera
