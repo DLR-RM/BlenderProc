@@ -11,7 +11,7 @@ default_rgb_keys = ["colors", "normals", "diffuse", "nocs"]
 default_flow_keys = ["forward_flow", "backward_flow"]
 default_segmap_keys = ["segmap", ".*_segmaps"]
 default_segcolormap_keys = ["segcolormap"]
-default_depth_keys = ["distance", "depth"]
+default_depth_keys = ["distance", "depth", "stereo-depth"]
 all_default_keys = default_rgb_keys + default_flow_keys + default_segmap_keys + default_segcolormap_keys + default_depth_keys
 default_depth_max = 20
 
