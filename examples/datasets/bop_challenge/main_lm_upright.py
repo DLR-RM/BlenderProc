@@ -2,6 +2,7 @@ import blenderproc as bproc
 import argparse
 import os
 import numpy as np
+import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', help="Path to the bop datasets parent directory")
@@ -9,6 +10,8 @@ parser.add_argument('cc_textures_path', default="resources/cctextures", help="Pa
 parser.add_argument('output_dir', help="Path to where the final files will be saved ")
 parser.add_argument('--num_scenes', type=int, default=2000, help="How many scenes with 25 images each to generate")
 args = parser.parse_args()
+
+start_time = time.time()
 
 bproc.init()
 
@@ -148,3 +151,6 @@ for i in range(args.num_scenes):
     
     for obj in (sampled_target_bop_objs + sampled_distractor_bop_objs):      
         obj.hide(True)
+
+
+print(f"Render args.num_scenes*25 = {args.num_scenes * 25} ; Used time: {time.time() - start_time}")
