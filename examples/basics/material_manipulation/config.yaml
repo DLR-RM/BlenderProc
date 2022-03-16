@@ -60,18 +60,6 @@
         "selector": {
           "provider": "getter.Material",
           "conditions": {
-            "name": "Material.001"
-          }
-        },
-        "cf_color_link_to_displacement": 1.5
-      }
-    },
-    {
-      "module": "manipulators.MaterialManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Material",
-          "conditions": {
             "name": "Material.*"
           }
         },
@@ -82,6 +70,18 @@
             "path": "<args:1>/material_manipulation_sample_texture*.jpg"
           }
         }
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.001"
+          }
+        },
+        "cf_color_link_to_displacement": 1.5
       }
     },
     {
