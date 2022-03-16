@@ -6,7 +6,6 @@ from pathlib import Path
 
 import bpy
 import numpy as np
-import matplotlib.pyplot as plt
 
 from blenderproc.scripts.visHdf5Files import vis_data
 from blenderproc.python.utility.Utility import Utility
