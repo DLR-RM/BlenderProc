@@ -169,7 +169,7 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     cx_new += 1
     cy_new += 1
     # suggested resolution for Blender image generation
-    new_image_resolution = np.array([columns_needed, rows_needed])
+    new_image_resolution = np.array([columns_needed, rows_needed], dtype=int)
 
     # Adapt/shift the mapping function coordinates to the new_image_resolution resolution
     # (if we didn't, the mapping would only be valid for same resolution mapping)
