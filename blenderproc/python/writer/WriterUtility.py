@@ -7,6 +7,7 @@ import numpy as np
 import bpy
 import mathutils
 import h5py
+from mathutils import Matrix
 
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth, depth2dist
@@ -19,7 +20,7 @@ import blenderproc.python.camera.CameraUtility as CameraUtility
 
 
 def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
-               append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
+        append_to_existing_output: bool = False, stereo_separate_keys: bool = False, save_world2cam: bool=False ):
     """
     Saves the information provided inside of the output_data_dict into a .hdf5 container
 
@@ -33,6 +34,7 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
                                  won't be saved in one tensor [2, img_x, img_y, channels], where the img[0] is the
                                  left image and img[1] the right. They will be saved in separate keys: for example
                                  for colors in colors_0 and colors_1.
+    :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
     """
 
     if not os.path.exists(output_dir_path):
@@ -66,6 +68,10 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
         with h5py.File(hdf5_path, "w") as file:
             # Go through all the output types
             print(f"Merging data for frame {frame} into {hdf5_path}")
+            # Activate frame.
+            bpy.context.scene.frame_set(frame)
+            if save_world2cam:
+                WriterUtility._write_to_hdf_file(file, "camera_pose", WriterUtility._get_frame_camera())
 
             adjusted_frame = frame - bpy.context.scene.frame_start
             for key, data_block in output_data_dict.items():
@@ -85,6 +91,8 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
             blender_proc_version = Utility.get_current_version()
             if blender_proc_version is not None:
                 WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
+
+
 
 
 class WriterUtility:
@@ -283,6 +291,31 @@ class WriterUtility:
             else:
                 return WriterUtility.get_common_attribute(cam_ob, attribute_name, local_frame_change,
                                                           world_frame_change)
+
+    @staticmethod
+    def _get_frame_camera( destination_frame=["X", "-Y", "-Z"]):
+        """ Returns camera parameters for the active camera.
+        :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates
+        :return: dict containing info for scene_camera.json 
+        """
+
+        cam_K = WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam_K')
+
+        frame_camera_dict = {
+            'cam_K': cam_K[0] + cam_K[1] + cam_K[2],
+        }
+
+        H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix',
+                                                              local_frame_change=destination_frame))
+
+        H_w2c_opencv = H_c2w_opencv.inverted()
+        R_w2c_opencv = H_w2c_opencv.to_quaternion().to_matrix()
+        t_w2c_opencv = H_w2c_opencv.to_translation()
+
+        frame_camera_dict['cam_R_w2c'] = list(R_w2c_opencv[0]) + list(R_w2c_opencv[1]) + list(R_w2c_opencv[2])
+        frame_camera_dict['cam_t_w2c'] = list(t_w2c_opencv)
+
+        return frame_camera_dict
 
     @staticmethod
     def get_light_attribute(light: bpy.types.Light, attribute_name: str,

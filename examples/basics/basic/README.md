@@ -158,6 +158,23 @@ The file `0.h5py` would therefore look like the following:
 
 => Creates the files `0.h5py` and `1.h5py`
 
+## Save the camera pose in the `.hdf5` file
+For also saving each of the cam pose add `save_world2cam=True` 
+
+```python
+# write the data to a .hdf5 container
+bproc.writer.write_hdf5(args.output_dir, data, save_world2cam=True)
+```
+The hdf5 file will also contain the camera poses.
+```yaml
+{
+  "colors": #<numpy array with pixel values read in from rgb_0000.png>,
+  "depth": #<numpy array with pixel values read in from depth_0000.exr>,
+  "normals": #<numpy array with pixel values read in from normals_0000.exr>,
+  "camera_pose": #<dictionary with keys `cam_K`, `cam_R_w2c`, `cam_T_w2c`>
+}
+``` 
+
 # More Modules
 
 Well done, how about another example on [camera_sampling](../camera_sampling/README.md) or are you more interested in [object manipulation](../entity_manipulation/README.md)?
