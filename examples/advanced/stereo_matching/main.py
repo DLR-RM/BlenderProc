@@ -41,12 +41,15 @@ bproc.lighting.light_suncg_scene()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 bproc.renderer.toggle_stereo(True)
+bproc.renderer.set_max_amount_of_samples(50)
 
 # render the whole pipeline
 data = bproc.renderer.render()
 
 # Apply stereo matching to each pair of images
-data["stereo-depth"], data["disparity"] = bproc.postprocessing.stereo_global_matching(data["colors"], disparity_filter=False)
+data["stereo-depth"], data["disparity"] = bproc.postprocessing.stereo_global_matching(data["colors"], 
+                                                                                      disparity_filter=False, 
+                                                                                      depth_completion=False)
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

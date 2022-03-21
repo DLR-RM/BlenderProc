@@ -1,11 +1,14 @@
 # Stereo Matching
-![](../../../images/stereo_matching_stereo_pair.jpg)
-![](../../../images/stereo_matching_stereo_depth.jpg)
+<p align="center">
+<img src="../../../images/stereo_matching_color_left.jpg" alt="Front readme image" width=400>
+<img src="../../../images/stereo_matching_color_right.jpg" alt="Front readme image" width=400>
+</p>
+<p align="center">
+<img src="../../../images/stereo_matching_stereo_depth.jpg" alt="Front readme image" width=400>
+</p>
 
 In the first row we can see the rendered stereo RGB images, left and right respectively, and beneath them we can view
-the computed depth image using stereo matching. Note that due to a high discrepancy between the TV and the rest
-of the rendered scene, the visualization is not descriptive enough. This discrepancy or high depth values at the TV
-is due to a lack of gradient or useful features for stereo matching in this area. However, the depth values in other
+the computed depth image using stereo matching. The high depth values from the uniform yellow area to the right are due to a lack of gradient or useful features for stereo matching in this area. However, the depth values in other
 areas are consistent and close to the rendered depth images.
 
 ## Usage

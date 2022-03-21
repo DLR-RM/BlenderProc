@@ -38,7 +38,7 @@ ground_material = bproc.filter.one_by_attr(materials, "name", "Material.001")
 ground_material.set_displacement_from_principled_shader_value("Base Color", multiply_factor=1.5)
 
 # Collect all jpg images in the specified directory
-images = list(Path(args.image_dir).rglob("material_manipulation_sample_texture*.jpg"))
+images = list(Path(args.image_dir).absolute().rglob("material_manipulation_sample_texture*.jpg"))
 for mat in materials:
     # Load one random image
     image = bpy.data.images.load(filepath=str(random.choice(images)))

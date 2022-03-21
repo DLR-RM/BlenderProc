@@ -3,7 +3,7 @@ import os
 import shutil
 import signal
 import sys
-repo_root_directory = os.path.join(os.path.dirname(__file__), "..")
+repo_root_directory = os.path.join(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(repo_root_directory)
 
 import subprocess
@@ -32,13 +32,17 @@ def cli():
             'install': "Installs package in the Blender python environment", 
             'uninstall': "Uninstalls package in the Blender python environment"
             },
+        "quickstart": {
+            }
     }
     
     parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic image generation.", formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('-v', '--version', action='store_true', help='Version of BlenderProc')
     subparsers = parser.add_subparsers(dest='mode', help="Select a BlenderProc command to run:")
 
     # Setup different modes
     parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
+    parser_quickstart = subparsers.add_parser('quickstart', help="Runs a quickstart script blenderproc/scripts/quickstart.py")
     parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
     parser_vis = subparsers.add_parser('vis', help="Visualize the content of BlenderProc output files. \nOptions: {}".format(", ".join(options['vis'])), formatter_class=argparse.RawTextHelpFormatter)
     parser_download = subparsers.add_parser('download', help="Download datasets, materials or 3D models to run examples or your own pipeline. \nOptions: {}".format(", ".join(options['download'])), formatter_class=argparse.RawTextHelpFormatter)
@@ -63,7 +67,7 @@ def cli():
     parser_pip.add_argument('--not-use-custom-package-path', dest='not_use_custom_package_path', action='store_true', help='If set, the pip packages will not be installed into the separate custom package folder, but into blenders python site-packages folder. This should only be used, if a specific pip package cannot be installed into a custom package path.')
 
     # Setup all common arguments of run and debug mode
-    for subparser in [parser_run, parser_debug]:
+    for subparser in [parser_run, parser_debug, parser_quickstart]:
         subparser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
 
         subparser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
@@ -72,30 +76,40 @@ def cli():
         subparser.add_argument('--force-pip-update', dest='force_pip_update', action='store_true', help="If set, the cache of installed pip packages will be ignored and rebuild based on pip freeze.")
 
     # Setup common arguments of run, debug and pip mode
-    for subparser in [parser_run, parser_debug, parser_pip]:
+    for subparser in [parser_run, parser_debug, parser_pip, parser_quickstart]:
         subparser.add_argument('--blender-install-path', dest='blender_install_path', default=None, help="Set path where blender should be installed. If None is given, /home_local/<env:USER>/blender/ is used per default. This argument is ignored if it is specified in the given YAML config.")
         subparser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None, help="Set, if you want to use a custom blender installation to run BlenderProc. If None is given, blender is installed into the configured blender_install_path. This argument is ignored if it is specified in the given YAML config.")
 
     args, unknown_args = parser.parse_known_args()
 
-    if args.mode in ["run", "debug"]:
-        # Make sure a file is given
-        if args.file is None:
-            print(parser.format_help())
-            exit(0)
+    if args.version:
+        from blenderproc import __version__
+        print(__version__)
+    elif args.mode in ["run", "debug", "quickstart"]:
 
-        # Check whether its a python a script or a yaml config
-        is_config = not args.file.endswith(".py")
+        if args.mode == 'quickstart':
+            is_config = False
+        else:
+            # Make sure a file is given
+            if args.file is None :
+                print(parser.format_help())
+                exit(0)
+            # Check whether its a python a script or a yaml config
+            is_config = not args.file.endswith(".py")
 
         # Install blender, if not already done
         custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(is_config, args, unknown_args)
         blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
 
         # Setup script path that should be executed
-        if is_config:
+        if args.mode == "quickstart":
+            path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
+            args.file = path_src_run
+            print("'blenderproc quickstart' is an alias for 'blenderproc run {}'".format(path_src_run))
+        elif is_config:
             print("\033[33m" + "Warning: Running BlenderProc with config.yaml files is deprecated and will be removed in future releases.\n",
                 "Please switch to the more intuitive Python API introduced in BlenderProc 2.0. It's easy, you won't regret it." + "\033[0m")
-            path_src_run = os.path.join(repo_root_directory, "blenderproc/run.py")
+            path_src_run = os.path.join(repo_root_directory, "blenderproc", "run.py")
         else:
             path_src_run = args.file
             SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)

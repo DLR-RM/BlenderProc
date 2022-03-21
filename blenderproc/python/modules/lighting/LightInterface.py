@@ -64,3 +64,7 @@ class LightInterface(Module):
         light.set_energy(config.get_float("energy", 10.))
         light.set_color(config.get_list("color", [1, 1, 1])[:3])
         light.set_distance(config.get_float("distance", 0))
+        if config.get_bool("use_projector", False):
+            light.setup_as_projector(config.get_string("path", "examples/advanced/stereo_matching_with_projector"
+                                                               "/patterns/random_pattern_00256.png"))
+

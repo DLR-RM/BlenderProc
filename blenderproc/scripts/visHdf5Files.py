@@ -11,9 +11,33 @@ default_rgb_keys = ["colors", "normals", "diffuse", "nocs"]
 default_flow_keys = ["forward_flow", "backward_flow"]
 default_segmap_keys = ["segmap", ".*_segmaps"]
 default_segcolormap_keys = ["segcolormap"]
-default_depth_keys = ["distance", "depth"]
+default_depth_keys = ["distance", "depth", "stereo-depth"]
 all_default_keys = default_rgb_keys + default_flow_keys + default_segmap_keys + default_segcolormap_keys + default_depth_keys
 default_depth_max = 20
+
+
+def flow_to_rgb(flow):
+    """
+    Visualizes optical flow in hsv space and converts it to rgb space.
+    :param flow: (np.array (h, w, c)) optical flow
+    :return: (np.array (h, w, c)) rgb data
+    """
+    import cv2
+    
+    im1 = flow[:, :, 0]
+    im2 = flow[:, :, 1]
+
+    h, w = flow.shape[:2]
+
+    # Use Hue, Saturation, Value colour model
+    hsv = np.zeros((h, w, 3), dtype=np.float32)
+    hsv[..., 1] = 1
+
+    mag, ang = cv2.cartToPolar(im1, im2)
+    hsv[..., 0] = ang * 180 / np.pi
+    hsv[..., 2] = cv2.normalize(mag, None, 0, 1, cv2.NORM_MINMAX)
+
+    return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
 def key_matches(key, patterns, return_index=False):
     for p, pattern in enumerate(patterns):
@@ -41,19 +65,14 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
         plt.title("{} in {}".format(key, file_label))
 
     if key_matches(key, flow_keys):
-        try:
-            # This import here is ugly, but else everytime someone uses this script it demands opencv and the progressbar
-            sys.path.append(os.path.join(os.path.dirname(__file__)))
-            from utils import flow_to_rgb
+        try: 
+            # Visualize optical flow
+            if save_to_file is None:
+                plt.imshow(flow_to_rgb(data), cmap='jet')
+            else:
+                plt.imsave(save_to_file, flow_to_rgb(data), cmap='jet')
         except ImportError:
-            raise ImportError("Using .hdf5 containers, which contain flow images needs opencv-python and progressbar "
-                              "to be installed!")
-
-        # Visualize optical flow
-        if save_to_file is None:
-            plt.imshow(flow_to_rgb(data), cmap='jet')
-        else:
-            plt.imsave(save_to_file, flow_to_rgb(data), cmap='jet')
+            raise ImportError("Using .hdf5 containers, which contain flow images needs opencv-python to be installed!")
     elif key_matches(key, segmap_keys):
         # Try to find labels for each channel in the segcolormap
         channel_labels = {}

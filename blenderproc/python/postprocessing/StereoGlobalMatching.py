@@ -44,7 +44,7 @@ def stereo_global_matching(color_images: List[np.ndarray], depth_max: Optional[f
 
     depth_frames = []
     disparity_frames = []
-    for frame, color_image in enumerate(color_images):
+    for color_image in color_images:
         depth, disparity = StereoGlobalMatching._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
 
         depth_frames.append(depth)
@@ -114,10 +114,7 @@ class StereoGlobalMatching:
             filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
 
         disparity_to_be_written = filteredImg if disparity_filter else displ
-        disparity = np.float64(np.copy(disparity_to_be_written)) / 16.0
-
-        # Crop and resize, due to baseline, a part of the image on the left can't be matched with the one on the right
-        disparity = resize(disparity[:, num_disparities:], (left_color_image.shape[1], left_color_image.shape[0]))
+        disparity = np.float32(np.copy(disparity_to_be_written)) / 16.0
 
         # Triangulation
         depth = (1.0 / disparity) * baseline * focal_length
