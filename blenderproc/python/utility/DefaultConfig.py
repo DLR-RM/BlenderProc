@@ -37,7 +37,5 @@ class DefaultConfig:
     antialiasing_distance_max = 10000
 
     # Setup
-    #default_pip_packages = ["wheel", "pyyaml==6.0", "imageio==2.16.1", "gitpython==3.1.27", "scikit-image==0.19.2", "pypng==0.0.21", "scipy==1.8.0", "tkinter",
-    #                        "matplotlib==3.4.3", "pytz==2021.3", "h5py==3.6.0", "Pillow==9.0.1", "opencv-contrib-python==4.5.5.64", "scikit-learn==1.0.2"]
     default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18", "scikit-image==0.19.2", "pypng==0.0.20", "scipy==1.7.3",
                             "matplotlib==3.5.1", "pytz==2021.1", "h5py==3.6.0", "Pillow==8.3.2", "opencv-contrib-python==4.5.5.64", "scikit-learn==1.0.2"]
