@@ -37,7 +37,7 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
     # Use cycles
     bpy.context.scene.render.engine = 'CYCLES'
 
-    if platform == "darwin" or compute_device == "CPU":
+    if platform == "darwin":
         import platform as platform_locally
         mac_version = platform_locally.mac_ver()[0]
         mac_version_numbers = [int(ele) for ele in mac_version.split(".")]
@@ -60,6 +60,9 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
             # then we use the cpu with maximum power
             bpy.context.scene.cycles.device = "CPU"
             bpy.context.scene.render.threads = multiprocessing.cpu_count()
+    elif compute_device == "CPU":
+        bpy.context.scene.cycles.device = "CPU"
+        bpy.context.scene.render.threads = multiprocessing.cpu_count()
     else:
         bpy.context.scene.cycles.device = "GPU"
         preferences = bpy.context.preferences.addons['cycles'].preferences
