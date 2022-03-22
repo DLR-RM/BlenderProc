@@ -27,9 +27,9 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
     :param urdf_file: Path to the URDF file.
     :param weight_distribution: One of ['envelope', 'automatic', 'rigid']. For more information please see
                                 https://docs.blender.org/manual/en/latest/animation/armatures/skinning/parenting.html.
-    :param fk_offset: Offset between fk bone chain and link bone chain. This does not have any effect on the
+    :param fk_offset: Offset between fk (forward kinematic) bone chain and link bone chain. This does not have any effect on the
                       transformations, but can be useful for visualization in blender.
-    :param ik_offset: Offset between fk bone chain and link bone chain. Effects on the transformation (e.g.
+    :param ik_offset: Offset between ik (inverse kinematic) bone chain and link bone chain. Effects on the transformation (e.g.
                       `urdf_object.set_location_ik()`) are being handled internally. Useful for visualization in
                       blender.
     :return: URDF object instance.
