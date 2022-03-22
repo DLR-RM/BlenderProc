@@ -132,6 +132,8 @@ class IKEALoader:
         obj_dict = {}
         counter = 0
         obj_files = glob.glob(os.path.join(data_dir, "IKEA", "*", "*.obj"))
+        # this will be ensure that the call is deterministic
+        obj_files.sort()
         for obj_file in obj_files:
             category = [s for s in obj_file.split('/') if 'IKEA_' in s][0]
             if IKEALoader._check_material_file(obj_file):

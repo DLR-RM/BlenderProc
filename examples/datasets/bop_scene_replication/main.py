@@ -27,6 +27,7 @@ light_point.set_location([0, 0, -0.8])
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+bproc.renderer.set_max_amount_of_samples(50)
 
 # render the cameras of the current scene
 data = bproc.renderer.render()
