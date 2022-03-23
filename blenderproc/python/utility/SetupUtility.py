@@ -145,7 +145,7 @@ class SetupUtility:
         packages_were_installed = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path, use_custom_package_path=use_custom_package_path)
 
         # Make sure to update the pip package list cache, if it does not exist or changes have been made
-        cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+        cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
         if packages_were_installed or not os.path.exists(cache_path):
             with open(cache_path, "w") as f:
                 json.dump(SetupUtility.installed_packages, f)
@@ -253,7 +253,7 @@ class SetupUtility:
         """
         if SetupUtility.installed_packages is None:
             if not force_update:
-                cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+                cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
                 if os.path.exists(cache_path):
                     with open(cache_path, "r") as f:
                         SetupUtility.installed_packages = json.load(f)
@@ -288,7 +288,7 @@ class SetupUtility:
         :param major_version: The major version string of the blender installation.
         """
         python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
-        cache_path = os.path.join(packages_path, "installed_packages_cache.json")
+        cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
         if os.path.exists(cache_path):
             os.remove(cache_path)
 
