@@ -88,21 +88,24 @@ class SetupUtility:
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+            packages_import_path = os.path.join(packages_path, "lib", current_python_version, "site-packages")
             pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", current_python_version, "site-packages")
         elif platform == "darwin":
             python_bin_folder = os.path.join(blender_path, "..", "Resources", major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+            packages_import_path = os.path.join(packages_path, "lib", current_python_version, "site-packages")
             pre_python_package_path = os.path.join(blender_path, "..", "Resources", major_version, "python", "lib", current_python_version, "site-packages")
         elif platform == "win32":
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python")
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+            packages_import_path = os.path.join(packages_path, "lib", current_python_version, "site-packages")
             pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "site-packages")
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
 
-        return python_bin, packages_path, pre_python_package_path
+        return python_bin, packages_path, packages_import_path, pre_python_package_path
 
     @staticmethod
     def setup_pip(user_required_packages: Optional[List[str]] = None, blender_path: Optional[str] = None, major_version: Optional[str] = None, reinstall_packages: bool = False, use_custom_package_path: bool = True, install_default_packages: bool = True) -> str:
@@ -126,10 +129,10 @@ class SetupUtility:
         if user_required_packages is not None:
             required_packages += user_required_packages
 
-        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
+        python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
 
         # Init pip
-        SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path)
+        SetupUtility._ensure_pip(python_bin, packages_path, packages_import_path, pre_python_package_path)
 
         # If the list of installed packages was read from cache
         if SetupUtility.package_list_is_from_cache:
@@ -137,7 +140,7 @@ class SetupUtility:
             found_package_to_install = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path, dry_run=True)
             # If yes, reload the list of installed packages
             if found_package_to_install:
-                SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path, force_update=True)
+                SetupUtility._ensure_pip(python_bin, packages_path, packages_import_path, pre_python_package_path, force_update=True)
 
         packages_were_installed = SetupUtility._pip_install_packages(required_packages, python_bin, packages_path, use_custom_package_path=use_custom_package_path)
 
@@ -150,7 +153,7 @@ class SetupUtility:
         # If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away
         if packages_were_installed:
             importlib.invalidate_caches()
-        return packages_path
+        return packages_import_path
 
     @staticmethod
     def _pip_install_packages(required_packages, python_bin, packages_path, reinstall_packages: bool = False, dry_run: bool = False, use_custom_package_path: bool = True):
@@ -197,11 +200,6 @@ class SetupUtility:
                 # Check if the correct version is installed
                 already_installed = (package_version == SetupUtility.installed_packages[package_name])
 
-                # If there is already a different version installed
-                if not already_installed:
-                    # Remove the old version (We have to do this manually, as we are using --target with pip install. There old version are not removed)
-                    subprocess.Popen([python_bin, "-m", "pip", "uninstall", package_name, "-y"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
-
             # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
             if not already_installed or reinstall_packages:
                 print("Installing pip package {} {}".format(package_name, package_version))
@@ -216,9 +214,9 @@ class SetupUtility:
 
                 if not dry_run:
                     if use_custom_package_path:
-                        extra_args.extend(["--target", packages_path])
+                        extra_args.extend(["--user"])
                     # Run pip install
-                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONNOUSERSITE="0", PYTHONUSERBASE=packages_path)).wait()
                     SetupUtility.installed_packages[package_name] = package_version
                     packages_were_installed = True
                 else:
@@ -235,20 +233,21 @@ class SetupUtility:
         :param major_version: The major version string of the blender installation.
         """
         # Determine python and packages paths
-        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
+        python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
 
         # Run pip uninstall
-        subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+        subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_import_path)).wait()
 
         # Clear installed packages cache
         SetupUtility.clean_installed_packages_cache(blender_path, major_version)
 
     @staticmethod
-    def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str, force_update: bool = False):
+    def _ensure_pip(python_bin: str, packages_path: str, packages_import_path: str, pre_python_package_path: str, force_update: bool = False):
         """ Make sure pip is installed and read in the already installed packages
 
         :param python_bin: Path to python binary.
         :param packages_path: Path where our pip packages should be installed
+        :param packages_import_path: Path to site-packages in packages_path which contains the installed packages
         :param pre_python_package_path: Path that contains blender's default pip packages
         :param force_update: If True, the installed-packages-cache will be ignored and will be recollected based on the actually installed packages.
         """
@@ -272,7 +271,7 @@ class SetupUtility:
 
             # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
             installed_packages = subprocess.check_output([python_bin, "-m", "pip", "list", "--format=freeze", "--path={}".format(pre_python_package_path)])
-            installed_packages += subprocess.check_output([python_bin, "-m", "pip", "list", "--format=freeze", "--path={}".format(packages_path)])
+            installed_packages += subprocess.check_output([python_bin, "-m", "pip", "list", "--format=freeze", "--path={}".format(packages_import_path)])
 
             # Split up strings into two lists (names and versions)
             installed_packages_name, installed_packages_versions = zip(*[str(line).lower().split('==') for line in installed_packages.splitlines()])
@@ -288,7 +287,7 @@ class SetupUtility:
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
         """
-        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
+        python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
         cache_path = os.path.join(packages_path, "installed_packages_cache.json")
         if os.path.exists(cache_path):
             os.remove(cache_path)
