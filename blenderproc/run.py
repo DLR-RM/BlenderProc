@@ -35,3 +35,4 @@ temp_dir = argv[1]
 
 pipeline = Pipeline(config_path, argv[2:], temp_dir)
 pipeline.run()
+
