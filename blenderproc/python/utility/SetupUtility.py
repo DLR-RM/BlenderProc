@@ -100,7 +100,7 @@ class SetupUtility:
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python")
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
-            packages_import_path = os.path.join(packages_path, "lib", current_python_version, "site-packages")
+            packages_import_path = os.path.join(packages_path, current_python_version.replace(".", "").capitalize(), "site-packages")
             pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "site-packages")
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
