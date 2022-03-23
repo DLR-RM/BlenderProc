@@ -83,16 +83,17 @@ class SetupUtility:
             major_version = os.path.basename(os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..")))
 
         # Based on the OS determined the three paths
+        current_python_version = "python3.10"
         if platform == "linux" or platform == "linux2":
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
-            python_bin = os.path.join(python_bin_folder, "python3.9")
+            python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
-            pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.9", "site-packages")
+            pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", current_python_version, "site-packages")
         elif platform == "darwin":
             python_bin_folder = os.path.join(blender_path, "..", "Resources", major_version, "python", "bin")
-            python_bin = os.path.join(python_bin_folder, "python3.9")
+            python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
-            pre_python_package_path = os.path.join(blender_path, "..", "Resources", major_version, "python", "lib", "python3.9", "site-packages")
+            pre_python_package_path = os.path.join(blender_path, "..", "Resources", major_version, "python", "lib", current_python_version, "site-packages")
         elif platform == "win32":
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python")

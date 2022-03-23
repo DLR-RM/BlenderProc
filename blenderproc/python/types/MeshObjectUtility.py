@@ -169,10 +169,10 @@ class MeshObject(Entity):
         if mode == "POINT":
             if point is None:
                 raise Exception("The parameter point is not given even though the mode is set to POINT.")
-            prev_cursor_location = bpy.context.scene.cursor.location
+            prev_cursor_location = bpy.context.scene.cursor.location.copy()
             bpy.context.scene.cursor.location = point
             bpy.ops.object.origin_set(context, type='ORIGIN_CURSOR')
-            bpy.context.scene.cursor.location = prev_cursor_location
+            bpy.context.scene.cursor.location = prev_cursor_location.copy()
         elif mode == "CENTER_OF_MASS":
             bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_MASS')
         elif mode == "CENTER_OF_VOLUME":
@@ -436,6 +436,21 @@ class MeshObject(Entity):
             return max_val > 1e-7
         return False
 
+    def scale_uv_coordinates(self, factor: float):
+        """Scales the UV coordinates of an object by a given factor. Scaling with a factor greater than one has the 
+        effect of making the texture look smaller on the object.
+
+        :param factor: The amount the UV coordinates will be scaled.
+        :type factor: float
+        """
+        if not self.has_uv_mapping():
+            raise Exception("Cannot scale UV coordinates of a MeshObject that has no UV mapping.")
+
+        mesh = self.blender_obj.data
+        uv_layer = mesh.uv_layers.active
+        for loop in mesh.loops :
+            uv_layer.data[loop.index].uv *= factor
+        
     def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1,
                               min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
         """ Adds a displace modifier with a texture to an object.

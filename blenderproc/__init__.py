@@ -42,7 +42,10 @@ else:
         is_correct_startup_command = is_bproc_shell_called or is_command_line_script_called
     else:
         first_file_name = file_names_of_stack[0]
-        # check if the name of this file is either blenderproc or if the "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the cli.py
+        # check if the name of this file is either blenderproc or if the
+        # "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the cli.py
         is_correct_startup_command = first_file_name in ["blenderproc", "command_line.py"]
-    if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ and not is_correct_startup_command:
-        raise Exception(f"\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:\n\tpython {sys.argv[0]}\ncall:\n\tblenderproc run {sys.argv[0]}\n###############")
+    if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ \
+            and not is_correct_startup_command:
+        raise Exception("\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:"
+                        "\n\tpython {}\ncall:\n\tblenderproc run {}\n###############".format(sys.argv[0], sys.argv[0]))
