@@ -519,9 +519,9 @@ class Utility:
         :param output: A dict containing key and path of the new output type.
         """
         registered_outputs = Utility.get_registered_outputs()
-        for j,reg_out in enumerate(registered_outputs):
+        for i,reg_out in enumerate(registered_outputs):
             if output["key"] == reg_out["key"]:
-                registered_outputs[j] = output
+                registered_outputs[i] = output
         GlobalStorage.set("output", registered_outputs)      
 
     @staticmethod
