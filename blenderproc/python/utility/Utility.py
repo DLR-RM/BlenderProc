@@ -513,6 +513,18 @@ class Utility:
         return np.round(values)
 
     @staticmethod
+    def replace_output_entry(output: Dict[str, str]):
+        """ Replaces the output in the scene's custom properties with the given one
+
+        :param output: A dict containing key and path of the new output type.
+        """
+        registered_outputs = Utility.get_registered_outputs()
+        for j,reg_out in enumerate(registered_outputs):
+            if output["key"] == reg_out["key"]:
+                registered_outputs[j] = output
+        GlobalStorage.set("output", registered_outputs)      
+
+    @staticmethod
     def add_output_entry(output: Dict[str, str]):
         """ Registers the given output in the scene's custom properties
 
@@ -520,7 +532,9 @@ class Utility:
         """
         if GlobalStorage.is_in_storage("output"):
             # E.g. multiple camera samplers
-            if not Utility.output_already_registered(output, GlobalStorage.get("output")):
+            if Utility.output_already_registered(output, GlobalStorage.get("output")):
+                Utility.replace_output_entry(output)
+            else:
                 GlobalStorage.get("output").append(output)
         else:
             GlobalStorage.set("output", [output])
