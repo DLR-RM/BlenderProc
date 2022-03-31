@@ -266,6 +266,7 @@ def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_c
     # Create new material emitting the given color
     new_mat = bpy.data.materials.new(name="segmentation")
     new_mat.use_nodes = True
+    new_mat.cycles.sample_as_light=False
     nodes = new_mat.node_tree.nodes
     links = new_mat.node_tree.links
     emission_node = nodes.new(type='ShaderNodeEmission')
