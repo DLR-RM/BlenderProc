@@ -28,6 +28,9 @@ def slice_faces_with_normals(mesh_objects: List[MeshObject], compare_angle_degre
     if up_vector_upwards is None:
         up_vector_upwards = np.array([0.0, 0.0, 1.0])
 
+    # the up vector has to have unit length
+    up_vector_upwards /= np.linalg.norm(up_vector_upwards)
+
     newly_created_objects = []
     for obj in mesh_objects:
         obj.edit_mode()
@@ -266,6 +269,7 @@ class FaceSlicer:
         normal_face = face.normal.to_4d()
         normal_face[3] = 0.0
         normal_face = (mathutils.Matrix(matrix_world) @ normal_face).to_3d()
+        normal_face /= np.linalg.norm(normal_face)
         # compare the normal to the current up_vec
         return acos(normal_face @ mathutils.Vector(up_vector)) < cmp_angle
 
