@@ -47,7 +47,7 @@ The noise level can be controlled by using `brpoc.renderer.set_noise_threshold(n
 This means that for each pixel only so many rays are used to get below this noise threshold.
 Hereby, `noise_threshold` is a float value above `0` and below `0.1`. 
 A higher value means more noise per pixel, a lower value results in less noise but longer computation time.
-You can influence the maximum amount of samples per pixel with the `bproc.rendererset_max_amount_of_samples(max_amount_of_samples)` fct.
+You can influence the maximum amount of samples per pixel with the `bproc.renderer.set_max_amount_of_samples(max_amount_of_samples)` fct.
 For more information about how blenders renderer works visit the [blender docu](https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html).
 
 The required noise level is unfortunately quite low to achieve a smooth result and therefore rendering can take quite long.
