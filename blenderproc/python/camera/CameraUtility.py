@@ -329,3 +329,9 @@ def add_depth_of_field(focal_point_obj: Entity, fstop_value: float,
     # distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number will
     # cause a vertical distortion.
     camera.dof.aperture_ratio = aperture_ratio
+
+
+def remove_depth_of_field():
+    cam_ob = bpy.context.scene.camera
+    camera = cam_ob.data
+    camera.dof.use_dof = False

@@ -140,6 +140,8 @@ def objects_area(cam2world_matrix: Union[Matrix, np.ndarray], bvh_tree_target: B
     vec_x = frame[1] - frame[0]
     vec_y = frame[3] - frame[0]
 
+    min_dist = 0.2
+
     # Go in discrete grid-like steps over plane
     position = cam2world_matrix.to_translation()
     hits = 0
@@ -152,6 +154,8 @@ def objects_area(cam2world_matrix: Union[Matrix, np.ndarray], bvh_tree_target: B
             #_, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
             hit_point, _, _, dist_target = bvh_tree_target.ray_cast(position, end - position)
             _, _, _, dist_obstacle = bvh_tree_obstacle.ray_cast(position, end - position)
+            if dist_target is not None and dist_target < min_dist or dist_obstacle is not None and dist_obstacle < min_dist:
+                return 0, None
             # Add hit object to set
             if dist_target is not None and (dist_obstacle is None or dist_target <= dist_obstacle):
                 hits += 1

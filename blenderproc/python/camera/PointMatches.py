@@ -1,6 +1,9 @@
+import numpy as np
+from blenderproc.python.camera import CameraUtility
+import bpy
+from mathutils import Matrix
 
-
-def compute_matches(point_clouds, cam_extrinsics, start_frame):
+def compute_matches(point_clouds, cam_extrinsics):
     point_clouds = np.stack(point_clouds)
     point_clouds = np.concatenate((point_clouds, np.ones_like(point_clouds[...,:1])), -1)
 
@@ -42,7 +45,7 @@ def compute_matches(point_clouds, cam_extrinsics, start_frame):
         return point_2d
 
 
-def compute_point_cloud( cam2world_matrix):
+def compute_point_cloud( cam2world_matrix, bvh_tree_target, bvh_tree_other):
     """ Check if there is an obstacle in front of the camera which is less than the configured
         "min_dist_to_obstacle" away from it.
 
@@ -50,6 +53,7 @@ def compute_point_cloud( cam2world_matrix):
     :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
     :return: True, if there are no obstacles too close to the cam.
     """
+    cam2world_matrix = Matrix(cam2world_matrix)
 
     cam_ob = bpy.context.scene.camera
     cam = cam_ob.data
@@ -73,8 +77,12 @@ def compute_point_cloud( cam2world_matrix):
             end = frame[0] + vec_x * (x + 0.5) / float(sqrt_number_of_rays) \
                   + vec_y * (y + 0.5) / float(sqrt_number_of_rays)
             # Send ray from the camera position through the current point on the plane
-            _, _, _, dist = bvh_tree.ray_cast(position, end - position)
-            if dist is None:
+            _, _, _, dist_target = bvh_tree_target.ray_cast(position, end - position)
+            _, _, _, dist_obstacle = bvh_tree_other.ray_cast(position, end - position)
+
+            if dist_target is not None and (dist_obstacle is None or dist_target <= dist_obstacle):
+                dist = dist_target
+            else:
                 dist = np.nan
 
             point = position + dist * (end - position).normalized()
@@ -82,4 +90,5 @@ def compute_point_cloud( cam2world_matrix):
 
     points = np.array(points)
     points = np.reshape(points, [bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y, 3])
+    #points = np.reshape(points, [512, 512, 3])
     return points

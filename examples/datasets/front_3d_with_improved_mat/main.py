@@ -89,7 +89,7 @@ proximity_checks = {"min": 0.5, "no_background": False}
 shapenet_objs_1 = []
 shapenet_dir = "/media/domin/data/shapenet/ShapeNetCore.v2/"
 s = 0
-while s < 10:
+while s < 50:
     cat_id = random.choice(os.listdir(shapenet_dir))
     if cat_id.isdigit():
         shapenet_objs_1.append(bproc.loader.load_shapenet(shapenet_dir, cat_id, move_object_origin=False))
@@ -111,7 +111,7 @@ pairs = 0
 
 cam_poses1 = []
 cam_poses2 = []
-while pairs < 1:
+while pairs < 4:
 
     begin2 = time.time()
     target_obj = None
@@ -232,6 +232,7 @@ while pairs < 1:
         #for cam_pose in cam_poses:
         #    bproc.camera.add_camera_pose(cam_pose)
 
+bproc.renderer.set_max_amount_of_samples(64)
 
 for obj in shapenet_objs_1:
     obj.hide(False)

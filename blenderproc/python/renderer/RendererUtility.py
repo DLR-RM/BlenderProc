@@ -540,6 +540,15 @@ def enable_motion_blur(motion_blur_length: float = 0.5, rolling_shutter_type: st
     bpy.context.scene.cycles.rolling_shutter_duration = rolling_shutter_length
 
 
+def disable_motion_blur():
+    """ Enables motion blur and sets rolling shutter.
+
+    :param motion_blur_length: Time taken in frames between shutter open and close.
+    :param rolling_shutter_type: Type of rolling shutter effect. If "NONE", rolling shutter is disabled.
+    :param rolling_shutter_length: Scanline "exposure" time for the rolling shutter effect.
+    """
+    bpy.context.scene.render.use_motion_blur = False
+
 def _render_init():
     """ Initializes the renderer.
 
