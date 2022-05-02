@@ -3,15 +3,18 @@ from blenderproc.python.camera import CameraUtility
 import bpy
 from mathutils import Matrix
 
-def compute_matches(point_clouds, cam_extrinsics):
+def compute_matches(point_clouds, cam_extrinsics, Ks):
     point_clouds = np.stack(point_clouds)
     point_clouds = np.concatenate((point_clouds, np.ones_like(point_clouds[...,:1])), -1)
 
+    matches = []
+
     # Reproject using K matrix
-    K = CameraUtility.get_intrinsics_as_K_matrix()
+    #K = CameraUtility.get_intrinsics_as_K_matrix()
     # Account for different coordinate system in opencv and blender
-    K[1][2] = (bpy.context.scene.render.resolution_x - 1) - K[1][2]
-    K = np.array(K)
+    Ks = Ks.copy()
+    Ks[:,1,2] = (bpy.context.scene.render.resolution_x - 1) - Ks[:,1,2]
+    #K = np.array(K)
     for i, (cam_extrinsic, cam_location) in enumerate(cam_extrinsics):
         print(i)
 
@@ -22,7 +25,7 @@ def compute_matches(point_clouds, cam_extrinsics):
         local_point_clouds[...,2] *= -1
         # Reproject 3d point
 
-        point_2d = np.matmul(K[None, None], np.transpose(local_point_clouds[..., :3], (0,1,3,2)))
+        point_2d = np.matmul(Ks[i][None, None], np.transpose(local_point_clouds[..., :3], (0,1,3,2)))
         point_2d = np.transpose(point_2d, (0, 1, 3, 2))
         point_2d /= point_2d[...,2:]
         point_2d = point_2d[...,:2]
@@ -40,9 +43,10 @@ def compute_matches(point_clouds, cam_extrinsics):
         repr_point[np.isnan(point_2d)] = 0
 
         own_depth = own_depth[repr_point[..., 1], repr_point[..., 0]]
-        point_2d[np.abs(own_depth - repr_depth) > 1e-2] = np.nan
+        point_2d[np.abs(own_depth - repr_depth) > 1e-1] = np.nan
+        matches.append(point_2d)
 
-        return point_2d
+    return np.array(matches)
 
 
 def compute_point_cloud( cam2world_matrix, bvh_tree_target, bvh_tree_other):

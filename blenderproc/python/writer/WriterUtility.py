@@ -56,11 +56,8 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
     else:
         frame_offset = 0
 
-    if amount_of_frames != bpy.context.scene.frame_end - bpy.context.scene.frame_start:
-        raise Exception("The amount of images stored in the output_data_dict does not correspond with the amount"
-                        "of images specified by frame_start to frame_end.")
 
-    for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+    for frame in range(amount_of_frames):
         # for each frame a new .hdf5 file is generated
         hdf5_path = os.path.join(output_dir_path, str(frame + frame_offset) + ".hdf5")
         with h5py.File(hdf5_path, "w") as file:

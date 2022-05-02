@@ -7,6 +7,8 @@ from matplotlib import pyplot as plt
 import sys
 import json
 import re
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 default_rgb_keys = ["colors", "normals", "diffuse", "nocs"]
 default_flow_keys = ["forward_flow", "backward_flow"]

@@ -10,6 +10,9 @@ import time
 import bpy
 import bpy_extras
 import mathutils
+import random
+#import pydevd_pycharm
+#pydevd_pycharm.settrace('localhost', port=1234, stdoutToServer=True, stderrToServer=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('hdri_path', nargs='?', default="resources/haven", help="The folder where the `hdri` folder can be found, to load an world environment")
@@ -38,7 +41,23 @@ plane.set_scale([1000, 1000, 100])
 poses = 0
 tries = 0
 
-delta_poses = np.load("/media/domin/data/image_matching_challenge/delta_poses.npy")
+def scale_intrinsics(intrinsics):
+    scaling_mat = np.zeros_like(intrinsics[0])
+    scaling_mat[0, 0] = 128 / intrinsics[1][0]
+    scaling_mat[1, 1] = 128 / intrinsics[1][1]
+    scaling_mat[2, 2] = 1
+    return scaling_mat @ intrinsics[0]
+
+
+
+intrinsics_data = np.load("/media/domin/data/image_matching_challenge/intrinsics.npz")
+intrinsics_data = list(zip(intrinsics_data["camera_intrinsics"], intrinsics_data["resolutions"]))
+intrinsics1 = random.choice(intrinsics_data)
+intrinsics2 = random.choice(intrinsics_data)
+scaled_intrinsics1 = scale_intrinsics(intrinsics1)
+scaled_intrinsics2 = scale_intrinsics(intrinsics2)
+default_intrinsics = bproc.camera.get_intrinsics_as_K_matrix()#
+
 
 proximity_checks = {"min": 0.5, "no_background": False}
 
@@ -51,6 +70,7 @@ while s < 50:
         shapenet_objs_1.append(bproc.loader.load_shapenet(shapenet_dir, cat_id, move_object_origin=False))
         s += 1"""
 shapenet_objs_1 = bproc.loader.load_blend("/media/domin/data/image_matching_challenge/shapenet100.blend")
+target_obj = bproc.loader.load_blend(str(random.choice(list(Path("/media/domin/data/image_matching_challenge/shapenet_large").iterdir()))))[0]
 
 #for obj in shapenet_objs_1[:]:
 #    shapenet_objs_1.append(obj.duplicate())
@@ -59,7 +79,6 @@ shapenet_objs_2 = [obj.duplicate() for obj in shapenet_objs_1]
 
 
 begin2 = time.time()
-target_obj = random.choice(shapenet_objs_1)
 
 for shapenet_objs in [shapenet_objs_1, shapenet_objs_2]:
     for obj in shapenet_objs:
@@ -81,7 +100,7 @@ target_obj.set_scale(np.random.uniform([5, 5, 5], [100, 100, 100]))
 target_obj.set_location([0,-target_obj.get_bound_box()[:,1].min(),-target_obj.get_bound_box()[:,2].min()])
 
 bvh_target = bproc.object.create_bvh_tree_multi_objects([target_obj])
-bvh_all1 = bproc.object.create_bvh_tree_multi_objects(shapenet_objs_1 + [plane])
+bvh_all1 = bproc.object.create_bvh_tree_multi_objects(shapenet_objs_1 + [target_obj, plane])
 bvh_all2 = bproc.object.create_bvh_tree_multi_objects(shapenet_objs_2 + [target_obj, plane])
 
 print(target_obj.get_name())
@@ -92,6 +111,7 @@ pairs = 0
 cam_poses1 = []
 visible_objects = set()
 cam_poses2 = []
+all_matches = []
 while pairs <5:
     
     for outer_tries in range(10):
@@ -99,6 +119,7 @@ while pairs <5:
         last_frame_hit_points = None
         for p in range(2):
             bvh_all = bvh_all1 if p == 0 else bvh_all2
+            bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics1 if p == 0 else scaled_intrinsics2, 128, 128)
             for tries in range(1000):
                 begin = time.time()
                 # Sample point inside house
@@ -210,17 +231,19 @@ while pairs <5:
             cam_poses2.append(cam_poses[1])
             visible_objects.update(bproc.camera.visible_objects(cam_poses[0]))
             visible_objects.update(bproc.camera.visible_objects(cam_poses[1]))
+            bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics1, 128, 128)
             pc1 = bproc.camera.compute_point_cloud(cam_poses[0], bvh_target, bvh_all1)
-            pc2 = bproc.camera.compute_point_cloud(cam_poses[1], bvh_target, bvh_all1)
+            bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics2, 128, 128)
+            pc2 = bproc.camera.compute_point_cloud(cam_poses[1], bvh_target, bvh_all2)
             pcs = np.stack((pc1, pc2), 0)
 
             cam_extrinsics = []
             for cam_pose in cam_poses:
-                bproc.camera.add_camera_pose(cam_pose)
-                cam_extrinsics.append((np.linalg.inv(cam_poses[1]), cam_poses[1][:3, 3]))
+                #bproc.camera.add_camera_pose(cam_pose)
+                cam_extrinsics.append((np.linalg.inv(cam_pose), cam_pose[:3, 3]))
 
-            matches = bproc.camera.compute_matches(pcs, cam_extrinsics)
-            print(matches.shape)
+            matches = bproc.camera.compute_matches(pcs, cam_extrinsics, np.stack((scaled_intrinsics1, scaled_intrinsics2), 0))
+            all_matches.append(matches)
 
             """print("spheres")
             for point in pc1.reshape(-1, 3)[::10]:
@@ -228,13 +251,12 @@ while pairs <5:
                     sphere = bproc.object.create_primitive("SPHERE")
                     sphere.set_scale([0.01, 0.01, 0.01])
                     sphere.set_location(point)"""
-            sdfsd
 
             break
 
 print(visible_objects)
 for obj in visible_objects:
-    if np.random.rand() > 0.75:
+    if np.random.rand() > 0.95 and False:
         if len(obj.get_materials()) == 0:
             material = random.choice(cc_materials)
             print(obj.get_name(), material.get_name())
@@ -309,12 +331,20 @@ for obj in shapenet_objs_1:
 for obj in shapenet_objs_2:
     obj.hide(True)
 
-
+bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics1, 128, 128)
 for cam_pose in cam_poses1:
     bproc.camera.add_camera_pose(cam_pose)
 
 data= {}
-data["colors1"] = bproc.renderer.render()["colors"]
+
+colors1 = bproc.renderer.render()["colors"]
+intrinsics1 = np.repeat(scaled_intrinsics1[None], len(colors1), 0)
+intrinsics1_org = np.repeat(intrinsics1[0][None], len(colors1), 0)
+intrinsics1_org_res = np.repeat(intrinsics1[1][None], len(colors1), 0)
+
+K = bproc.camera.get_intrinsics_as_K_matrix()
+print(K, scaled_intrinsics1, K - scaled_intrinsics1)
+#assert np.abs(K - scaled_intrinsics1).max() < 1e-1
 
 randomize()
 
@@ -328,9 +358,31 @@ for light in lights:
     light.set_location(np.random.uniform((-100, -100, 0), (100, 50, 10)))
 
 bproc.utility.reset_keyframes()
+bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics2, 128, 128)
 for cam_pose in cam_poses2:
     bproc.camera.add_camera_pose(cam_pose)
-data["colors2"] = bproc.renderer.render()["colors"]
+
+
+colors2 = bproc.renderer.render()["colors"]
+intrinsics2 = np.repeat(scaled_intrinsics2[None], len(colors2), 0)
+intrinsics2_org = np.repeat(intrinsics2[0][None], len(colors2), 0)
+intrinsics2_org_res = np.repeat(intrinsics2[1][None], len(colors2), 0)
+
+K = bproc.camera.get_intrinsics_as_K_matrix()
+print(K, scaled_intrinsics1, K - scaled_intrinsics1)
+#assert np.abs(K - scaled_intrinsics2).max() < 1e-1
+
+def interleave(arr1, arr2):
+    out = np.zeros_like(np.concatenate((arr1, arr2), 0))
+    out[::2] = arr1
+    out[1::2] = arr2
+    return list(out)
+
+data["colors"] = interleave(colors1, colors2)
+data["matching"] = np.concatenate(all_matches, 0)
+data["intrinsics"] = interleave(intrinsics1, intrinsics2)
+data["intrinsics_org"] = interleave(intrinsics1_org, intrinsics2_org)
+data["intrinsics_org_res"] = interleave(intrinsics1_org_res, intrinsics2_org_res)
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
