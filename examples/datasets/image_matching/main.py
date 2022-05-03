@@ -17,6 +17,7 @@ import random
 parser = argparse.ArgumentParser()
 parser.add_argument('hdri_path', nargs='?', default="resources/haven", help="The folder where the `hdri` folder can be found, to load an world environment")
 parser.add_argument('cc_material_path', nargs='?', default="resources/cctextures", help="Path to CCTextures folder, see the /scripts for the download script.")
+parser.add_argument("image_matching_dir", nargs='?', default="/media/domin/data/image_matching_challenge")
 parser.add_argument("output_dir", nargs='?', default="examples/datasets/front_3d_with_improved_mat/output", help="Path to where the data should be saved")
 args = parser.parse_args()
 
@@ -48,9 +49,9 @@ def scale_intrinsics(intrinsics):
     scaling_mat[2, 2] = 1
     return scaling_mat @ intrinsics[0]
 
+image_matching_dir = Path(args.image_matching_dir)
 
-
-intrinsics_data = np.load("/media/domin/data/image_matching_challenge/intrinsics.npz")
+intrinsics_data = np.load(str(image_matching_dir / "intrinsics.npz"))
 intrinsics_data = list(zip(intrinsics_data["camera_intrinsics"], intrinsics_data["resolutions"]))
 intrinsics1 = random.choice(intrinsics_data)
 intrinsics2 = random.choice(intrinsics_data)
@@ -69,8 +70,8 @@ while s < 50:
     if cat_id.isdigit():
         shapenet_objs_1.append(bproc.loader.load_shapenet(shapenet_dir, cat_id, move_object_origin=False))
         s += 1"""
-shapenet_objs_1 = bproc.loader.load_blend("/media/domin/data/image_matching_challenge/shapenet100.blend")
-target_obj = bproc.loader.load_blend(str(random.choice(list(Path("/media/domin/data/image_matching_challenge/shapenet_large").iterdir()))))[0]
+shapenet_objs_1 = bproc.loader.load_blend(str(image_matching_dir / "shapenet100.blend"))
+target_obj = bproc.loader.load_blend(str(random.choice(list((image_matching_dir / "shapenet_large").iterdir()))))[0]
 
 #for obj in shapenet_objs_1[:]:
 #    shapenet_objs_1.append(obj.duplicate())
