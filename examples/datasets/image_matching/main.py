@@ -61,7 +61,8 @@ intrinsics2 = random.choice(intrinsics_data)
 scaled_intrinsics1 = scale_intrinsics(intrinsics1)
 scaled_intrinsics2 = scale_intrinsics(intrinsics2)
 default_intrinsics = bproc.camera.get_intrinsics_as_K_matrix()#
-
+scaled_intrinsics1 = default_intrinsics
+scaled_intrinsics2 = default_intrinsics
 
 proximity_checks = {"min": 0.5, "no_background": False}
 
@@ -417,6 +418,7 @@ data["matching"] = np.concatenate(all_matches, 0)
 data["intrinsics"] = interleave(intrinsics1, intrinsics2)
 data["intrinsics_org"] = interleave(intrinsics1_org, intrinsics2_org)
 data["intrinsics_org_res"] = interleave(intrinsics1_org_res, intrinsics2_org_res)
+data["campose"] = interleave(cam_poses1, cam_poses2)
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(str(Path(args.output_dir) / str(uuid.uuid4())), data)
