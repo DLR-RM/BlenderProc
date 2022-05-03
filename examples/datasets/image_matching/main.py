@@ -1,3 +1,4 @@
+
 import blenderproc as bproc
 from pathlib import Path
 
@@ -11,6 +12,8 @@ import bpy
 import bpy_extras
 import mathutils
 import random
+import uuid
+
 #import pydevd_pycharm
 #pydevd_pycharm.settrace('localhost', port=1234, stdoutToServer=True, stderrToServer=True)
 
@@ -416,4 +419,4 @@ data["intrinsics_org"] = interleave(intrinsics1_org, intrinsics2_org)
 data["intrinsics_org_res"] = interleave(intrinsics1_org_res, intrinsics2_org_res)
 
 # write the data to a .hdf5 container
-bproc.writer.write_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(str(Path(args.output_dir) / str(uuid.uuid4())), data)
