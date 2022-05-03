@@ -44,6 +44,8 @@ def compute_matches(point_clouds, cam_extrinsics, Ks):
 
         own_depth = own_depth[repr_point[..., 1], repr_point[..., 0]]
         point_2d[np.abs(own_depth - repr_depth) > 1e-1] = np.nan
+        point_2d[np.isnan(own_depth )] = np.nan
+        point_2d[np.isnan(repr_depth )] = np.nan
         matches.append(point_2d)
 
     return np.array(matches)

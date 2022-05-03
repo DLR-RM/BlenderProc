@@ -32,7 +32,10 @@ shapenet_obj = None
 s = 0
 for row in shapenets[100:]:
     out = Path(os.path.abspath(args.output_dir)) / (row[1] + ".blend")
+
     if not out.exists():
+        if row[0] in ["02958343", "02691156"]:
+            continue
         if shapenet_obj is not None:
             shapenet_obj.delete()
         shapenet_obj = bproc.loader.load_shapenet(shapenet_dir, row[0], row[1], move_object_origin=False)

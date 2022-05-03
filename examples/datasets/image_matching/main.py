@@ -96,7 +96,8 @@ for shapenet_objs in [shapenet_objs_1, shapenet_objs_2]:
             obj.set_location([location[0],location[1],-obj.get_bound_box()[:,2].min()])
 #bvh_obstacle = bproc.object.create_bvh_tree_multi_objects([obj for obj in loaded_objects if obj != target_obj])
 
-target_obj.set_scale(np.random.uniform([5, 5, 5], [100, 100, 100]))
+target_obj.blender_obj.dimensions = np.random.uniform([5, 5, 5], [100, 100, 100])
+target_obj.set_rotation_euler( mathutils.Matrix.Rotation(np.random.uniform(0, 360), 3, 'Z').to_euler())
 target_obj.set_location([0,-target_obj.get_bound_box()[:,1].min(),-target_obj.get_bound_box()[:,2].min()])
 
 bvh_target = bproc.object.create_bvh_tree_multi_objects([target_obj])
@@ -112,7 +113,7 @@ cam_poses1 = []
 visible_objects = set()
 cam_poses2 = []
 all_matches = []
-while pairs <5:
+for _ in range(5):
     
     for outer_tries in range(10):
         cam_poses = []
@@ -125,7 +126,7 @@ while pairs <5:
                 # Sample point inside house
                 if p == 0 or True:
                     #height = np.random.uniform(0, 1.8)
-                    location = np.random.uniform((-100, -100, 0), (100, 0, 2))
+                    location = np.random.uniform((-100, -100, 0), (100, -10, 2))
                     # Sample rotation (fix around X and Y axis)
                     rotation = mathutils.Matrix.Rotation(np.random.uniform(0, 360), 3, 'Z') @ mathutils.Matrix.Rotation(np.random.normal(91.79, 13.46) / 180 * np.pi, 3, 'X') @ mathutils.Matrix.Rotation(np.random.normal(0, 8.0) / 180 * np.pi, 3, 'Z')# np.random.uniform([np.pi / 4, -np.pi / 4, 0], [np.pi / 4 * 3, np.pi / 4, np.pi * 2])
                     cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
@@ -147,24 +148,37 @@ while pairs <5:
                 # meters and make sure that no background is visible, finally make sure the view is interesting enough
                 begin = time.time()
                 area, hit_points = bproc.camera.objects_area(cam2world_matrix, bvh_target, bvh_all, sqrt_number_of_rays=10)
+                """if p == 1:
+                    print(scaled_intrinsics1)
+                    print(scaled_intrinsics2)
+                    bproc.camera.add_camera_pose(cam2world_matrix)
+                    sdf"""
                 
                 #print("2", time.time() - begin)
                 #print(tries, area)
-                #print(area)
-                if area > 0.1:
+                """if area > 0.3:
+                    bproc.camera.add_camera_pose(cam2world_matrix)
+                    sdfsd"""
+                if area > 0.3:
+                    print(pairs, outer_tries, tries, p, area)
+                    #print("iin")
                     if last_frame_hit_points is not None:
                         begin = time.time()
                         both_visible_points = []
-                        for points, campose in [(last_frame_hit_points, cam2world_matrix), (hit_points, cam_poses[-1])]:
+                        both_visible_points_indx = []
+                        for i, (points, campose) in enumerate([(last_frame_hit_points, cam2world_matrix), (hit_points, cam_poses[-1])]):
                             position = campose[:3, 3]
                             for point in points:
                                 _, _, _, dist = bvh_all.ray_cast(position, point - position)
                                 #print(dist, abs(dist - np.linalg.norm(position - point)) if dist is not None else None, point, position)
                                 if dist is not None and abs(dist - np.linalg.norm(position - point)) < 1e-4:
                                     both_visible_points.append(point)
+                                    both_visible_points_indx.append(i)
                         #print("3a", time.time() - begin)
                         if len(both_visible_points) == 0:
+                            print("both_visible_points")
                             continue
+                        both_visible_points_indx = np.array(both_visible_points_indx)
 
                         begin = time.time()
                         both_visible_points = np.array(both_visible_points)
@@ -199,14 +213,28 @@ while pairs <5:
                         mask = np.isnan(points_2d).any(-1).any(-1)
                         #print(points_2d.shape, mask.shape)
                         points_2d = points_2d[~mask]
+                        both_visible_points_indx = both_visible_points_indx[~mask]
+                        area1 = (both_visible_points_indx == 0).sum() / 100
+                        area2 = (both_visible_points_indx == 1).sum() / 100
+                        print(area1, area2)
+                        if min(area1, area2) < 0.1:
+                            continue
+
                         #print("3b", time.time() - begin)
-                        if len(points_2d) == 0:
+                        """if len(points_2d) == 0:
+                            print("points_2d")
                             continue
                         area1 = np.prod(points_2d[:, 0].max(0) - points_2d[:, 0].min(0)) / (bpy.context.scene.render.resolution_x * bpy.context.scene.render.resolution_y)
                         area2 = np.prod(points_2d[:, 1].max(0) - points_2d[:, 1].min(0)) / (bpy.context.scene.render.resolution_x * bpy.context.scene.render.resolution_y)
                         print(area1, area2)
                         if min(area1, area2) < 0.1:
-                            continue
+                            continue"""
+
+                        """if pairs == 1:
+                            for point in both_visible_points:
+                                sphere = bproc.object.create_primitive("SPHERE")
+                                sphere.set_scale([0.01, 0.01, 0.01])
+                                sphere.set_location(point[:3])"""
 
                         """import matplotlib.pyplot as plt
                         plt.figure()
@@ -223,7 +251,7 @@ while pairs <5:
                     break
 
 
-        print("b", time.time() - begin2)
+        #print("b", time.time() - begin2)
 
         if len(cam_poses) == 2:
             pairs += 1
@@ -231,6 +259,7 @@ while pairs <5:
             cam_poses2.append(cam_poses[1])
             visible_objects.update(bproc.camera.visible_objects(cam_poses[0]))
             visible_objects.update(bproc.camera.visible_objects(cam_poses[1]))
+
             bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics1, 128, 128)
             pc1 = bproc.camera.compute_point_cloud(cam_poses[0], bvh_target, bvh_all1)
             bproc.camera.set_intrinsics_from_K_matrix(scaled_intrinsics2, 128, 128)
@@ -254,6 +283,7 @@ while pairs <5:
 
             break
 
+#sdf
 print(visible_objects)
 for obj in visible_objects:
     if np.random.rand() > 0.95 and False:
