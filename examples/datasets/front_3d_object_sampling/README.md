@@ -32,10 +32,6 @@ blenderproc run examples/datasets/front_3d_object_sampling/main.py {PATH_TO_3D-F
 * `PATH_TO_3D-Object`: path to the downloaded 3D object, get it [here](https://www.cgtrader.com/free-3d-models/food/fruit/apple-1) 
 * `examples/datasets/front_3d_object_sampling/output`: path to the output directory
 
-```
-blenderproc run examples/datasets/front_3d_object_sampling/main.py 036bc96c-419d-4a43-812e-1e533d95dfd3.json {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} /home/markus/workspace/BlenderProc/examples/datasets/front_3d_object_sampling/ShapeNetCore.v2 examples/datasets/front_3d/output 
-```
-
 ## Visualization
 
 Visualize the generated data:
@@ -75,7 +71,7 @@ for obj in left_objects:
 
 * Specify with objects to use to sample on. In this case its "table" and "desk".
 * Then for each of those objects, get the biggest surface (e. g. top of the table) to sample on.
-* 
+
 
 #### Front3DObjectSampling 
 
