@@ -4,6 +4,7 @@ import bpy
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 import blenderproc.python.renderer.RendererUtility as RendererUtility
+from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
 
 class RendererInterface(Module):
@@ -166,7 +167,7 @@ class RendererInterface(Module):
                 self._determine_output_dir(),
                 self.config.get_string("distance_output_file_prefix", "distance_"),
                 self.config.get_string("distance_output_key", "distance"),
-                self.config.get_float("distance_range", 10000.0)
+                self.config.get_float("distance_range", DefaultConfig.antialiasing_distance_max)
             )
 
         if self.config.get_bool("render_depth", False):

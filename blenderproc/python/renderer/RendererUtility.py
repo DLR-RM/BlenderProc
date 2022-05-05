@@ -205,6 +205,7 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     mapper_node = tree.nodes.new("CompositorNodeMapRange")
     links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
     # map the values 0-1 to range distance_start to distance_range
+    mapper_node.inputs['From Max'].default_value = 1.0
     mapper_node.inputs['To Min'].default_value = 0
     mapper_node.inputs['To Max'].default_value = antialiasing_distance_max
     final_output = mapper_node.outputs['Value']

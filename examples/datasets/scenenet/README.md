@@ -6,7 +6,7 @@
 
 The focus of this example is the `loader.SceneNetLoader`, which can be used to load objects from the SceneNet dataset.
 
-We provide a script to download the `.obj` files, see the [scripts](../../scripts/) folder, the texture files can be downloaded [here](http://tinyurl.com/zpc9ppb).
+We provide a script to download the `.obj` files, see the [scripts](../../scripts/) folder, the texture files can be downloaded [here](https://drive.google.com/file/d/0B_CLZMBI0zcuQ3ZMVnp1RUkyOFk/view?usp=sharing&resourcekey=0-w8JN2r3WQ48eZltxQ-fSwA).
 
 Both are needed to use this dataset properly.
 

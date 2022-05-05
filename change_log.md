@@ -8,6 +8,23 @@
 
 # Version History
 
+## Version 2.3.0 22th March 2022
+- upgrade to blender 3.1.0 
+  - add support for Apple Silicon and GPU on Mac OS 12.3 
+- add new stereo image projector, making it easier to simulate SGM depth
+- add quickstart command `blenderproc quickstart`
+- add gif writer 
+- function to scale the UV texture coordinates of a `MeshObject`
+- `object.sample_poses()` now also supports a `mode_on_failure`, which allows to control where the object is placed if the sampling fails @marcelhohn 
+- improve error message for python 2.X
+- bug fixes:
+  - `set_origin()` doesn't change the cursor position anymore @marcelhohn
+  - `vis hdf5 --save` now also supports stereo images
+  - improve error message when rendering with no camera poses
+  - fixed a bug where the windows path was incorrect for blender @marcelhohn
+  - fixed a bug when the category name is an int during coco vis
+  - `load_haven_mat()` now loads more materials, not all materials have been used before @Victorlouisdg
+
 ## Version 2.2.0 17th December 2021
 - switch blender version to 3.0.0 instead of 2.93.0 
   - we now rely on Cycles X, making the rendering much faster than before
