@@ -110,14 +110,14 @@ self.config.get_int("example_value")
 
 In some modules it makes sense to revert changes made inside the module to not disturb modules coming afterwards (For example renderer modules should not change the state of the scene).
 
-This often required functionality can be easily done via the `Utility.UndoAfterExecution()` with-statement:
+This often required functionality can be easily done via the `UndoAfterExecution()` with-statement:
 
 **Example:**
 ```python
 def run(self):
     bpy.context.scene.cycles.samples = 50
     
-    with Utility.UndoAfterExecution():
+    with UndoAfterExecution():
         bpy.context.scene.cycles.samples = 320
         
         print(bpy.context.scene.cycles.samples)

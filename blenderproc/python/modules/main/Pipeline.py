@@ -3,7 +3,7 @@ import os
 
 from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
-from blenderproc.python.utility.Utility import Utility, resolve_path
+from blenderproc.python.utility.Utility import Utility, resolve_path, BlockStopWatch
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
 class Pipeline:
@@ -35,7 +35,7 @@ class Pipeline:
 
     def run(self):
         """ Runs each module and measuring their execution time. """
-        with Utility.BlockStopWatch("Running blender pipeline"):
+        with BlockStopWatch("Running blender pipeline"):
             for module in self.modules:
-                with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
+                with BlockStopWatch("Running module " + module.__class__.__name__):
                     module.run()

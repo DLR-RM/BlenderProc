@@ -1,6 +1,6 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.renderer.FlowRendererUtility import render_optical_flow
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import UndoAfterExecution
 
 
 class FlowRenderer(RendererInterface):
@@ -45,7 +45,7 @@ class FlowRenderer(RendererInterface):
         RendererInterface.__init__(self, config)
 
     def run(self):
-        with Utility.UndoAfterExecution():
+        with UndoAfterExecution():
             self._configure_renderer(max_amount_of_samples=1)
 
             if not self._avoid_output:
