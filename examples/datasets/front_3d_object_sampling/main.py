@@ -2,7 +2,7 @@ import blenderproc as bproc
 import os
 import numpy as np
 import argparse
-import bpy
+#import bpy
 
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 parser = argparse.ArgumentParser()
@@ -89,12 +89,7 @@ for obj in left_objects:
             return x
 
         # join surface objects again
-        bpy.ops.object.select_all(action='DESELECT')
-        obj.select()
-        surface_obj.select()
-        bpy.context.view_layer.objects.active = surface_obj.blender_obj
-        bpy.ops.object.join()
-        bpy.ops.object.select_all(action='DESELECT')
+        surface_obj.join_with_other_objects([obj])
 
         min_coord_z = np.min([dropped_object.get_local2world_mat() @ conv_to_homogen(vert) for vert in
                               dropped_object.blender_obj.data.vertices], axis=0)[2]

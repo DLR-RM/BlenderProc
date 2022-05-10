@@ -1,4 +1,4 @@
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Self
 
 import bpy
 import numpy as np
@@ -71,7 +71,7 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self) -> "MeshObject":
+    def duplicate(self) -> Self:
         """ Duplicates the object.
 
         :return: A new mesh object, which is a duplicate of this object.
@@ -337,6 +337,32 @@ class MeshObject(Entity):
         # Make sure the mesh is updated
         self.get_mesh().update()
 
+    def join_with_other_objects(self, objects: List[Self]):
+        """
+            Joins the given list of objects with this object.
+
+            Does not change the global selection.
+
+        :param objects: List of objects which will be merged with this object
+        """
+        # save selection for undo selection in this function
+        selected_objects = bpy.context.selected_objects
+        # deselect all current selected objects
+        bpy.ops.object.select_all(action='DESELECT')
+        # set the current object as the joined target
+        self.select()
+        bpy.context.view_layer.objects.active = self.blender_obj
+        # select all objects which will be merged with the joined target
+        for obj in objects:
+            obj.select()
+        # execute the joined operation
+        bpy.ops.object.join()
+        bpy.ops.object.select_all(action='DESELECT')
+
+        # undo selection in this function
+        for obj in selected_objects:
+            MeshObject(obj).select()
+
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
         # Make sure we are in object mode
@@ -485,7 +511,7 @@ class MeshObject(Entity):
             setattr(modifier, key, value)
 
 
-def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
+def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> Self:
     """ Creates a new Mesh object using the given blender mesh.
 
     :param blender_mesh: The blender mesh.
@@ -499,7 +525,7 @@ def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = No
     return MeshObject(obj)
 
 
-def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> Self:
     """ Creates an object with an empty mesh.
     :param object_name: The name of the new object.
     :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
@@ -510,7 +536,7 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObje
     return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
 
 
-def create_primitive(shape: str, **kwargs) -> "MeshObject":
+def create_primitive(shape: str, **kwargs) -> Self:
     """ Creates a new primitive mesh object.
 
     :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "MONKEY"]
@@ -540,7 +566,7 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
     return primitive
 
 
-def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
+def convert_to_meshes(blender_objects: list) -> List[MeshObject]:
     """ Converts the given list of blender objects to mesh objects
 
     :param blender_objects: List of blender objects.
@@ -549,7 +575,7 @@ def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
     return [MeshObject(obj) for obj in blender_objects]
 
 
-def get_all_mesh_objects() -> List["MeshObject"]:
+def get_all_mesh_objects() -> List[MeshObject]:
     """
     Returns all mesh objects in scene
 
@@ -565,7 +591,7 @@ def disable_all_rigid_bodies():
             obj.disable_rigidbody()
 
 
-def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils.bvhtree.BVHTree:
+def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.bvhtree.BVHTree:
     """ Creates a bvh tree which contains multiple mesh objects.
 
     Such a tree is later used for fast raycasting.
@@ -591,7 +617,7 @@ def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils
     return bvh_tree
 
 
-def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
+def compute_poi(objects: List[MeshObject]) -> np.ndarray:
     """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
     that is the closest one to the mean location of the bboxes of the selected objects.
 
@@ -616,7 +642,7 @@ def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
 
 def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
                    max_distance: float = 1.70141e+38) -> Tuple[
-    bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
+    bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
     """ Cast a ray onto all geometry from the scene, in world space.
 
    :param origin: Origin of the ray, in world space.
