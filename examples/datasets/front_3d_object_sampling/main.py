@@ -126,7 +126,7 @@ for obj in left_objects:
         proximity_checks = {"min": radius_min, "avg": {"min": radius_min * 1.2, "max": radius_max * 0.8}, "no_background": True}
         cam_counter = 0
         # Init bvh tree containing all mesh objects
-        bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in bproc.object.get_all_mesh_objects()])
+        bvh_tree = bproc.object.create_bvh_tree_multi_objects(bproc.object.get_all_mesh_objects())
         for i in range(1000):
             camera_location = bproc.sampler.shell(center=object_location, radius_min=radius_min, radius_max=radius_max,
                                                   elevation_min=15, elevation_max=70)
