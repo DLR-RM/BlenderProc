@@ -42,7 +42,8 @@ for obj in room_objs:
         left_objects.append(obj)
 
 for obj in left_objects:
-    # The loop starts with and UndoAfterExecution in order to restore the camera positions for each object
+    # The loop starts with and UndoAfterExecution in order to clean up the cam poses from the previous iteration and
+    # also remove the dropped objects and restore the sliced up objects.
     with bproc.utility.UndoAfterExecution():
         # Select the surfaces, where the object should be sampled on
         droppable_surface = bproc.object.slice_faces_with_normals([obj])
