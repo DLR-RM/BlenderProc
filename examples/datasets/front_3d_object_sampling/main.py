@@ -91,8 +91,8 @@ for obj in left_objects:
         # join surface objects again
         surface_obj.join_with_other_objects([obj])
 
-        min_coord_z = np.min([dropped_object.get_local2world_mat() @ conv_to_homogen(vert) for vert in
-                              dropped_object.blender_obj.data.vertices], axis=0)[2]
+        # get the minimum value of all eight corners and from that the Z value
+        min_coord_z = np.min(dropped_object.get_bound_box(local_coords=False), axis=0)[2]
 
         # Check if object is on surface, otherwise delete object
         remove_list = []
