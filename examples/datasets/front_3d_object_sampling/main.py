@@ -61,7 +61,7 @@ for obj in left_objects:
                 use_ray_trace_check=False
             ))
             #Randomized rotation of the sampled object
-            obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
+            obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
         # Load the object, which should be sampled on the surface
         sampling_obj = bproc.loader.load_blend(args.treed_obj_path)
