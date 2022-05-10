@@ -345,23 +345,13 @@ class MeshObject(Entity):
 
         :param objects: List of objects which will be merged with this object
         """
-        # save selection for undo selection in this function
-        selected_objects = bpy.context.selected_objects
-        # deselect all current selected objects
-        bpy.ops.object.select_all(action='DESELECT')
-        # set the current object as the joined target
-        self.select()
-        bpy.context.view_layer.objects.active = self.blender_obj
-        # select all objects which will be merged with the joined target
-        for obj in objects:
-            obj.select()
-        # execute the joined operation
-        bpy.ops.object.join()
-        bpy.ops.object.select_all(action='DESELECT')
-
-        # undo selection in this function
-        for obj in selected_objects:
-            MeshObject(obj).select()
+        context = {}
+        #save selection
+        context["object"] = context["active_object"] = self.blender_obj
+        # select all objects which will be merged with the target
+        context["selected_objects"] = context["selected_editable_objects"] = [obj.blender_obj for obj in objects] + [self.blender_obj]
+        # execute the joining operation
+        bpy.ops.object.join(context)
 
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
