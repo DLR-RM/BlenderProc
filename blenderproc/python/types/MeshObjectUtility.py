@@ -342,6 +342,7 @@ class MeshObject(Entity):
             Joins the given list of objects with this object.
 
             Does not change the global selection.
+            The given object-references become invalid after the join operation.
 
         :param objects: List of objects which will be merged with this object
         """
