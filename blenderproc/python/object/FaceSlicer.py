@@ -135,6 +135,8 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
     for obj in mesh_objects:
         obj.edit_mode()
         bm = obj.mesh_as_bmesh()
+        # this makes sure all normals are calculated
+        bm.normal_update()
         bpy.ops.mesh.select_all(action='DESELECT')
 
         if height_list:
