@@ -93,10 +93,10 @@ dropped_object_list = bproc.object.sample_poses_on_surface(sampling_obj, surface
                                                                    check_all_bb_corners_over_surface=False)
 ```
 
-* Get the hight of the sampling surface
-* For every surface, the object is placed by `bproc.object.smaple_poses_on_surface`.
-* This also needs a pre-defined `sample_pose()` function, where the sampling surface, as well as the min and maximum sampling hight are given.
-* There also the rotation of the sampled object is done.
+* Get the height of the sampling surface
+* For every surface, the object is placed by `bproc.object.sample_poses_on_surface`.
+* This also needs a pre-defined `sample_pose()` function, where the sampling surface, as well as the minimum and maximum sampling height, are given.
+* It also sets the rotation of the sampled object.
 
 #### Front3DObjectSamplingChecks
 
