@@ -1,4 +1,4 @@
-from typing import List, Union, Tuple, Optional, Self
+from typing import List, Union, Tuple, Optional
 
 import bpy
 import numpy as np
@@ -71,7 +71,7 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self) -> Self:
+    def duplicate(self) -> "MeshObject":
         """ Duplicates the object.
 
         :return: A new mesh object, which is a duplicate of this object.
@@ -337,7 +337,7 @@ class MeshObject(Entity):
         # Make sure the mesh is updated
         self.get_mesh().update()
 
-    def join_with_other_objects(self, objects: List[Self]):
+    def join_with_other_objects(self, objects: List["MeshObject"]):
         """
             Joins the given list of objects with this object.
 
@@ -502,7 +502,7 @@ class MeshObject(Entity):
             setattr(modifier, key, value)
 
 
-def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> Self:
+def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
 
     :param blender_mesh: The blender mesh.
@@ -516,7 +516,7 @@ def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = No
     return MeshObject(obj)
 
 
-def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> Self:
+def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
     """ Creates an object with an empty mesh.
     :param object_name: The name of the new object.
     :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
@@ -527,7 +527,7 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> Self:
     return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
 
 
-def create_primitive(shape: str, **kwargs) -> Self:
+def create_primitive(shape: str, **kwargs) -> "MeshObject":
     """ Creates a new primitive mesh object.
 
     :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "MONKEY"]
