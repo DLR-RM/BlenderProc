@@ -64,9 +64,9 @@ for obj in room_objs:
         left_objects.append(obj)
 for obj in left_objects:
     # The loop starts with and UndoAfterExecution in order to restore the camera positions for each object
-    with bproc.python.utility.UndoAfterExecution():
+    with bproc.utility.UndoAfterExecution():
         # Select the surfaces, where the object should be sampled on
-        droppable_surface = bproc.object.slice_faces_with_normals([obj])
+        droppable_surface = bproc.object.slice_faces_with_normals(obj)
 ```
 
 * Specify with objects to use to sample on. In this case its "table" and "desk".
@@ -101,18 +101,17 @@ dropped_object_list = bproc.object.sample_poses_on_surface(sampling_obj, surface
 #### Front3DObjectSamplingChecks
 
 ```python
-min_coord_z = np.min([dropped_object.get_local2world_mat() @ conv_to_homogen(vert) for vert in
-                              dropped_object.blender_obj.data.vertices], axis=0)[2]
-
-        # Check if object is on surface, otherwise delete object
-        remove_list = []
-        for index, dropped_object in enumerate(dropped_object_list):
-            # if distance is smaller than 5 cm
-            print(f"Object: {dropped_object.get_name()} has a diff of: {abs(min_coord_z - surface_height_z)}m to the surface")
-            if abs(min_coord_z - surface_height_z) > 0.05:
-                print("Delete this object, distance is above 0.05m")
-                dropped_object.delete()
-                remove_list.append(index)
+    # get the minimum value of all eight corners and from that the Z value
+    min_coord_z = np.min(dropped_object.get_bound_box(local_coords=False), axis=0)[2]
+    # Check if object is on surface, otherwise delete object
+    remove_list = []
+    for index, dropped_object in enumerate(dropped_object_list):
+        # if distance is smaller than 5 cm
+        print(f"Object: {dropped_object.get_name()} has a diff of: {abs(min_coord_z - surface_height_z)}m to the surface")
+        if abs(min_coord_z - surface_height_z) > 0.05:
+            print("Delete this object, distance is above 0.05m")
+            dropped_object.delete()
+            remove_list.append(index)
 ```
 
 * After running the physics we have to check if the sampled object is still on the surface.
