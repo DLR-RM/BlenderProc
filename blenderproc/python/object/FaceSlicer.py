@@ -54,8 +54,7 @@ def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: flo
     faces = [face for value, face in list_of_median_poses]
     for label, face in zip(ms.labels_, faces):
         all_labels[label] += face.calc_area()
-    all_labels = [[k, v] for k, v in all_labels.items()]
-    max_label = all_labels[np.argmax([size for label, size in all_labels])][0]
+    max_label = all_labels.keys()[np.argmax(all_labels.values())]
 
     bpy.ops.mesh.select_all(action='DESELECT')
     for f, label in zip(faces, ms.labels_):

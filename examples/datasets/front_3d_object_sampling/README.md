@@ -4,8 +4,8 @@
 <img src="../../../images/front_3d_object_sampling.jpg" alt="Front readme image" width=375>
 </p>
 
-In this example we explain to you how to sample specific objects in the 3D-Front Dataset with the BlenderProc pipeline.
-Whats special is, that we select the surface-object beforehand and that the sampled object is placed directly on the surface of a table for example. 
+In this example, we explain to you how to sample specific objects in the 3D-Front Dataset with the BlenderProc pipeline.
+What's special is, that we select the surface object beforehand and that the sampled object is placed directly on the surface of a table for example. 
 This is an advanced example, make sure that you have executed the basic examples before proceeding to this one.
 
 ## Get the 3D-Front dataset
@@ -93,10 +93,10 @@ dropped_object_list = bproc.object.sample_poses_on_surface(sampling_obj, surface
                                                                    check_all_bb_corners_over_surface=False)
 ```
 
-* Get the hight of the sampling surface
-* For every surface, the object is placed by `bproc.object.smaple_poses_on_surface`.
-* This also needs a pre-defined `sample_pose()` function, where the sampling surface, as well as the min and maximum sampling hight are given.
-* There also the rotation of the sampled object is done.
+* Get the height of the sampling surface
+* For every surface, the object is placed by `bproc.object.sample_poses_on_surface`.
+* This also needs a pre-defined `sample_pose()` function, where the sampling surface, as well as the minimum and maximum sampling height, are given.
+* It also sets the rotation of the sampled object.
 
 #### Front3DObjectSamplingChecks
 
