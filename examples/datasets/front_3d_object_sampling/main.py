@@ -2,9 +2,7 @@ import blenderproc as bproc
 import os
 import numpy as np
 import argparse
-#import bpy
 
-from blenderproc.python.utility.CollisionUtility import CollisionUtility
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
 parser.add_argument("future_folder", help="Path to the 3D Future Model folder.")
@@ -14,7 +12,7 @@ parser.add_argument('output_dir', nargs='?', default="examples/datasets/front_3d
 args = parser.parse_args()
 
 if not os.path.exists(args.front) or not os.path.exists(args.future_folder) or not os.path.exists(args.shapenet_path):
-    raise Exception("One of the three folders does not exist!")
+    raise OSError("One of the three folders does not exist!")
 
 bproc.init()
 mapping_file = bproc.utility.resolve_resource(os.path.join("front_3D", "3D_front_mapping.csv"))
@@ -36,17 +34,17 @@ room_objs = bproc.loader.load_front3d(
 bproc.camera.set_resolution(512, 512)
 
 # Select the objects, where other objects should be sampled on
-left_objects = []
+sample_surface_objects = []
 for obj in room_objs:
     if "table" in obj.get_name().lower() or "desk" in obj.get_name().lower():
-        left_objects.append(obj)
+        sample_surface_objects.append(obj)
 
-for obj in left_objects:
+for obj in sample_surface_objects:
     # The loop starts with and UndoAfterExecution in order to clean up the cam poses from the previous iteration and
     # also remove the dropped objects and restore the sliced up objects.
     with bproc.utility.UndoAfterExecution():
         # Select the surfaces, where the object should be sampled on
-        droppable_surface = bproc.object.slice_faces_with_normals([obj])
+        droppable_surface = bproc.object.slice_faces_with_normals(obj)
         if droppable_surface is not None and len(droppable_surface) == 1:
             surface_obj = droppable_surface[0]
         else:
@@ -73,7 +71,6 @@ for obj in left_objects:
             print("Dropping of the object failed")
             continue
 
-        # dropped_objects.append(dropped_object_list)
         # Enable physics for spheres (active) and the surface (passive)
         for dropped_object in dropped_object_list:
             dropped_object.enable_rigidbody(True)
@@ -82,11 +79,6 @@ for obj in left_objects:
         # Run the physics simulation
         bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4,
                                                           check_object_interval=1)
-
-        def conv_to_homogen(x):
-            x = x.co.to_4d()
-            x[3] = 1.0
-            return x
 
         # join surface objects again
         surface_obj.join_with_other_objects([obj])
