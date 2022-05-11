@@ -4,8 +4,8 @@
 <img src="../../../images/front_3d_object_sampling.jpg" alt="Front readme image" width=375>
 </p>
 
-In this example we explain to you how to sample specific objects in the 3D-Front Dataset with the BlenderProc pipeline.
-Whats special is, that we select the surface-object beforehand and that the sampled object is placed directly on the surface of a table for example. 
+In this example, we explain to you how to sample specific objects in the 3D-Front Dataset with the BlenderProc pipeline.
+What's special is, that we select the surface object beforehand and that the sampled object is placed directly on the surface of a table for example. 
 This is an advanced example, make sure that you have executed the basic examples before proceeding to this one.
 
 ## Get the 3D-Front dataset
