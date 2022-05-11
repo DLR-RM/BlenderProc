@@ -10,19 +10,19 @@ import mathutils
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import resolve_path
 
-def slice_faces_with_normals(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5,
+def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: float = 7.5,
                   up_vector_upwards: Optional[np.array] = None, new_name_for_object: str = "Surface") \
-        -> List[MeshObject]:
+        -> MeshObject:
     """ Extracts normal faces like floors in the following steps:
     1. Searchs for the specified object.
     2. Splits the surfaces which point upwards at a specified level away.
 
-    :param mesh_objects: Objects to where all polygons will be extracted.
+    :param mesh_object: Object to which all polygons will be extracted.
     :param compare_angle_degrees: Maximum difference between the up vector and the current polygon normal in degrees.
     :param up_vector_upwards: If this is True the `up_vec` points upwards -> [0, 0, 1] if not it points downwards: [0, 0, -1] in world coordinates. This vector is used for the `compare_angle_degrees` option.
     :param new_name_for_object: Name for the newly created object, which faces fulfill the given parameters.
 
-    :return: The extracted surface of the objects.
+    :return: The extracted surface of the object.
     """
     # set the up_vector
     if up_vector_upwards is None:
@@ -31,52 +31,53 @@ def slice_faces_with_normals(mesh_objects: List[MeshObject], compare_angle_degre
     # the up vector has to have unit length
     up_vector_upwards /= np.linalg.norm(up_vector_upwards)
 
-    newly_created_objects = []
-    for obj in mesh_objects:
-        obj.edit_mode()
-        bm = obj.mesh_as_bmesh()
-        bpy.ops.mesh.select_all(action='DESELECT')
+    newly_created_object = []
 
-        list_of_median_poses: List[Tuple[float, bmesh.types.BMFace]] = [(FaceSlicer._get_median_face_pose(f, obj.get_local2world_mat())[2], f)  for f in
-                                bm.faces if FaceSlicer._check_face_angle(f, obj.get_local2world_mat(), up_vector_upwards,
-                                np.deg2rad(compare_angle_degrees))]
+    mesh_object.edit_mode()
+    bm = mesh_object.mesh_as_bmesh()
+    bpy.ops.mesh.select_all(action='DESELECT')
 
-        list_of_median_poses_only_z_value = [value for value, face in list_of_median_poses]
+    list_of_median_poses: List[Tuple[float, bmesh.types.BMFace]] = [(FaceSlicer._get_median_face_pose(f, mesh_object.get_local2world_mat())[2], f)  for f in
+                            bm.faces if FaceSlicer._check_face_angle(f, mesh_object.get_local2world_mat(), up_vector_upwards,
+                            np.deg2rad(compare_angle_degrees))]
 
-        ms = MeanShift(bandwidth=0.005, bin_seeding=True)
-        ms.fit(np.array(list_of_median_poses_only_z_value).reshape((-1, 1)))
+    list_of_median_poses_only_z_value = [value for value, face in list_of_median_poses]
 
-        all_labels = {}
-        for l in np.unique(ms.labels_):
-            all_labels[l] = 0.0
+    bandwidth_in_meter = 0.005
+    ms = MeanShift(bandwidth=bandwidth_in_meter, bin_seeding=True)
+    ms.fit(np.array(list_of_median_poses_only_z_value).reshape((-1, 1)))
 
-        faces = [face for value, face in list_of_median_poses]
-        for label, face in zip(ms.labels_, faces):
-            all_labels[label] += face.calc_area()
-        all_labels = [[k, v] for k, v in all_labels.items()]
-        max_label = all_labels[np.argmax([size for label, size in all_labels])][0]
+    all_labels = {}
+    for l in np.unique(ms.labels_):
+        all_labels[l] = 0.0
 
-        bpy.ops.mesh.select_all(action='DESELECT')
-        for f, label in zip(faces, ms.labels_):
-            if label == max_label:
-                f.select = True
-        bpy.ops.mesh.separate(type='SELECTED')
+    faces = [face for value, face in list_of_median_poses]
+    for label, face in zip(ms.labels_, faces):
+        all_labels[label] += face.calc_area()
+    all_labels = [[k, v] for k, v in all_labels.items()]
+    max_label = all_labels[np.argmax([size for label, size in all_labels])][0]
 
-        selected_objects = bpy.context.selected_objects
-        if selected_objects:
-            if len(selected_objects) == 2:
-                selected_objects = [o for o in selected_objects
-                                    if o != bpy.context.view_layer.objects.active]
-                selected_objects[0].name = new_name_for_object
-                newly_created_objects.append(MeshObject(selected_objects[0]))
-            else:
-                raise Exception("There is more than one selection after splitting, this should not happen!")
+    bpy.ops.mesh.select_all(action='DESELECT')
+    for f, label in zip(faces, ms.labels_):
+        if label == max_label:
+            f.select = True
+    bpy.ops.mesh.separate(type='SELECTED')
+
+    selected_objects = bpy.context.selected_objects
+    if selected_objects:
+        if len(selected_objects) == 2:
+            selected_objects = [o for o in selected_objects
+                                if o != bpy.context.view_layer.objects.active]
+            selected_objects[0].name = new_name_for_object
+            newly_created_object.append(MeshObject(selected_objects[0]))
         else:
-            raise Exception("No floor object was constructed!")
+            raise Exception("There is more than one selection after splitting, this should not happen!")
+    else:
+        raise Exception("No surface object was constructed!")
 
-        obj.object_mode()
+    mesh_object.object_mode()
 
-    return newly_created_objects
+    return newly_created_object
 
 
 def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15,
