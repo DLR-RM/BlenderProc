@@ -117,7 +117,7 @@ This often required functionality can be easily done via the `UndoAfterExecution
 def run(self):
     bpy.context.scene.cycles.samples = 50
     
-    with UndoAfterExecution():
+    with bproc.utility.UndoAfterExecution():
         bpy.context.scene.cycles.samples = 320
         
         print(bpy.context.scene.cycles.samples)
