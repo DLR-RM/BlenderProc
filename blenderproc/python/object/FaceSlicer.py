@@ -267,6 +267,9 @@ class FaceSlicer:
         :param cmp_angle: Angle, which is used to compare against the up_vec in radians.
         :return: bool: Returns true if the face is close the height_value and is inside of the cmp_angle range
         """
+        # if the face has no surface the face angle is always bigger than the compare angle
+        if face.calc_area() == 0.0:
+            return False
         # calculate the normal
         normal_face = face.normal.to_4d()
         normal_face[3] = 0.0
