@@ -12,7 +12,7 @@ from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.EntityUtility import Entity, delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
-from blenderproc.python.object.FloorExtractor import FloorExtractor
+from blenderproc.python.object.FaceSlicer import FaceSlicer
 
 
 def construct_random_room(used_floor_area: float, interior_objects: List[MeshObject], materials: List[Material],
@@ -354,7 +354,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
     def extract_plane_from_room(obj: MeshObject, used_split_height: float, up_vec: mathutils.Vector,
                                 new_name_for_obj: str):
         """
-        Extract a plane from the current room object. This uses the FloorExtractor Module functions
+        Extract a plane from the current room object. This uses the FaceSlicer Module functions
 
         :param obj: The current room object
         :param used_split_height: The height at which the split should be performed. Usually 0 or wall_height
@@ -370,7 +370,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
         bm = obj.mesh_as_bmesh()
         bm.faces.ensure_lookup_table()
         # Select faces at given height that should be separate from the mesh
-        counter = FloorExtractor.select_at_height_value(bm, used_split_height, compare_height,
+        counter = FaceSlicer.select_at_height_value(bm, used_split_height, compare_height,
                                                         mathutils.Vector(up_vec), compare_angle,
                                                         obj.get_local2world_mat())
         # if any faces are selected split them up

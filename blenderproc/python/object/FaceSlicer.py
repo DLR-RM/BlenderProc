@@ -1,5 +1,5 @@
 from math import fabs, acos
-from typing import Union, List
+from typing import Union, List, Tuple, Optional
 import numpy as np
 from sklearn.cluster import MeanShift
 
@@ -9,6 +9,74 @@ import mathutils
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import resolve_path
+
+def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: float = 7.5,
+                  up_vector_upwards: Optional[np.array] = None, new_name_for_object: str = "Surface") \
+        -> MeshObject:
+    """ Extracts normal faces like floors in the following steps:
+    1. Searchs for the specified object.
+    2. Splits the surfaces which point upwards at a specified level away.
+
+    :param mesh_object: Object to which all polygons will be extracted.
+    :param compare_angle_degrees: Maximum difference between the up vector and the current polygon normal in degrees.
+    :param up_vector_upwards: If this is True the `up_vec` points upwards -> [0, 0, 1] if not it points downwards: [0, 0, -1] in world coordinates. This vector is used for the `compare_angle_degrees` option.
+    :param new_name_for_object: Name for the newly created object, which faces fulfill the given parameters.
+
+    :return: The extracted surface of the object.
+    """
+    # set the up_vector
+    if up_vector_upwards is None:
+        up_vector_upwards = np.array([0.0, 0.0, 1.0])
+
+    # the up vector has to have unit length
+    up_vector_upwards /= np.linalg.norm(up_vector_upwards)
+
+    newly_created_object = []
+
+    mesh_object.edit_mode()
+    bm = mesh_object.mesh_as_bmesh()
+    bpy.ops.mesh.select_all(action='DESELECT')
+
+    list_of_median_poses: List[Tuple[float, bmesh.types.BMFace]] = [(FaceSlicer._get_median_face_pose(f, mesh_object.get_local2world_mat())[2], f)  for f in
+                            bm.faces if FaceSlicer._check_face_angle(f, mesh_object.get_local2world_mat(), up_vector_upwards,
+                            np.deg2rad(compare_angle_degrees))]
+
+    list_of_median_poses_only_z_value = [value for value, face in list_of_median_poses]
+
+    bandwidth_in_meter = 0.005
+    ms = MeanShift(bandwidth=bandwidth_in_meter, bin_seeding=True)
+    ms.fit(np.array(list_of_median_poses_only_z_value).reshape((-1, 1)))
+
+    all_labels = {}
+    for l in np.unique(ms.labels_):
+        all_labels[l] = 0.0
+
+    faces = [face for value, face in list_of_median_poses]
+    for label, face in zip(ms.labels_, faces):
+        all_labels[label] += face.calc_area()
+    max_label = all_labels.keys()[np.argmax(all_labels.values())]
+
+    bpy.ops.mesh.select_all(action='DESELECT')
+    for f, label in zip(faces, ms.labels_):
+        if label == max_label:
+            f.select = True
+    bpy.ops.mesh.separate(type='SELECTED')
+
+    selected_objects = bpy.context.selected_objects
+    if selected_objects:
+        if len(selected_objects) == 2:
+            selected_objects = [o for o in selected_objects
+                                if o != bpy.context.view_layer.objects.active]
+            selected_objects[0].name = new_name_for_object
+            newly_created_object.append(MeshObject(selected_objects[0]))
+        else:
+            raise Exception("There is more than one selection after splitting, this should not happen!")
+    else:
+        raise Exception("No surface object was constructed!")
+
+    mesh_object.object_mode()
+
+    return newly_created_object
 
 
 def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15,
@@ -67,13 +135,15 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
     for obj in mesh_objects:
         obj.edit_mode()
         bm = obj.mesh_as_bmesh()
+        # this makes sure all normals are calculated
+        bm.normal_update()
         bpy.ops.mesh.select_all(action='DESELECT')
 
         if height_list:
             counter = 0
             for height_val in height_list:
-                counter = FloorExtractor.select_at_height_value(bm, height_val, compare_height, up_vec,
-                                                                compare_angle_degrees, obj.get_local2world_mat())
+                counter = FaceSlicer.select_at_height_value(bm, height_val, compare_height, up_vec,
+                                                                np.deg2rad(compare_angle_degrees), obj.get_local2world_mat())
 
             if counter:
                 obj.update_from_bmesh(bm)
@@ -83,16 +153,16 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
 
             # first get a list of all height values of the median points, which are inside of the defined
             # compare angle range
-            list_of_median_poses: Union[List[float], np.ndarray] = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
+            list_of_median_poses: Union[List[float], np.ndarray] = [FaceSlicer._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
                                     bm.faces if
-                                    FloorExtractor._check_face_angle(f, obj.get_local2world_mat(), up_vec,
-                                                                     compare_angle_degrees)]
+                                    FaceSlicer._check_face_angle(f, obj.get_local2world_mat(), up_vec,
+                                                                     np.deg2rad(compare_angle_degrees))]
             if not list_of_median_poses:
                 print("Object with name: {} is skipped no faces were relevant, try with "
                       "flipped up_vec".format(obj.get_name()))
-                list_of_median_poses = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
-                                        bm.faces if FloorExtractor._check_face_angle(f, obj.get_local2world_mat(),
-                                                                                     -up_vec, compare_angle_degrees)]
+                list_of_median_poses = [FaceSlicer._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
+                                        bm.faces if FaceSlicer._check_face_angle(f, obj.get_local2world_mat(),
+                                                                                     -up_vec, np.deg2rad(compare_angle_degrees))]
                 if not list_of_median_poses:
                     print("Still no success for: {} skip object.".format(obj.get_name()))
                     bpy.ops.object.mode_set(mode='OBJECT')
@@ -117,8 +187,8 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
                 else:
                     height_value = np.max(ms.cluster_centers_)
 
-            counter = FloorExtractor.select_at_height_value(bm, height_value, compare_height, successful_up_vec,
-                                                            compare_angle_degrees, obj.get_local2world_mat())
+            counter = FaceSlicer.select_at_height_value(bm, height_value, compare_height, successful_up_vec,
+                                                            np.deg2rad(compare_angle_degrees), obj.get_local2world_mat())
 
             if counter:
                 obj.update_from_bmesh(bm)
@@ -140,7 +210,7 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
     return newly_created_objects
 
 
-class FloorExtractor:
+class FaceSlicer:
 
     @staticmethod
     def select_at_height_value(bm: bmesh.types.BMesh, height_value: float, compare_height: float,
@@ -162,7 +232,7 @@ class FloorExtractor:
         # deselect all faces
         counter = 0
         for f in bm.faces:
-            if FloorExtractor._check_face_with(f, matrix_world, height_value, compare_height, up_vector, cmp_angle):
+            if FaceSlicer._check_face_with(f, matrix_world, height_value, compare_height, up_vector, cmp_angle):
                 counter += 1
                 f.select = True
         print("Selected {} polygons as floor".format(counter))
@@ -197,10 +267,14 @@ class FloorExtractor:
         :param cmp_angle: Angle, which is used to compare against the up_vec in radians.
         :return: bool: Returns true if the face is close the height_value and is inside of the cmp_angle range
         """
+        # if the face has no surface the face angle is always bigger than the compare angle
+        if face.calc_area() == 0.0:
+            return False
         # calculate the normal
         normal_face = face.normal.to_4d()
         normal_face[3] = 0.0
         normal_face = (mathutils.Matrix(matrix_world) @ normal_face).to_3d()
+        normal_face /= np.linalg.norm(normal_face)
         # compare the normal to the current up_vec
         return acos(normal_face @ mathutils.Vector(up_vector)) < cmp_angle
 
@@ -221,9 +295,9 @@ class FloorExtractor:
         :param cmp_angle: Angle, which is used to compare against the up_vec in radians.
         :return: bool: Returns true if the face is close the height_value and is inside of the cmp_angle range
         """
-        median_pose = FloorExtractor._get_median_face_pose(face, matrix_world)
+        median_pose = FaceSlicer._get_median_face_pose(face, matrix_world)
 
         # compare that pose to the current height_band
         if fabs(median_pose[2] - height_value) < cmp_height:
-            return FloorExtractor._check_face_angle(face, matrix_world, up_vector, cmp_angle)
+            return FaceSlicer._check_face_angle(face, matrix_world, up_vector, cmp_angle)
         return False

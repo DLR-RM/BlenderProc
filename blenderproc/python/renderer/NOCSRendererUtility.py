@@ -8,7 +8,7 @@ from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.renderer.RendererUtility import set_world_background
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 
 
 def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", output_key: str = "nocs", return_data: bool = True) -> Dict[str, List[np.ndarray]]:
@@ -28,7 +28,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
 
-    with Utility.UndoAfterExecution():
+    with UndoAfterExecution():
         nocs_material = NOCSRendererUtility.create_nocs_material()
 
         # Set the NOCS material to all objects

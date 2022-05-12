@@ -9,7 +9,7 @@ import numpy as np
 from blenderproc.python.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from blenderproc.python.material import MaterialLoaderUtility
 import blenderproc.python.renderer.RendererUtility as RendererUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 
 
 def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = None,
@@ -45,7 +45,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
     if default_values is None:
         default_values = {"class": 0}
 
-    with Utility.UndoAfterExecution():
+    with UndoAfterExecution():
         RendererUtility._render_init()
         # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)

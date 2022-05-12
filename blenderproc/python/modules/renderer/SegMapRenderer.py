@@ -1,6 +1,6 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.renderer.SegMapRendererUtility import render_segmap
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import UndoAfterExecution
 
 
 class SegMapRenderer(RendererInterface):
@@ -122,7 +122,7 @@ class SegMapRenderer(RendererInterface):
 
         default_values = self.config.get_raw_dict("default_values", {})
 
-        with Utility.UndoAfterExecution():
+        with UndoAfterExecution():
             self._configure_renderer(max_amount_of_samples=1)
 
             if not self._avoid_output:

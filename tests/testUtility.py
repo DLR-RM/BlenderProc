@@ -6,7 +6,7 @@ import numpy as np
 
 from blenderproc.python.tests.SilentMode import SilentMode
 from blenderproc.python.tests.TestsPathManager import test_path_manager
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import UndoAfterExecution
 
 
 class UnitTestCheckUtility(unittest.TestCase):
@@ -21,7 +21,7 @@ class UnitTestCheckUtility(unittest.TestCase):
             for obj in objs:
                 obj.set_cp("test", 0)
 
-            with Utility.UndoAfterExecution():
+            with UndoAfterExecution():
                 for obj in objs:
                     obj.set_cp("test", 1)
 

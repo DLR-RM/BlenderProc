@@ -4,7 +4,7 @@ import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MeshObjectUtility import disable_all_rigid_bodies, get_all_mesh_objects, MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import UndoAfterExecution
 
 
 def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
@@ -32,7 +32,7 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     :param solver_iters: Number of constraint solver iterations made per simulation step.
     """
     # Undo changes made in the simulation like origin adjustment and persisting the object's scale
-    with Utility.UndoAfterExecution():
+    with UndoAfterExecution():
         # Run simulation and remember poses before and after
         obj_poses_before_sim = PhysicsSimulation._get_pose()
         origin_shifts = simulate_physics(min_simulation_time, max_simulation_time, check_object_interval,
