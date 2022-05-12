@@ -69,8 +69,8 @@ for obj in left_objects:
         droppable_surface = bproc.object.slice_faces_with_normals(obj)
 ```
 
-* Specify with objects to use to sample on. In this case its "table" and "desk".
-* Then for each of those objects, get the biggest surface (e. g. top of the table) to sample on.
+* Specify with objects to use to sample on. In this case, it's "table" and "desk".
+* Then for each of those objects, the biggest surface is selected (e. g. top of the table) for sampling.
 
 
 #### Front3DObjectSampling 
