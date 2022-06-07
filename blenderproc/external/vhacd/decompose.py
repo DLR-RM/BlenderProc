@@ -61,7 +61,7 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
         os.makedirs(vhacd_path, exist_ok=True)
         print("Downloading v-hacd library into " + str(vhacd_path))
-        git.Git(vhacd_path).clone("git://github.com/kmammou/v-hacd.git")
+        git.Git(vhacd_path).clone("https://github.com/kmammou/v-hacd.git")
 
         print("Building v-hacd")
         if "NO_OPENCL" in os.environ and os.environ["NO_OPENCL"] == "1":

@@ -2,6 +2,7 @@ import os
 import random
 from numpy import random as np_random
 from sys import platform
+
 import multiprocessing
 
 import bpy
@@ -36,8 +37,30 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
     # Use cycles
     bpy.context.scene.render.engine = 'CYCLES'
 
-    if platform == "darwin" or compute_device == "CPU":
-        # if there is no gpu support (mac os) or if cpu is specified as compute device, then use the cpu with maximum power
+    if platform == "darwin":
+        import platform as platform_locally
+        mac_version = platform_locally.mac_ver()[0]
+        mac_version_numbers = [int(ele) for ele in mac_version.split(".")]
+        if (mac_version_numbers[0] == 12 and mac_version_numbers[1] >= 3) or mac_version_numbers[0] > 12:
+            bpy.context.scene.cycles.device = "GPU"
+            preferences = bpy.context.preferences.addons['cycles'].preferences
+            for device_type in preferences.get_device_types(bpy.context):
+                preferences.get_devices_for_type(device_type[0])
+            gpu_type = "METAL"  # only available type on mac os
+            for device in preferences.devices:
+                if device.type == gpu_type and (compute_device_type is None or compute_device_type == gpu_type):
+                    bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                    print('Device {} of type {} found and used.'.format(device.name, device.type))
+                    break
+            # make sure that all visible GPUs are used
+            for device in prefs.devices:
+                device.use = True
+        else:
+            # there is no gpu support on mac os below 12.3, if cpu is specified as compute device,
+            # then we use the cpu with maximum power
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.scene.render.threads = multiprocessing.cpu_count()
+    elif compute_device == "CPU":
         bpy.context.scene.cycles.device = "CPU"
         bpy.context.scene.render.threads = multiprocessing.cpu_count()
     else:

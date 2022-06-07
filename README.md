@@ -167,10 +167,9 @@ The configuration will show you, specifically for your version, which pip packag
 The following assumes Pycharm 2021.3:
 
 First, install the `pydevd-pycharm` package in blenders python environment.
-Unfortunately, the package cannot be installed into our custom separate packages folder, therefore, make sure to add `--not-use-custom-package-path`.
 
 ```
-blenderproc pip install pydevd-pycharm~=212.5457.59 --not-use-custom-package-path
+blenderproc pip install pydevd-pycharm~=212.5457.59
 ```
 
 Now, add the following code to the top (after the imports) of your blenderproc script which you want to debug.
