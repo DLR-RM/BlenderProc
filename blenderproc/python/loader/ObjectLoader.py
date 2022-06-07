@@ -49,8 +49,8 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             elif filepath.endswith('.stl') or filepath.endswith('.STL'):
                 # load a .stl file
                 bpy.ops.import_mesh.stl(filepath=filepath, **kwargs)
-                # add a default material to ply file
-                mat = bpy.data.materials.new(name="ply_material")
+                # add a default material to stl file
+                mat = bpy.data.materials.new(name="stl_material")
                 mat.use_nodes = True
                 selected_objects = [obj for obj in bpy.context.selected_objects if
                                     obj not in previously_selected_objects]
