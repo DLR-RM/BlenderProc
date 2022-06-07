@@ -12,7 +12,9 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
-from blenderproc.python.types.URDFUtility import URDFObject, Link, Inertial
+from blenderproc.python.types.URDFUtility import URDFObject
+from blenderproc.python.types.LinkUtility import Link
+from blenderproc.python.types.InertialUtility import Inertial
 from blenderproc.python.filter.Filter import one_by_attr
 from blenderproc.python.types.MeshObjectUtility import create_with_empty_mesh
 from blenderproc.python.types.BoneUtility import set_location_constraint, set_rotation_constraint, \
@@ -72,16 +74,31 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
     for link in links:
         link.switch_fk_ik_mode(mode="fk")
 
-    return URDFObject(armature, links=links, xml_tree=urdf_tree)
+    urdf_object = URDFObject(armature, links=links, xml_tree=urdf_tree)
+
+    # hide all inertial and collision objects per default
+    urdf_object.hide_irrelevant_objs()
+
+    return urdf_object
 
 
 def get_joints_which_have_link_as_parent(link_name: str, joint_trees: List["urdfpy.Joint"]) -> List["urdfpy.Joint"]:
-    """ Returns a list of joints which have a specific link as parent. """
+    """ Returns a list of joints which have a specific link as parent.
+
+    :param link_name: Name of the link.
+    :param joint_trees: List of urdfpy.Joint objects.
+    :return: List of urdfpy.Joint objects.
+    """
     return [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.parent == link_name]
 
 
 def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfpy.Joint"]) -> Union["urdfpy.Joint", None]:
-    """ Returns the joint which is the parent of a specific link. """
+    """ Returns the joint which is the parent of a specific link.
+
+    :param link_name: Name of the link.
+    :param joint_trees: List of urdfpy.Joint objects.
+    :return: List of urdfpy.Joint objects, or None if no joint is defined as parent for the respective link.
+    """
     valid_joint_trees = [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.child == link_name]
     if valid_joint_trees == []:  # happens for the very first link
         print(f"WARNING: There is no joint defined for the link {link_name}!")
