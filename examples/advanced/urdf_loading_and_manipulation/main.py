@@ -10,7 +10,6 @@ bproc.init()
 
 robot = bproc.loader.load_urdf(urdf_file=args.urdf_file)
 
-robot.hide_irrelevant_objs()
 robot.remove_link_by_index(index=0)
 robot.set_ascending_category_ids()
 
