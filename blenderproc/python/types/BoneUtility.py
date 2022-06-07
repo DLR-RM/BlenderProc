@@ -6,12 +6,15 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 def get_armature_from_bone(bone_name: str) -> MeshObject:
-    """ Returns the armature that holds a specified bone. """
+    """ Returns the armature that holds a specified bone.
+
+    :param bone_name: Name of the bone.
+    :return: The respective armature.
+    """
     for obj in bpy.data.objects:
         if obj.type == "ARMATURE":
             if obj.pose.bones.get(bone_name) is not None:
                 return obj
-    raise NotImplementedError("impossible")
 
 
 def add_constraint_if_not_existing(bone: bpy.types.PoseBone, constraint_name: str = "",
