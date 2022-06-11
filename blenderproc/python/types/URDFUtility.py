@@ -55,7 +55,7 @@ class URDFObject(Entity):
         """
         return [obj for obj in self.get_all_urdf_objs() if 'visual' in obj.get_name()]
 
-    def hide_irrelevant_objs(self):
+    def hide_links_and_collision_inertial_objs(self):
         """ Hides links and their respective collision and inertial objects from rendering. """
         self.blender_obj.hide_set(True)
         for link in self.links:

@@ -78,7 +78,7 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
     urdf_object = URDFObject(armature, links=links, xml_tree=urdf_tree)
 
     # hide all inertial and collision objects per default
-    urdf_object.hide_irrelevant_objs()
+    urdf_object.hide_links_and_collision_inertial_objs()
 
     return urdf_object
 
@@ -236,11 +236,11 @@ def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"
         visuals, collisions, inertial = [], [], None
 
         if link_tree.visuals:
-            visuals = [load_viscol(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
+            visuals = [load_visual_collision_obj(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
                        link_tree.visuals]
 
         if link_tree.collisions:
-            collisions = [load_viscol(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for
+            collisions = [load_visual_collision_obj(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for
                           collision_tree in link_tree.collisions]
 
         if link_tree.inertial:
