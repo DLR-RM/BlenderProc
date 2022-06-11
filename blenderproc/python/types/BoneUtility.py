@@ -170,6 +170,8 @@ def set_copy_location_constraint(bone: bpy.types.PoseBone, target: bpy.types.Arm
     :param target_bone: Name of the target bone which locations shall influence this bone.
     :param custom_constraint_name: Custom name for the constraint. If not specified will use the default name.
     :param influence: Influence of the constraint.
+    :param target_space: Target space of the constraint.
+    :param owner_space: Owner space of the constraint.
      """
     c = add_constraint_if_not_existing(bone, constraint_name="Copy Location",
                                        custom_constraint_name=custom_constraint_name, add_to_existing=True)
@@ -222,7 +224,6 @@ def get_constraint(bone: bpy.types.PoseBone, constraint_name: str = "") -> Optio
     """
     if constraint_name in bone.constraints.keys():
         return bone.constraints[constraint_name]
-    return None
 
 
 def get_location_constraint(bone: bpy.types.PoseBone) -> Optional[bpy.types.Constraint]:

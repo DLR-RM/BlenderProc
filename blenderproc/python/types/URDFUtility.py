@@ -205,7 +205,7 @@ class URDFObject(Entity):
     def _set_ik_link(self, ik_link: Optional[Link]):
         """ Sets the ik link constraint.
 
-        :param bone: Link to set as ik link.
+        :param ik_link: Link to set as ik link.
         """
         object.__setattr__(self, "ik_link", ik_link)
 
@@ -239,7 +239,7 @@ class URDFObject(Entity):
             `set_rotation_euler_fk()` and `set_rotation_euler_ik()`.
 
         :param mode: One of  for forward / inverse kinematik.
-        :param keep_pose: If specified, will keep the pose when switching modes. Otherwise will return to the old pose
+        :param keep_pose: If specified, will keep the pose when switching modes. Otherwise, will return to the old pose
                           of the previously selected mode.
         """
         if mode == "ik" and self.ik_bone_controller is None:

@@ -39,7 +39,7 @@ class Armature(Entity):
                 print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
             else:
                 bone.rotation_euler = Vector([self._clip_value_from_constraint(value=rot_euler, constraint_name="Limit Rotation", axis=axis)
-                                       for rot_euler, axis in zip(rotation_euler, ["X", "Y", "Z"])])
+                                              for rot_euler, axis in zip(rotation_euler, ["X", "Y", "Z"])])
                 print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
         # in relative mode we add the rotation to the current value
         elif mode == "relative":
