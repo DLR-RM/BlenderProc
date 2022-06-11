@@ -1,5 +1,6 @@
 from typing import List, Union, Optional
 import os
+import warnings
 from mathutils import Matrix, Vector
 import numpy as np
 
@@ -24,7 +25,7 @@ from blenderproc.python.types.BoneUtility import set_location_constraint, set_ro
 def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
               fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
               ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]) -> URDFObject:
-    """ Loads a urdf object from an URDF file.
+    """ Loads an urdf object from an URDF file.
 
     :param urdf_file: Path to the URDF file.
     :param weight_distribution: One of ['envelope', 'automatic', 'rigid']. For more information please see
@@ -100,8 +101,8 @@ def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfp
     :return: List of urdfpy.Joint objects, or None if no joint is defined as parent for the respective link.
     """
     valid_joint_trees = [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.child == link_name]
-    if valid_joint_trees == []:  # happens for the very first link
-        print(f"WARNING: There is no joint defined for the link {link_name}!")
+    if not valid_joint_trees:  # happens for the very first link
+        warnings.warn(f"WARNING: There is no joint defined for the link {link_name}!")
         return None
     elif len(valid_joint_trees) == 1:
         return valid_joint_trees[0]
@@ -209,7 +210,7 @@ def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_jo
                                      custom_constraint_name="copy_rotation.ik",
                                      influence=0.)  # start in fk mode per default
     else:
-        print(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
+        warnings.warn(f"WARNING: No constraint implemented for joint type '{joint_tree.joint_type}'!")
 
     if create_recursive:
         child_joints = get_joints_which_have_link_as_parent(link_name=joint_tree.child, joint_trees=all_joint_trees)
@@ -318,8 +319,8 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = N
                 # load in default coordinate system
                 obj = load_obj(filepath=relative_path, axis_forward='Y', axis_up='Z')[0]
             else:
-                print(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf "
-                      f"filename: {urdf_path})")
+                warnings.warn(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf "
+                              f"filename: {urdf_path})")
         else:
             raise NotImplementedError(f"Couldn't load mesh file for {geometry_tree} (filename: "
                                       f"{geometry_tree.mesh.filename})")
