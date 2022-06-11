@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Optional
 import os
 from mathutils import Matrix, Vector
 import numpy as np
@@ -92,7 +92,7 @@ def get_joints_which_have_link_as_parent(link_name: str, joint_trees: List["urdf
     return [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.parent == link_name]
 
 
-def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfpy.Joint"]) -> Union["urdfpy.Joint", None]:
+def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfpy.Joint"]) -> Optional["urdfpy.Joint"]:
     """ Returns the joint which is the parent of a specific link.
 
     :param link_name: Name of the link.
@@ -111,8 +111,8 @@ def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfp
 
 
 def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_joint_trees: List["urdfpy.Joint"],
-                parent_bone_name: Union[str, None] = None, create_recursive: bool = True,
-                parent_origin: Union[Matrix, None] = None, fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
+                parent_bone_name: Optional[str] = None, create_recursive: bool = True,
+                parent_origin: Optional[Matrix] = None, fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
                 ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]):
     """ Creates deform, fk and ik bone for a specific joint. Can loop recursively through the child(ren).
 
@@ -302,8 +302,8 @@ def propagate_pose(links: List[Link], joint_tree: "urdfpy.Joint", joint_trees: L
             propagate_pose(links, child_joint_tree, joint_trees, armature, recursive=True)
 
 
-def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] = None) -> MeshObject:
-    """ Loads a geometric element from a urdf tree.
+def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = None) -> MeshObject:
+    """ Loads a geometric element from an urdf tree.
 
     :param geometry_tree: The urdf representation of the geometric element.
     :param urdf_path: Optional path of the urdf file for relative geometry files.
@@ -337,8 +337,8 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Union[str, None] 
     return obj
 
 
-def load_viscol(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str,
-                urdf_path: Union[str, None] = None) -> MeshObject:
+def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str,
+                              urdf_path: Optional[str] = None) -> MeshObject:
     """ Loads a visual / collision element from an urdf tree.
 
     :param viscol_tree: The urdf representation of the visual / collision element.
@@ -431,7 +431,7 @@ def load_inertial(inertial_tree: "urdfpy.Inertial", name: str) -> Inertial:
     return inertial
 
 
-def get_size_from_geometry(geometry: "urdfpy.Geometry") -> Union[float, None]:
+def get_size_from_geometry(geometry: "urdfpy.Geometry") -> Optional[float]:
     """ Helper to derive the link size from the largest geometric element.
 
     :param geometry: The urdf representation of the geometric element.

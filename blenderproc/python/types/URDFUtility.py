@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 import numpy as np
 from mathutils import Vector, Euler, Color, Matrix, Quaternion
 
@@ -12,7 +12,7 @@ from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constrai
 
 
 class URDFObject(Entity):
-    def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Union["urdfpy.URDF", None] = None):
+    def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
         super().__init__(bpy_object=armature)
 
         object.__setattr__(self, "links", links)
@@ -63,7 +63,7 @@ class URDFObject(Entity):
                 if "collision" in obj.get_name() or "inertial" in obj.get_name():
                     obj.hide()
 
-    def set_ascending_category_ids(self, category_ids: Union[List[int], None] = None):
+    def set_ascending_category_ids(self, category_ids: Optional[List[int]] = None):
         """ Sets semantic categories to the links and their associated objects.
 
         :param category_ids: List of 'category_id's for every link. If None, will create a list from [1 ... len(links)].
@@ -202,14 +202,14 @@ class URDFObject(Entity):
         """
         object.__setattr__(self, "fk_ik_mode", mode)
 
-    def _set_ik_link(self, ik_link: Union[Link, None]):
+    def _set_ik_link(self, ik_link: Optional[Link]):
         """ Sets the ik link constraint.
 
         :param bone: Link to set as ik link.
         """
         object.__setattr__(self, "ik_link", ik_link)
 
-    def create_ik_bone_controller(self, link: Union[Link, None] = None,
+    def create_ik_bone_controller(self, link: Optional[Link] = None,
                                   relative_location: Union[List[float], Vector] = [0., 0., 0.], use_rotation: bool = True,
                                   chain_length: int = 0):
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
@@ -282,7 +282,7 @@ class URDFObject(Entity):
         if frame > bpy.context.scene.frame_end:
             bpy.context.scene.frame_end += 1
 
-    def set_rotation_euler_fk(self, link: Union[Link, None], rotation_euler: Union[float, List[float], Euler, np.ndarray],
+    def set_rotation_euler_fk(self, link: Optional[Link], rotation_euler: Union[float, List[float], Euler, np.ndarray],
                               mode: str = "absolute", frame: int = 0):
         """ Rotates one specific link or all links based on euler angles in forward kinematic mode. Validates values
             with given constraints.

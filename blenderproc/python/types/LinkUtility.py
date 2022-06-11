@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 import numpy as np
 from mathutils import Vector, Euler, Color, Matrix, Quaternion
 
@@ -159,7 +159,7 @@ class Link(Entity):
         location = offset_mat.inverted() @ location
         self.ik_bone_controller.location = location[:3]
 
-    def _determine_rotation_axis(self, bone: bpy.types.PoseBone) -> Union[str, None]:
+    def _determine_rotation_axis(self, bone: bpy.types.PoseBone) -> Optional[str]:
         """ Determines the single rotation axis and checks if the constraints are set well to have only one axis of
             freedom.
 
@@ -336,7 +336,7 @@ class Link(Entity):
         for obj in self.get_all_objs():
             obj.hide(hide_object=hide_object)
 
-    def get_visual_local2world_mats(self) -> Union[List, None]:
+    def get_visual_local2world_mats(self) -> Optional[List]:
         """Returns the transformation matrices from world to the visual parts.
 
         :return: List of transformation matrices.
@@ -351,7 +351,7 @@ class Link(Entity):
         else:
             return None
 
-    def get_collision_local2world_mats(self) -> Union[List, None]:
+    def get_collision_local2world_mats(self) -> Optional[List]:
         """Returns the transformation matrices from world to the collision parts.
 
         :return: List of transformation matrices.
@@ -387,14 +387,14 @@ class Link(Entity):
         """
         return self.visuals + self.collisions + ([self.inertial] if self.inertial is not None else [])
 
-    def set_joint_type(self, joint_type: Union[str, None]):
+    def set_joint_type(self, joint_type: Optional[str]):
         """ Sets the joint type of the link which specifies the connection to its parent.
 
         :param joint_type: One of ['fixed', 'prismatic', 'revolute', 'continuous', 'planar', 'floating' or None].
         """
         object.__setattr__(self, "joint_type", joint_type)
 
-    def get_joint_type(self) -> Union[str, None]:
+    def get_joint_type(self) -> Optional[str]:
         """ Returns the joint type.
 
         :return: The joint type of the armature.

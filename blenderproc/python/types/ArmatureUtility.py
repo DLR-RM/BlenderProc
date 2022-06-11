@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 import numpy as np
 from mathutils import Euler, Vector
 
@@ -107,7 +107,7 @@ class Armature(Entity):
             self.blender_obj.pose.bones["Bone"].constraints.new(constraint_name.upper().replace(' ', '_'))
         return self.blender_obj.pose.bones["Bone"].constraints[constraint_name]
 
-    def set_rotation_constraint(self, x_limits: Union[List[float], None] = None, y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None):
+    def set_rotation_constraint(self, x_limits: Optional[List[float]] = None, y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
         """ Sets rotation constraints on the armature's bone.
 
         :param x_limits: A list of two float values specifying min/max radiant values along the x-axis or None if no constraint should be applied.
@@ -131,7 +131,7 @@ class Armature(Entity):
             constraint.min_z, constraint.max_z = z_limits
         constraint.owner_space = "LOCAL"
 
-    def set_location_constraint(self, x_limits: Union[List[float], None] = None, y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None):
+    def set_location_constraint(self, x_limits: Optional[List[float]] = None, y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
         """ Sets location constraints on the armature's bone.
 
         :param x_limits: A list of two float values specifying min/max values along the x-axis or None if no constraint should be applied.
@@ -158,7 +158,7 @@ class Armature(Entity):
             constraint.min_z, constraint.max_z = z_limits
         constraint.owner_space = "LOCAL"
 
-    def get_constraint(self, constraint_name: str) -> Union[bpy.types.Constraint, None]:
+    def get_constraint(self, constraint_name: str) -> Optional[bpy.types.Constraint]:
         """ Returns the desired constraint if existing; otherwise None.
 
         :param constraint_name: Name of the constraint.
@@ -168,14 +168,14 @@ class Armature(Entity):
             return self.blender_obj.pose.bones["Bone"].constraints[constraint_name]
         return None
 
-    def get_location_constraint(self) -> Union[bpy.types.Constraint, None]:
+    def get_location_constraint(self) -> Optional[bpy.types.Constraint]:
         """ Returns the location constraint if existing; otherwise None.
 
         :return: Location constraint if it exists; else None.
         """
         return self.get_constraint(constraint_name="Limit Location")
 
-    def get_rotation_constraint(self) -> Union[bpy.types.Constraint, None]:
+    def get_rotation_constraint(self) -> Optional[bpy.types.Constraint]:
         """ Returns the rotation constraint if existing; otherwise None.
 
         :return: Rotation constraint if it exists; else None.

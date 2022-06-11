@@ -1,6 +1,6 @@
 import bpy
 
-from typing import Union, List
+from typing import List, Optional
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
@@ -18,8 +18,8 @@ def get_armature_from_bone(bone_name: str) -> MeshObject:
 
 
 def add_constraint_if_not_existing(bone: bpy.types.PoseBone, constraint_name: str = "",
-                                   custom_constraint_name: Union[str, None] = None,
-                                   add_to_existing: bool = False) -> Union[bpy.types.Constraint, None]:
+                                   custom_constraint_name: Optional[str] = None,
+                                   add_to_existing: bool = False) -> Optional[bpy.types.Constraint]:
     """ Adds a new constraint.
 
     :param bone: The bone to add the constraint to.
@@ -38,8 +38,8 @@ def add_constraint_if_not_existing(bone: bpy.types.PoseBone, constraint_name: st
         return None
 
 
-def set_rotation_constraint(bone: bpy.types.PoseBone, x_limits: Union[List[float], None] = None,
-                            y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None,
+def set_rotation_constraint(bone: bpy.types.PoseBone, x_limits: Optional[List[float]] = None,
+                            y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None,
                             set_ik_limits: bool = True):
     """ Sets rotation constraints on the armature's bone.
 
@@ -74,7 +74,7 @@ def set_rotation_constraint(bone: bpy.types.PoseBone, x_limits: Union[List[float
 
 
 def set_ik_limits_from_rotation_constraint(bone: bpy.types.PoseBone,
-                                           constraint: Union[bpy.types.Constraint, None] = None):
+                                           constraint: Optional[bpy.types.Constraint] = None):
     """ Sets inverse kinematics limits based on a given rotation constraint.
 
     :param bone: The bone to set the inverse kinematics limits to.
@@ -108,7 +108,7 @@ def set_ik_limits_from_rotation_constraint(bone: bpy.types.PoseBone,
 
 
 def copy_constraints(source_bone: bpy.types.PoseBone, target_bone: bpy.types.PoseBone,
-                     constraints_to_be_copied: Union[List[str], None] = None):
+                     constraints_to_be_copied: Optional[List[str]] = None):
     """ Copies constraints from one bone to another.
 
     :param source_bone: The bone holding the constraints to be copied.
@@ -147,7 +147,7 @@ def set_ik_constraint(bone: bpy.types.PoseBone, target: bpy.types.Armature, targ
 
 
 def set_copy_rotation_constraint(bone: bpy.types.PoseBone, target: bpy.types.PoseBone, target_bone: str,
-                                 custom_constraint_name: Union[str, None] = None, influence: float = 1.):
+                                 custom_constraint_name: Optional[str] = None, influence: float = 1.):
     """ Sets a copy_rotation constraint.
 
     :param bone: The bone to set the constraint to.
@@ -164,7 +164,7 @@ def set_copy_rotation_constraint(bone: bpy.types.PoseBone, target: bpy.types.Pos
 
 
 def set_copy_location_constraint(bone: bpy.types.PoseBone, target: bpy.types.Armature, target_bone: str,
-                                 custom_constraint_name: Union[str, None] = None, influence: float = 1.,
+                                 custom_constraint_name: Optional[str] = None, influence: float = 1.,
                                  target_space: str = 'LOCAL', owner_space: str = 'LOCAL'):
     """ Sets a copy_location constraint.
 
@@ -183,8 +183,8 @@ def set_copy_location_constraint(bone: bpy.types.PoseBone, target: bpy.types.Arm
     c.owner_space = owner_space
 
 
-def set_location_constraint(bone: bpy.types.PoseBone, x_limits: Union[List[float], None] = None,
-                            y_limits: Union[List[float], None] = None, z_limits: Union[List[float], None] = None):
+def set_location_constraint(bone: bpy.types.PoseBone, x_limits: Optional[List[float]] = None,
+                            y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
     """ Sets a location constraint.
 
     :param bone: The bone to set the constraint to.
@@ -216,7 +216,7 @@ def set_location_constraint(bone: bpy.types.PoseBone, x_limits: Union[List[float
     constraint.owner_space = "LOCAL"
 
 
-def get_constraint(bone: bpy.types.PoseBone, constraint_name: str = "") -> Union[bpy.types.Constraint, None]:
+def get_constraint(bone: bpy.types.PoseBone, constraint_name: str = "") -> Optional[bpy.types.Constraint]:
     """ Returns the desired constraint if existing; otherwise None.
 
     :param bone: The bone to set the constraint to.
@@ -228,7 +228,7 @@ def get_constraint(bone: bpy.types.PoseBone, constraint_name: str = "") -> Union
     return None
 
 
-def get_location_constraint(bone: bpy.types.PoseBone) -> Union[bpy.types.Constraint, None]:
+def get_location_constraint(bone: bpy.types.PoseBone) -> Optional[bpy.types.Constraint]:
     """ Returns the location constraint if existing; otherwise None.
 
     :param bone: The bone to set the constraint to.
@@ -237,7 +237,7 @@ def get_location_constraint(bone: bpy.types.PoseBone) -> Union[bpy.types.Constra
     return get_constraint(bone, constraint_name="Limit Location")
 
 
-def get_rotation_constraint(bone: bpy.types.PoseBone) -> Union[bpy.types.Constraint, None]:
+def get_rotation_constraint(bone: bpy.types.PoseBone) -> Optional[bpy.types.Constraint]:
     """ Returns the rotation constraint if existing; otherwise None.
 
     :param bone: The bone to set the constraint to.
