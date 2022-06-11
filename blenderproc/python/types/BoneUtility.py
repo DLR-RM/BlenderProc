@@ -120,10 +120,7 @@ def copy_constraints(source_bone: bpy.types.PoseBone, target_bone: bpy.types.Pos
             continue
         c_copy = add_constraint_if_not_existing(target_bone, constraint_name=c.name)
         for prop in dir(c):
-            try:
-                setattr(c_copy, prop, getattr(c, prop))
-            except Exception as e:
-                raise e
+            setattr(c_copy, prop, getattr(c, prop))
 
 
 def set_ik_constraint(bone: bpy.types.PoseBone, target: bpy.types.Armature, target_bone: str, influence: float = 1.,

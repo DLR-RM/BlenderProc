@@ -215,10 +215,9 @@ def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_jo
     if create_recursive:
         child_joints = get_joints_which_have_link_as_parent(link_name=joint_tree.child, joint_trees=all_joint_trees)
 
-        if child_joints != []:
-            for child_joint in child_joints:
-                create_bone(armature, child_joint, all_joint_trees, parent_bone_name=bone.name, create_recursive=True,
-                            parent_origin=origin, fk_offset=fk_offset, ik_offset=ik_offset)
+        for child_joint in child_joints:
+            create_bone(armature, child_joint, all_joint_trees, parent_bone_name=bone.name, create_recursive=True,
+                        parent_origin=origin, fk_offset=fk_offset, ik_offset=ik_offset)
 
 
 def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"], armature: bpy.types.Armature,
@@ -348,12 +347,9 @@ def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collis
     :return: The respective MeshObject.
     """
     obj = load_geometry(viscol_tree.geometry, urdf_path=urdf_path)
-    try:
-        obj.set_name(name=viscol_tree.name)
-    except Exception as e:
-        # fallback to the link name with specified suffix
-        print(f"Didn't find a name for visual / collision object in {viscol_tree} ({e}). Falling back to {name}.")
-        obj.set_name(name=name)
+    if hasattr(viscol_tree, "name"):
+        name = viscol_tree.name
+    obj.set_name(name=name)
 
     # load material - only valid for visuals
     if hasattr(viscol_tree, "material") and viscol_tree.material is not None:
@@ -395,12 +391,10 @@ def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collis
             obj.replace_materials(mat)
 
     # set the pose of the object
-    try:
-        obj.set_local2world_mat(Matrix(viscol_tree.origin))
-        print(f"Set matrix_local of {obj.get_name()} to \n{viscol_tree.origin}")
-    except Exception as e:
-        print(f"No origin found for {viscol_tree}: {e}. Setting origin to world origin.")
-        obj.set_local2world_mat(Matrix.Identity(4))
+    origin = Matrix.Identity(4)
+    if hasattr(viscol_tree, "origin"):
+        origin = Matrix(viscol_tree.origin)
+    obj.set_local2world_mat(Matrix(origin))
 
     # set scale of the mesh
     scale = get_size_from_geometry(viscol_tree.geometry)
