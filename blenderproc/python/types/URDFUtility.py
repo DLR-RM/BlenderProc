@@ -7,8 +7,8 @@ import bpy
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constraint, \
-    set_ik_limits_from_rotation_constraint
+from blenderproc.python.types.LinkUtility import Link
+from blenderproc.python.types.InertialUtility import Inertial
 
 
 class URDFObject(Entity):
