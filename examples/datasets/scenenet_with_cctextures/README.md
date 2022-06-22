@@ -6,7 +6,7 @@
 
 The focus of this example is to show the correct usage of the MaterialRandomizer in a more complex context.
 
-We provide a script to download the `.obj` files, see the [scripts](../../scripts/) folder, the texture files can be downloaded [here](http://tinyurl.com/zpc9ppb).
+We provide a script to download the `.obj` files, see the [scripts](../../scripts/) folder, the texture files can be downloaded [here](https://drive.google.com/file/d/0B_CLZMBI0zcuQ3ZMVnp1RUkyOFk/view?usp=sharing&resourcekey=0-w8JN2r3WQ48eZltxQ-fSwA).
 
 It is also necessary to download the textures from cc_textures we provide a script [here](../../scripts/download_cc_textures.py).
 
