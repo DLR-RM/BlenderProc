@@ -9,6 +9,7 @@ import ssl
 import signal
 import sys
 from sys import platform, version_info
+from platform import machine
 from typing import List, Union
 
 if version_info.major == 3:
@@ -87,7 +88,12 @@ class InstallUtility:
                 blender_version += "-linux-x64"
                 blender_path = os.path.join(blender_install_path, blender_version)
             elif platform == "darwin":
-                blender_version += "-macos-x64"
+                # check if the current mac uses an Intel x86 processor 
+                if "x86" in machine():
+                    blender_version += "-macos-x64"
+                else:
+                    # or an Apple Silicion
+                    blender_version += "-macos-arm64"
                 blender_install_path = os.path.join(blender_install_path, blender_version)
                 blender_path = os.path.join(blender_install_path, "Blender.app")
             elif platform == "win32":
