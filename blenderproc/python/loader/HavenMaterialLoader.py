@@ -95,11 +95,15 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
     """ Loads all specified haven textures from the given directory.
 
     :param folder_path: The path to the downloaded haven.
-    :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
-                        beginning the name starts with. By default all assets will be loaded, specified by an empty list.
+    :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely,
+                        only the beginning the name starts with. By default all assets will be loaded, specified
+                        by an empty list or None.
     :param preload: If set true, only the material names are loaded and not the complete material.
     :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
     :param add_cp: A dictionary of materials and the respective properties.
+    :return a list of all loaded materials, if preload is active these materials do not contain any textures yet
+            and have to be filled before rendering (by calling this function again, there is no need to save the prior
+            returned list)
     """
     # set default value
     if add_cp is None:
