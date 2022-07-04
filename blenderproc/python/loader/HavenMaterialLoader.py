@@ -144,7 +144,7 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
         else:
             new_mat = MaterialLoaderUtility.create_new_cc_material(texture_name, add_cp)
         # append newly created material
-        materials.append(new_mat)
+        materials.append(Material(new_mat))
         if preload:
             # if preload then the material is only created but not filled
             continue
