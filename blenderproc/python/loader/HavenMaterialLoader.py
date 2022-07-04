@@ -1,8 +1,11 @@
 import glob
 import os
+from typing import List, Optional, Dict, Any
+
 import addon_utils
 import bpy
 
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
@@ -87,7 +90,8 @@ def identify_texture_maps(texture_folder_path: str) -> dict[str, str]:
     return texture_map_paths_by_type
 
 
-def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
+def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[List[str]] = None, preload: bool = False,
+                   fill_used_empty_materials: bool = False, add_cp: Optional[Dict[str, Any]] = None) -> List[Material]:
     """ Loads all specified haven textures from the given directory.
 
     :param folder_path: The path to the downloaded haven.
@@ -97,6 +101,12 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
     :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
     :param add_cp: A dictionary of materials and the respective properties.
     """
+    # set default value
+    if add_cp is None:
+        add_cp = {}
+    if used_assets is None:
+        used_assets = []
+
     # makes the integration of complex materials easier
     addon_utils.enable("node_wrangler")
 
@@ -109,6 +119,7 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
         raise Exception("The folder path does not exist: {}".format(textures_folder_path))
 
     texture_names = os.listdir(folder_path)
+    materials: List[Material] = []
     for texture_name in texture_names:       
         if used_assets and not any(texture_name.startswith(asset) for asset in used_assets):
             continue
@@ -128,6 +139,8 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
             new_mat = MaterialLoaderUtility.find_cc_material_by_name(texture_name, add_cp)
         else:
             new_mat = MaterialLoaderUtility.create_new_cc_material(texture_name, add_cp)
+        # append newly created material
+        materials.append(new_mat)
         if preload:
             # if preload then the material is only created but not filled
             continue
@@ -145,6 +158,8 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
                                             texture_map_paths_by_type["normal"],
                                             texture_map_paths_by_type["displacement"], 
                                             texture_map_paths_by_type["bump"])
+    return materials
+
 
 
 class HavenMaterialLoader:
