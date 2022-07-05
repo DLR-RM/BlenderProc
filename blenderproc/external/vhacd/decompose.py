@@ -18,6 +18,7 @@
 
 import os
 from sys import platform
+from typing import Optional
 
 import git
 import numpy as np
@@ -28,7 +29,10 @@ import bmesh
 from subprocess import Popen
 import shutil
 
-def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000, name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True, apply_transforms: str = "NONE", depth: int = 20, concavity: float = 0.0025, plane_downsampling: int = 4, convexhull_downsampling: int = 4, alpha: float = 0.05, beta: float = 0.05, gamma: float = 0.00125, pca: bool = False, mode: str = "VOXEL", max_num_vertices_per_ch: int = 64, min_volume_per_ch: float = 0.0001, cache_dir: str = None):
+def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000,
+                         name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True,
+                         apply_transforms: str = "NONE", depth: int = 20, max_num_vertices_per_ch: int = 64,
+                         cache_dir: Optional[str] = None):
     """ Uses V-HACD to decompose the given object.
 
     You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
@@ -42,16 +46,7 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     :param apply_modifiers: Apply modifiers before decomposition.
     :param apply_transforms: Apply transforms before decomposition.
     :param depth: maximum number of clipping stages. During each split stage, all the model parts (with a concavity higher than the user defined threshold) are clipped according the "best" clipping plane
-    :param concavity: maximum concavity
-    :param plane_downsampling: controls the granularity of the search for the "best" clipping plane
-    :param convexhull_downsampling: controls the precision of the convex-hull generation process during the clipping plane selection stage
-    :param alpha: controls the bias toward clipping along symmetry planes
-    :param beta: controls the bias toward clipping along revolution axes
-    :param gamma: maximum allowed concavity during the merge stage
-    :param pca: enable/disable normalizing the mesh before applying the convex decomposition
-    :param mode: 0: voxel-based approximate convex decomposition, 1: tetrahedron-based approximate convex decomposition
     :param max_num_vertices_per_ch: controls the maximum number of triangles per convex-hull
-    :param min_volume_per_ch: controls the adaptive sampling of the generated convex-hulls
     :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
     :return: The list of convex parts composing the given object.
     """
@@ -125,20 +120,13 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
         print("\nExporting mesh for V-HACD: {}...".format(off_filename))
         obj_export(mesh, off_filename)
         bpy.data.meshes.remove(mesh)
-        cmd_line = f'"{vhacd_binary}" {off_filename} -r {resolution} -v {max_num_vertices_per_ch} -d {depth}' #> {logFileName}'
-        #cmd_line = ('"{}" --input "{}" --resolution {} --depth {} '
-        #            "--concavity {:g} --planeDownsampling {} --convexhullDownsampling {} "
-        #            "--alpha {:g} --beta {:g} --gamma {:g} --pca {:b} --mode {:b} "
-        #            '--maxNumVerticesPerCH {} --minVolumePerCH {:g} --output "{}" --log "{}"').format(
-        #    vhacd_binary, off_filename, resolution, depth,
-        #    concavity, plane_downsampling, convexhull_downsampling,
-        #    alpha, beta, gamma, pca, mode == "TETRAHEDRON",
-        #    max_num_vertices_per_ch, min_volume_per_ch, outFileName, logFileName)
-
+        cmd_line = f'"{vhacd_binary}" {off_filename} -r {resolution} -v {max_num_vertices_per_ch} -d {depth}'
+        if os.path.exists(os.path.basename(logFileName)):
+            cmd_line += f"2>&1 > {logFileName}"
         print("Running V-HACD...\n{}\n".format(cmd_line))
         vhacd_process = Popen(cmd_line, bufsize=-1, close_fds=True, shell=True, cwd=temp_dir)
         vhacd_process.wait()
-        outFileName = os.path.join(temp_dir, "decomp.stl")
+        outFileName = os.path.join(temp_dir, "decomp.obj")
 
         # Import convex parts
         if not os.path.exists(outFileName):
@@ -149,11 +137,11 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir, exist_ok=True)
             # Copy decomposition into cache dir
-            shutil.copyfile(outFileName, os.path.join(cache_dir, str(mesh_hash) + ".stl"))
+            shutil.copyfile(outFileName, os.path.join(cache_dir, str(mesh_hash) + ".obj"))
     else:
-        outFileName = os.path.join(cache_dir, str(mesh_hash) + ".stl")
+        outFileName = os.path.join(cache_dir, str(mesh_hash) + ".obj")
 
-    bpy.ops.import_scene.stl(filepath=outFileName, axis_forward="Y", axis_up="Z")
+    bpy.ops.import_scene.obj(filepath=outFileName, axis_forward="Y", axis_up="Z")
     imported = bpy.context.selected_objects
 
     # Name and transform the loaded parts
