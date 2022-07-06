@@ -16,10 +16,11 @@ from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 
-def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None, depths: Optional[List[np.ndarray]] = None, 
-              colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG", dataset: str = "", 
-              append_to_existing_output: bool = True, depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
-              ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000):
+def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None, depths: Optional[List[np.ndarray]] = None,
+              colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG", dataset: str = "",
+              target_cps: List[str] = ['category_id'], append_to_existing_output: bool = True, depth_scale: float = 1.0,
+              jpg_quality: int = 95, save_world2cam: bool = True, ignore_dist_thres: float = 100., m2mm: bool = True,
+              frames_per_chunk: int = 1000):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
@@ -29,6 +30,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
     :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
     :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
+    :param target_cps: List of custom parameters of the target objects to be saved in the scene_gt json file.
     :param append_to_existing_output: If true, the new frames will be appended to the existing ones.
     :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy
         and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.
@@ -75,8 +77,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     # Save the data.
     BopWriterUtility._write_camera(camera_path, depth_scale=depth_scale)
-    BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
-                                   color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
+    BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, target_cps=target_cps, depths=depths,
+                                   colors=colors, color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
                                    m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam,
                                    depth_scale=depth_scale, jpg_quality=jpg_quality)
 
@@ -182,10 +184,11 @@ class BopWriterUtility:
         BopWriterUtility._save_json(camera_path, camera)
 
     @staticmethod
-    def _get_frame_gt(dataset_objects: List[bpy.types.Mesh], unit_scaling: float, ignore_dist_thres: float,
-                      destination_frame: List[str] = ["X", "-Y", "-Z"]):
+    def _get_frame_gt(dataset_objects: List[bpy.types.Mesh], target_cps: List[str],
+                      unit_scaling: float, ignore_dist_thres: float, destination_frame: List[str] = ["X", "-Y", "-Z"]):
         """ Returns GT pose annotations between active camera and objects.
         :param dataset_objects: Save annotations for these objects.
+        :param target_cps: List of custom parameters of the target objects to be saved in the scene_gt json file.
         :param unit_scaling: 1000. for outputting poses in mm
         :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
         :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates
@@ -194,7 +197,7 @@ class BopWriterUtility:
 
         H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix',
                                                               local_frame_change=destination_frame))
-
+        assert isinstance(target_cps, list), "target_cps should be a list of strings, got {} instead".format(type(target_cps))
         frame_gt = []
         for obj in dataset_objects:
 
@@ -204,15 +207,18 @@ class BopWriterUtility:
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_t_m2c = cam_H_m2c.to_translation()
 
-            assert "category_id" in obj, "{} object has no custom property 'category_id'".format(obj.get_name())
             
             # ignore examples that fell through the plane
             if not np.linalg.norm(list(cam_t_m2c)) > ignore_dist_thres:
                 cam_t_m2c = list(cam_t_m2c * unit_scaling)
+                target_cps_dict = {}
+                for cp in target_cps:
+                    assert cp in obj, "{} object has no custom property {}".format(obj.get_name(), cp)
+                    target_cps_dict[cp] = obj[cp]
                 frame_gt.append({
                     'cam_R_m2c': list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2]),
                     'cam_t_m2c': cam_t_m2c,
-                    'obj_id': obj["category_id"]
+                    **target_cps_dict
                 })
             else:
                 print('ignored obj, ', obj["category_id"], 'because either ')
@@ -255,7 +261,7 @@ class BopWriterUtility:
 
     @staticmethod
     def _write_frames(chunks_dir: str, dataset_objects: list, depths: List[np.ndarray] = [],
-                      colors: List[np.ndarray] = [],
+                      target_cps: List[str] = ['category_id'], colors: List[np.ndarray] = [],
                       color_file_format: str = "PNG", depth_scale: float = 1.0, frames_per_chunk: int = 1000,
                       m2mm: bool = True,
                       ignore_dist_thres: float = 100., save_world2cam: bool = True, jpg_quality: int = 95):
@@ -264,6 +270,7 @@ class BopWriterUtility:
         :param chunks_dir: Path to the output directory of the current chunk.
         :param dataset_objects: Save annotations for these objects.
         :param depths: List of depth images in m to save
+        :param target_cps: List of custom parameters of the target objects to be saved in the scene_gt json file.
         :param colors: List of color images to save
         :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
         :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
@@ -342,7 +349,7 @@ class BopWriterUtility:
             # Output translation gt in m or mm
             unit_scaling = 1000. if m2mm else 1.
 
-            chunk_gt[curr_frame_id] = BopWriterUtility._get_frame_gt(dataset_objects, unit_scaling, ignore_dist_thres)
+            chunk_gt[curr_frame_id] = BopWriterUtility._get_frame_gt(dataset_objects, target_cps, unit_scaling, ignore_dist_thres)
             chunk_camera[curr_frame_id] = BopWriterUtility._get_frame_camera(save_world2cam, depth_scale, unit_scaling)
 
             if colors:
