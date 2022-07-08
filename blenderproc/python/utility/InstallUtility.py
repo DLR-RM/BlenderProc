@@ -92,7 +92,7 @@ class InstallUtility:
                 if "x86" in machine():
                     blender_version += "-macos-x64"
                 else:
-                    # or an Apple Silicion
+                    # or an Apple Silicon
                     blender_version += "-macos-arm64"
                 blender_install_path = os.path.join(blender_install_path, blender_version)
                 blender_path = os.path.join(blender_install_path, "Blender.app")
