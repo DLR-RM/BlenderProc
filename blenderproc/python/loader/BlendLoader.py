@@ -24,7 +24,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
     :param data_blocks: The datablock or a list of datablocks which should be loaded from the given .blend file.
                         Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
 
-    :param linked: whether to link instead of a bend datablocs from .blend file.
+    :param link: whether to link instead of a append datablocs from .blend file. Linked objects can not be modifed.
     :return: The list of loaded mesh objects.
     """
     if obj_types is None:
