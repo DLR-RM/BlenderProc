@@ -337,6 +337,23 @@ class MeshObject(Entity):
         # Make sure the mesh is updated
         self.get_mesh().update()
 
+    def join_with_other_objects(self, objects: List["MeshObject"]):
+        """
+            Joins the given list of objects with this object.
+
+            Does not change the global selection.
+            The given object-references become invalid after the join operation.
+
+        :param objects: List of objects which will be merged with this object
+        """
+        context = {}
+        #save selection
+        context["object"] = context["active_object"] = self.blender_obj
+        # select all objects which will be merged with the target
+        context["selected_objects"] = context["selected_editable_objects"] = [obj.blender_obj for obj in objects] + [self.blender_obj]
+        # execute the joining operation
+        bpy.ops.object.join(context)
+
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
         # Make sure we are in object mode
@@ -540,7 +557,7 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
     return primitive
 
 
-def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
+def convert_to_meshes(blender_objects: list) -> List[MeshObject]:
     """ Converts the given list of blender objects to mesh objects
 
     :param blender_objects: List of blender objects.
@@ -549,7 +566,7 @@ def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
     return [MeshObject(obj) for obj in blender_objects]
 
 
-def get_all_mesh_objects() -> List["MeshObject"]:
+def get_all_mesh_objects() -> List[MeshObject]:
     """
     Returns all mesh objects in scene
 
@@ -565,7 +582,7 @@ def disable_all_rigid_bodies():
             obj.disable_rigidbody()
 
 
-def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils.bvhtree.BVHTree:
+def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.bvhtree.BVHTree:
     """ Creates a bvh tree which contains multiple mesh objects.
 
     Such a tree is later used for fast raycasting.
@@ -591,7 +608,7 @@ def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils
     return bvh_tree
 
 
-def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
+def compute_poi(objects: List[MeshObject]) -> np.ndarray:
     """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
     that is the closest one to the mean location of the bboxes of the selected objects.
 
@@ -616,7 +633,7 @@ def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
 
 def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
                    max_distance: float = 1.70141e+38) -> Tuple[
-    bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
+    bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
     """ Cast a ray onto all geometry from the scene, in world space.
 
    :param origin: Origin of the ray, in world space.

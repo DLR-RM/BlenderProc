@@ -1,7 +1,7 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.material import MaterialLoaderUtility
 import blenderproc.python.renderer.RendererUtility as RendererUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import UndoAfterExecution
 
 
 class RgbRenderer(RendererInterface):
@@ -59,7 +59,7 @@ class RgbRenderer(RendererInterface):
     def run(self):
         # if the rendering is not performed -> it is probably the debug case.
         do_undo = not self._avoid_output
-        with Utility.UndoAfterExecution(perform_undo_op=do_undo):
+        with UndoAfterExecution(perform_undo_op=do_undo):
             self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 
             # check if texture less render mode is active

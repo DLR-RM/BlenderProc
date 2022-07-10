@@ -5,7 +5,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.FloorExtractor import extract_floor
+from blenderproc.python.object.FaceSlicer import extract_floor
 
 
 class FloorExtractorModule(Module):

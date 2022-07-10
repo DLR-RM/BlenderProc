@@ -6,7 +6,7 @@ import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import load_image
 import blenderproc.python.renderer.RendererUtility as RendererUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 
@@ -40,7 +40,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     if temp_dir is None:
         temp_dir = Utility.get_temporary_directory()
 
-    with Utility.UndoAfterExecution():
+    with UndoAfterExecution():
         RendererUtility._render_init()
         # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)

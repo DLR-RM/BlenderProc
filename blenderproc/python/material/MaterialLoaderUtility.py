@@ -40,7 +40,7 @@ def convert_to_materials(blender_materials: List[Optional[bpy.types.Material]]) 
     return [(None if obj is None else Material(obj)) for obj in blender_materials]
 
 
-def find_cc_material_by_name(material_name: str, custom_properties: dict):
+def find_cc_material_by_name(material_name: str, custom_properties: dict) -> bpy.types.Material:
     """
     Finds from all loaded materials the cc material, which has the given material_name and the given
     custom_properties.
@@ -75,7 +75,7 @@ def is_material_used(material: bpy.types.Material):
     return material.users != 0
 
 
-def create_new_cc_material(material_name: str, add_custom_properties: dict):
+def create_new_cc_material(material_name: str, add_custom_properties: dict) -> bpy.types.Material:
     """
     Creates a new material, which gets the given custom properties and the material name.
 
