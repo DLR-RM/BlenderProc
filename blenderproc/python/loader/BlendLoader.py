@@ -11,7 +11,7 @@ from blenderproc.python.utility.Utility import resolve_path
 
 
 def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, name_regrex: Optional[str] = None,
-               data_blocks: Union[List[str], str] = "objects") -> List[Entity]:
+               data_blocks: Union[List[str], str] = "objects", link: bool = False) -> List[Entity]:
     """
     Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
     bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
@@ -23,6 +23,8 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                      file's folders, see Blender's documentation for bpy.types.ID for more info) names.
     :param data_blocks: The datablock or a list of datablocks which should be loaded from the given .blend file.
                         Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
+
+    :param link: whether to link instead of a append datablocs from .blend file. Linked objects can not be modifed.
     :return: The list of loaded mesh objects.
     """
     if obj_types is None:
@@ -38,7 +40,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
     orphans_before = collect_all_orphan_datablocks()
 
     # Start importing blend file. All objects that should be imported need to be copied from "data_from" to "data_to"
-    with bpy.data.libraries.load(path) as (data_from, data_to):
+    with bpy.data.libraries.load(path, link=link) as (data_from, data_to):
         for data_block in data_blocks:
             # Verify that the given data block is valid
             if hasattr(data_from, data_block):
