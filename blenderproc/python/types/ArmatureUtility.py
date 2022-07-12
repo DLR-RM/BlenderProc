@@ -53,7 +53,7 @@ class Armature(Entity):
                 print(f"Relatively rotated armature {self.get_name()} for {rotation_euler} radians")
 
         Utility.insert_keyframe(bone, "rotation_euler", frame)
-        if frame > bpy.context.scene.frame_end:
+        if frame is not None and frame > bpy.context.scene.frame_end:
             bpy.context.scene.frame_end += 1
 
     def _determine_rotation_axis(self):
