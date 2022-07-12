@@ -47,11 +47,11 @@ light.set_location(location=[5, 5, 5])
 light.set_energy(energy=1000)
 
 # sample camera pose
-bproc.camera.set_intrinsics_from_blender_params(640, 480)
-location = [1., 2., 2.]
+bproc.camera.set_resolution(640, 480)
+location = [-1., 2., 2.]
 poi = bproc.object.compute_poi(robot.links[4].get_visuals())
 # Compute rotation based on vector going from location towards poi
-rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=3.14)
+rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location)
 # Add homog cam pose based on location and rotation
 cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 bproc.camera.add_camera_pose(cam2world_matrix)
