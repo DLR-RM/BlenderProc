@@ -347,7 +347,7 @@ def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collis
     :return: The respective MeshObject.
     """
     obj = load_geometry(viscol_tree.geometry, urdf_path=urdf_path)
-    if hasattr(viscol_tree, "name"):
+    if hasattr(viscol_tree, "name") and viscol_tree.name is not None:
         name = viscol_tree.name
     obj.set_name(name=name)
 
