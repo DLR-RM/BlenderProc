@@ -4,6 +4,7 @@ from mathutils import Vector, Euler, Color, Matrix, Quaternion
 
 import bpy
 
+from blenderproc.python.utility.Utility import KeyFrame
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constraint, \
@@ -557,3 +558,38 @@ class Link(Entity):
                 fk_bone_mat = np.array(self.fk_bone.matrix)
                 fk_bone_mat[:3, -1] = np.array(self.ik_bone_controller.matrix)[:3, -1]
                 self.ik_bone_controller.matrix = Matrix(fk_bone_mat)
+
+    def get_joint_rotation(self, frame: int = None) -> float:
+        """ Get current joint rotation based on euler angles.
+
+        :param frame: The desired frame.
+        :return: Current joint rotation in radians.
+        """
+
+        if self.bone is None:
+            return 0.0
+
+        pose_bone = self.armature.pose.bones[self.bone.name]
+        data_bone = self.armature.data.bones[self.bone.name]
+
+        with KeyFrame(frame):
+            M_pose = pose_bone.matrix
+            M_data = data_bone.matrix_local
+
+        # grab the parent's world pose and rest matrices
+        if data_bone.parent:
+            M_parent_data = data_bone.parent.matrix_local.copy()
+            M_parent_pose = pose_bone.parent.matrix.copy()
+        else:
+            M_parent_data = Matrix()
+            M_parent_pose = Matrix()
+
+        M1 = M_data.copy()
+        M1.invert()
+
+        M2 = M_parent_pose.copy()
+        M2.invert()
+
+        visual_matrix = M1 @ M_parent_data @ M2 @ M_pose
+
+        return visual_matrix.to_quaternion().angle
