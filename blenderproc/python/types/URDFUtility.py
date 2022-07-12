@@ -250,7 +250,7 @@ class URDFObject(Entity):
                 link.switch_fk_ik_mode(mode=mode, keep_pose=keep_pose)
             self._set_fk_ik_mode(mode=mode)
 
-    def get_revolute_joints(self) -> List[Link]:
+    def get_links_with_revolute_joints(self) -> List[Link]:
         """ Returns all revolute joints.
 
         :return: List of revolute joints.
@@ -301,7 +301,7 @@ class URDFObject(Entity):
         if link is not None:
             link.set_rotation_euler_fk(rotation_euler=rotation_euler, mode=mode)
         else:
-            revolute_joints = self.get_revolute_joints()
+            revolute_joints = self.get_links_with_revolute_joints()
             if isinstance(rotation_euler, list) and len(revolute_joints) == len(rotation_euler):
                 for revolute_joint, rotation in zip(revolute_joints, rotation_euler):
                     revolute_joint.set_rotation_euler_fk(rotation_euler=rotation, mode=mode)
