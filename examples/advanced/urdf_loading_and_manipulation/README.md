@@ -15,11 +15,11 @@ This example explains loading a robot from a urdf file and manipulating it.
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/urdf_loading_and_manipulation/main.py /path/to/model.urdf examples/advanced/urdf_loading_and_manipulation/output
+blenderproc run examples/advanced/urdf_loading_and_manipulation/main.py examples/resources/medical_robot/miro.urdf examples/advanced/urdf_loading_and_manipulation/output
 ```
 
 * `examples/advanced/urdf_loading_and_manipulation/main.py`: path to the python file with pipeline configuration.
-* `/path/to/model.urdf`: path to a URDF robot definition file.
+* `examples/resources/medical_robot/miro.urdf`: path to the URDF robot definition file.
 * `examples/advanced/urdf_loading_and_manipulation/output`: path to the output directory.
 
 ## Visualization
@@ -29,7 +29,7 @@ blenderproc run examples/advanced/urdf_loading_and_manipulation/main.py /path/to
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/urdf_loading_and_manipulation/output/*.hdf5
+ blenderproc vis hdf5 examples/advanced/urdf_loading_and_manipulation/output/*.hdf5
 ```
 
 ## Implementation
