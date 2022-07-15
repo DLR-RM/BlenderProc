@@ -15,6 +15,7 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
 
     :param data_path: The path to the data folder, where all rooms are saved.
     :param data_set_name: Name of the room (for example: apartment_0).
+    :param use_smooth_shading: if set to True all objects loaded, will have smooth shading activated
     :return: The list of loaded and separated mesh objects.
     """
     try:
