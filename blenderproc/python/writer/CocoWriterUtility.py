@@ -118,7 +118,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
             inst_segmaps.append(segmap[:, :, inst_channel])
 
         if colors:
-            color_rgb = colors[frame]
+            color_rgb = colors[frame - bpy.context.scene.frame_start]
 
             # Reverse channel order for opencv
             color_bgr = color_rgb.copy()
