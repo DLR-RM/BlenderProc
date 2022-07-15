@@ -22,6 +22,8 @@ blenderproc run examples/advanced/urdf_loading_and_manipulation/main.py examples
 * `examples/resources/medical_robot/miro.urdf`: path to the URDF robot definition file.
 * `examples/advanced/urdf_loading_and_manipulation/output`: path to the output directory.
 
+Please note that the provided robot model in `examples/resources/medical_robot` is a reduced model in order to keep its size at minimum.
+
 ## Visualization
 
 ---
@@ -29,7 +31,7 @@ blenderproc run examples/advanced/urdf_loading_and_manipulation/main.py examples
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
- blenderproc vis hdf5 examples/advanced/urdf_loading_and_manipulation/output/*.hdf5
+blenderproc vis hdf5 examples/advanced/urdf_loading_and_manipulation/output/*.hdf5
 ```
 
 ## Implementation
