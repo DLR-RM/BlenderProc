@@ -2,5 +2,5 @@
 
 cd $1
 cd app/
-cmake CMakeLists.txt
+cmake CmakeLists.txt -DCMAKE_BUILD_TYPE=Release
 cmake --build .
