@@ -75,6 +75,7 @@ for _ in range(5):
             poses += 1
 
     # render the cameras of the current scene
+    bproc.renderer.set_output_format(enable_transparency=True)
     data = bproc.renderer.render()
     seg_data = bproc.renderer.render_segmap(map_by = ["instance", "class", "cp_bop_dataset_name"], 
                                             default_values = {"class": 0, "cp_bop_dataset_name": None})
@@ -85,7 +86,7 @@ for _ in range(5):
                            depths = data["depth"],
                            depth_scale = 1.0, 
                            colors = data["colors"], 
-                           color_file_format = "JPEG", 
+                           color_file_format = "PNG", 
                            append_to_existing_output = True)
 
     # Write data to coco format

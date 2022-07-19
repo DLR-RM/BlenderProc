@@ -14,26 +14,31 @@ def compute_matches(point_clouds, cam_extrinsics, Ks):
     # Account for different coordinate system in opencv and blender
     Ks = Ks.copy()
     Ks[:,1,2] = (bpy.context.scene.render.resolution_x - 1) - Ks[:,1,2]
+    print(Ks)
     #K = np.array(K)
     for i, (cam_extrinsic, cam_location) in enumerate(cam_extrinsics):
-        print(i)
+        print(i, point_clouds.shape)
 
-        local_point_clouds = np.concatenate((point_clouds[:i], point_clouds[i+1:]),0)
+        local_point_clouds = point_clouds[:]#np.concatenate((point_clouds[:i], point_clouds[i+1:]),0)
         local_point_clouds = np.matmul(cam_extrinsic[None, None],  np.transpose(local_point_clouds, (0,1,3,2)))
         local_point_clouds = np.transpose(local_point_clouds, (0,1,3,2))
 
         local_point_clouds[...,2] *= -1
         # Reproject 3d point
+        print(local_point_clouds)
 
         point_2d = np.matmul(Ks[i][None, None], np.transpose(local_point_clouds[..., :3], (0,1,3,2)))
         point_2d = np.transpose(point_2d, (0, 1, 3, 2))
         point_2d /= point_2d[...,2:]
         point_2d = point_2d[...,:2]
+        print(point_2d)
 
         point_2d[..., 1] = (bpy.context.scene.render.resolution_x - 1) - point_2d[..., 1]
 
         point_2d[(point_2d < 0 - 1e-3).any(-1)] = np.nan
         point_2d[(point_2d > (bpy.context.scene.render.resolution_x - 1) + 1e-3).any(-1)] = np.nan
+        print(point_2d)
+        return point_2d
 
         own_depth = np.linalg.norm(point_clouds[i,...,:3] - cam_location[None, None], axis=-1)
         print("a")

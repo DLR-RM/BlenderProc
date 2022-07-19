@@ -130,7 +130,7 @@ def cli():
         if args.mode == "debug":
             p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--", path_src_run if not is_config else args.file, temp_dir] + unknown_args, env=used_environment)
         else:
-            p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args, env=used_environment)
+            p = subprocess.Popen([blender_run_path, "--background", "--debug-all", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args, env=used_environment)
 
         def clean_temp_dir():
             # If temp dir should not be kept and temp dir still exists => remove it

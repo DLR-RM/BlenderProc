@@ -86,7 +86,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
 
         if not placed_successfully:
             print("Giving up on {}, deleting...".format(obj.get_name()))
-            obj.delete()
+            obj.hide(True)
 
     return placed_objects
 

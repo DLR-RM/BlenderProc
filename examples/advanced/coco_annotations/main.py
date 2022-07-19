@@ -9,6 +9,7 @@ parser.add_argument('output_dir', nargs='?', default="examples/advanced/coco_ann
 args = parser.parse_args()
 
 bproc.init()
+bproc.python.utility.In
 
 # load the objects into the scene
 objs = bproc.loader.load_blend(args.scene)
@@ -19,7 +20,7 @@ for j, obj in enumerate(objs):
 
 # define a light and set its location and energy level
 light = bproc.types.Light()
-light.set_type("POINT")
+light.set_type("POINT")ma
 light.set_location([5, -5, 5])
 light.set_energy(1000)
 

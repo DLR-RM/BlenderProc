@@ -23,13 +23,13 @@ for file in sorted(path.rglob("*.hdf5"), key=lambda x: int(x.name[:-len(".hdf5")
 img1 = 1
 img2 = 0
 N = 2
-offset = 2
+offset = 3
 
 matchings = matchings[offset * N:]
 images = images[offset * N:]
 
 print(matchings[img2].shape)
-plt.imshow(np.repeat(np.concatenate((np.isnan(matchings[img2][img1%N - (1 if img1 > img2 else 0)]).any(-1)[..., None] * 255, np.isnan(matchings[img1][img2%N - (1 if img2 > img1 else 0)]).any(-1)[..., None] * 255), 1), 3, -1))
+plt.imshow(np.repeat(np.concatenate((np.isnan(matchings[img2][img1%N - (1 if img1 > img2 else 0)]).any(-1)[..., None] * 255, np.isnan(matchings[img1][img2%N - (1 if img2 > img1 else 0)]).any(-1)[..., None] * 255), 1), 3, -1).astype(np.uint8))
 plt.figure()
 
 point = [0,0]

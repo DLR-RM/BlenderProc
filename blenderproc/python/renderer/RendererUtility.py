@@ -474,6 +474,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         keys_with_alpha_channel = {'colors'} if bpy.context.scene.render.film_transparent else None
 
     if output_key is not None:
+        print(bpy.context.scene.render.image_settings.file_format)
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" +
@@ -492,7 +493,9 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         # As frame_end is pointing to the next free frame, decrease it by one, as
         # blender will render all frames in [frame_start, frame_ned]
         bpy.context.scene.frame_end -= 1
+        print("before render")
         bpy.ops.render.render(animation=True, write_still=True)
+        print("after render")
         # Revert changes
         bpy.context.scene.frame_end += 1
     else:
