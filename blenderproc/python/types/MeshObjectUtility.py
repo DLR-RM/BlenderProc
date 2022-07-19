@@ -6,17 +6,21 @@ import bmesh
 import mathutils
 from mathutils import Vector, Matrix
 from sys import platform
+from pathlib import Path
+import os
+import random
 
 
 if platform != "win32":
     # this is only supported under linux and mac os, the import itself already doesn't work under windows
     from blenderproc.external.vhacd.decompose import convex_decomposition
+
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.material import MaterialLoaderUtility
-
+from blenderproc.python.loader.HavenMaterialLoader import load_haven_mat
 
 class MeshObject(Entity):
 
@@ -56,6 +60,56 @@ class MeshObject(Entity):
         new_mat = MaterialLoaderUtility.create(name)
         self.add_material(new_mat)
         return new_mat
+
+    def new_random_haven_material(self, haven_folder: Union[str, Path],
+                                  used_assets: Optional[Union[List[str], str]] = None):
+        """
+        Loads a haven material and sets this as a new material. This clears all other existing materials from the
+        object. If `used_assets` is a specific material haven name only this material is used.
+
+        This function should only be used if only a small subset of materials from the haven material dataset is going
+        to be used. If you want to sample a bigger number of materials please load all of them first, via the preload
+        option in the `bproc.loader.load_haven_mat()` function and then sample out of those you want to actually use.
+
+        :param haven_folder: Path to the haven folder, either the textures folder or the haven parent folder
+        :param used_assets: a possible list or str of the used_assets, this can be used to get one particular haven
+                            material
+        """
+
+        if isinstance(haven_folder, str):
+            haven_folder = Path(haven_folder)
+        if not haven_folder.exists():
+            raise FileNotFoundError(f"The given haven folder does not exist: {haven_folder}")
+
+        # add the "textures" folder, if that is not already the case
+        if haven_folder.name != "textures" and (haven_folder / "textures").exists():
+            haven_folder = haven_folder / "textures"
+
+        # get all texture names
+        if not used_assets:
+            texture_names = os.listdir(haven_folder)
+            if not texture_names:
+                raise FileNotFoundError(f"No texture folders found in {haven_folder}.")
+            # this sort makes it deterministic
+            texture_names.sort()
+            texture_names = [random.choice(texture_names)]
+        else:
+            # extract the used assets
+            if isinstance(used_assets, list):
+                texture_names = used_assets
+            elif isinstance(used_assets, str):
+                texture_names = [used_assets]
+            else:
+                raise TypeError(f"The used asset must be either a list or a str: {type(used_assets)}")
+
+        loaded_materials = load_haven_mat(str(haven_folder.absolute()), used_assets=texture_names)
+        if not loaded_materials:
+            raise RuntimeError(f"No material was loaded, it might be that the used texture_names do not appear "
+                               f"in the haven folder: {texture_names}")
+        # clear all materials beforehand
+        self.clear_materials()
+        # set the new chosen material
+        self.add_material(random.choice(loaded_materials))
 
     def clear_materials(self):
         """ Removes all materials from the object. """
