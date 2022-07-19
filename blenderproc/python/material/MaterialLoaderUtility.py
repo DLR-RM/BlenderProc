@@ -1,6 +1,7 @@
 import os
 import random
 from typing import Union, List, Optional
+from pathlib import Path
 
 import bpy
 
@@ -12,7 +13,7 @@ x_texture_node = -1500
 y_texture_node = 300
 
 
-def collect_all() -> List[Optional["Material"]]:
+def collect_all() -> List[Optional[Material]]:
     """ Returns all existing materials.
 
     :return: A list of all materials.
@@ -20,7 +21,7 @@ def collect_all() -> List[Optional["Material"]]:
     return convert_to_materials(bpy.data.materials)
 
 
-def create(name: str) -> "Material":
+def create(name: str) -> Material:
     """ Creates a new empty material.
 
     :param name: The name of the new material.
@@ -31,7 +32,7 @@ def create(name: str) -> "Material":
     return Material(new_mat)
 
 
-def convert_to_materials(blender_materials: List[Optional[bpy.types.Material]]) -> List[Optional["Material"]]:
+def convert_to_materials(blender_materials: List[Optional[bpy.types.Material]]) -> List[Optional[Material]]:
     """ Converts the given list of blender materials to bproc.Material(s)
 
     :param blender_materials: List of materials.
@@ -482,9 +483,9 @@ def change_to_texture_less_render(use_alpha_channel):
     principled_bsdf.inputs['Specular'].default_value = 0.65  # specular
     principled_bsdf.inputs['Roughness'].default_value = 0.2  # roughness
 
-    for object in [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]:
+    for used_object in [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]:
         # replace all materials with the new texture less material
-        for slot in object.material_slots:
+        for slot in used_object.material_slots:
             emission_shader = False
             # check if the material contains an emission shader:
             for node in slot.material.node_tree.nodes:
@@ -520,3 +521,36 @@ def create_procedural_texture(pattern_name: str = None) -> bpy.types.Texture:
                 "There is no such pattern: " + str(pattern_name) + ". Allowed patterns are: " + str(possible_patterns))
 
     return bpy.data.textures.new("ct_{}".format(pattern_name), pattern_name)
+
+
+def create_material_from_texture(texture: Union[Path, str, bpy.types.Image], material_name: str) -> Material:
+    """
+    Creates a material based on a given texture, the texture can either be a path to a texture file on disc or a
+    already loaded bpy.types.Image.
+
+    :param texture: either a path to an image, or a loaded bpy.types.Image texture
+    :param material_name: name of the newly created material
+    :return: the newly created material, which uses the texture as Base Color
+    """
+    texture_path: Optional[Path] = None
+    if isinstance(texture, Path) or isinstance(texture, str):
+        texture_path = Path(texture)
+    elif not isinstance(texture, bpy.types.Image):
+        raise TypeError(f"The given type of texture must be either [str, Path, bpy.types.Image] "
+                        f"and not {type(texture)}.")
+
+    # if a texture path was set, load the image
+    if texture_path:
+        if texture_path.exists():
+            texture = bpy.data.images.load(str(texture_path), check_existing=True)
+        else:
+            raise FileNotFoundError(f"The given texture path could not be found: \"{texture_path}\"")
+
+    if isinstance(texture, bpy.types.Image):
+        new_mat = bpy.data.materials.new(material_name)
+        new_mat.use_nodes = True
+        bp_mat = Material(new_mat)
+        bp_mat.set_principled_shader_value("Base Color", texture)
+        return bp_mat
+    else:
+        raise TypeError("The texture variable should be a bpy.types.Image at this point!")
