@@ -138,15 +138,20 @@ def load_haven_mat(folder_path: Union[str, Path] = "resources/haven", used_asset
     if not texture_names:
         raise FileNotFoundError(f"No texture folders found in {haven_folder}.")
 
+    # filter texture names based on used assets:
+    if used_assets:
+        texture_names = [texture_name for texture_name in texture_names if
+                         any(texture_name.startswith(asset) for asset in used_assets)]
+        if not texture_names:
+            raise FileNotFoundError(f"No texture folders found in {haven_folder} for which used_assets "
+                                    f"can be meet: {used_assets}.")
+
     # if only one element is returned
     if return_random_element:
         texture_names = [random.choice(texture_names)]
 
     materials: List[Material] = []
     for texture_name in texture_names:       
-        if used_assets and not any(texture_name.startswith(asset) for asset in used_assets):
-            continue
-
         texture_folder_path = haven_folder / texture_name
         if not texture_folder_path.is_dir():
             print(f"Ignoring {texture_folder_path}, must be a folder.")
@@ -183,8 +188,7 @@ def load_haven_mat(folder_path: Union[str, Path] = "resources/haven", used_asset
                                             texture_map_paths_by_type["bump"])
     if return_random_element:
         if len(materials) != 1:
-            raise RuntimeError(f"The amount of loaded materials is not one: {materials}, "
-                               f"check the used_asset list: {used_assets}")
+            raise RuntimeError(f"The amount of loaded materials is not one: {materials}, this should not happen!")
         return materials[0]
 
     return materials
