@@ -542,7 +542,7 @@ def create_material_from_texture(texture: Union[Path, str, bpy.types.Image], mat
     # if a texture path was set, load the image
     if texture_path:
         if texture_path.exists():
-            texture = bpy.data.images.load(texture_path, check_existing=True)
+            texture = bpy.data.images.load(str(texture_path), check_existing=True)
         else:
             raise FileNotFoundError(f"The given texture path could not be found: \"{texture_path}\"")
 
