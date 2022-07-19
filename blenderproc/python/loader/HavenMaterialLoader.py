@@ -117,10 +117,10 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
     textures_folder_path = resolve_path(folder_path)
 
     if preload and fill_used_empty_materials:
-        raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
+        raise RuntimeError("Preload and fill used empty materials can not be done at the same time, check config!")
         
     if not os.path.exists(textures_folder_path) or not os.path.isdir(textures_folder_path):
-        raise Exception("The folder path does not exist: {}".format(textures_folder_path))
+        raise FileNotFoundError("The folder path does not exist: {}".format(textures_folder_path))
 
     texture_names = os.listdir(folder_path)
     materials: List[Material] = []
@@ -163,7 +163,6 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
                                             texture_map_paths_by_type["displacement"], 
                                             texture_map_paths_by_type["bump"])
     return materials
-
 
 
 class HavenMaterialLoader:

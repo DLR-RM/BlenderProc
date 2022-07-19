@@ -37,6 +37,27 @@ class UnitTestCheckHavenLoader(unittest.TestCase):
         assert_message = f"Loaded {successes}/{total} Haven textures succesfully."
         self.assertEqual(successes, total, assert_message)
 
+    def test_new_random_haven_material(self):
+        """
+        Test if one can load a random texture from the haven dataset
+        """
+
+        cube = bproc.object.create_primitive("CUBE")
+        # set a completely random haven material
+        cube.new_random_haven_material(test_path_manager.haven)
+
+        # check if after loading exactly one material is there
+        materials = cube.get_materials()
+        self.assertEqual(len(materials), 1)
+
+        # check if images where loaded
+        material = materials[0]
+        texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
+        self.assertGreater(len(texture_nodes), 3)
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
