@@ -1,6 +1,8 @@
 import glob
 import os
-from typing import List, Optional, Dict, Any
+import random
+from pathlib import Path
+from typing import List, Optional, Dict, Any, Union, Tuple
 
 import addon_utils
 import bpy
@@ -37,7 +39,7 @@ texture_map_identifiers = {
 }
 
 
-def identify_base_color_image_path(texture_map_paths: list[str]) -> tuple[str, str]:
+def identify_base_color_image_path(texture_map_paths: List[str]) -> Tuple[Optional[str], Optional[str]]:
     """Finds the path to the base color image in a list of texture map paths.
     We do this by looking for any of the "base color" identifiers in each path.
     We also make sure to account for different capitalizations of the identifier.
@@ -59,15 +61,15 @@ def identify_base_color_image_path(texture_map_paths: list[str]) -> tuple[str, s
     return None, None
 
 
-def identify_texture_maps(texture_folder_path: str) -> dict[str, str]:
+def identify_texture_maps(texture_folder_path: Union[str, Path]) -> Optional[Dict[str, str]]:
     """Finds the paths of the different textures maps in a texture folder.
 
     :param texture_folder_path: path to the texture folder
-    :type texture_folder_path: str
     :return: dictionary that maps texture map types to their path when found, else it maps to an empty string
-    :rtype: dict
     """
-    texture_map_paths = glob.glob(os.path.join(texture_folder_path, "*.jpg"))
+    if isinstance(texture_folder_path, str):
+        texture_folder_path = Path(texture_folder_path)
+    texture_map_paths = [str(path.absolute()) for path in texture_folder_path.glob("*.jpg")]
     color_path, color_identifier = identify_base_color_image_path(texture_map_paths)
 
     if not color_path:
@@ -90,8 +92,10 @@ def identify_texture_maps(texture_folder_path: str) -> dict[str, str]:
     return texture_map_paths_by_type
 
 
-def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[List[str]] = None, preload: bool = False,
-                   fill_used_empty_materials: bool = False, add_cp: Optional[Dict[str, Any]] = None) -> List[Material]:
+def load_haven_mat(folder_path: Union[str, Path] = "resources/haven", used_assets: Optional[List[str]] = None,
+                   preload: bool = False, fill_used_empty_materials: bool = False,
+                   add_cp: Optional[Dict[str, Any]] = None, return_random_element: bool = False) \
+        -> Union[List[Material], Material]:
     """ Loads all specified haven textures from the given directory.
 
     :param folder_path: The path to the downloaded haven.
@@ -101,9 +105,12 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
     :param preload: If set true, only the material names are loaded and not the complete material.
     :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
     :param add_cp: A dictionary of materials and the respective properties.
+    :param return_random_element: If this is True only a single Material is loaded and returned, if you want to sample
+                                  many materials load them all with the preload option, use them and then fill the used
+                                  empty materials instead of calling this function multiple times.
     :return a list of all loaded materials, if preload is active these materials do not contain any textures yet
             and have to be filled before rendering (by calling this function again, there is no need to save the prior
-            returned list)
+            returned list) or if return_random_element is True only a single Material is returned
     """
     # set default value
     if add_cp is None:
@@ -114,26 +121,38 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
     # makes the integration of complex materials easier
     addon_utils.enable("node_wrangler")
 
-    textures_folder_path = resolve_path(folder_path)
+    haven_folder = Path(resolve_path(str(folder_path)))
 
     if preload and fill_used_empty_materials:
         raise RuntimeError("Preload and fill used empty materials can not be done at the same time, check config!")
-        
-    if not os.path.exists(textures_folder_path) or not os.path.isdir(textures_folder_path):
-        raise FileNotFoundError("The folder path does not exist: {}".format(textures_folder_path))
 
-    texture_names = os.listdir(folder_path)
+    if not haven_folder.exists():
+        raise FileNotFoundError(f"The given haven folder does not exist: {haven_folder}")
+
+    # add the "textures" folder, if that is not already the case
+    if haven_folder.name != "textures" and (haven_folder / "textures").exists():
+        haven_folder = haven_folder / "textures"
+
+    texture_names: List[str] = os.listdir(haven_folder)
+    texture_names.sort()
+    if not texture_names:
+        raise FileNotFoundError(f"No texture folders found in {haven_folder}.")
+
+    # if only one element is returned
+    if return_random_element:
+        texture_names = [random.choice(texture_names)]
+
     materials: List[Material] = []
     for texture_name in texture_names:       
         if used_assets and not any(texture_name.startswith(asset) for asset in used_assets):
             continue
 
-        texture_folder_path = os.path.join(textures_folder_path, texture_name)
-        if not os.path.isdir(texture_folder_path):
+        texture_folder_path = haven_folder / texture_name
+        if not texture_folder_path.is_dir():
             print(f"Ignoring {texture_folder_path}, must be a folder.")
             continue
 
-        texture_map_paths_by_type = identify_texture_maps(texture_folder_path)
+        texture_map_paths_by_type = identify_texture_maps(str(texture_folder_path))
         if texture_map_paths_by_type is None:
             print(f"Ignoring {texture_name}, could not identify texture maps.")
             continue
@@ -162,6 +181,12 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: Optional[L
                                             texture_map_paths_by_type["normal"],
                                             texture_map_paths_by_type["displacement"], 
                                             texture_map_paths_by_type["bump"])
+    if return_random_element:
+        if len(materials) != 1:
+            raise RuntimeError(f"The amount of loaded materials is not one: {materials}, "
+                               f"check the used_asset list: {used_assets}")
+        return materials[0]
+
     return materials
 
 

@@ -44,7 +44,8 @@ class UnitTestCheckHavenLoader(unittest.TestCase):
 
         cube = bproc.object.create_primitive("CUBE")
         # set a completely random haven material
-        cube.new_random_haven_material(test_path_manager.haven)
+        mat = bproc.loader.load_haven_mat(test_path_manager.haven, return_random_element=True)
+        cube.replace_materials(mat)
 
         # check if after loading exactly one material is there
         materials = cube.get_materials()
@@ -54,9 +55,6 @@ class UnitTestCheckHavenLoader(unittest.TestCase):
         material = materials[0]
         texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
         self.assertGreater(len(texture_nodes), 3)
-
-
-
 
 
 if __name__ == '__main__':
