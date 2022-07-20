@@ -1,5 +1,6 @@
 import blenderproc as bproc
 import argparse
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('urdf_file', nargs='?', default="./model.urdf", help="Path to the .urdf file")
@@ -65,8 +66,10 @@ light.set_type(type="POINT")
 light.set_location(location=[5, 5, 5])
 light.set_energy(energy=1000)
 
-# sample camera pose
+# Set rendering parameters
 bproc.camera.set_resolution(640, 480)
+bproc.renderer.enable_depth_output(True)
+# sample camera pose
 location = [-1., 2., 2.]
 poi = bproc.object.compute_poi(robot.links[4].get_visuals())
 # Compute rotation based on vector going from location towards poi
@@ -82,3 +85,10 @@ data.update(bproc.renderer.render_segmap(use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
+
+# write link poses in BOP format
+bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
+                       target_objects = robot.links,
+                       depths = data["depth"],
+                       colors = data["colors"], 
+                       m2mm = False)
