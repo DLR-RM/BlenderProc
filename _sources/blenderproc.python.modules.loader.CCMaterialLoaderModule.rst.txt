@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.CCMaterialLoaderModule module
-===================================================================
+blenderproc.python.modules.loader.CCMaterialLoaderModule module
+===============================================================
 
 .. automodule:: blenderproc.python.modules.loader.CCMaterialLoaderModule
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.utility\.CollisionUtility module
-=====================================================
+blenderproc.python.utility.CollisionUtility module
+==================================================
 
 .. automodule:: blenderproc.python.utility.CollisionUtility
     :members:

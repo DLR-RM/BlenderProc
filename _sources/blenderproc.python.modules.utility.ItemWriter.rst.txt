@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.utility\.ItemWriter module
-========================================================
+blenderproc.python.modules.utility.ItemWriter module
+====================================================
 
 .. automodule:: blenderproc.python.modules.utility.ItemWriter
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.postprocessing\.LensDistortion module
-===================================================================
+blenderproc.python.modules.postprocessing.LensDistortion module
+===============================================================
 
 .. automodule:: blenderproc.python.modules.postprocessing.LensDistortion
     :members:

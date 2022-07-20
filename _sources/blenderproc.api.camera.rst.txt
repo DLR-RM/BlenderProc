@@ -1,5 +1,5 @@
-blenderproc\.camera package
-================================
+blenderproc.camera package
+==============================
 
 Module contents
 ---------------

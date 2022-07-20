@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.constructor\.BasicMeshInitializer module
-======================================================================
+blenderproc.python.modules.constructor.BasicMeshInitializer module
+==================================================================
 
 .. automodule:: blenderproc.python.modules.constructor.BasicMeshInitializer
     :members:

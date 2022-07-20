@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.object\.ObjectPoseSamplerModule module
-====================================================================
+blenderproc.python.modules.object.ObjectPoseSamplerModule module
+================================================================
 
 .. automodule:: blenderproc.python.modules.object.ObjectPoseSamplerModule
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.object\.PhysicsSimulation module
-=====================================================
+blenderproc.python.object.PhysicsSimulation module
+==================================================
 
 .. automodule:: blenderproc.python.object.PhysicsSimulation
     :members:

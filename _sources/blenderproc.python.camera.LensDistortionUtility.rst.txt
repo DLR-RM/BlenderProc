@@ -1,5 +1,5 @@
-blenderproc\.python\.camera\.LensDistortionUtility module
-=========================================================
+blenderproc.python.camera.LensDistortionUtility module
+======================================================
 
 .. automodule:: blenderproc.python.camera.LensDistortionUtility
     :members:

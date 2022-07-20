@@ -1,5 +1,5 @@
-blenderproc\.python\.sampler\.ReplicaPointInRoomSampler module
-==============================================================
+blenderproc.python.sampler.ReplicaPointInRoomSampler module
+===========================================================
 
 .. automodule:: blenderproc.python.sampler.ReplicaPointInRoomSampler
     :members:

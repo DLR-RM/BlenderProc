@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.ReplicaLoader module
-=================================================
+blenderproc.python.loader.ReplicaLoader module
+==============================================
 
 .. automodule:: blenderproc.python.loader.ReplicaLoader
     :members:

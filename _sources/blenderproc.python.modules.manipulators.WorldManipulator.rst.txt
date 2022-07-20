@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.manipulators\.WorldManipulator module
-===================================================================
+blenderproc.python.modules.manipulators.WorldManipulator module
+===============================================================
 
 .. automodule:: blenderproc.python.modules.manipulators.WorldManipulator
     :members:

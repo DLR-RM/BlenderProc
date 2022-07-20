@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler package
-=======================================================
+blenderproc.python.modules.provider.sampler package
+===================================================
 
 Submodules
 ----------

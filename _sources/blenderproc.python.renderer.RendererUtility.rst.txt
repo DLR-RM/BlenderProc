@@ -1,5 +1,5 @@
-blenderproc\.python\.renderer\.RendererUtility module
-=====================================================
+blenderproc.python.renderer.RendererUtility module
+==================================================
 
 .. automodule:: blenderproc.python.renderer.RendererUtility
     :members:

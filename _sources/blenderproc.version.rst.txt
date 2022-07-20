@@ -1,5 +1,5 @@
-blenderproc\.version module
-===========================
+blenderproc.version module
+==========================
 
 .. automodule:: blenderproc.version
     :members:

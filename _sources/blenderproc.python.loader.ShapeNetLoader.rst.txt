@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.ShapeNetLoader module
-==================================================
+blenderproc.python.loader.ShapeNetLoader module
+===============================================
 
 .. automodule:: blenderproc.python.loader.ShapeNetLoader
     :members:

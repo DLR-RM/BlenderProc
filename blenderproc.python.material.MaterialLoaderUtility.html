@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.material.MaterialLoaderUtility module &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>blenderproc.python.material.MaterialLoaderUtility module &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -830,6 +835,31 @@ This is necessary to connect it later on in the add_alpha_channel_to_textures</p
 </dd></dl>
 
 <dl class="function">
+<dt id="blenderproc.python.material.MaterialLoaderUtility.create_material_from_texture">
+<code class="descclassname">blenderproc.python.material.MaterialLoaderUtility.</code><code class="descname">create_material_from_texture</code><span class="sig-paren">(</span><em>texture</em>, <em>material_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/material/MaterialLoaderUtility.html#create_material_from_texture"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.material.MaterialLoaderUtility.create_material_from_texture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a material based on a given texture, the texture can either be a path to a texture file on disc or a
+already loaded bpy.types.Image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>texture</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code>]) – either a path to an image, or a loaded bpy.types.Image texture</li>
+<li><strong>material_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – name of the newly created material</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the newly created material, which uses the texture as Base Color</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="blenderproc.python.material.MaterialLoaderUtility.create_new_cc_material">
 <code class="descclassname">blenderproc.python.material.MaterialLoaderUtility.</code><code class="descname">create_new_cc_material</code><span class="sig-paren">(</span><em>material_name</em>, <em>add_custom_properties</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/material/MaterialLoaderUtility.html#create_new_cc_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#blenderproc.python.material.MaterialLoaderUtility.create_new_cc_material" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new material, which gets the given custom properties and the material name.</p>
@@ -843,7 +873,10 @@ This is necessary to connect it later on in the add_alpha_channel_to_textures</p
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bpy.types.Material: Return the newly created material</p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bpy.types.Material: Return the newly created material</p>
 </td>
 </tr>
 </tbody>
@@ -884,7 +917,10 @@ custom_properties.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bpy.types.Material: Return the searched material, if not found returns None</p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bpy.types.Material: Return the searched material, if not found returns None</p>
 </td>
 </tr>
 </tbody>

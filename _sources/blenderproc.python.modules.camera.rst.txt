@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera package
-============================================
+blenderproc.python.modules.camera package
+=========================================
 
 Submodules
 ----------

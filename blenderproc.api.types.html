@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.types package &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>blenderproc.types package &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -473,6 +478,211 @@
 <h1>blenderproc.types package<a class="headerlink" href="#blenderproc-types-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-blenderproc.types">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.types" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="blenderproc.types.Armature">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Armature</code><span class="sig-paren">(</span><em>bpy_object</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.EntityUtility.Entity</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.Armature._clip_value_from_constraint">
+<code class="descname">_clip_value_from_constraint</code><span class="sig-paren">(</span><em>value</em>, <em>constraint_name</em>, <em>axis</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature._clip_value_from_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if an axis is constraint, and clips the value to the min/max of this constraint. If the constraint does not exist, nothing is done.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Value to be clipped.</li>
+<li><strong>constraint_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the constraint.</li>
+<li><strong>axis</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Axis to check.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Clipped value if a constraint is set, else the initial value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature._determine_rotation_axis">
+<code class="descname">_determine_rotation_axis</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature._determine_rotation_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the single rotation axis and checks if the constraints are set well to have only one axis of freedom.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The single rotation axis (‘X’, ‘Y’ or ‘Z’).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.add_constraint_if_not_existing">
+<code class="descname">add_constraint_if_not_existing</code><span class="sig-paren">(</span><em>constraint_name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.add_constraint_if_not_existing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new constraint if it doesn’t exist, and returns the specified constraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraint_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the desired constraint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.get_constraint">
+<code class="descname">get_constraint</code><span class="sig-paren">(</span><em>constraint_name</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.get_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the desired constraint if existing; otherwise None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraint_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the constraint.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Constraint if it exists; else None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.get_location_constraint">
+<code class="descname">get_location_constraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.get_location_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the location constraint if existing; otherwise None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Location constraint if it exists; else None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.get_rotation_constraint">
+<code class="descname">get_rotation_constraint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.get_rotation_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rotation constraint if existing; otherwise None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Rotation constraint if it exists; else None.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><em>hide_object=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the visibility of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hide_object</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object should be hidden in rendering.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.remove_constraint">
+<code class="descname">remove_constraint</code><span class="sig-paren">(</span><em>constraint_key</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.remove_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a specified constraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>constraint_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Key to be removed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.remove_constraints">
+<code class="descname">remove_constraints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.remove_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all constraints of the armature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.set_location_constraint">
+<code class="descname">set_location_constraint</code><span class="sig-paren">(</span><em>x_limits=None</em>, <em>y_limits=None</em>, <em>z_limits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.set_location_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets location constraints on the armature’s bone.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max values along the x-axis or None if no constraint should be applied.</li>
+<li><strong>y_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max values along the y-axis or None if no constraint should be applied.</li>
+<li><strong>z_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max values along the z-axis or None if no constraint should be applied.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.set_rotation_constraint">
+<code class="descname">set_rotation_constraint</code><span class="sig-paren">(</span><em>x_limits=None</em>, <em>y_limits=None</em>, <em>z_limits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.set_rotation_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets rotation constraints on the armature’s bone.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max radiant values along the x-axis or None if no constraint should be applied.</li>
+<li><strong>y_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max radiant values along the y-axis or None if no constraint should be applied.</li>
+<li><strong>z_limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]]) – A list of two float values specifying min/max radiant values along the z-axis or None if no constraint should be applied.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Armature.set_rotation_euler">
+<code class="descname">set_rotation_euler</code><span class="sig-paren">(</span><em>rotation_euler</em>, <em>mode='absolute'</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Armature.set_rotation_euler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates the armature based on euler angles. Validates values with given constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rotation_euler</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Euler</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The amount of rotation (in radians). Either three floats for x, y and z axes, or a single float.
+In the latter case, the axis of rotation is derived based on the rotation constraint. If
+these are not properly set (i.e., two axes must have equal min/max values) an exception will be thrown.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – One of [“absolute”, “relative”]. For absolute rotations we clip the rotation value based on the constraints.
+For relative we don’t - this will result in inverse motion after the constraint’s limits have been reached.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Keyframe where to insert the respective rotations.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="blenderproc.types.Entity">
 <em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">Entity</code><span class="sig-paren">(</span><em>bpy_object</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Entity" title="Permalink to this definition">¶</a></dt>
@@ -855,6 +1065,32 @@
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.Light.setup_as_projector">
+<code class="descname">setup_as_projector</code><span class="sig-paren">(</span><em>pattern</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.Light.setup_as_projector" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Sets a spot light source as projector of a pattern image. Sets location and angle of projector to current</dt>
+<dd>camera. Adjusts scale of pattern image to fit field-of-view of camera:
+$(0.5 +</dd>
+</dl>
+<p>rac{X}{Z cdot F}, 0.5 + 
+rac{X}{Z cdot F cdot r}, 0)$</p>
+<blockquote>
+<div><p>where $F$ is focal length and $r$ aspect ratio.
+WARNING: This should be done after the camera parameters are set!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param pattern:</th><td class="field-body">pattern image to be projected onto scene as np.ndarray.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param frame:</th><td class="field-body">The frame number which the value should be set to. If None is given, the current frame number is used.</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </dd></dl>
 
 </dd></dl>
@@ -1569,6 +1805,24 @@ with the displacement output of the material.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="blenderproc.types.MeshObject.join_with_other_objects">
+<code class="descname">join_with_other_objects</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.join_with_other_objects" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Joins the given list of objects with this object.</p>
+<p>Does not change the global selection.
+The given object-references become invalid after the join operation.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – List of objects which will be merged with this object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="blenderproc.types.MeshObject.mesh_as_bmesh">
 <code class="descname">mesh_as_bmesh</code><span class="sig-paren">(</span><em>return_copy=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.mesh_as_bmesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a bmesh based on the object’s mesh.</p>
@@ -1696,6 +1950,21 @@ The face index, -1 when original data isn’t available, int in [-inf, inf]</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>material</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code>) – A material that should exclusively be used as new material for the object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.MeshObject.scale_uv_coordinates">
+<code class="descname">scale_uv_coordinates</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.MeshObject.scale_uv_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales the UV coordinates of an object by a given factor. Scaling with a factor greater than one has the 
+effect of making the texture look smaller on the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The amount the UV coordinates will be scaled.</td>
 </tr>
 </tbody>
 </table>
@@ -1959,6 +2228,437 @@ The face index, -1 when original data isn’t available, int in [-inf, inf]</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The new name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="blenderproc.types.URDFObject">
+<em class="property">class </em><code class="descclassname">blenderproc.types.</code><code class="descname">URDFObject</code><span class="sig-paren">(</span><em>armature</em>, <em>links</em>, <em>xml_tree=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">blenderproc.python.types.EntityUtility.Entity</span></code></a></p>
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_fk_ik_mode">
+<code class="descname">_set_fk_ik_mode</code><span class="sig-paren">(</span><em>mode='fk'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_fk_ik_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the mode of the bone chain.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – One of “fk” or “ik” for forward / inverse kinematic.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_ik_bone_constraint">
+<code class="descname">_set_ik_bone_constraint</code><span class="sig-paren">(</span><em>bone</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_ik_bone_constraint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the ik bone constraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – Bone to set as ik constraint bone.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_ik_bone_controller">
+<code class="descname">_set_ik_bone_controller</code><span class="sig-paren">(</span><em>bone</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_ik_bone_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the ik bone controller.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – Bone to set as ik control bone.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_ik_bone_offset">
+<code class="descname">_set_ik_bone_offset</code><span class="sig-paren">(</span><em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_ik_bone_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the location offset between the control and constraint bone.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>) – The location offset.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_ik_link">
+<code class="descname">_set_ik_link</code><span class="sig-paren">(</span><em>ik_link</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_ik_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the ik link constraint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ik_link</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link" title="blenderproc.python.types.LinkUtility.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>]) – Link to set as ik link.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._set_keyframe">
+<code class="descname">_set_keyframe</code><span class="sig-paren">(</span><em>name</em>, <em>frame=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._set_keyframe" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Sets a keyframe for a specific name for all bones of all links, as well as the copy_rotation constraint for</dt>
+<dd>revolute joints.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the keyframe to be inserted.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Where to insert the keyframe.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject._switch_fk_ik_mode">
+<code class="descname">_switch_fk_ik_mode</code><span class="sig-paren">(</span><em>mode='fk'</em>, <em>keep_pose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject._switch_fk_ik_mode" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Switches between forward and inverse kinematics mode. Will do this automatically when switching between e.g.</dt>
+<dd><cite>set_rotation_euler_fk()</cite> and <cite>set_rotation_euler_ik()</cite>.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – One of  for forward / inverse kinematik.</li>
+<li><strong>keep_pose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If specified, will keep the pose when switching modes. Otherwise, will return to the old pose
+of the previously selected mode.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.create_ik_bone_controller">
+<code class="descname">create_ik_bone_controller</code><span class="sig-paren">(</span><em>link=None, relative_location=[0.0, 0.0, 0.0], use_rotation=True, chain_length=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.create_ik_bone_controller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an ik bone controller and a corresponding constraint bone for the respective link.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>link</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link" title="blenderproc.python.types.LinkUtility.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>]) – The link to create an ik bone for. If None, will use the last link.</li>
+<li><strong>relative_location</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]) – Relative location of the ik bone controller w.r.t. the bone’s location. This can be
+used to shift the point of control further away from the end effector.</li>
+<li><strong>use_rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to rotate the child links as well. Defaults to True.</li>
+<li><strong>chain_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of parent links which are influenced by this ik bone. Defaults to 0 for all
+parents.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_collision_local2world_mats">
+<code class="descname">get_all_collision_local2world_mats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_collision_local2world_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all transformations from the world frame to the collision objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">&lt;built-in function array&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of shape (num_bones, 4, 4).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_collision_objs">
+<code class="descname">get_all_collision_objs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_collision_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all collision objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of all collision objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_inertial_local2world_mats">
+<code class="descname">get_all_inertial_local2world_mats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_inertial_local2world_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all transformations from the world frame to the inertial objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">&lt;built-in function array&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of shape (num_bones, 4, 4).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_inertial_objs">
+<code class="descname">get_all_inertial_objs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_inertial_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all inertial objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial" title="blenderproc.python.types.InertialUtility.Inertial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Inertial</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of all inertial objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_local2world_mats">
+<code class="descname">get_all_local2world_mats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_local2world_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all matrix_world matrices from every joint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">&lt;built-in function array&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of shape (num_bones, 4, 4).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_urdf_objs">
+<code class="descname">get_all_urdf_objs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_urdf_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all urdf-related objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link" title="blenderproc.python.types.LinkUtility.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>, <a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial" title="blenderproc.python.types.InertialUtility.Inertial"><code class="xref py py-class docutils literal notranslate"><span class="pre">Inertial</span></code></a>, <a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of all urdf-related objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_visual_local2world_mats">
+<code class="descname">get_all_visual_local2world_mats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_visual_local2world_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all transformations from world frame to the visual objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">&lt;built-in function array&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Numpy array of shape (num_bones, 4, 4).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_all_visual_objs">
+<code class="descname">get_all_visual_objs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_all_visual_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all visual objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of all visual objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.get_links_with_revolute_joints">
+<code class="descname">get_links_with_revolute_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.get_links_with_revolute_joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all revolute joints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link" title="blenderproc.python.types.LinkUtility.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of revolute joints.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.has_reached_ik_pose">
+<code class="descname">has_reached_ik_pose</code><span class="sig-paren">(</span><em>location_error=0.01</em>, <em>rotation_error=0.01</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.has_reached_ik_pose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the urdf object was able to move to the currently set pose.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>location_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Tolerable location error in m.</li>
+<li><strong>rotation_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Tolerable rotation error in radians.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the link is at the desired ik pose; else False.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><em>hide_object=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the visibility of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hide_object</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object should be hidden in rendering.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.hide_links_and_collision_inertial_objs">
+<code class="descname">hide_links_and_collision_inertial_objs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.hide_links_and_collision_inertial_objs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hides links and their respective collision and inertial objects from rendering.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.remove_link_by_index">
+<code class="descname">remove_link_by_index</code><span class="sig-paren">(</span><em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.remove_link_by_index" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Removes a link and all its associated objects given an index. Also handles relationship of the link’s child</dt>
+<dd>with its parent. This is useful for removing a ‘world link’ which could be a simple flat surface, or if
+someone wants to shorten the whole urdf object.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Index of the joint to be removed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.set_ascending_category_ids">
+<code class="descname">set_ascending_category_ids</code><span class="sig-paren">(</span><em>category_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.set_ascending_category_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets semantic categories to the links and their associated objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>category_ids</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]) – List of ‘category_id’s for every link. If None, will create a list from [1 … len(links)].</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.set_location_ik">
+<code class="descname">set_location_ik</code><span class="sig-paren">(</span><em>location</em>, <em>frame=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.set_location_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs location change in inverse kinematics mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], &lt;built-in function array&gt;, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>]) – Location vector.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The keyframe where to insert the rotation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.set_rotation_euler_fk">
+<code class="descname">set_rotation_euler_fk</code><span class="sig-paren">(</span><em>link</em>, <em>rotation_euler</em>, <em>mode='absolute'</em>, <em>frame=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.set_rotation_euler_fk" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Rotates one specific link or all links based on euler angles in forward kinematic mode. Validates values</dt>
+<dd>with given constraints.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>link</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link" title="blenderproc.python.types.LinkUtility.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>]) – The link to be rotated. If None, will perform the rotation on all revolute joints.</li>
+<li><strong>rotation_euler</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Euler</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The amount of rotation (in radians). Either three floats for x, y and z axes, or a
+single float. In the latter case, the axis of rotation is derived based on the rotation
+constraint. If these are not properly set (i.e., two axes must have equal min/max
+values) an exception will be thrown.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – One of [“absolute”, “relative”]. For absolute rotations we clip the rotation value based on the
+constraints. For relative we don’t - this will result in inverse motion after the constraint’s
+limits have been reached.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The keyframe where to insert the rotation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="blenderproc.types.URDFObject.set_rotation_euler_ik">
+<code class="descname">set_rotation_euler_ik</code><span class="sig-paren">(</span><em>rotation_euler</em>, <em>mode='absolute'</em>, <em>frame=0</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.types.URDFObject.set_rotation_euler_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs rotation in inverse kinematics mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rotation_euler</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Euler</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The amount of rotation (in radians). Either three floats for x, y and z axes, or a
+single float. In the latter case, the axis of rotation is derived based on the rotation
+constraint. If these are not properly set (i.e., two axes must have equal min/max
+values) an exception will be thrown.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – One of [“absolute”, “relative”]. For absolute rotations we clip the rotation value based on the
+constraints. For relative we don’t - this will result in inverse motion after the constraint’s
+limits have been reached.</li>
+<li><strong>frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The keyframe where to insert the rotation.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

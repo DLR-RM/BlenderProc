@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.main\.Provider module
-===================================================
+blenderproc.python.modules.main.Provider module
+===============================================
 
 .. automodule:: blenderproc.python.modules.main.Provider
     :members:

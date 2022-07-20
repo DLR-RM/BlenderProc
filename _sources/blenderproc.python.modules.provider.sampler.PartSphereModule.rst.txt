@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler\.PartSphereModule module
-========================================================================
+blenderproc.python.modules.provider.sampler.PartSphereModule module
+===================================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.PartSphereModule
     :members:

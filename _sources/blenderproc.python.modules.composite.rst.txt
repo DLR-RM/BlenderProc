@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.composite package
-===============================================
+blenderproc.python.modules.composite package
+============================================
 
 Submodules
 ----------

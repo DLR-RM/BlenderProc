@@ -1,5 +1,5 @@
-blenderproc\.lighting package
-==================================
+blenderproc.lighting package
+================================
 
 Module contents
 ---------------

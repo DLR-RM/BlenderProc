@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.SceneNetLoader module
-==================================================
+blenderproc.python.loader.SceneNetLoader module
+===============================================
 
 .. automodule:: blenderproc.python.loader.SceneNetLoader
     :members:

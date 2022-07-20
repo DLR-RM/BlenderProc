@@ -1,5 +1,5 @@
-blenderproc\.python\.sampler\.Disk module
-=========================================
+blenderproc.python.sampler.Disk module
+======================================
 
 .. automodule:: blenderproc.python.sampler.Disk
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.filter\.Filter module
-==========================================
+blenderproc.python.filter.Filter module
+=======================================
 
 .. automodule:: blenderproc.python.filter.Filter
     :members:

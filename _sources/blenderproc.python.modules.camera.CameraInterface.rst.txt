@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera\.CameraInterface module
-============================================================
+blenderproc.python.modules.camera.CameraInterface module
+========================================================
 
 .. automodule:: blenderproc.python.modules.camera.CameraInterface
     :members:

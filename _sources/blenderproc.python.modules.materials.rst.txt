@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.materials package
-===============================================
+blenderproc.python.modules.materials package
+============================================
 
 Submodules
 ----------

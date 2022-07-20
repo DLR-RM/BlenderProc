@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler\.Uniform3d module
-=================================================================
+blenderproc.python.modules.provider.sampler.Uniform3d module
+============================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.Uniform3d
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.writer package
-===================================
+blenderproc.python.writer package
+=================================
 
 Submodules
 ----------
@@ -8,6 +8,7 @@ Submodules
 
    blenderproc.python.writer.BopWriterUtility
    blenderproc.python.writer.CocoWriterUtility
+   blenderproc.python.writer.GifWriterUtility
    blenderproc.python.writer.WriterUtility
 
 Module contents

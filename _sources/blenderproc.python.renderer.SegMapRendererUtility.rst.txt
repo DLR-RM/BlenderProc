@@ -1,5 +1,5 @@
-blenderproc\.python\.renderer\.SegMapRendererUtility module
-===========================================================
+blenderproc.python.renderer.SegMapRendererUtility module
+========================================================
 
 .. automodule:: blenderproc.python.renderer.SegMapRendererUtility
     :members:

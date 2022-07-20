@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera\.SuncgCameraSampler module
-===============================================================
+blenderproc.python.modules.camera.SuncgCameraSampler module
+===========================================================
 
 .. automodule:: blenderproc.python.modules.camera.SuncgCameraSampler
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera\.Front3DCameraSampler module
-=================================================================
+blenderproc.python.modules.camera.Front3DCameraSampler module
+=============================================================
 
 .. automodule:: blenderproc.python.modules.camera.Front3DCameraSampler
     :members:

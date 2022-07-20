@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera\.CameraLoader module
-=========================================================
+blenderproc.python.modules.camera.CameraLoader module
+=====================================================
 
 .. automodule:: blenderproc.python.modules.camera.CameraLoader
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.sampler\.UniformSO3 module
-===============================================
+blenderproc.python.sampler.UniformSO3 module
+============================================
 
 .. automodule:: blenderproc.python.sampler.UniformSO3
     :members:

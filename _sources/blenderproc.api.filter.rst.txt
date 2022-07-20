@@ -1,5 +1,5 @@
-blenderproc\.filter package
-================================
+blenderproc.filter package
+==============================
 
 Module contents
 ---------------

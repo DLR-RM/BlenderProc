@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.ObjectLoaderModule module
-===============================================================
+blenderproc.python.modules.loader.ObjectLoaderModule module
+===========================================================
 
 .. automodule:: blenderproc.python.modules.loader.ObjectLoaderModule
     :members:

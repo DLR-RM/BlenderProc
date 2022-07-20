@@ -1,5 +1,5 @@
-blenderproc\.python\.types\.EntityUtility module
-================================================
+blenderproc.python.types.EntityUtility module
+=============================================
 
 .. automodule:: blenderproc.python.types.EntityUtility
     :members:

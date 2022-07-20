@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer\.WriterInterface module
-============================================================
+blenderproc.python.modules.writer.WriterInterface module
+========================================================
 
 .. automodule:: blenderproc.python.modules.writer.WriterInterface
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader package
-============================================
+blenderproc.python.modules.loader package
+=========================================
 
 Submodules
 ----------

@@ -1,5 +1,5 @@
-blenderproc\.types package
-===============================
+blenderproc.types package
+=============================
 
 Module contents
 ---------------

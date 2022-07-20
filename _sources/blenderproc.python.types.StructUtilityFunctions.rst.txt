@@ -1,5 +1,5 @@
-blenderproc\.python\.types\.StructUtilityFunctions module
-=========================================================
+blenderproc.python.types.StructUtilityFunctions module
+======================================================
 
 .. automodule:: blenderproc.python.types.StructUtilityFunctions
     :members:

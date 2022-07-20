@@ -1,5 +1,5 @@
-blenderproc\.writer package
-================================
+blenderproc.writer package
+==============================
 
 Module contents
 ---------------

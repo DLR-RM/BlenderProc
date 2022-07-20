@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.object package &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>blenderproc.object package &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -603,11 +608,11 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the primitive to create. Available: [“CUBE”]</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the primitive to create. Available: [“CUBE”, “CYLINDER”, “CONE”, “PLANE”, “SPHERE”, “MONKEY”]</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The newly created MeshObject</td>
 </tr>
 </tbody>
 </table>
@@ -743,18 +748,25 @@ name_for_split_obj, which would be used for the newly created object.</li>
 
 <dl class="function">
 <dt id="blenderproc.object.sample_poses">
-<code class="descclassname">blenderproc.object.</code><code class="descname">sample_poses</code><span class="sig-paren">(</span><em>objects_to_sample</em>, <em>sample_pose_func</em>, <em>objects_to_check_collisions=None</em>, <em>max_tries=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.object.sample_poses" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.object.</code><code class="descname">sample_poses</code><span class="sig-paren">(</span><em>objects_to_sample</em>, <em>sample_pose_func</em>, <em>objects_to_check_collisions=None</em>, <em>max_tries=1000</em>, <em>mode_on_failure='last_pose'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.object.sample_poses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>objects_to_sample</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – A list of mesh objects whose poses are sampled based on the given function.</li>
 <li><strong>sample_pose_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>], <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The function to use for sampling the pose of a given object.</li>
 <li><strong>objects_to_check_collisions</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]]) – A list of mesh objects who should not be considered when checking for collisions.</li>
 <li><strong>max_tries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Amount of tries before giving up on an object and moving to the next one.</li>
+<li><strong>mode_on_failure</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Define final state of objects that could not be placed without collisions within max_tries attempts. Options: ‘last_pose’, ‘initial_pose’</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity" title="blenderproc.python.types.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">Entity</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with the objects to sample as keys and a Tuple with the number of executed attempts to place the object as first element, and a bool whether it has been succesfully placed without collisions.</p>
 </td>
 </tr>
 </tbody>
@@ -763,7 +775,7 @@ name_for_split_obj, which would be used for the newly created object.</li>
 
 <dl class="function">
 <dt id="blenderproc.object.sample_poses_on_surface">
-<code class="descclassname">blenderproc.object.</code><code class="descname">sample_poses_on_surface</code><span class="sig-paren">(</span><em>objects_to_sample</em>, <em>surface</em>, <em>sample_pose_func</em>, <em>max_tries=100</em>, <em>min_distance=0.25</em>, <em>max_distance=0.6</em>, <em>up_direction=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.object.sample_poses_on_surface" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">blenderproc.object.</code><code class="descname">sample_poses_on_surface</code><span class="sig-paren">(</span><em>objects_to_sample</em>, <em>surface</em>, <em>sample_pose_func</em>, <em>max_tries=100</em>, <em>min_distance=0.25</em>, <em>max_distance=0.6</em>, <em>up_direction=None</em>, <em>check_all_bb_corners_over_surface=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.object.sample_poses_on_surface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Samples objects poses on a surface.</p>
 <p>The objects are positioned slightly above the surface due to the non-axis aligned nature of used bounding boxes
 and possible non-alignment of the sampling surface (i.e. on the X-Y hyperplane, can be somewhat mitigated with
@@ -782,6 +794,8 @@ the sampling surface.</p>
 <li><strong>min_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum distance to the closest other object from objects_to_sample. Center to center.</li>
 <li><strong>max_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum distance to the closest other object from objects_to_sample. Center to center.</li>
 <li><strong>up_direction</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Normal vector of the side of surface the objects should be placed on.</li>
+<li><strong>check_all_bb_corners_over_surface</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True all bounding box corners have to be above the surface,
+else only the center of the object has to be above the surface</li>
 </ul>
 </td>
 </tr>
@@ -886,6 +900,34 @@ that an object is still recognized as ‘stopped moving’.</li>
 <li><strong>substeps_per_frame</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of simulation steps taken per frame.</li>
 <li><strong>solver_iters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of constraint solver iterations made per simulation step.</li>
 </ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="blenderproc.object.slice_faces_with_normals">
+<code class="descclassname">blenderproc.object.</code><code class="descname">slice_faces_with_normals</code><span class="sig-paren">(</span><em>mesh_object</em>, <em>compare_angle_degrees=7.5</em>, <em>up_vector_upwards=None</em>, <em>new_name_for_object='Surface'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.object.slice_faces_with_normals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts normal faces like floors in the following steps:
+1. Searchs for the specified object.
+2. Splits the surfaces which point upwards at a specified level away.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mesh_object</strong> (<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – Object to which all polygons will be extracted.</li>
+<li><strong>compare_angle_degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum difference between the up vector and the current polygon normal in degrees.</li>
+<li><strong>up_vector_upwards</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[&lt;built-in function array&gt;]) – If this is True the <cite>up_vec</cite> points upwards -&gt; [0, 0, 1] if not it points downwards: [0, 0, -1] in world coordinates. This vector is used for the <cite>compare_angle_degrees</cite> option.</li>
+<li><strong>new_name_for_object</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name for the newly created object, which faces fulfill the given parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The extracted surface of the object.</p>
 </td>
 </tr>
 </tbody>

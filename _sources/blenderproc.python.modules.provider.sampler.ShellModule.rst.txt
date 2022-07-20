@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler\.ShellModule module
-===================================================================
+blenderproc.python.modules.provider.sampler.ShellModule module
+==============================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.ShellModule
     :members:

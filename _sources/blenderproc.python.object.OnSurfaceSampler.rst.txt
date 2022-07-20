@@ -1,5 +1,5 @@
-blenderproc\.python\.object\.OnSurfaceSampler module
-====================================================
+blenderproc.python.object.OnSurfaceSampler module
+=================================================
 
 .. automodule:: blenderproc.python.object.OnSurfaceSampler
     :members:

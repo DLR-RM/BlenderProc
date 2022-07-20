@@ -1,7 +1,0 @@
-blenderproc\.python\.tests\.TestsPathManager module
-===================================================
-
-.. automodule:: blenderproc.python.tests.TestsPathManager
-    :members:
-    :undoc-members:
-    :show-inheritance:

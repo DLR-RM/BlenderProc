@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.main\.Pipeline module
-===================================================
+blenderproc.python.modules.main.Pipeline module
+===============================================
 
 .. automodule:: blenderproc.python.modules.main.Pipeline
     :members:

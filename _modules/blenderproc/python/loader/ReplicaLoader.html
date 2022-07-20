@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.loader.ReplicaLoader &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>blenderproc.python.loader.ReplicaLoader &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -469,10 +474,127 @@
             
   <h1>Source code for blenderproc.python.loader.ReplicaLoader</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
-<span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span><span class="p">,</span> <span class="n">create_with_empty_mesh</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.loader.ObjectLoader</span> <span class="kn">import</span> <span class="n">load_obj</span>
+
+
+<div class="viewcode-block" id="load_replica_segmented_mesh"><a class="viewcode-back" href="../../../../blenderproc.python.loader.ReplicaLoader.html#blenderproc.python.loader.ReplicaLoader.load_replica_segmented_mesh">[docs]</a><span class="k">def</span> <span class="nf">load_replica_segmented_mesh</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">data_set_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_smooth_shading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a segmented replica file</span>
+
+<span class="sd">    :param data_path: The path to the data folder, where all rooms are saved.</span>
+<span class="sd">    :param data_set_name: Name of the room (for example: apartment_0).</span>
+<span class="sd">    :param use_smooth_shading: if set to True all objects loaded, will have smooth shading activated</span>
+<span class="sd">    :return: The list of loaded and separated mesh objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">plyfile</span>
+    <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This function needs the plyfile lib, install it via:</span><span class="se">\n\t</span><span class="s2">blenderproc pip install plyfile&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">data_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+
+    <span class="n">current_folder</span> <span class="o">=</span> <span class="n">data_path</span> <span class="o">/</span> <span class="n">data_set_name</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The dataset folder: </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">current_folder</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> does not exist!&quot;</span><span class="p">)</span>
+
+    <span class="n">json_file_path</span> <span class="o">=</span> <span class="n">current_folder</span> <span class="o">/</span> <span class="s2">&quot;habitat&quot;</span> <span class="o">/</span> <span class="s2">&quot;info_semantic.json&quot;</span>
+
+    <span class="n">class_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">ele</span><span class="p">:</span>
+            <span class="n">class_mapping</span><span class="p">[</span><span class="n">ele</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;objects&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">ele</span><span class="p">:</span>
+            <span class="n">class_mapping</span><span class="p">[</span><span class="n">ele</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;class_name&quot;</span><span class="p">]</span>
+
+    <span class="n">ply_segmented_path</span> <span class="o">=</span> <span class="n">current_folder</span> <span class="o">/</span> <span class="s2">&quot;habitat&quot;</span> <span class="o">/</span> <span class="s2">&quot;mesh_semantic.ply&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ply_segmented_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">ply_segmented_path</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, the path was created automatically.&quot;</span><span class="p">)</span>
+
+    <span class="n">plydata</span> <span class="o">=</span> <span class="n">plyfile</span><span class="o">.</span><span class="n">PlyData</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ply_segmented_path</span><span class="p">))</span>
+
+    <span class="n">vertex_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">plydata</span><span class="p">[</span><span class="s2">&quot;vertex&quot;</span><span class="p">]])</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="n">vertex_data</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">normals</span> <span class="o">=</span> <span class="n">vertex_data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+    <span class="c1"># add alpha channel</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">vertex_data</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">vertex_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># extract the face indices and the class ids</span>
+    <span class="n">face_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">plydata</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">]])</span>
+    <span class="n">class_face_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">plydata</span><span class="p">[</span><span class="s2">&quot;face&quot;</span><span class="p">]])</span>
+    <span class="n">used_class_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">class_face_ids</span><span class="p">)</span>
+
+    <span class="n">objs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">current_class_id</span> <span class="ow">in</span> <span class="n">used_class_ids</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_class_id</span> <span class="ow">in</span> <span class="n">class_mapping</span><span class="p">:</span>
+            <span class="n">used_obj_name</span> <span class="o">=</span> <span class="n">class_mapping</span><span class="p">[</span><span class="n">current_class_id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">used_obj_name</span> <span class="o">=</span> <span class="s2">&quot;undefined&quot;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">create_with_empty_mesh</span><span class="p">(</span><span class="n">used_obj_name</span><span class="p">,</span> <span class="n">used_obj_name</span> <span class="o">+</span> <span class="s2">&quot;_mesh&quot;</span><span class="p">)</span>
+        <span class="c1"># add this new data to the mesh object</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_mesh</span><span class="p">()</span>
+
+        <span class="c1"># first select all currently used faces, based on the object id</span>
+        <span class="n">current_face_indices</span> <span class="o">=</span> <span class="n">face_indices</span><span class="p">[</span><span class="n">class_face_ids</span> <span class="o">==</span> <span class="n">current_class_id</span><span class="p">]</span>
+        <span class="n">amount_of_vertices</span> <span class="o">=</span> <span class="n">current_face_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">current_face_indices</span> <span class="o">=</span> <span class="n">current_face_indices</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># as we add all vertices used for the current object, the face indices order is just from 0</span>
+        <span class="c1"># to amount of vertices</span>
+        <span class="n">vertex_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">current_face_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># add vertices</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">current_face_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="n">current_face_indices</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="n">normals</span><span class="p">[</span><span class="n">current_face_indices</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># add faces</span>
+        <span class="n">num_vertex_indicies</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vertex_indices</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">loops</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num_vertex_indicies</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">loops</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;vertex_index&quot;</span><span class="p">,</span> <span class="n">vertex_indices</span><span class="p">)</span>
+
+        <span class="c1"># the loops are set based on how the faces are a ranged</span>
+        <span class="n">num_loops</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_vertex_indicies</span> <span class="o">//</span> <span class="n">amount_of_vertices</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num_loops</span><span class="p">)</span>
+        <span class="c1"># always amount_of_vertices vertices form one polygon</span>
+        <span class="n">loop_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_vertex_indicies</span><span class="p">,</span> <span class="n">amount_of_vertices</span><span class="p">)</span>
+        <span class="c1"># the total size of each triangle is therefore amount_of_vertices</span>
+        <span class="n">loop_total</span> <span class="o">=</span> <span class="p">[</span><span class="n">amount_of_vertices</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_loops</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;loop_start&quot;</span><span class="p">,</span> <span class="n">loop_start</span><span class="p">)</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;loop_total&quot;</span><span class="p">,</span> <span class="n">loop_total</span><span class="p">)</span>
+
+        <span class="c1"># this update is needed else the vertex colors can&#39;t be set</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="c1"># check if the mesh already has some vertex colors</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_colors</span><span class="p">:</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_colors</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+        <span class="c1"># get the newly created vertex colors</span>
+        <span class="n">color_layer</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">vertex_colors</span><span class="p">[</span><span class="s2">&quot;Col&quot;</span><span class="p">]</span>
+        <span class="n">color_layer</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="n">colors</span><span class="p">[</span><span class="n">current_face_indices</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># one final update to integrate the vertex colors</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="n">objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+    <span class="c1"># add smoothing if requested</span>
+    <span class="k">if</span> <span class="n">use_smooth_shading</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_shading_mode</span><span class="p">(</span><span class="s2">&quot;SMOOTH&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">objs</span></div>
+
 
 <div class="viewcode-block" id="load_replica"><a class="viewcode-back" href="../../../../blenderproc.python.loader.ReplicaLoader.html#blenderproc.python.loader.ReplicaLoader.load_replica">[docs]</a><span class="k">def</span> <span class="nf">load_replica</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_set_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_smooth_shading</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot; Just imports the configured .ply file straight into blender for the replica case.</span>

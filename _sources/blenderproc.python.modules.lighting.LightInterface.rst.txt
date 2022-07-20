@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.lighting\.LightInterface module
-=============================================================
+blenderproc.python.modules.lighting.LightInterface module
+=========================================================
 
 .. automodule:: blenderproc.python.modules.lighting.LightInterface
     :members:

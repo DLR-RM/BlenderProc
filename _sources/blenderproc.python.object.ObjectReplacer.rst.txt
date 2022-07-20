@@ -1,5 +1,5 @@
-blenderproc\.python\.object\.ObjectReplacer module
-==================================================
+blenderproc.python.object.ObjectReplacer module
+===============================================
 
 .. automodule:: blenderproc.python.object.ObjectReplacer
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.object package
-================================
+blenderproc.object package
+==============================
 
 Module contents
 ---------------

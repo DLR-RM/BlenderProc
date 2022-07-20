@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.postprocessing\.TrimRedundantChannels module
-==========================================================================
+blenderproc.python.modules.postprocessing.TrimRedundantChannels module
+======================================================================
 
 .. automodule:: blenderproc.python.modules.postprocessing.TrimRedundantChannels
     :members:

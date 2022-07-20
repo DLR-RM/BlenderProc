@@ -1,5 +1,5 @@
-blenderproc\.world package
-===============================
+blenderproc.world package
+=============================
 
 Module contents
 ---------------

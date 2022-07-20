@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler\.Value module
-=============================================================
+blenderproc.python.modules.provider.sampler.Value module
+========================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.Value
     :members:

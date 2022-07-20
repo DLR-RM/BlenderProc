@@ -1,17 +1,22 @@
-blenderproc\.python\.types package
-==================================
+blenderproc.python.types package
+================================
 
 Submodules
 ----------
 
 .. toctree::
 
+   blenderproc.python.types.ArmatureUtility
+   blenderproc.python.types.BoneUtility
    blenderproc.python.types.EntityUtility
+   blenderproc.python.types.InertialUtility
    blenderproc.python.types.LightUtility
+   blenderproc.python.types.LinkUtility
    blenderproc.python.types.MaterialUtility
    blenderproc.python.types.MeshObjectUtility
    blenderproc.python.types.StructUtility
    blenderproc.python.types.StructUtilityFunctions
+   blenderproc.python.types.URDFUtility
 
 Module contents
 ---------------

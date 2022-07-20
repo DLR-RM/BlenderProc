@@ -1,5 +1,5 @@
-blenderproc\.loader package
-================================
+blenderproc.loader package
+==============================
 
 Module contents
 ---------------

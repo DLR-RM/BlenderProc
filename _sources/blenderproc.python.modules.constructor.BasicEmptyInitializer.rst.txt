@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.constructor\.BasicEmptyInitializer module
-=======================================================================
+blenderproc.python.modules.constructor.BasicEmptyInitializer module
+===================================================================
 
 .. automodule:: blenderproc.python.modules.constructor.BasicEmptyInitializer
     :members:

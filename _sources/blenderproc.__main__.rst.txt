@@ -1,5 +1,5 @@
-blenderproc\.\_\_main\_\_ module
-================================
+blenderproc.\_\_main\_\_ module
+===============================
 
 .. automodule:: blenderproc.__main__
     :members:

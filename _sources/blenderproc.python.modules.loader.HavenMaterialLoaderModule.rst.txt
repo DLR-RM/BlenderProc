@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.HavenMaterialLoaderModule module
-======================================================================
+blenderproc.python.modules.loader.HavenMaterialLoaderModule module
+==================================================================
 
 .. automodule:: blenderproc.python.modules.loader.HavenMaterialLoaderModule
     :members:

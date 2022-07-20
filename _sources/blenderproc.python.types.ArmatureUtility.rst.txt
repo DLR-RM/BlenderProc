@@ -1,0 +1,7 @@
+blenderproc.python.types.ArmatureUtility module
+===============================================
+
+.. automodule:: blenderproc.python.types.ArmatureUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

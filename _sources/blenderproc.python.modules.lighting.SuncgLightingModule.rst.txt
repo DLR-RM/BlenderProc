@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.lighting\.SuncgLightingModule module
-==================================================================
+blenderproc.python.modules.lighting.SuncgLightingModule module
+==============================================================
 
 .. automodule:: blenderproc.python.modules.lighting.SuncgLightingModule
     :members:

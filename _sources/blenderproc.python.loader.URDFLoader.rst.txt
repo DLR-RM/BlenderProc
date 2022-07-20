@@ -1,0 +1,7 @@
+blenderproc.python.loader.URDFLoader module
+===========================================
+
+.. automodule:: blenderproc.python.loader.URDFLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

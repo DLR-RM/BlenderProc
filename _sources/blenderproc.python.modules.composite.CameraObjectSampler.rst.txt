@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.composite\.CameraObjectSampler module
-===================================================================
+blenderproc.python.modules.composite.CameraObjectSampler module
+===============================================================
 
 .. automodule:: blenderproc.python.modules.composite.CameraObjectSampler
     :members:

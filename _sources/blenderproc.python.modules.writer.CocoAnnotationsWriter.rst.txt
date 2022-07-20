@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer\.CocoAnnotationsWriter module
-==================================================================
+blenderproc.python.modules.writer.CocoAnnotationsWriter module
+==============================================================
 
 .. automodule:: blenderproc.python.modules.writer.CocoAnnotationsWriter
     :members:

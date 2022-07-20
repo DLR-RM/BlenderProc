@@ -1,5 +1,25 @@
-blenderproc\.python\.modules package
-====================================
+blenderproc.python.modules package
+==================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    blenderproc.python.modules.camera
+    blenderproc.python.modules.composite
+    blenderproc.python.modules.constructor
+    blenderproc.python.modules.lighting
+    blenderproc.python.modules.loader
+    blenderproc.python.modules.main
+    blenderproc.python.modules.manipulators
+    blenderproc.python.modules.materials
+    blenderproc.python.modules.object
+    blenderproc.python.modules.postprocessing
+    blenderproc.python.modules.provider
+    blenderproc.python.modules.renderer
+    blenderproc.python.modules.utility
+    blenderproc.python.modules.writer
 
 Module contents
 ---------------

@@ -1,5 +1,5 @@
-blenderproc\.python\.types\.LightUtility module
-===============================================
+blenderproc.python.types.LightUtility module
+============================================
 
 .. automodule:: blenderproc.python.types.LightUtility
     :members:

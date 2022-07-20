@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.postprocessing package
-====================================================
+blenderproc.python.modules.postprocessing package
+=================================================
 
 Submodules
 ----------

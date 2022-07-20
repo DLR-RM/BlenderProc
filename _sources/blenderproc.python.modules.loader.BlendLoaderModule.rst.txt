@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.BlendLoaderModule module
-==============================================================
+blenderproc.python.modules.loader.BlendLoaderModule module
+==========================================================
 
 .. automodule:: blenderproc.python.modules.loader.BlendLoaderModule
     :members:

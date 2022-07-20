@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.postprocessing\.NoiseRemoval module
-=================================================================
+blenderproc.python.modules.postprocessing.NoiseRemoval module
+=============================================================
 
 .. automodule:: blenderproc.python.modules.postprocessing.NoiseRemoval
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.constructor\.RandomRoomConstructorModule module
-=============================================================================
+blenderproc.python.modules.constructor.RandomRoomConstructorModule module
+=========================================================================
 
 .. automodule:: blenderproc.python.modules.constructor.RandomRoomConstructorModule
     :members:

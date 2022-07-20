@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.BopLoaderModule module
-============================================================
+blenderproc.python.modules.loader.BopLoaderModule module
+========================================================
 
 .. automodule:: blenderproc.python.modules.loader.BopLoaderModule
     :members:

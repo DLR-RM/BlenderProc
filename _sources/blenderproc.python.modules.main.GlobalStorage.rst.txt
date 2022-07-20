@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.main\.GlobalStorage module
-========================================================
+blenderproc.python.modules.main.GlobalStorage module
+====================================================
 
 .. automodule:: blenderproc.python.modules.main.GlobalStorage
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.sampler\.Sphere module
-===========================================
+blenderproc.python.sampler.Sphere module
+========================================
 
 .. automodule:: blenderproc.python.sampler.Sphere
     :members:

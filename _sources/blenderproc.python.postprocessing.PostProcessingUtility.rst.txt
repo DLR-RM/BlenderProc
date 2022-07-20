@@ -1,5 +1,5 @@
-blenderproc\.python\.postprocessing\.PostProcessingUtility module
-=================================================================
+blenderproc.python.postprocessing.PostProcessingUtility module
+==============================================================
 
 .. automodule:: blenderproc.python.postprocessing.PostProcessingUtility
     :members:

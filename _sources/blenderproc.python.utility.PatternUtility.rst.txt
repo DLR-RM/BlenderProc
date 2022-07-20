@@ -1,0 +1,7 @@
+blenderproc.python.utility.PatternUtility module
+================================================
+
+.. automodule:: blenderproc.python.utility.PatternUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+blenderproc.python.types.InertialUtility module
+===============================================
+
+.. automodule:: blenderproc.python.types.InertialUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

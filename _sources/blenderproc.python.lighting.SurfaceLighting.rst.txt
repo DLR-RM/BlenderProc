@@ -1,5 +1,5 @@
-blenderproc\.python\.lighting\.SurfaceLighting module
-=====================================================
+blenderproc.python.lighting.SurfaceLighting module
+==================================================
 
 .. automodule:: blenderproc.python.lighting.SurfaceLighting
     :members:

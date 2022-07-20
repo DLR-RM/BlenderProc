@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.AMASSLoaderModule module
-==============================================================
+blenderproc.python.modules.loader.AMASSLoaderModule module
+==========================================================
 
 .. automodule:: blenderproc.python.modules.loader.AMASSLoaderModule
     :members:

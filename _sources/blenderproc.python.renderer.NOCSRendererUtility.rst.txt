@@ -1,5 +1,5 @@
-blenderproc\.python\.renderer\.NOCSRendererUtility module
-=========================================================
+blenderproc.python.renderer.NOCSRendererUtility module
+======================================================
 
 .. automodule:: blenderproc.python.renderer.NOCSRendererUtility
     :members:

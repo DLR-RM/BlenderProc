@@ -1,5 +1,5 @@
-blenderproc\.python\.utility\.Initializer module
-================================================
+blenderproc.python.utility.Initializer module
+=============================================
 
 .. automodule:: blenderproc.python.utility.Initializer
     :members:

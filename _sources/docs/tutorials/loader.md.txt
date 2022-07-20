@@ -4,12 +4,12 @@
 
 If don't have any data yet, BlenderProc offers download functionality for many datasets and freely available assets via the `blenderproc` CLI:
 
-* `blendeproc download_blenderkit`: Downloads materials and models from blenderkit
-* `blendeproc download_cc_textures`: Downloads textures from cc0textures.com.
-* `blendeproc download_haven`: Downloads HDRIs, Textures and Models from polyhaven.com.
-* `blendeproc download_ikea`: Downloads the IKEA dataset. **(At the moment this dataset is not availabe!)**
-* `blendeproc download_pix3d`: Downloads the Pix3D dataset.
-* `blendeproc download_scenenet`: Downloads the scenenet dataset.
+* `blenderproc download blenderkit <output_dir>`: Downloads materials and models from blenderkit
+* `blenderproc download cc_textures <output_dir>`: Downloads textures from cc0textures.com.
+* `blenderproc download haven <output_dir>`: Downloads HDRIs, Textures and Models from polyhaven.com.
+* `blenderproc download ikea <output_dir>`: Downloads the IKEA dataset. **(At the moment this dataset is not availabe!)**
+* `blenderproc download pix3d <output_dir>`: Downloads the Pix3D dataset.
+* `blenderproc download scenenet <output_dir>`: Downloads the scenenet dataset.
 
 ## Loading
 

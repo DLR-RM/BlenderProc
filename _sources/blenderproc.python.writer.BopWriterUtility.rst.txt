@@ -1,5 +1,5 @@
-blenderproc\.python\.writer\.BopWriterUtility module
-====================================================
+blenderproc.python.writer.BopWriterUtility module
+=================================================
 
 .. automodule:: blenderproc.python.writer.BopWriterUtility
     :members:

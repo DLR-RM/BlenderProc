@@ -1,5 +1,5 @@
-blenderproc\.python\.material\.Dust module
-==========================================
+blenderproc.python.material.Dust module
+=======================================
 
 .. automodule:: blenderproc.python.material.Dust
     :members:

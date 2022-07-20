@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.TextureLoader module
-=================================================
+blenderproc.python.loader.TextureLoader module
+==============================================
 
 .. automodule:: blenderproc.python.loader.TextureLoader
     :members:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BlenderProc2 &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>BlenderProc2 &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -480,8 +485,8 @@
 
 </p><p>A procedural Blender pipeline for photorealistic rendering.</p>
 <p><a class="reference external" href="https://dlr-rm.github.io/BlenderProc">Documentation</a> | <a class="reference internal" href="index.html#tutorials"><span class="std std-ref">Tutorials</span></a> | <a class="reference internal" href="index.html#examples"><span class="std std-ref">Examples</span></a> | <a class="reference external" href="https://arxiv.org/abs/1911.01911">ArXiv paper</a> | <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">Workshop paper</a></p>
-<div class="section" id="features">
-<span id="id1"></span><h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features-1">
+<span id="features"></span><h2>Features<a class="headerlink" href="#features-1" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Loading: <code class="docutils literal notranslate"><span class="pre">*.obj</span></code>, <code class="docutils literal notranslate"><span class="pre">*.ply</span></code>, <code class="docutils literal notranslate"><span class="pre">*.blend</span></code>, BOP, ShapeNet, Haven, 3D-FRONT, etc.</li>
 <li>Objects: Set or sample object poses, apply physics and collision checking.</li>
@@ -492,17 +497,17 @@
 <li>Writing: .hdf5 containers, COCO &amp; BOP annotations.</li>
 </ul>
 </div>
-<div class="section" id="installation">
-<span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="via-pip">
-<span id="id3"></span><h3>Via pip<a class="headerlink" href="#via-pip" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="installation-1">
+<span id="installation"></span><h2>Installation<a class="headerlink" href="#installation-1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="via-pip-1">
+<span id="via-pip"></span><h3>Via pip<a class="headerlink" href="#via-pip-1" title="Permalink to this headline">¶</a></h3>
 <p>The simplest way to install blenderproc is via pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install blenderproc
 </pre></div>
 </div>
 </div>
-<div class="section" id="git-clone">
-<span id="id4"></span><h3>Git clone<a class="headerlink" href="#git-clone" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="git-clone-1">
+<span id="git-clone"></span><h3>Git clone<a class="headerlink" href="#git-clone-1" title="Permalink to this headline">¶</a></h3>
 <p>If you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/DLR-RM/BlenderProc
 </pre></div>
@@ -515,20 +520,24 @@ pip install -e .
 </div>
 </div>
 </div>
-<div class="section" id="usage">
-<span id="id5"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="usage-1">
+<span id="usage"></span><h2>Usage<a class="headerlink" href="#usage-1" title="Permalink to this headline">¶</a></h2>
 <p>BlenderProc has to be run inside the blender python environment, as only there we can access the blender API.</p>
 <p>Therefore, instead of running your script with the usual python interpreter, the command line interface of BlenderProc has to be used.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc run &lt;your_python_script&gt;
 </pre></div>
 </div>
 <p>In general, one run of your script first loads or constructs a 3D scene, then sets some camera poses inside this scene and renders different types of images (RGB, distance, semantic segmentation, etc.) for each of those camera poses.</p>
-<p>In the usual case, to create a big and diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.</p>
-<p>With a little more experience, it is also possible to render multiple times in one script call, read <a class="reference internal" href="docs/tutorials/key_frames.html"><span class="doc">here</span></a> how this is done.</p>
+<p>Usually, you will run your script multiple times, each time producing a new scene and rendering e.g. 5-20 images from it.</p>
+<p>With a little more experience, it is also possible to change scenes during a single script call, read <a class="reference internal" href="docs/tutorials/key_frames.html"><span class="doc">here</span></a> how this is done.</p>
 </div>
-<div class="section" id="quickstart">
-<span id="id6"></span><h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<p>Create a python script <code class="docutils literal notranslate"><span class="pre">quickstart.py</span></code> with the following content:</p>
+<div class="section" id="quickstart-1">
+<span id="quickstart"></span><h2>Quickstart<a class="headerlink" href="#quickstart-1" title="Permalink to this headline">¶</a></h2>
+<p>You can test your BlenderProc pip installation by running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc quickstart
+</pre></div>
+</div>
+<p>This is an alias to <code class="docutils literal notranslate"><span class="pre">blenderproc</span> <span class="pre">run</span> <span class="pre">quickstart.py</span></code> where <code class="docutils literal notranslate"><span class="pre">quickstart.py</span></code> is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">blenderproc</span> <span class="k">as</span> <span class="nn">bproc</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -574,18 +583,14 @@ pip install -e .
 <span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_hdf5</span><span class="p">(</span><span class="s2">&quot;output/&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now run the script via:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc run quickstart.py
-</pre></div>
-</div>
-<p>BlenderProc now creates the specified scene and renders the image into <code class="docutils literal notranslate"><span class="pre">output/0.hdf5</span></code>.</p>
+<p>BlenderProc creates the specified scene and renders the image into <code class="docutils literal notranslate"><span class="pre">output/0.hdf5</span></code>.</p>
 <p>To visualize that image, simply call:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc vis hdf5 output/0.hdf5
 </pre></div>
 </div>
 <p>Thats it! You rendered your first image with BlenderProc!</p>
-<div class="section" id="debugging-in-the-blender-gui">
-<span id="id7"></span><h3>Debugging in the Blender GUI<a class="headerlink" href="#debugging-in-the-blender-gui" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="debugging-in-the-blender-gui-1">
+<span id="debugging-in-the-blender-gui"></span><h3>Debugging in the Blender GUI<a class="headerlink" href="#debugging-in-the-blender-gui-1" title="Permalink to this headline">¶</a></h3>
 <p>To understand what is actually going on, BlenderProc has the great feature of visualizing everything inside the blender UI.</p>
 <p>To do so, simply call your script with the <code class="docutils literal notranslate"><span class="pre">debug</span></code> instead of <code class="docutils literal notranslate"><span class="pre">run</span></code> subcommand:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc debug quickstart.py
@@ -600,34 +605,34 @@ pip install -e .
 
 </p><p>The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.</p>
 </div>
-<div class="section" id="breakpoint-debugging-in-ides">
-<span id="id8"></span><h3>Breakpoint-Debugging in IDEs<a class="headerlink" href="#breakpoint-debugging-in-ides" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="breakpoint-debugging-in-ides-1">
+<span id="breakpoint-debugging-in-ides"></span><h3>Breakpoint-Debugging in IDEs<a class="headerlink" href="#breakpoint-debugging-in-ides-1" title="Permalink to this headline">¶</a></h3>
 <p>As blenderproc runs in blenders separate python environment, debugging your blenderproc script cannot be done in the same way as with any other python script.</p>
 <p>Therefore, remote debugging is necessary, which is explained for vscode and PyCharm in the following:</p>
-<div class="section" id="debugging-with-vscode">
-<span id="id9"></span><h4>Debugging with vscode<a class="headerlink" href="#debugging-with-vscode" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="debugging-with-vscode-1">
+<span id="debugging-with-vscode"></span><h4>Debugging with vscode<a class="headerlink" href="#debugging-with-vscode-1" title="Permalink to this headline">¶</a></h4>
 <p>First, install the <code class="docutils literal notranslate"><span class="pre">debugpy</span></code> package in blenders python environment.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">debugpy</span>
 </pre></div>
 </div>
 <p>Now add the following configuration to your vscode <a class="reference external" href="https://code.visualstudio.com/docs/python/debugging#_initialize-configurations">launch.json</a>.</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 
-    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Attach&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Attach&quot;</span><span class="p">,</span><span class="w"></span>
 
-    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;python&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"></span>
 
-    <span class="nt">&quot;request&quot;</span><span class="p">:</span> <span class="s2">&quot;attach&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;request&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;attach&quot;</span><span class="p">,</span><span class="w"></span>
 
-    <span class="nt">&quot;connect&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;connect&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-        <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span><span class="w"></span>
 
-        <span class="nt">&quot;port&quot;</span><span class="p">:</span> <span class="mi">5678</span>
+<span class="w">        </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5678</span><span class="w"></span>
 
-    <span class="p">}</span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Finally, add the following lines to the top (after the imports) of your blenderproc script which you want to debug.</p>
@@ -641,14 +646,13 @@ pip install -e .
 <p>Now run your blenderproc script as usual via the CLI and then start the added “Attach” configuration in vscode.</p>
 <p>You are now able to add breakpoints and go through the execution step by step.</p>
 </div>
-<div class="section" id="debugging-with-pycharm-professional">
-<span id="id10"></span><h4>Debugging with PyCharm Professional<a class="headerlink" href="#debugging-with-pycharm-professional" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="debugging-with-pycharm-professional-1">
+<span id="debugging-with-pycharm-professional"></span><h4>Debugging with PyCharm Professional<a class="headerlink" href="#debugging-with-pycharm-professional-1" title="Permalink to this headline">¶</a></h4>
 <p>In Pycharm, go to <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">configurations...</span></code> and create a <a class="reference external" href="https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html#remote-debug-config">new configuration</a> based on <code class="docutils literal notranslate"><span class="pre">Python</span> <span class="pre">Debug</span> <span class="pre">Server</span></code>.</p>
 <p>The configuration will show you, specifically for your version, which pip package to install and which code to add into the script.</p>
 <p>The following assumes Pycharm 2021.3:</p>
 <p>First, install the <code class="docutils literal notranslate"><span class="pre">pydevd-pycharm</span></code> package in blenders python environment.</p>
-<p>Unfortunately, the package cannot be installed into our custom separate packages folder, therefore, make sure to add <code class="docutils literal notranslate"><span class="pre">--not-use-custom-package-path</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pydevd</span><span class="o">-</span><span class="n">pycharm</span><span class="o">~=</span><span class="mf">212.5457.59</span> <span class="o">--</span><span class="ow">not</span><span class="o">-</span><span class="n">use</span><span class="o">-</span><span class="n">custom</span><span class="o">-</span><span class="n">package</span><span class="o">-</span><span class="n">path</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">blenderproc</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pydevd</span><span class="o">-</span><span class="n">pycharm</span><span class="o">~=</span><span class="mf">212.5457.59</span>
 </pre></div>
 </div>
 <p>Now, add the following code to the top (after the imports) of your blenderproc script which you want to debug.</p>
@@ -663,11 +667,11 @@ pip install -e .
 </div>
 </div>
 </div>
-<div class="section" id="what-to-do-next">
-<span id="id11"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-to-do-next-1">
+<span id="what-to-do-next"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next-1" title="Permalink to this headline">¶</a></h2>
 <p>As you now ran your first BlenderProc script, your ready to learn the basics:</p>
-<div class="section" id="tutorials">
-<span id="id12"></span><h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tutorials-1">
+<span id="tutorials"></span><h3>Tutorials<a class="headerlink" href="#tutorials-1" title="Permalink to this headline">¶</a></h3>
 <p>Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:</p>
 <ol class="arabic simple">
 <li><a class="reference internal" href="docs/tutorials/loader.html"><span class="doc">Loading and manipulating objects</span></a></li>
@@ -678,8 +682,8 @@ pip install -e .
 <li><a class="reference internal" href="docs/tutorials/physics.html"><span class="doc">Positioning objects via the physics simulator</span></a></li>
 </ol>
 </div>
-<div class="section" id="examples">
-<span id="id13"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="examples-1">
+<span id="examples"></span><h3>Examples<a class="headerlink" href="#examples-1" title="Permalink to this headline">¶</a></h3>
 <p>We provide a lot of <a class="reference internal" href="examples/README.html"><span class="doc">examples</span></a> which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide support for some datasets.</p>
 <ul class="simple">
 <li><a class="reference internal" href="examples/basics/basic/README.html"><span class="doc">Basic scene</span></a>: Basic example, this is the ideal place to start for beginners</li>
@@ -694,16 +698,16 @@ pip install -e .
 <p>and much more, see our <a class="reference internal" href="examples/README.html"><span class="doc">examples</span></a> for more details.</p>
 </div>
 </div>
-<div class="section" id="contributions">
-<span id="id14"></span><h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="contributions-1">
+<span id="contributions"></span><h2>Contributions<a class="headerlink" href="#contributions-1" title="Permalink to this headline">¶</a></h2>
 <p>Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Start a PR. Check the <a class="reference internal" href="CONTRIBUTING.html"><span class="doc">contributions guidelines</span></a>.</p>
 </div>
-<div class="section" id="change-log">
-<span id="id15"></span><h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="change-log-1">
+<span id="change-log"></span><h2>Change log<a class="headerlink" href="#change-log-1" title="Permalink to this headline">¶</a></h2>
 <p>See our <a class="reference internal" href="change_log.html"><span class="doc">change log</span></a>.</p>
 </div>
-<div class="section" id="citation">
-<span id="id16"></span><h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="citation-1">
+<span id="citation"></span><h2>Citation<a class="headerlink" href="#citation-1" title="Permalink to this headline">¶</a></h2>
 <p>If you use BlenderProc in a research project, please cite as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">denninger2019blenderproc</span><span class="p">,</span>
 

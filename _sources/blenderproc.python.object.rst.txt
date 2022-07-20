@@ -1,12 +1,12 @@
-blenderproc\.python\.object package
-===================================
+blenderproc.python.object package
+=================================
 
 Submodules
 ----------
 
 .. toctree::
 
-   blenderproc.python.object.FloorExtractor
+   blenderproc.python.object.FaceSlicer
    blenderproc.python.object.ObjectMerging
    blenderproc.python.object.ObjectPoseSampler
    blenderproc.python.object.ObjectReplacer

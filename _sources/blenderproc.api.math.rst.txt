@@ -1,5 +1,5 @@
-blenderproc\.math package
-==============================
+blenderproc.math package
+============================
 
 Module contents
 ---------------

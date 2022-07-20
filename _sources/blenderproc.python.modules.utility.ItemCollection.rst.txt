@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.utility\.ItemCollection module
-============================================================
+blenderproc.python.modules.utility.ItemCollection module
+========================================================
 
 .. automodule:: blenderproc.python.modules.utility.ItemCollection
     :members:

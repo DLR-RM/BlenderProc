@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.main\.Module module
-=================================================
+blenderproc.python.modules.main.Module module
+=============================================
 
 .. automodule:: blenderproc.python.modules.main.Module
     :members:

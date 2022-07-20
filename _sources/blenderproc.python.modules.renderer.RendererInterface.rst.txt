@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.renderer\.RendererInterface module
-================================================================
+blenderproc.python.modules.renderer.RendererInterface module
+============================================================
 
 .. automodule:: blenderproc.python.modules.renderer.RendererInterface
     :members:

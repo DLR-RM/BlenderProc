@@ -1,5 +1,5 @@
-blenderproc\.utility package
-=================================
+blenderproc.utility package
+===============================
 
 Module contents
 ---------------

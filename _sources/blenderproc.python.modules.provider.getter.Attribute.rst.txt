@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.getter\.Attribute module
-================================================================
+blenderproc.python.modules.provider.getter.Attribute module
+===========================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.Attribute
     :members:

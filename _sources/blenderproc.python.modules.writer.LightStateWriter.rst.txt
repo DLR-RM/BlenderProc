@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer\.LightStateWriter module
-=============================================================
+blenderproc.python.modules.writer.LightStateWriter module
+=========================================================
 
 .. automodule:: blenderproc.python.modules.writer.LightStateWriter
     :members:

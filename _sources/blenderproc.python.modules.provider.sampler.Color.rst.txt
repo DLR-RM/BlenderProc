@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.sampler\.Color module
-=============================================================
+blenderproc.python.modules.provider.sampler.Color module
+========================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.Color
     :members:

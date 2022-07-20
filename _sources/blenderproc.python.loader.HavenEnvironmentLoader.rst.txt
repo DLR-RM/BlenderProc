@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.HavenEnvironmentLoader module
-==========================================================
+blenderproc.python.loader.HavenEnvironmentLoader module
+=======================================================
 
 .. automodule:: blenderproc.python.loader.HavenEnvironmentLoader
     :members:

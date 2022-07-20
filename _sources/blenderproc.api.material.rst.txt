@@ -1,5 +1,5 @@
-blenderproc\.material package
-==================================
+blenderproc.material package
+================================
 
 Module contents
 ---------------

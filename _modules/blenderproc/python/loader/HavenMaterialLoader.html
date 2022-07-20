@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>blenderproc.python.loader.HavenMaterialLoader &mdash; BlenderProc 2.2.0 documentation</title>
+  <title>blenderproc.python.loader.HavenMaterialLoader &mdash; BlenderProc 2.4.0 documentation</title>
   
 
   
@@ -122,6 +122,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,6 +135,8 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
@@ -147,6 +150,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_object_sampling/README.html">front_3d_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
@@ -210,7 +214,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
@@ -235,16 +239,16 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
@@ -255,17 +259,18 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -470,86 +475,198 @@
   <h1>Source code for blenderproc.python.loader.HavenMaterialLoader</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">addon_utils</span>
 <span class="kn">import</span> <span class="nn">bpy</span>
 
+<span class="kn">from</span> <span class="nn">blenderproc.python.types.MaterialUtility</span> <span class="kn">import</span> <span class="n">Material</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.material</span> <span class="kn">import</span> <span class="n">MaterialLoaderUtility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
-<div class="viewcode-block" id="load_haven_mat"><a class="viewcode-back" href="../../../../blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.load_haven_mat">[docs]</a><span class="k">def</span> <span class="nf">load_haven_mat</span><span class="p">(</span><span class="n">folder_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;resources/haven&quot;</span><span class="p">,</span> <span class="n">used_assets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">preload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">fill_used_empty_materials</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">add_cp</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{}):</span>
+<span class="sd">&quot;&quot;&quot;Haven textures are stored as a directory with several texture maps .jpgs e.g:</span>
+<span class="sd">textures</span>
+<span class="sd">|- rock_01</span>
+<span class="sd">|  |- rock_01_ao_1k.jpg</span>
+<span class="sd">|  |- rock_01_diff_1k.jpg</span>
+<span class="sd">|  |- rock_01_disp_1k.jpg</span>
+<span class="sd">|  |- rock_01_nor_gl_1k.jpg</span>
+<span class="sd">|  |- rock_01_rough_1k.jpg</span>
+<span class="sd">|- rock_02</span>
+<span class="sd">| ...</span>
+
+<span class="sd">The general naming pattern of the texture maps is: {name}_{type}_{resolution}.jpg</span>
+<span class="sd">However, the type abbreviation is not consistent for all textures. E.g. for some textures the base color map is </span>
+<span class="sd">identified with &quot;diff&quot; and for other with &quot;col&quot;. The texture_map_identifiers dictionary tracks these variations.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">texture_map_identifiers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;base color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;diff&quot;</span><span class="p">,</span> <span class="s2">&quot;diffuse&quot;</span><span class="p">,</span> <span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="s2">&quot;albedo&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ambient occlusion&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ao&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;specular&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;roughness&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rough&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;normal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;nor&quot;</span><span class="p">,</span> <span class="s2">&quot;nor_gl&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;displacement&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;disp&quot;</span><span class="p">,</span> <span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;bump&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bump&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;transparency&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="identify_base_color_image_path"><a class="viewcode-back" href="../../../../blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.identify_base_color_image_path">[docs]</a><span class="k">def</span> <span class="nf">identify_base_color_image_path</span><span class="p">(</span><span class="n">texture_map_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Finds the path to the base color image in a list of texture map paths.</span>
+<span class="sd">    We do this by looking for any of the &quot;base color&quot; identifiers in each path.</span>
+<span class="sd">    We also make sure to account for different capitalizations of the identifier.</span>
+
+<span class="sd">    :param texture_map_paths: paths to check</span>
+<span class="sd">    :type texture_map_paths: list of strings</span>
+<span class="sd">    :return: path to the base color image and the specific identifier</span>
+<span class="sd">    :rtype: tuple of 2 strings</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">texture_map_path</span> <span class="ow">in</span> <span class="n">texture_map_paths</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">identifier_lowercase</span> <span class="ow">in</span> <span class="n">texture_map_identifiers</span><span class="p">[</span><span class="s2">&quot;base color&quot;</span><span class="p">]:</span>
+            <span class="n">search_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">identifier_lowercase</span><span class="si">}</span><span class="s2">_&quot;</span>
+            <span class="n">search_start</span> <span class="o">=</span> <span class="n">texture_map_path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">search_string</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">search_start</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">identifier_start</span> <span class="o">=</span> <span class="n">search_start</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">identifier_end</span> <span class="o">=</span> <span class="n">identifier_start</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">identifier_lowercase</span><span class="p">)</span>
+                <span class="n">identifier</span> <span class="o">=</span> <span class="n">texture_map_path</span><span class="p">[</span><span class="n">identifier_start</span><span class="p">:</span><span class="n">identifier_end</span><span class="p">]</span>
+                <span class="k">return</span> <span class="n">texture_map_path</span><span class="p">,</span> <span class="n">identifier</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="identify_texture_maps"><a class="viewcode-back" href="../../../../blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.identify_texture_maps">[docs]</a><span class="k">def</span> <span class="nf">identify_texture_maps</span><span class="p">(</span><span class="n">texture_folder_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Finds the paths of the different textures maps in a texture folder.</span>
+
+<span class="sd">    :param texture_folder_path: path to the texture folder</span>
+<span class="sd">    :return: dictionary that maps texture map types to their path when found, else it maps to an empty string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">texture_folder_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">texture_folder_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">texture_folder_path</span><span class="p">)</span>
+    <span class="n">texture_map_paths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">texture_folder_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.jpg&quot;</span><span class="p">)]</span>
+    <span class="n">color_path</span><span class="p">,</span> <span class="n">color_identifier</span> <span class="o">=</span> <span class="n">identify_base_color_image_path</span><span class="p">(</span><span class="n">texture_map_paths</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">color_path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">texture_map_types</span> <span class="o">=</span> <span class="n">texture_map_identifiers</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">texture_map_paths_by_type</span> <span class="o">=</span> <span class="p">{</span><span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;&quot;</span> <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">texture_map_types</span><span class="p">}</span>
+    <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;base color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color_path</span>
+
+    <span class="c1"># To find the other texture maps, we replace the color identifier, with the identifiers of the other texture map</span>
+    <span class="c1"># types. By comparing lowercase paths, we also account for different capitalizations e.g. Nor, NOR, NoR, ...</span>
+    <span class="k">for</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">texture_map_types</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">identifier</span> <span class="ow">in</span> <span class="n">texture_map_identifiers</span><span class="p">[</span><span class="nb">type</span><span class="p">]:</span>
+            <span class="n">texture_map_path_lowercase</span> <span class="o">=</span> <span class="n">color_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">color_identifier</span><span class="p">,</span> <span class="n">identifier</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>   
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">texture_map_paths</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">texture_map_path_lowercase</span><span class="p">:</span>
+                    <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="nb">type</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span>
+                    <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">texture_map_paths_by_type</span></div>
+
+
+<div class="viewcode-block" id="load_haven_mat"><a class="viewcode-back" href="../../../../blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.load_haven_mat">[docs]</a><span class="k">def</span> <span class="nf">load_haven_mat</span><span class="p">(</span><span class="n">folder_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;resources/haven&quot;</span><span class="p">,</span> <span class="n">used_assets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="n">preload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">fill_used_empty_materials</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                   <span class="n">add_cp</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_random_element</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Material</span><span class="p">],</span> <span class="n">Material</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot; Loads all specified haven textures from the given directory.</span>
 
 <span class="sd">    :param folder_path: The path to the downloaded haven.</span>
-<span class="sd">    :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely, only the</span>
-<span class="sd">                        beginning the name starts with. By default all assets will be loaded, specified by an empty list.</span>
+<span class="sd">    :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely,</span>
+<span class="sd">                        only the beginning the name starts with. By default all assets will be loaded, specified</span>
+<span class="sd">                        by an empty list or None.</span>
 <span class="sd">    :param preload: If set true, only the material names are loaded and not the complete material.</span>
 <span class="sd">    :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.</span>
 <span class="sd">    :param add_cp: A dictionary of materials and the respective properties.</span>
+<span class="sd">    :param return_random_element: If this is True only a single Material is loaded and returned, if you want to sample</span>
+<span class="sd">                                  many materials load them all with the preload option, use them and then fill the used</span>
+<span class="sd">                                  empty materials instead of calling this function multiple times.</span>
+<span class="sd">    :return a list of all loaded materials, if preload is active these materials do not contain any textures yet</span>
+<span class="sd">            and have to be filled before rendering (by calling this function again, there is no need to save the prior</span>
+<span class="sd">            returned list) or if return_random_element is True only a single Material is returned</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># set default value</span>
+    <span class="k">if</span> <span class="n">add_cp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">add_cp</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">used_assets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">used_assets</span> <span class="o">=</span> <span class="p">[]</span>
+
     <span class="c1"># makes the integration of complex materials easier</span>
     <span class="n">addon_utils</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;node_wrangler&quot;</span><span class="p">)</span>
 
-    <span class="n">folder_path</span> <span class="o">=</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span>
+    <span class="n">haven_folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">resolve_path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)))</span>
 
     <span class="k">if</span> <span class="n">preload</span> <span class="ow">and</span> <span class="n">fill_used_empty_materials</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Preload and fill used empty materials can not be done at the same time, check config!&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">folder_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">used_assets</span><span class="p">:</span>
-                <span class="n">skip_this_one</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">for</span> <span class="n">used_asset</span> <span class="ow">in</span> <span class="n">used_assets</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">asset</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">used_asset</span><span class="p">):</span>
-                        <span class="n">skip_this_one</span> <span class="o">=</span> <span class="kc">False</span>
-                        <span class="k">break</span>
-                <span class="k">if</span> <span class="n">skip_this_one</span><span class="p">:</span>
-                    <span class="k">continue</span>
-            <span class="n">current_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">asset</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">current_path</span><span class="p">):</span>
-                <span class="c1"># find the current base_image_path by search for _diff_, this make it independent of the used res</span>
-                <span class="n">all_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">,</span> <span class="s2">&quot;*.jpg&quot;</span><span class="p">))</span>
-                <span class="n">base_image_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="s2">&quot;_diff_&quot;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
-                        <span class="n">base_image_path</span> <span class="o">=</span> <span class="n">path</span>
-                        <span class="k">break</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">base_image_path</span><span class="p">):</span>
-                    <span class="k">continue</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Preload and fill used empty materials can not be done at the same time, check config!&quot;</span><span class="p">)</span>
 
-                <span class="c1"># if the material was already created it only has to be searched</span>
-                <span class="k">if</span> <span class="n">fill_used_empty_materials</span><span class="p">:</span>
-                    <span class="n">new_mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">find_cc_material_by_name</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">add_cp</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">new_mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">create_new_cc_material</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">add_cp</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">preload</span><span class="p">:</span>
-                    <span class="c1"># if preload then the material is only created but not filled</span>
-                    <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">fill_used_empty_materials</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">is_material_used</span><span class="p">(</span><span class="n">new_mat</span><span class="p">):</span>
-                    <span class="c1"># now only the materials, which have been used should be filled</span>
-                    <span class="k">continue</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">haven_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The given haven folder does not exist: </span><span class="si">{</span><span class="n">haven_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-                <span class="c1"># construct all image paths</span>
-                <span class="c1"># the images path contain the words named in this list, but some of them are differently</span>
-                <span class="c1"># capitalized, e.g. Nor, NOR, NoR, ...</span>
-                <span class="n">used_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ao&quot;</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">,</span> <span class="s2">&quot;rough&quot;</span><span class="p">,</span> <span class="s2">&quot;nor&quot;</span><span class="p">,</span> <span class="s2">&quot;disp&quot;</span><span class="p">,</span> <span class="s2">&quot;bump&quot;</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">]</span>
-                <span class="n">final_paths</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">used_elements</span><span class="p">:</span>
-                    <span class="n">new_path</span> <span class="o">=</span> <span class="n">base_image_path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;diff&quot;</span><span class="p">,</span> <span class="n">ele</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                    <span class="n">found_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">all_paths</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">new_path</span><span class="p">:</span>
-                            <span class="n">found_path</span> <span class="o">=</span> <span class="n">path</span>
-                            <span class="k">break</span>
-                    <span class="n">final_paths</span><span class="p">[</span><span class="n">ele</span><span class="p">]</span> <span class="o">=</span> <span class="n">found_path</span>
+    <span class="c1"># add the &quot;textures&quot; folder, if that is not already the case</span>
+    <span class="k">if</span> <span class="n">haven_folder</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s2">&quot;textures&quot;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">haven_folder</span> <span class="o">/</span> <span class="s2">&quot;textures&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">haven_folder</span> <span class="o">=</span> <span class="n">haven_folder</span> <span class="o">/</span> <span class="s2">&quot;textures&quot;</span>
 
-                <span class="c1"># create material based on these image paths</span>
-                <span class="n">HavenMaterialLoader</span><span class="o">.</span><span class="n">create_material</span><span class="p">(</span><span class="n">new_mat</span><span class="p">,</span> <span class="n">base_image_path</span><span class="p">,</span> <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;ao&quot;</span><span class="p">],</span>
-                                                    <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;spec&quot;</span><span class="p">],</span> <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;rough&quot;</span><span class="p">],</span>
-                                                    <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;alpha&quot;</span><span class="p">],</span> <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;nor&quot;</span><span class="p">],</span>
-                                                    <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;disp&quot;</span><span class="p">],</span> <span class="n">final_paths</span><span class="p">[</span><span class="s2">&quot;bump&quot;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The folder path does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder_path</span><span class="p">))</span></div>
+    <span class="n">texture_names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">haven_folder</span><span class="p">)</span>
+    <span class="n">texture_names</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">texture_names</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No texture folders found in </span><span class="si">{</span><span class="n">haven_folder</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># filter texture names based on used assets:</span>
+    <span class="k">if</span> <span class="n">used_assets</span><span class="p">:</span>
+        <span class="n">texture_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">texture_name</span> <span class="k">for</span> <span class="n">texture_name</span> <span class="ow">in</span> <span class="n">texture_names</span> <span class="k">if</span>
+                         <span class="nb">any</span><span class="p">(</span><span class="n">texture_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">used_assets</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">texture_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No texture folders found in </span><span class="si">{</span><span class="n">haven_folder</span><span class="si">}</span><span class="s2"> for which used_assets &quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;can be meet: </span><span class="si">{</span><span class="n">used_assets</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># if only one element is returned</span>
+    <span class="k">if</span> <span class="n">return_random_element</span><span class="p">:</span>
+        <span class="n">texture_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">texture_names</span><span class="p">)]</span>
+
+    <span class="n">materials</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Material</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">texture_name</span> <span class="ow">in</span> <span class="n">texture_names</span><span class="p">:</span>       
+        <span class="n">texture_folder_path</span> <span class="o">=</span> <span class="n">haven_folder</span> <span class="o">/</span> <span class="n">texture_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">texture_folder_path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ignoring </span><span class="si">{</span><span class="n">texture_folder_path</span><span class="si">}</span><span class="s2">, must be a folder.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">texture_map_paths_by_type</span> <span class="o">=</span> <span class="n">identify_texture_maps</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">texture_folder_path</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">texture_map_paths_by_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ignoring </span><span class="si">{</span><span class="n">texture_name</span><span class="si">}</span><span class="s2">, could not identify texture maps.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+                
+        <span class="c1"># if the material was already created it only has to be searched</span>
+        <span class="k">if</span> <span class="n">fill_used_empty_materials</span><span class="p">:</span>
+            <span class="n">new_mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">find_cc_material_by_name</span><span class="p">(</span><span class="n">texture_name</span><span class="p">,</span> <span class="n">add_cp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">create_new_cc_material</span><span class="p">(</span><span class="n">texture_name</span><span class="p">,</span> <span class="n">add_cp</span><span class="p">)</span>
+        <span class="c1"># append newly created material</span>
+        <span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Material</span><span class="p">(</span><span class="n">new_mat</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">preload</span><span class="p">:</span>
+            <span class="c1"># if preload then the material is only created but not filled</span>
+            <span class="k">continue</span>
+        <span class="k">elif</span> <span class="n">fill_used_empty_materials</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">is_material_used</span><span class="p">(</span><span class="n">new_mat</span><span class="p">):</span>
+            <span class="c1"># now only the materials, which have been used should be filled</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># create material based on the found image paths</span>
+        <span class="n">HavenMaterialLoader</span><span class="o">.</span><span class="n">create_material</span><span class="p">(</span><span class="n">new_mat</span><span class="p">,</span> 
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;base color&quot;</span><span class="p">],</span> 
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;ambient occlusion&quot;</span><span class="p">],</span>
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;specular&quot;</span><span class="p">],</span> 
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;roughness&quot;</span><span class="p">],</span>
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;transparency&quot;</span><span class="p">],</span> 
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;normal&quot;</span><span class="p">],</span>
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;displacement&quot;</span><span class="p">],</span> 
+                                            <span class="n">texture_map_paths_by_type</span><span class="p">[</span><span class="s2">&quot;bump&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">return_random_element</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">materials</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The amount of loaded materials is not one: </span><span class="si">{</span><span class="n">materials</span><span class="si">}</span><span class="s2">, this should not happen!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">materials</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">materials</span></div>
 
 
 <div class="viewcode-block" id="HavenMaterialLoader"><a class="viewcode-back" href="../../../../blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">[docs]</a><span class="k">class</span> <span class="nc">HavenMaterialLoader</span><span class="p">:</span>

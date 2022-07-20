@@ -1,0 +1,7 @@
+blenderproc.python.types.BoneUtility module
+===========================================
+
+.. automodule:: blenderproc.python.types.BoneUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

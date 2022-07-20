@@ -1,5 +1,5 @@
-blenderproc\.python\.lighting package
-=====================================
+blenderproc.python.lighting package
+===================================
 
 Submodules
 ----------

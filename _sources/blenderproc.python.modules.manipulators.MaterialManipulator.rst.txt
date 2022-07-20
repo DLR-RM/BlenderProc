@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.manipulators\.MaterialManipulator module
-======================================================================
+blenderproc.python.modules.manipulators.MaterialManipulator module
+==================================================================
 
 .. automodule:: blenderproc.python.modules.manipulators.MaterialManipulator
     :members:

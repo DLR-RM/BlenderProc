@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.constructor package
-=================================================
+blenderproc.python.modules.constructor package
+==============================================
 
 Submodules
 ----------

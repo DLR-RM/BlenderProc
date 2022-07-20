@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.getter\.Texture module
-==============================================================
+blenderproc.python.modules.provider.getter.Texture module
+=========================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.Texture
     :members:

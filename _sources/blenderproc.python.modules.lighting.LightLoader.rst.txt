@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.lighting\.LightLoader module
-==========================================================
+blenderproc.python.modules.lighting.LightLoader module
+======================================================
 
 .. automodule:: blenderproc.python.modules.lighting.LightLoader
     :members:

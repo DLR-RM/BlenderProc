@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.getter\.POI module
-==========================================================
+blenderproc.python.modules.provider.getter.POI module
+=====================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.POI
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.utility package
-=============================================
+blenderproc.python.modules.utility package
+==========================================
 
 Submodules
 ----------

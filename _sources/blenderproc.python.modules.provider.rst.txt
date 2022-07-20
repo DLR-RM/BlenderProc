@@ -1,5 +1,13 @@
-blenderproc\.python\.modules\.provider package
-==============================================
+blenderproc.python.modules.provider package
+===========================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    blenderproc.python.modules.provider.getter
+    blenderproc.python.modules.provider.sampler
 
 Module contents
 ---------------

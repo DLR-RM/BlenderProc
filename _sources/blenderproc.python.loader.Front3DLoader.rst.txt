@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.Front3DLoader module
-=================================================
+blenderproc.python.loader.Front3DLoader module
+==============================================
 
 .. automodule:: blenderproc.python.loader.Front3DLoader
     :members:

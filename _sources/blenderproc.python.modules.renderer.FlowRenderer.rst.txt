@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.renderer\.FlowRenderer module
-===========================================================
+blenderproc.python.modules.renderer.FlowRenderer module
+=======================================================
 
 .. automodule:: blenderproc.python.modules.renderer.FlowRenderer
     :members:

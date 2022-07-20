@@ -1,5 +1,5 @@
-blenderproc\.python\.types\.MeshObjectUtility module
-====================================================
+blenderproc.python.types.MeshObjectUtility module
+=================================================
 
 .. automodule:: blenderproc.python.types.MeshObjectUtility
     :members:

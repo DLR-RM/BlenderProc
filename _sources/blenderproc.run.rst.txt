@@ -1,7 +1,0 @@
-blenderproc\.run module
-=======================
-
-.. automodule:: blenderproc.run
-    :members:
-    :undoc-members:
-    :show-inheritance:

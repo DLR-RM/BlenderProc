@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.LoaderInterface module
-============================================================
+blenderproc.python.modules.loader.LoaderInterface module
+========================================================
 
 .. automodule:: blenderproc.python.modules.loader.LoaderInterface
     :members:

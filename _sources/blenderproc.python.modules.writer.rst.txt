@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer package
-============================================
+blenderproc.python.modules.writer package
+=========================================
 
 Submodules
 ----------

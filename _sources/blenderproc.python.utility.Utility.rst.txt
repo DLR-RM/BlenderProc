@@ -1,5 +1,5 @@
-blenderproc\.python\.utility\.Utility module
-============================================
+blenderproc.python.utility.Utility module
+=========================================
 
 .. automodule:: blenderproc.python.utility.Utility
     :members:

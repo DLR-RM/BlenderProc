@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.constructor\.RockEssentialsGroundConstructor module
-=================================================================================
+blenderproc.python.modules.constructor.RockEssentialsGroundConstructor module
+=============================================================================
 
 .. automodule:: blenderproc.python.modules.constructor.RockEssentialsGroundConstructor
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.loader package
-===================================
+blenderproc.python.loader package
+=================================
 
 Submodules
 ----------
@@ -22,6 +22,7 @@ Submodules
    blenderproc.python.loader.ShapeNetLoader
    blenderproc.python.loader.SuncgLoader
    blenderproc.python.loader.TextureLoader
+   blenderproc.python.loader.URDFLoader
 
 Module contents
 ---------------

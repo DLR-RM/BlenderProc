@@ -1,5 +1,5 @@
-blenderproc\.python\.sampler\.UpperRegionSampler module
-=======================================================
+blenderproc.python.sampler.UpperRegionSampler module
+====================================================
 
 .. automodule:: blenderproc.python.sampler.UpperRegionSampler
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.camera\.CameraSampler module
-==========================================================
+blenderproc.python.modules.camera.CameraSampler module
+======================================================
 
 .. automodule:: blenderproc.python.modules.camera.CameraSampler
     :members:

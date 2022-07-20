@@ -1,5 +1,5 @@
-blenderproc\.python\.utility package
-====================================
+blenderproc.python.utility package
+==================================
 
 Submodules
 ----------
@@ -13,6 +13,7 @@ Submodules
    blenderproc.python.utility.InstallUtility
    blenderproc.python.utility.LabelIdMapping
    blenderproc.python.utility.MathUtility
+   blenderproc.python.utility.PatternUtility
    blenderproc.python.utility.SetupUtility
    blenderproc.python.utility.Utility
 

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.IKEALoaderModule module
-=============================================================
+blenderproc.python.modules.loader.IKEALoaderModule module
+=========================================================
 
 .. automodule:: blenderproc.python.modules.loader.IKEALoaderModule
     :members:

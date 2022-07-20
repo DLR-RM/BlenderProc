@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.getter\.Material module
-===============================================================
+blenderproc.python.modules.provider.getter.Material module
+==========================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.Material
     :members:

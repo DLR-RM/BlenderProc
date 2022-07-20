@@ -1,5 +1,5 @@
-blenderproc\.python\.camera\.CameraUtility module
-=================================================
+blenderproc.python.camera.CameraUtility module
+==============================================
 
 .. automodule:: blenderproc.python.camera.CameraUtility
     :members:

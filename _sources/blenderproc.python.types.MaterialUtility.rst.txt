@@ -1,5 +1,5 @@
-blenderproc\.python\.types\.MaterialUtility module
-==================================================
+blenderproc.python.types.MaterialUtility module
+===============================================
 
 .. automodule:: blenderproc.python.types.MaterialUtility
     :members:

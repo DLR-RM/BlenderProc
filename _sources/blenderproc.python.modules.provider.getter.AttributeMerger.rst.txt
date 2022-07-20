@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.provider\.getter\.AttributeMerger module
-======================================================================
+blenderproc.python.modules.provider.getter.AttributeMerger module
+=================================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.AttributeMerger
     :members:

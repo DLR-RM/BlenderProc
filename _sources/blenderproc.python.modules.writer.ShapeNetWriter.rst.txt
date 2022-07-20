@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer\.ShapeNetWriter module
-===========================================================
+blenderproc.python.modules.writer.ShapeNetWriter module
+=======================================================
 
 .. automodule:: blenderproc.python.modules.writer.ShapeNetWriter
     :members:

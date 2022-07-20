@@ -1,5 +1,5 @@
-blenderproc\.python\.loader\.SuncgLoader module
-===============================================
+blenderproc.python.loader.SuncgLoader module
+============================================
 
 .. automodule:: blenderproc.python.loader.SuncgLoader
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.writer\.CocoWriterUtility module
-=====================================================
+blenderproc.python.writer.CocoWriterUtility module
+==================================================
 
 .. automodule:: blenderproc.python.writer.CocoWriterUtility
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.Pix3DLoaderModule module
-==============================================================
+blenderproc.python.modules.loader.Pix3DLoaderModule module
+==========================================================
 
 .. automodule:: blenderproc.python.modules.loader.Pix3DLoaderModule
     :members:

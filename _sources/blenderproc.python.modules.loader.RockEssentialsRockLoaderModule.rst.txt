@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.loader\.RockEssentialsRockLoaderModule module
-===========================================================================
+blenderproc.python.modules.loader.RockEssentialsRockLoaderModule module
+=======================================================================
 
 .. automodule:: blenderproc.python.modules.loader.RockEssentialsRockLoaderModule
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.renderer package
-=====================================
+blenderproc.python.renderer package
+===================================
 
 Submodules
 ----------

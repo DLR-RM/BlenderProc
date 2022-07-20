@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.renderer\.RgbRenderer module
-==========================================================
+blenderproc.python.modules.renderer.RgbRenderer module
+======================================================
 
 .. automodule:: blenderproc.python.modules.renderer.RgbRenderer
     :members:

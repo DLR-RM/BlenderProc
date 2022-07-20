@@ -1,5 +1,5 @@
-blenderproc\.python\.modules\.writer\.ObjectStateWriter module
-==============================================================
+blenderproc.python.modules.writer.ObjectStateWriter module
+==========================================================
 
 .. automodule:: blenderproc.python.modules.writer.ObjectStateWriter
     :members:

@@ -1,5 +1,5 @@
-blenderproc\.python\.camera\.CameraValidation module
-====================================================
+blenderproc.python.camera.CameraValidation module
+=================================================
 
 .. automodule:: blenderproc.python.camera.CameraValidation
     :members:

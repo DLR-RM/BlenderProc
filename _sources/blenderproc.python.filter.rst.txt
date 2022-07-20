@@ -1,5 +1,5 @@
-blenderproc\.python\.filter package
-===================================
+blenderproc.python.filter package
+=================================
 
 Submodules
 ----------

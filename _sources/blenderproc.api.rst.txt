@@ -1,5 +1,5 @@
-blenderproc\.api package
-========================
+blenderproc.api package
+=======================
 
 Subpackages
 -----------
