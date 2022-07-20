@@ -337,7 +337,7 @@ class Link(Entity):
         for obj in self.get_all_objs():
             obj.hide(hide_object=hide_object)
 
-    def get_visual_local2world_mats(self) -> Optional[List]:
+    def get_visual_local2world_mats(self) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the visual parts.
 
         :return: List of transformation matrices.
@@ -352,7 +352,7 @@ class Link(Entity):
         else:
             return None
 
-    def get_collision_local2world_mats(self) -> Optional[List]:
+    def get_collision_local2world_mats(self) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the collision parts.
 
         :return: List of transformation matrices.

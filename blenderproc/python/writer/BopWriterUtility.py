@@ -199,7 +199,7 @@ class BopWriterUtility:
 
         frame_gt = []
         for obj in dataset_objects:
-            if type(obj) == Link:
+            if isinstance(obj, Link):
                 if not obj.visuals:
                     continue
                 elif len(obj.visuals) > 1:
@@ -219,7 +219,7 @@ class BopWriterUtility:
                 frame_gt.append({
                     'cam_R_m2c': list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2]),
                     'cam_t_m2c': cam_t_m2c,
-                    'obj_id': obj.get_cp("category_id") if type(obj) != Link else obj.visuals[0].get_cp('category_id') 
+                    'obj_id': obj.get_cp("category_id") if not isinstance(obj, Link) else obj.visuals[0].get_cp('category_id') 
                 })
             else:
                 print('ignored obj, ', obj["category_id"], 'because either ')
