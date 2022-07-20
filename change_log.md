@@ -1,12 +1,30 @@
 # Planned Features
 
-- Add URDF loader to define articulated objects and robots
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
 - Support non-rigid physics simulation
 - Improve performance
 - Deprecate Global Storage
 
 # Version History
+
+## Version 2.4.0 20th July 2022
+- add urdf support: 
+  - this enables the simulation of robotic arms with forward and inverse kinematics
+  - add an example to show of how this works
+- add a new face slicer option, making it easier to slice the top of a table away for placing objects on them
+- add a new example for sampling objects in 3D Front scenes
+- switch to vhacd version 4.X allowing for faster decompositions than before, speeding up the simulation
+- add an option to link blend files instead of loading them (faster, but objects can not be changed after linking)
+- add a new replica loader, loading semantic objects instead of just one mesh for the whole scene
+- add basic support for apple silicion (M1, M2), this might still mean that some packages have to be installed on their own afterwards
+- add return random material to the load haven material function, the function returns also now the full loaded list of materials
+- add new function to create a material based soley on a texture (Path or bpy.types.Image)
+- upgrade to blender 3.2.1 
+- reduce the memory demand of the semantic segmentation by fixing a small bug
+- fix a bug where the coco annotation writer wouldn't work if the frame_start is not zero
+- fix a bug where writing alpha images in the bop writer did not work
+- fix a bug where pip would reinstall packages all the time
+- fix a bug where on windows the pip path would be wrong
 
 ## Version 2.3.0 22th March 2022
 - upgrade to blender 3.1.0 
