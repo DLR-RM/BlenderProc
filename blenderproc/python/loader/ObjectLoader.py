@@ -34,7 +34,7 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             previously_selected_objects = bpy.context.selected_objects
             if filepath.endswith('.obj'):
                 # load an .obj file:
-                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+                bpy.ops.wm.obj_import(filepath=filepath, **kwargs)
             elif filepath.endswith('.ply'):
                 # load a .ply mesh
                 bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
