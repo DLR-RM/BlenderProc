@@ -346,7 +346,7 @@ class Link(Entity):
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
-        if not self.visuals:
+        if self.visuals:
             return [bone_mat @ (self.link2bone_mat.inverted() @ visual_local2link_mat) for visual_local2link_mat in
                     self.visual_local2link_mats]
         else:
@@ -361,7 +361,7 @@ class Link(Entity):
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
-        if not self.collisions:
+        if self.collisions:
             return [bone_mat @ (self.link2bone_mat.inverted() @ collision_local2link_mat) for collision_local2link_mat
                     in self.collision_local2link_mats]
         else:
