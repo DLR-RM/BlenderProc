@@ -11,7 +11,8 @@ import numpy as np
 def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshObject,
                             sample_pose_func: Callable[[MeshObject], None], max_tries: int = 100,
                             min_distance: float = 0.25, max_distance: float = 0.6,
-                            up_direction: Optional[np.ndarray] = None) -> List[MeshObject]:
+                            up_direction: Optional[np.ndarray] = None,
+                            check_all_bb_corners_over_surface: bool = True) -> List[MeshObject]:
     """ Samples objects poses on a surface.
 
     The objects are positioned slightly above the surface due to the non-axis aligned nature of used bounding boxes
@@ -27,6 +28,8 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
     :param min_distance: Minimum distance to the closest other object from objects_to_sample. Center to center.
     :param max_distance: Maximum distance to the closest other object from objects_to_sample. Center to center.
     :param up_direction: Normal vector of the side of surface the objects should be placed on.
+    :param check_all_bb_corners_over_surface: If this is True all bounding box corners have to be above the surface,
+                                              else only the center of the object has to be above the surface
     :return: The list of placed objects.
     """
     if up_direction is None:
@@ -42,7 +45,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
 
     placed_objects: List[MeshObject] = []
     for obj in objects_to_sample:
-        print("Trying to put ", obj.get_name())
+        print(f"Trying to put {obj.get_name()}")
 
         placed_successfully = False
 
@@ -56,7 +59,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
                 print("Collision detected, retrying!")
                 continue
 
-            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction):
+            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
                 print("Not above surface, retrying!")
                 continue
 
@@ -65,7 +68,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
             if obj.get_name() in bvh_cache:
                 del bvh_cache[obj.get_name()]
 
-            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction):
+            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
                 print("Not above surface after drop, retrying!")
                 continue
 
@@ -94,19 +97,27 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
 class OnSurfaceSampler:
 
     @staticmethod
-    def check_above_surface(obj: MeshObject, surface: MeshObject, up_direction: np.ndarray) -> bool:
+    def check_above_surface(obj: MeshObject, surface: MeshObject, up_direction: np.ndarray,
+                            check_all_bb_corners_over_surface: bool = True) -> bool:
         """ Check if all corners of the bounding box are "above" the surface
 
         :param obj: Object for which the check is carried out. Type: blender object.
         :param surface: The surface object.
         :param up_direction: The direction that indicates "above" direction.
+        :param check_all_bb_corners_over_surface: If this is True all bounding box corners have to be above the surface,
+                                                  else only the center of the object has to be above the surface
         :return: True if the bounding box is above the surface, False - if not.
         """
-        for point in obj.get_bound_box():
-            if not surface.position_is_above_object(point + up_direction, -up_direction,
-                                                    check_no_objects_in_between=False):
-                return False
-        return True
+        if check_all_bb_corners_over_surface:
+            for point in obj.get_bound_box():
+                if not surface.position_is_above_object(point + up_direction, -up_direction,
+                                                        check_no_objects_in_between=False):
+                    return False
+            return True
+        else:
+            center = np.mean(obj.get_bound_box(), axis=0)
+            return surface.position_is_above_object(center + up_direction, -up_direction,
+                                                    check_no_objects_in_between=False)
 
     @staticmethod
     def check_spacing(obj: MeshObject, placed_objects: List[MeshObject], min_distance: float, max_distance: float) \

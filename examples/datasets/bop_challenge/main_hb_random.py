@@ -58,6 +58,7 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     
 # activate depth rendering without antialiasing and set amount of samples for color rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+bproc.renderer.set_max_amount_of_samples(50)
 
 for i in range(args.num_scenes):
 

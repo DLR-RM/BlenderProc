@@ -1,17 +1,19 @@
-import bpy
-
 from typing import List, Union
+
+import bpy
 
 from blenderproc.python.utility import BlenderUtility
 from blenderproc.python.types.StructUtility import Struct
 from blenderproc.python.utility.Utility import Utility
+
 
 class Material(Struct):
 
     def __init__(self, material: bpy.types.Material):
         super().__init__(material)
         if not material.use_nodes:
-            raise Exception("The given material " + material.name + " does not have nodes enabled and can therefore not be handled by BlenderProc's Material wrapper class.")
+            raise RuntimeError(f"The given material {material.name} does not have nodes enabled and can "
+                               f"therefore not be handled by BlenderProc's Material wrapper class.")
 
         self.nodes = material.node_tree.nodes
         self.links = material.node_tree.links
@@ -407,6 +409,8 @@ class Material(Struct):
 
     def __setattr__(self, key, value):
         if key not in ["links", "nodes", "blender_obj"]:
-            raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
+            raise RuntimeError("The API class does not allow setting any attribute. Use the corresponding method or "
+                               "directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
+

@@ -359,7 +359,8 @@ class BopWriterUtility:
 
             if colors:
                 color_rgb = colors[frame_id]
-                color_bgr = color_rgb[..., ::-1].copy()
+                color_bgr = color_rgb.copy()
+                color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
                 if color_file_format == 'PNG':
                     rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.png')
                     cv2.imwrite(rgb_fpath, color_bgr)

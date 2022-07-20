@@ -19,7 +19,6 @@ You can also set the camera pose to a specific key frame `i` via `bproc.camera.a
 When setting object poses, e.g. via `obj.set_location(location)` they are by default set for all key frames.
 If you want to assign object poses to a specific frame `i`, you can make use of the `frame` parameter: `obj.set_location(location, frame=i)`.
 
-
 ## Debugging
 
 To inspect which keyframes are actually set, it is possible to view them in BlenderProcs debug mode (Read the [quick start](../../README.md#quickstart) to find out how to get into debug mode).
@@ -60,12 +59,14 @@ To now do the camera/object pose sampling and the rendering multiple times in on
 ```
 <object loading>
 
-<light setting>
+<light creation>
 
 for r in range(NUM_RUNS):
     bproc.utility.reset_keyframes()
     
     <setting random object poses>
+
+    <setting random light poses & strengths>
     
     <camera sampling>
     
@@ -74,7 +75,7 @@ for r in range(NUM_RUNS):
     <writing to file>
 ```
 
-
+Other properties such as object materials can not be keyframed so all images of one render path will contain the same materials. For these properties, it's better to call the rendering function frequently with a single or few keyframes and manipulate between the render calls.
 
 --- 
 

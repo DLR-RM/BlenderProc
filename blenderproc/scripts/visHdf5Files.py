@@ -1,6 +1,7 @@
 import os
 import h5py
 import argparse
+from pathlib import Path
 import numpy as np
 from matplotlib import pyplot as plt
 import sys
@@ -11,7 +12,7 @@ default_rgb_keys = ["colors", "normals", "diffuse", "nocs"]
 default_flow_keys = ["forward_flow", "backward_flow"]
 default_segmap_keys = ["segmap", ".*_segmaps"]
 default_segcolormap_keys = ["segcolormap"]
-default_depth_keys = ["distance", "depth"]
+default_depth_keys = ["distance", "depth", "stereo-depth"]
 all_default_keys = default_rgb_keys + default_flow_keys + default_segmap_keys + default_segcolormap_keys + default_depth_keys
 default_depth_max = 20
 
@@ -179,7 +180,9 @@ def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap
                     if len(value.shape) >= 3 and value.shape[0] == 2:
                         # Visualize both eyes separately
                         for i, img in enumerate(value):
-                            vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"), rgb_keys, flow_keys, segmap_keys, segcolormap_keys, depth_keys, depth_max, save_to_file)
+                            used_save_to_file = str(Path(save_to_file).with_suffix("")) + (
+                                "_left" if i == 0 else "_right") + Path(save_to_file).suffix
+                            vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"), rgb_keys, flow_keys, segmap_keys, segcolormap_keys, depth_keys, depth_max, used_save_to_file)
                     else:
                         vis_data(key, value, data, os.path.basename(path), rgb_keys, flow_keys, segmap_keys, segcolormap_keys, depth_keys, depth_max, save_to_file)
         else:

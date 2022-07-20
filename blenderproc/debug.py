@@ -4,15 +4,9 @@ import bpy
 import sys
 
 # Add path to custom packages inside the blender main directory
-if sys.platform == "linux" or sys.platform == "linux2":
-    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
-elif sys.platform == "darwin":
-    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "..", "Resources", "custom-python-packages"))
-elif sys.platform == "win32":
-    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
-else:
-    raise Exception("This system is not supported yet: {}".format(sys.platform))
-sys.path.append(packages_path)
+from blenderproc.python.utility.SetupUtility import SetupUtility
+python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(None, None)
+sys.path.append(packages_import_path)
 
 from blenderproc.python.modules.main.Pipeline import Pipeline
 

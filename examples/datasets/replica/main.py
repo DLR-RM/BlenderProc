@@ -5,29 +5,52 @@ import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
+parser.add_argument("--room_name", help="Name of the used room.", default="apartment_1")
 parser.add_argument("output_dir", help="Path to where the data should be saved")
+parser.add_argument("--load_segmented_objects", help="If this is given, the object is loaded as a segmented object.", default=False, action="store_true")
 args = parser.parse_args()
 
 # Define which dataset should be loaded and the path to the file containing possible height values.
-data_set_name = "office_1"
+data_set_name = args.room_name
+if not os.path.exists(args.replica_data_folder):
+    raise Exception("The given replica folder does not exist!")
+
+if not os.path.exists(os.path.join(args.replica_data_folder, data_set_name)):
+    raise Exception(f"The given room name \"{data_set_name}\" does not exist!")
+
 height_list_values = bproc.utility.resolve_resource(os.path.join('replica', 'height_levels', data_set_name, 'height_list_values.txt'))
 
 bproc.init()
 
 # Load the replica dataset
-objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
-# Extract the floor from the loaded room
-floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
-room = bproc.filter.one_by_attr(objs, "name", "mesh")
+if args.load_segmented_objects:
+    objs = bproc.loader.load_replica_segmented_mesh(args.replica_data_folder, data_set_name, use_smooth_shading=True)
+    floor = bproc.filter.by_attr(objs, "name", "floor")
+else:
+    objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
+    # Extract the floor from the loaded room
+    floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
+    room = bproc.filter.one_by_attr(objs, "name", "mesh")
+
+print("Loaded the replica file")
+
+for obj in objs:
+    if len(obj.get_materials()) == 0:
+        obj.new_material("VertexColor")
+    # Use vertex color of mesh as texture for all materials
+    for mat in obj.get_materials():
+        mat.map_vertex_color("Col", active_shading=False)
 
 # Init sampler for sampling locations inside the loaded replica room
-point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list_values)
+room_bounding_box = np.array([obj.get_bound_box() for obj in objs]).reshape((-1, 3))
+room_bounding_box = {"min": np.min(room_bounding_box, axis=0), "max": np.max(room_bounding_box, axis=0)}
+point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room_bounding_box, floor, height_list_values)
 
 # define the camera intrinsics
 bproc.camera.set_resolution(512, 512)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = bproc.object.create_bvh_tree_multi_objects([room, floor])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
 
 poses = 0
 tries = 0
@@ -43,10 +66,6 @@ while tries < 10000 and poses < 15:
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
-
-# Use vertex color of mesh as texture for all materials
-for mat in room.get_materials():
-    mat.map_vertex_color("Col", active_shading=False)
 
 # Activate normal rendering
 bproc.renderer.enable_normals_output()

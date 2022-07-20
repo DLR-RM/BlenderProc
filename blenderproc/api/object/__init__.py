@@ -1,4 +1,4 @@
-from blenderproc.python.object.FloorExtractor import extract_floor
+from blenderproc.python.object.FaceSlicer import extract_floor, slice_faces_with_normals
 from blenderproc.python.object.ObjectPoseSampler import sample_poses
 from blenderproc.python.object.ObjectMerging import merge_objects
 from blenderproc.python.object.ObjectReplacer import replace_objects

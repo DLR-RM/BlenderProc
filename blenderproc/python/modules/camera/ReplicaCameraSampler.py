@@ -1,10 +1,13 @@
 import os
 
+import bpy
+import numpy as np
+
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import resolve_path, Utility, resolve_resource
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
-import bpy
+
 
 class ReplicaCameraSampler(CameraSampler):
     """
@@ -42,6 +45,7 @@ class ReplicaCameraSampler(CameraSampler):
 
     def __init__(self, config):
         CameraSampler.__init__(self, config)
+        self.point_sampler: Optional[ReplicaPointInRoomSampler] = None
 
     def run(self):
         # Load the height levels of this scene
@@ -62,7 +66,9 @@ class ReplicaCameraSampler(CameraSampler):
         else:
             raise Exception("No floor object is defined!")
 
-        self.point_sampler = ReplicaPointInRoomSampler(mesh, floor_object, file_path)
+        room_bounding_box = mesh.get_bound_box()
+        room_bounding_box = {"min": np.min(room_bounding_box, axis=0), "max": np.max(room_bounding_box, axis=0)}
+        self.point_sampler = ReplicaPointInRoomSampler(room_bounding_box, floor_object, file_path)
         super().run()
 
     def _sample_pose(self, config):
@@ -72,5 +78,5 @@ class ReplicaCameraSampler(CameraSampler):
         :return: True, if the sampled pose was valid
         """
         cam2world_matrix = super()._sample_pose(config)
-        cam2world_matrix[:3,3] = self.point_sampler.sample(height = cam2world_matrix[2,3])
+        cam2world_matrix[:3, 3] = self.point_sampler.sample(height=cam2world_matrix[2, 3])
         return cam2world_matrix

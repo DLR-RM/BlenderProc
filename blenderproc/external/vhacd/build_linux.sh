@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cd $1
-cd bin/
-cmake ../src/ $2
-make -j 4
+cd app/
+cmake CmakeLists.txt -DCMAKE_BUILD_TYPE=Release
+cmake --build .

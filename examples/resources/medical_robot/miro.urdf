@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<robot name="miro">
+  <link name="world">
+	</link>
+  <joint name="base_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="base"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="base">
+    <visual>
+      <geometry>
+        <mesh filename="base.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link1_joint" type="revolute">
+    <origin xyz="0.0010 0 0.1845" rpy="0 0 0"/>
+    <parent link="base"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-2.618" upper="2.618" />
+  </joint>
+  <link name="link1">
+    <visual>
+      <geometry>
+        <mesh filename="link1.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link2_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="0 -1.5707963267948966 -1.5707963267948966"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-0.7156" upper="0.7156" />
+  </joint>
+  <link name="link2">
+    <visual>
+      <geometry>
+        <mesh filename="link2.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link3_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="1.5707963267948966 0 0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-0.7156" upper="0.7156" />
+  </joint>
+  <link name="link3">
+    <visual>
+      <geometry>
+        <mesh filename="link3.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link4_joint" type="revolute">
+    <origin xyz="0.310 0 0" rpy="-1.5707963267948966 1.5707963267948966 0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-0.8203" upper="2.0420" />
+  </joint>
+  <link name="link4">
+    <visual>
+      <geometry>
+        <mesh filename="link4.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link5_joint" type="revolute">
+    <origin xyz="0 -0.385000000000000 0" rpy="1.5707963267948966 0 0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-2.8362" upper="2.8362" />
+  </joint>
+  <link name="link5">
+    <visual>
+      <geometry>
+        <mesh filename="link5.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link6_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="-1.57079632679490 0 0"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-6.5" upper="6.5" />
+  </joint>
+  <link name="link6">
+    <visual>
+      <geometry>
+        <mesh filename="link6.obj"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="link7_joint" type="revolute">
+    <origin xyz="0 -0.200000000000000 0" rpy="1.57079632679490 0 0"/>
+    <parent link="link6"/>
+    <child link="link7"/>
+    <axis xyz="0 0 1"/>
+     <limit effort="30" velocity="1.0" lower="-2.8362" upper="2.8362" />
+  </joint>
+  <link name="link7">
+    <visual>
+      <geometry>
+        <mesh filename="link7.obj"/>
+      </geometry>
+    </visual>
+  </link>
+</robot>
+
+ 

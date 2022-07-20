@@ -126,7 +126,7 @@ class Utility:
             if "amount_of_repetitions" in module_config:
                 amount_of_repetitions = Config(module_config).get_int("amount_of_repetitions")
 
-            with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
+            with BlockStopWatch("Initializing module " + module_config["module"]):
                 for i in range(amount_of_repetitions):
                     module_class = None
                     # For backwards compatibility we allow to specify a modules also without "Module" suffix.
@@ -343,52 +343,6 @@ class Utility:
 
         return lights, windows
 
-    class BlockStopWatch:
-        """ Calls a print statement to mark the start and end of this block and also measures execution time.
-
-        Usage: with BlockStopWatch('text'):
-        """
-
-        def __init__(self, block_name):
-            self.block_name = block_name
-
-        def __enter__(self):
-            print("#### Start - " + self.block_name + " ####")
-            self.start = time.time()
-
-        def __exit__(self, type, value, traceback):
-            print("#### Finished - " + self.block_name + " (took " + (
-                        "%.3f" % (time.time() - self.start)) + " seconds) ####")
-
-    class UndoAfterExecution:
-        """ Reverts all changes done to the blender project inside this block.
-
-        Usage: with UndoAfterExecution():
-        """
-
-        def __init__(self, check_point_name: Optional[str] = None, perform_undo_op: bool = True):
-            if check_point_name is None:
-                check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
-            self.check_point_name = check_point_name
-            self._perform_undo_op = perform_undo_op
-
-        def __enter__(self):
-            if self._perform_undo_op:
-                from blenderproc.python.types.StructUtility import Struct
-                # Collect all existing struct instances
-                self.struct_instances = get_instances()
-                bpy.ops.ed.undo_push(message="before " + self.check_point_name)
-
-        def __exit__(self, type, value, traceback):
-            if self._perform_undo_op:
-                bpy.ops.ed.undo_push(message="after " + self.check_point_name)
-                # The current state points to "after", now by calling undo we go back to "before"
-                bpy.ops.ed.undo()
-                # After applying undo, all references to blender objects are invalid.
-                # Therefore we now go over all instances and update their references using their name as unique identifier.
-                for name, struct in self.struct_instances:
-                    struct.update_blender_ref(name)
-
     @staticmethod
     def build_provider(name: str, parameters: Dict[str, Any]) -> "Provider":
         """ Builds up providers like sampler or getter.
@@ -513,6 +467,18 @@ class Utility:
         return np.round(values)
 
     @staticmethod
+    def replace_output_entry(output: Dict[str, str]):
+        """ Replaces the output in the scene's custom properties with the given one
+
+        :param output: A dict containing key and path of the new output type.
+        """
+        registered_outputs = Utility.get_registered_outputs()
+        for i,reg_out in enumerate(registered_outputs):
+            if output["key"] == reg_out["key"]:
+                registered_outputs[i] = output
+        GlobalStorage.set("output", registered_outputs)      
+
+    @staticmethod
     def add_output_entry(output: Dict[str, str]):
         """ Registers the given output in the scene's custom properties
 
@@ -520,7 +486,9 @@ class Utility:
         """
         if GlobalStorage.is_in_storage("output"):
             # E.g. multiple camera samplers
-            if not Utility.output_already_registered(output, GlobalStorage.get("output")):
+            if Utility.output_already_registered(output, GlobalStorage.get("output")):
+                Utility.replace_output_entry(output)
+            else:
                 GlobalStorage.get("output").append(output)
         else:
             GlobalStorage.set("output", [output])
@@ -605,6 +573,51 @@ class Utility:
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
+class BlockStopWatch:
+    """ Calls a print statement to mark the start and end of this block and also measures execution time.
+
+    Usage: with BlockStopWatch('text'):
+    """
+
+    def __init__(self, block_name):
+        self.block_name = block_name
+
+    def __enter__(self):
+        print("#### Start - " + self.block_name + " ####")
+        self.start = time.time()
+
+    def __exit__(self, type, value, traceback):
+        print("#### Finished - " + self.block_name + " (took " + (
+                    "%.3f" % (time.time() - self.start)) + " seconds) ####")
+
+class UndoAfterExecution:
+    """ Reverts all changes done to the blender project inside this block.
+
+    Usage: with UndoAfterExecution():
+    """
+
+    def __init__(self, check_point_name: Optional[str] = None, perform_undo_op: bool = True):
+        if check_point_name is None:
+            check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
+        self.check_point_name = check_point_name
+        self._perform_undo_op = perform_undo_op
+
+    def __enter__(self):
+        if self._perform_undo_op:
+            from blenderproc.python.types.StructUtility import Struct
+            # Collect all existing struct instances
+            self.struct_instances = get_instances()
+            bpy.ops.ed.undo_push(message="before " + self.check_point_name)
+
+    def __exit__(self, type, value, traceback):
+        if self._perform_undo_op:
+            bpy.ops.ed.undo_push(message="after " + self.check_point_name)
+            # The current state points to "after", now by calling undo we go back to "before"
+            bpy.ops.ed.undo()
+            # After applying undo, all references to blender objects are invalid.
+            # Therefore we now go over all instances and update their references using their name as unique identifier.
+            for name, struct in self.struct_instances:
+                struct.update_blender_ref(name)
 
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):
