@@ -9,6 +9,7 @@
 
 ## Version 2.4.1 22th July 2022
 - allow writing poses for robot links in the BopWriter
+- loading .obj files now uses the faster importer
 - fix a pip install bug
 - fix a bug in the LinkUtility of the URDF loader
 
