@@ -82,6 +82,7 @@ def init(horizon_color: Optional[List[float]] = None, compute_device: str = "GPU
                     break
             if found:
                 break
+        init_gpus = True
     if init_gpus:
         # this ensures that recalling init doesn't change the selected GPUs
         if GlobalStorage.is_in_storage("list_of_used_gpu_ids"):

@@ -618,11 +618,15 @@ def set_used_gpus(used_gpu_ids: Optional[List[int]] = None, use_all_gpus: bool =
         raise ValueError("Either a list has to be given or all gpus have to be selected, not neither.")
 
     prefs = bpy.context.preferences.addons['cycles'].preferences
+
     if not use_all_gpus:
-        for index, device in enumerate(prefs.devices):
-            device.use = index in used_gpu_ids
+        index = 0
+        for device in prefs.devices:
+            if device.type == prefs.compute_device_type:
+                device.use = index in used_gpu_ids
+                index += 1
     else:
-        # make sure that all visible GPUs are used
+        # make sure that all visible are used
         for device in prefs.devices:
             device.use = True
         used_gpu_ids = list(range(len(prefs.devices)))
