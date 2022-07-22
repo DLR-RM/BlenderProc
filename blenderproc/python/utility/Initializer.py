@@ -1,30 +1,35 @@
 import os
 import random
+from typing import Optional, List
+
 from numpy import random as np_random
 from sys import platform
-
 import multiprocessing
 
 import bpy
+
 import blenderproc.python.camera.CameraUtility as CameraUtility
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
-
-import addon_utils
-
 import blenderproc.python.renderer.RendererUtility as RendererUtility
 
 
-def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", compute_device_type: str = None, use_experimental_features: bool = False, clean_up_scene: bool = True):
+def init(horizon_color: Optional[List[float]] = None, compute_device: str = "GPU",
+         compute_device_type: Optional[str] = None, use_experimental_features: bool = False,
+         clean_up_scene: bool = True):
     """ Initializes basic blender settings, the world and the camera.
 
     Also cleans up the whole scene at first.
 
-    :param horizon_color: The color to use for the world background.
+    :param horizon_color: The color to use for the world background. By default it is [0.05, 0.05, 0.05].
     :param compute_device: The compute device to use for the Cycles Render Engine i.e. CPU or GPU. (default: ``GPU``).
     :param compute_device_type: The compute device type to use for the Cycles Render Engine i.e. OPTIX or CUDA. Only necessary to specify, if compute device is GPU. If None is given, the available device type is used (OPTIX is preferred).
     :param use_experimental_features: Set to True, if you want to use the Experimental features of the Cycles Render Engine i.e Adaptive subdivision. (default: ``False``).
     :param clean_up_scene: Set to False, if you want to keep all scene data.
     """
+    if not horizon_color:
+        horizon_color = [0.05, 0.05, 0.05]
+
     if clean_up_scene:
         cleanup()
 
@@ -36,6 +41,7 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
     prefs = bpy.context.preferences.addons['cycles'].preferences
     # Use cycles
     bpy.context.scene.render.engine = 'CYCLES'
+    init_gpus = False
 
     if platform == "darwin":
         import platform as platform_locally
@@ -52,9 +58,7 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
                     bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
                     print('Device {} of type {} found and used.'.format(device.name, device.type))
                     break
-            # make sure that all visible GPUs are used
-            for device in prefs.devices:
-                device.use = True
+            init_gpus = True
         else:
             # there is no gpu support on mac os below 12.3, if cpu is specified as compute device,
             # then we use the cpu with maximum power
@@ -78,9 +82,13 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
                     break
             if found:
                 break
-        # make sure that all visible GPUs are used
-        for device in prefs.devices:
-            device.use = True
+    if init_gpus:
+        # this ensures that recalling init doesn't change the selected GPUs
+        if GlobalStorage.is_in_storage("list_of_used_gpu_ids"):
+            prior_used_gpu_ids = GlobalStorage.get("list_of_used_gpu_ids")
+            RendererUtility.set_used_gpus(used_gpu_ids=prior_used_gpu_ids)
+        else:
+            RendererUtility.set_used_gpus(use_all_gpus=True)
 
     # Set the Experimental features on/off
     if use_experimental_features:

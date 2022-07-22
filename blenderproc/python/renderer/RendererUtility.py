@@ -585,7 +585,6 @@ def _disable_all_denoiser():
             nodes.remove(denoiser_node)
 
 
-
 def set_world_background(color: List[float], strength: float = 1):
     """ Sets the color of blenders world background
 
@@ -603,3 +602,30 @@ def set_world_background(color: List[float], strength: float = 1):
 
     nodes.get("Background").inputs['Strength'].default_value = strength
     nodes.get("Background").inputs['Color'].default_value = color + [1]
+
+
+def set_used_gpus(used_gpu_ids: Optional[List[int]] = None, use_all_gpus: bool = False):
+    """
+    This allows setting the used gpus, the provided ids must correspond to the number of the GPU.
+
+    The ids start at 0. There are no checks performed to guarantee that a given id is present or not.
+    :param used_gpu_ids: List of used gpu ids to use, this overwrites all previous settings
+    :param use_all_gpus: If True all gpus are used and the given list is ignored.
+    """
+    if used_gpu_ids and use_all_gpus:
+        raise ValueError("The given list of used gpu ids should be empty if all gpus are requested!")
+    if not used_gpu_ids and not use_all_gpus:
+        raise ValueError("Either a list has to be given or all gpus have to be selected, not neither.")
+
+    prefs = bpy.context.preferences.addons['cycles'].preferences
+    if not use_all_gpus:
+        for index, device in enumerate(prefs.devices):
+            device.use = index in used_gpu_ids
+    else:
+        # make sure that all visible GPUs are used
+        for device in prefs.devices:
+            device.use = True
+        used_gpu_ids = list(range(len(prefs.devices)))
+
+    # save the setting for later calls of the init function
+    GlobalStorage.set("list_of_used_gpu_ids", used_gpu_ids)
