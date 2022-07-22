@@ -337,7 +337,7 @@ class Link(Entity):
         for obj in self.get_all_objs():
             obj.hide(hide_object=hide_object)
 
-    def get_visual_local2world_mats(self) -> Optional[List]:
+    def get_visual_local2world_mats(self) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the visual parts.
 
         :return: List of transformation matrices.
@@ -346,13 +346,13 @@ class Link(Entity):
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
-        if not self.visuals:
+        if self.visuals:
             return [bone_mat @ (self.link2bone_mat.inverted() @ visual_local2link_mat) for visual_local2link_mat in
                     self.visual_local2link_mats]
         else:
             return None
 
-    def get_collision_local2world_mats(self) -> Optional[List]:
+    def get_collision_local2world_mats(self) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the collision parts.
 
         :return: List of transformation matrices.
@@ -361,7 +361,7 @@ class Link(Entity):
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
-        if not self.collisions:
+        if self.collisions:
             return [bone_mat @ (self.link2bone_mat.inverted() @ collision_local2link_mat) for collision_local2link_mat
                     in self.collision_local2link_mats]
         else:
