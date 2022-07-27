@@ -72,7 +72,7 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self, duplicate_children = True) -> "MeshObject":
+    def duplicate(self, duplicate_children: bool = True) -> "MeshObject":
         """ Duplicates the object.
 
         :param duplicate_children: If True, also all children objects are recursively duplicated.
