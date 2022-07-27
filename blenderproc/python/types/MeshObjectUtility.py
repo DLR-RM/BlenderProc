@@ -1,4 +1,4 @@
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Dict
 
 import bpy
 import numpy as np
@@ -216,7 +216,9 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: str = None, cache_dir: str = "blenderproc_resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: str = None,
+                                                   cache_dir: str = "blenderproc_resources/decomposition_cache",
+                                                   cached_objects: Optional[Dict[str, List["MeshObject"]]] = None):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
         :param vhacd_path: The directory in which vhacd should be installed or is already installed.
@@ -230,8 +232,8 @@ class MeshObject(Entity):
             temp_dir = Utility.get_temporary_directory()
 
         # Decompose the object
-        parts = convex_decomposition(self, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
-        parts = [MeshObject(p) for p in parts]
+        parts = convex_decomposition(self, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir),
+                                     cached_objects=cached_objects)
 
         # Make the convex parts children of this object, enable their rigid body component and hide them
         for part in parts:

@@ -18,7 +18,7 @@
 
 import os
 from sys import platform
-from typing import Optional
+from typing import Optional, Dict, List
 
 import git
 import numpy as np
@@ -29,10 +29,13 @@ import bmesh
 from subprocess import Popen
 import shutil
 
+import blenderproc as bproc
+
 def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000,
                          name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True,
                          apply_transforms: str = "NONE", depth: int = 20, max_num_vertices_per_ch: int = 64,
-                         cache_dir: Optional[str] = None):
+                         cache_dir: Optional[str] = None,
+                         cached_objects: Optional[Dict[str, List["MeshObject"]]] = None) -> List["MeshObject"]:
     """ Uses V-HACD to decompose the given object.
 
     You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
@@ -52,6 +55,9 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     """
     if platform != "linux" and platform != "linux2":
         raise Exception("Convex decomposition is at the moment only available on linux.")
+
+    if cached_objects is None:
+        cached_objects = []
 
     # Download v-hacd library if necessary
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
@@ -141,11 +147,14 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     else:
         outFileName = os.path.join(cache_dir, str(mesh_hash) + ".obj")
 
-    bpy.ops.import_scene.obj(filepath=outFileName, axis_forward="Y", axis_up="Z")
-    imported = bpy.context.selected_objects
+    imported = bproc.loader.load_obj(filepath=outFileName, cached_objects=cached_objects)
+    #bpy.ops.import_scene.obj(filepath=outFileName, axis_forward="Y", axis_up="Z")
+    #imported = bpy.context.selected_objects
+
 
     # Name and transform the loaded parts
-    for index, hull in enumerate(imported):
+    for index, hull_mesh_obj in enumerate(imported):
+        hull = hull_mesh_obj.blender_obj
         hull.select_set(False)
         hull.matrix_basis = post_matrix
         name = name_template.replace("?", obj.get_name(), 1)
@@ -156,6 +165,8 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
         hull.data.name = name
         hull.display_type = "WIRE"
 
+    if cached_objects:
+        cached_objects[outFileName] = imported
     return imported
 
 def obj_export(mesh, fullpath):
