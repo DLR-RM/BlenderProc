@@ -255,14 +255,6 @@ class MeshObject(Entity):
         """
         self.blender_obj.hide_render = hide_object
 
-    def set_parent(self, new_parent: Entity):
-        """ Sets the parent of this object.
-
-        :param new_parent: The new parent object.
-        """
-        self.blender_obj.parent = new_parent.blender_obj
-        self.blender_obj.matrix_parent_inverse = Matrix(new_parent.get_local2world_mat()).inverted()
-
     def get_parent(self) -> Optional[Entity]:
         """ Returns the parent object.
 

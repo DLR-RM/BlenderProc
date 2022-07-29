@@ -116,12 +116,25 @@ class Entity(Struct):
         """ Deselects the entity. """
         self.blender_obj.select_set(False)
 
-    def set_parent(self, parent: "Entity"):
-        """ Sets the parent of entity.
+    def clear_parent(self):
+        """ Removes the object's parent and moves the object into the root level of the scene graph. """
+        # Remember original object pose
+        obj_pose = self.get_local2world_mat()
+        self.blender_obj.parent = None
+        # Make sure the object pose stays the same
+        self.set_local2world_mat(obj_pose)
 
-        :param parent: The parent entity to set.
+    def set_parent(self, new_parent: "Entity"):
+        """ Sets the parent of this object.
+
+        :param new_parent: The parent entity to set.
         """
-        self.blender_obj.parent = parent.blender_obj
+        # If the object has already a parent object, remove it first.
+        if self.blender_obj.parent is not None:
+            self.clear_parent()
+        self.blender_obj.parent = new_parent.blender_obj
+        # Make sure the object pose stays the same => add inverse of new parent's pose to transformation chain
+        self.blender_obj.matrix_parent_inverse = Matrix(new_parent.get_local2world_mat()).inverted()
 
     def get_parent(self) -> Optional["Entity"]:
         """ Returns the parent of the entity.
