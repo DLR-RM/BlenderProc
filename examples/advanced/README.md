@@ -3,6 +3,7 @@ These examples introduce the usage of advanced BlenderProc modules and/or their 
 
 * [auto_shading](auto_shading/README.md): How to change the shading mode of an object.
 * [camera_depth_of_field](camera_depth_of_field/README.md): Setting an object as the camera depth of field focus point.
+* [camera_random_trajectories](camera_random_trajectories/README.md): Creating camera trajectories with random walk noise.
 * [coco_annotations](coco_annotations/README.md): Generating COCO annotations in polygon or RLE format.
 * [diffuse_color_image](diffuse_color_image/README.md): How to render a scene without any lighting or shading.
 * [dust](dust/README.md): How to add dust on top objects, to make them look more real.

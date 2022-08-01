@@ -4,6 +4,7 @@ from blenderproc.python.sampler.Shell import shell
 from blenderproc.python.sampler.Sphere import sphere
 from blenderproc.python.sampler.UniformSO3 import uniformSO3
 from blenderproc.python.sampler.UpperRegionSampler import upper_region
+from blenderproc.python.sampler.RandomWalk import random_walk
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
