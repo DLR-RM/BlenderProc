@@ -1,4 +1,3 @@
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 import json
 import os
 import glob
@@ -8,12 +7,15 @@ from typing import List, Optional
 import png
 import cv2
 import bpy
-from mathutils import Matrix
+import warnings
+from mathutils import Matrix, Euler
 
+from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.types.LinkUtility import Link
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None, depths: Optional[List[np.ndarray]] = None, 
@@ -57,15 +59,15 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     # Select target objects or objects from the specified dataset or all objects
     if target_objects is not None:
-        dataset_objects = [t_obj.blender_obj for t_obj in target_objects]
+        dataset_objects = target_objects
     elif dataset:
         dataset_objects = []
-        for obj in get_all_blender_mesh_objects():
-            if "bop_dataset_name" in obj and not obj.hide_render:
-                if obj["bop_dataset_name"] == dataset:
+        for obj in get_all_mesh_objects():
+            if "bop_dataset_name" in obj.blender_obj and not obj.blender_obj.hide_render:
+                if obj.blender_obj["bop_dataset_name"] == dataset:
                     dataset_objects.append(obj)
     else:
-        dataset_objects = get_all_blender_mesh_objects()
+        dataset_objects = get_all_mesh_objects()
 
     # Check if there is any object from the specified dataset.
     if not dataset_objects:
@@ -197,22 +199,27 @@ class BopWriterUtility:
 
         frame_gt = []
         for obj in dataset_objects:
-
-            H_m2w = Matrix(WriterUtility.get_common_attribute(obj, 'matrix_world'))
+            if isinstance(obj, Link):
+                if not obj.visuals:
+                    continue
+                elif len(obj.visuals) > 1:
+                    warnings.warn(f'BOP Writer only supports saving poses of one visual mesh per Link')
+                H_m2w = Matrix(obj.get_visual_local2world_mats()[0])
+            else:
+                H_m2w = Matrix(obj.get_local2world_mat())
+                assert obj.has_cp("category_id"), "{} object has no custom property 'category_id'".format(obj.get_name())
 
             cam_H_m2c = H_c2w_opencv.inverted() @ H_m2w
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_t_m2c = cam_H_m2c.to_translation()
 
-            assert "category_id" in obj, "{} object has no custom property 'category_id'".format(obj.get_name())
-            
             # ignore examples that fell through the plane
             if not np.linalg.norm(list(cam_t_m2c)) > ignore_dist_thres:
                 cam_t_m2c = list(cam_t_m2c * unit_scaling)
                 frame_gt.append({
                     'cam_R_m2c': list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2]),
                     'cam_t_m2c': cam_t_m2c,
-                    'obj_id': obj["category_id"]
+                    'obj_id': obj.get_cp("category_id") if not isinstance(obj, Link) else obj.visuals[0].get_cp('category_id') 
                 })
             else:
                 print('ignored obj, ', obj["category_id"], 'because either ')

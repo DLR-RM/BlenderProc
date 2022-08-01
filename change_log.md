@@ -7,6 +7,12 @@
 
 # Version History
 
+## Version 2.4.1 22th July 2022
+- allow writing poses for robot links in the BopWriter
+- loading .obj files now uses the faster importer
+- fix a pip install bug
+- fix a bug in the LinkUtility of the URDF loader
+
 ## Version 2.4.0 20th July 2022
 - add urdf support: 
   - this enables the simulation of robotic arms with forward and inverse kinematics

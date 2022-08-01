@@ -1,4 +1,5 @@
 __pycache__
+dist/
 */__pycache__
 blenderproc.egg-info/
 build/
