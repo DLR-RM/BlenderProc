@@ -2,7 +2,7 @@ import numpy as np
 from typing import List
 
 def random_walk(total_length: int, dims: int, step_magnitude: float = 1.0, window_size: int = 1, 
-                interval: List[np.ndarray] = [], distribution: str = 'uniform', order: float = 1.0) -> np.ndarray:
+                interval: List[np.ndarray] = None, distribution: str = 'uniform', order: float = 1.0) -> np.ndarray:
     """
     Creates a random walk with the specified properties. Can be used to simulate camera shaking or POI drift. 
     steps ~ step_magnitude * U[-1,1]^order
@@ -32,7 +32,8 @@ def random_walk(total_length: int, dims: int, step_magnitude: float = 1.0, windo
     cumulative_steps = np.cumsum(random_steps, axis=0)
 
     # Keep the steps within the predefined interval
-    if interval:
+    if interval is not None:
+        assert len(interval) == 2, "interval must have length of two"
         left_bound = np.array(interval[0])
         size = np.abs(interval[1] - left_bound)
         cumulative_steps = np.abs((cumulative_steps - left_bound + size) % (2 * size) - size) + left_bound
