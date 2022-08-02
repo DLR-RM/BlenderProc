@@ -12,7 +12,8 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     # that we do not want to import inside the blenderproc env
     sys.path.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     # Also clean the python path as this might disturb the pip installs
-    del os.environ["PYTHONPATH"]
+    if "PYTHONPATH" in os.environ:
+        del os.environ["PYTHONPATH"]
     from .python.utility.SetupUtility import SetupUtility
     SetupUtility.setup([])
     from .api import loader
