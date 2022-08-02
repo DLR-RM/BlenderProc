@@ -1,6 +1,7 @@
 import blenderproc as bproc
 import numpy as np
 import argparse
+import mathutils
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
@@ -38,7 +39,6 @@ for i in range(25):
     location_cam = np.array([10*np.cos(i/25 * np.pi), 10*np.sin(i/25 * np.pi), 8])
     # Compute rotation based on vector going from location towards poi + drift
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi + poi_drift[i] - location_cam)
-    import mathutils
     # random walk axis-angle -> rotation matrix
     R_rand = np.array(mathutils.Matrix.Rotation(camera_shaking_rot_angle[i], 3, camera_shaking_rot_axis[i]))
     # Add the random walk to the camera rotation 
