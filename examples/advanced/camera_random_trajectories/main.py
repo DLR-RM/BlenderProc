@@ -4,10 +4,6 @@ import argparse
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
-# Install bop_toolkit_lib
-SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit"])
-from bop_toolkit_lib import transform
-
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", help="Path to the scene.obj file")
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/camera_random_trajectories/output", help="Path to where the final files, will be saved")
