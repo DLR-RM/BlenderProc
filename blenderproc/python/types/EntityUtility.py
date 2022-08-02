@@ -141,7 +141,14 @@ class Entity(Struct):
 
         :return: The parent.
         """
-        return Entity(self.blender_obj.parent) if self.blender_obj.parent is not None else None
+        return convert_to_entity_subclass(self.blender_obj.parent) if self.blender_obj.parent is not None else None
+
+    def get_children(self) -> List["Entity"]:
+        """ Returns the children objects.
+
+        :return: A list of all children objects.
+        """
+        return convert_to_entities(self.blender_obj.children, convert_to_subclasses=True)
 
     def delete(self):
         """ Deletes the entity """
@@ -188,13 +195,33 @@ def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
     return new_entity
 
 
-def convert_to_entities(blender_objects: list) -> List["Entity"]:
+def convert_to_entities(blender_objects: list, convert_to_subclasses: bool = False) -> List["Entity"]:
     """ Converts the given list of blender objects to entities
 
     :param blender_objects: List of blender objects.
+    :param convert_to_subclasses: If True, each blender object will be wrapped into a entity subclass based on the type of object.
     :return: The list of entities.
     """
-    return [Entity(obj) for obj in blender_objects]
+    if not convert_to_subclasses:
+        return [Entity(obj) for obj in blender_objects]
+    else:
+        return [convert_to_entity_subclass(obj) for obj in blender_objects]
+
+
+def convert_to_entity_subclass(blender_object: bpy.types.Object) -> "Entity":
+    """ Converts the given blender object into our respective wrapper class.
+
+    :param blender_object: The blender object.
+    :return: The wrapped object.
+    """
+    if blender_object.type == 'MESH':
+        from blenderproc.python.types.MeshObjectUtility import MeshObject
+        return MeshObject(blender_object)
+    elif blender_object.type == 'LIGHT':
+        from blenderproc.python.types.LightUtility import Light
+        return Light(blender_obj=blender_object)
+    else:
+        return Entity(blender_object)
 
 
 def delete_multiple(entities: List[Union["Entity"]]):

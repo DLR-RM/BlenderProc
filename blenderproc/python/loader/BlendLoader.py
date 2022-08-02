@@ -4,9 +4,7 @@ from typing import List, Union, Optional
 import bpy
 
 from blenderproc.python.utility.BlenderUtility import collect_all_orphan_datablocks
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import Entity, convert_to_entity_subclass
 from blenderproc.python.utility.Utility import resolve_path
 
 
@@ -65,12 +63,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                 if obj.type.lower() in obj_types:
                     # Link objects to the scene
                     bpy.context.collection.objects.link(obj)
-                    if obj.type == 'MESH':
-                        loaded_objects.append(MeshObject(obj))
-                    elif obj.type == 'LIGHT':
-                        loaded_objects.append(Light(blender_obj=obj))
-                    else:
-                        loaded_objects.append(Entity(obj))
+                    loaded_objects.append(convert_to_entity_subclass(obj))
 
                     # If a camera was imported
                     if obj.type == 'CAMERA':

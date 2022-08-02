@@ -255,20 +255,6 @@ class MeshObject(Entity):
         """
         self.blender_obj.hide_render = hide_object
 
-    def get_parent(self) -> Optional[Entity]:
-        """ Returns the parent object.
-
-        :return: The parent object, None if it has no parent.
-        """
-        return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
-
-    def get_children(self) -> List["MeshObject"]:
-        """ Returns the children objects.
-
-        :return: A list of all children objects.
-        """
-        return convert_to_meshes(self.blender_obj.children)
-
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
         if self.has_rigidbody_enabled():
