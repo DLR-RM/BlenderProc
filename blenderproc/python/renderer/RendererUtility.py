@@ -562,7 +562,8 @@ def _disable_all_denoiser():
     """
     # Disable cycles denoiser
     bpy.context.view_layer.cycles.use_denoising = False
-
+    bpy.context.scene.cycles.use_denoising = False
+    
     # Disable intel denoiser
     if bpy.context.scene.use_nodes:
         nodes = bpy.context.scene.node_tree.nodes
