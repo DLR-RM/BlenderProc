@@ -1,4 +1,4 @@
-# Camera sampling
+# Camera Random Trajectories
 
 <p align="center">
 <img src="../../../images/camera_random_trajectory.gif" alt="Front readme image" width=500>
