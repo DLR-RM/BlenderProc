@@ -10,7 +10,7 @@ import argparse
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 def cli():
-    parser = argparse.ArgumentParser("Downloads textures from cc0textures.com")
+    parser = argparse.ArgumentParser("Downloads textures from ambientcg.com")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
     args = parser.parse_args()
 
@@ -26,7 +26,7 @@ def cli():
         raise Exception("The folder already exists!")
 
     # download the csv file, which contains all the download links
-    csv_url = "https://cc0textures.com/api/v1/downloads_csv"
+    csv_url = "https://ambientcg.com/api/v1/downloads_csv"
     csv_file_path = os.path.join(cc_texture_dir, "full_info.csv")
     request = requests.get(csv_url, headers=headers)
     with open(csv_file_path, "wb") as file:
