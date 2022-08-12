@@ -6,6 +6,7 @@ import math
 import bpy
 import numpy as np
 
+from sys import platform
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
@@ -604,3 +605,65 @@ def set_world_background(color: List[float], strength: float = 1):
 
     nodes.get("Background").inputs['Strength'].default_value = strength
     nodes.get("Background").inputs['Color'].default_value = color + [1]
+
+
+def enable_experimental_features():
+    """ Enables experimental cycles features. """
+    bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
+
+
+def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Union[str, List[str]] = None, desired_gpu_ids: Union[int, List[int]] = None):
+    """ Configures the devices to use for rendering.
+
+    :param use_only_cpu: If True, only the cpu is used for rendering.
+    :param desired_gpu_device_type: One or multiple GPU device types to consider. If multiple are given, the first available is used. 
+                                    Possible choices are ["OPTIX", "CUDA", "METAL"]. Default is ["OPTIX", "CUDA"] and ["METAL"] on supported mac devices.
+    :param desired_gpu_ids: One or multiple GPU ids to specifically use. If none is given, all suitable GPUs are used.
+    """
+    if desired_gpu_device_type is None:
+        if platform == "darwin":
+            import platform as platform_locally
+            mac_version = platform_locally.mac_ver()[0]
+            mac_version_numbers = [int(ele) for ele in mac_version.split(".")]
+            # On recent macs, use METAL, otherwise use cpu only 
+            if (mac_version_numbers[0] == 12 and mac_version_numbers[1] >= 3) or mac_version_numbers[0] > 12:
+                desired_gpu_device_type = ["METAL"]
+            else:
+                desired_gpu_device_type = []
+        else:
+            # Define default for linux and windows
+            desired_gpu_device_type = ["OPTIX", "CUDA"]
+    elif not isinstance(desired_gpu_device_type, list):
+        # Make sure its a list
+        desired_gpu_device_type = [desired_gpu_device_type]
+
+    # Decide between gpu and cpu rendering
+    if not desired_gpu_device_type or use_only_cpu:
+        # Use only CPU
+        bpy.context.scene.cycles.device = "CPU"
+        print("Using only the CPU for rendering")
+    else:
+        # Use GPU
+        bpy.context.scene.cycles.device = "GPU"
+        preferences = bpy.context.preferences.addons['cycles'].preferences
+
+        # Go over all specified device types
+        for device_type in desired_gpu_device_type:
+            # Check if there are devices that support that type
+            devices = preferences.get_devices_for_type(device_type[0])
+            if devices:
+                # Set device type
+                bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                # Go over all devices with that type
+                found = False
+                for i, device in enumerate(devices):
+                    # Only use gpus with specified ids
+                    if desired_gpu_ids is None or i in desired_gpu_ids:
+                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        device.use = True        
+                        found = True
+
+                if not found:
+                    raise Exception("The specified gpu ids lead to no selected gpu at all. Valid gpu ids are " + str(list(range(len(devices)))))
+
+                break

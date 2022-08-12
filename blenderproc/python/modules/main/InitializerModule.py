@@ -1,6 +1,7 @@
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
+from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.utility.Initializer import init, cleanup
 
 
@@ -52,3 +53,7 @@ class InitializerModule(Module):
         compute_device_type = self.config.get_string("compute_device_type", None)
         use_experimental_features = self.config.get_bool("use_experimental_features", False)
         init(horizon_color, compute_device, compute_device_type, use_experimental_features, clean_up_scene=False)
+        RendererUtility.set_world_background(horizon_color)
+        RendererUtility.set_render_devices(compute_device == "CPU", compute_device_type)
+        if use_experimental_features:
+          RendererUtility.enable_experimental_features()
