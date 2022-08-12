@@ -617,7 +617,7 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
 
     :param use_only_cpu: If True, only the cpu is used for rendering.
     :param desired_gpu_device_type: One or multiple GPU device types to consider. If multiple are given, the first available is used. 
-                                    Possible choices are ["OPTIX", "CUDA", "METAL"]. Default is ["OPTIX", "CUDA"] and ["METAL"] on supported mac devices.
+                                    Possible choices are ["OPTIX", "CUDA", "METAL", "HIP"]. Default is ["OPTIX", "CUDA", "HIP"] and ["METAL"] on supported mac devices.
     :param desired_gpu_ids: One or multiple GPU ids to specifically use. If none is given, all suitable GPUs are used.
     """
     if desired_gpu_device_type is None:
@@ -632,7 +632,7 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                 desired_gpu_device_type = []
         else:
             # Define default for linux and windows
-            desired_gpu_device_type = ["OPTIX", "CUDA"]
+            desired_gpu_device_type = ["OPTIX", "CUDA", "HIP"]
     elif not isinstance(desired_gpu_device_type, list):
         # Make sure its a list
         desired_gpu_device_type = [desired_gpu_device_type]
@@ -641,6 +641,7 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
     if not desired_gpu_device_type or use_only_cpu:
         # Use only CPU
         bpy.context.scene.cycles.device = "CPU"
+        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
         print("Using only the CPU for rendering")
     else:
         # Use GPU
@@ -648,12 +649,13 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
         preferences = bpy.context.preferences.addons['cycles'].preferences
 
         # Go over all specified device types
+        found = False
         for device_type in desired_gpu_device_type:
             # Check if there are devices that support that type
-            devices = preferences.get_devices_for_type(device_type[0])
+            devices = preferences.get_devices_for_type(device_type)
             if devices:
                 # Set device type
-                bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                bpy.context.preferences.addons['cycles'].preferences.compute_device_type = device_type
                 # Go over all devices with that type
                 found = False
                 for i, device in enumerate(devices):
@@ -662,8 +664,14 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                         print('Device {} of type {} found and used.'.format(device.name, device.type))
                         device.use = True        
                         found = True
+                    else:
+                        device.use = False
 
                 if not found:
                     raise Exception("The specified gpu ids lead to no selected gpu at all. Valid gpu ids are " + str(list(range(len(devices)))))
 
                 break
+
+        if not found:
+            raise Exception("No GPU could be found with the specified device types: " + str(desired_gpu_device_type))
+
