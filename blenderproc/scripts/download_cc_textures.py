@@ -24,8 +24,7 @@ def cli():
     }
 
     cc_texture_dir = Path(args.output_dir)
-    if not cc_texture_dir.exists():
-        os.makedirs(cc_texture_dir)
+    cc_texture_dir.mkdir(parents=True, exist_ok=True)
 
     # until all download files have been found
     # this loop is necessary as the server only allows downloading the info for 100 materials at once
@@ -36,12 +35,8 @@ def cli():
         # download the json file, which contains all information
         json_url = f"https://ambientcg.com/api/v2/full_json?include=downloadData&limit={offset_size}" \
                    f"&offset={current_offset}&type=material"
-        json_file_path = cc_texture_dir / f"full_info_{current_offset}.json"
         request = requests.get(json_url, headers=headers)
-        with json_file_path.open("wb") as file:
-            file.write(request.content)
-        with json_file_path.open("r") as file:
-            json_data = json.load(file)
+        json_data = request.json()
         current_offset += offset_size
         if "foundAssets" in json_data and len(json_data["foundAssets"]) > 0:
             for asset in json_data["foundAssets"]:
@@ -80,9 +75,9 @@ def cli():
         download_assets = True
         current_folder = cc_texture_dir / asset
         if not current_folder.exists():
-            os.makedirs(current_folder)
+            current_folder.mkdir(parents=True)
         else:
-            files_in_asset_folder = [file_path.name for file_path in current_folder.glob("*")]
+            files_in_asset_folder = [file_path.name for file_path in current_folder.iterdir()]
             delete_folder = False
             for zip_asset in zip_assets:
                 if zip_asset not in files_in_asset_folder:
@@ -92,7 +87,7 @@ def cli():
                 print(f"Redownload the asset: {asset}, not all files are present after download")
                 # remove folder and create it again
                 shutil.rmtree(current_folder)
-                os.makedirs(current_folder)
+                current_folder.mkdir(parents=True)
             else:
                 download_assets = False
 
