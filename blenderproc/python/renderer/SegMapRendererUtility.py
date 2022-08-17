@@ -292,11 +292,14 @@ def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_c
         obj.data.materials.append(new_mat)
 
 
-def _set_world_background_color(color: mathutils.Vector):
+def _set_world_background_color(color: List[float]):
     """ Set the background color of the blender world object.
 
-    :param color: A 3-dim array containing the background color in range [0, 255]
+    :param color: A 3-dim list containing the background color.
     """
+    if len(color) != 3:
+        raise Exception("The given color has to be three dimensional.")
+
     nodes = bpy.context.scene.world.node_tree.nodes
     links = bpy.context.scene.world.node_tree.links
 
