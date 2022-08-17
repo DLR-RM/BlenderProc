@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 import bpy
 
@@ -9,7 +9,7 @@ import numpy as np
 
 
 class Light(Entity):
-    def __init__(self, type: str = "POINT", name: str = "light", blender_obj: bpy.types.Light = None):
+    def __init__(self, type: str = "POINT", name: str = "light", blender_obj: Optional[bpy.types.Object] = None):
         """
         Constructs a new light if no blender_obj is given, else the params type and name are used to construct a new
         light.

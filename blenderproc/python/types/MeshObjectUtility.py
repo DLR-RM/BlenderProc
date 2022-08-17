@@ -72,15 +72,24 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self) -> "MeshObject":
+    def duplicate(self, duplicate_children: bool = True) -> "MeshObject":
         """ Duplicates the object.
 
+        :param duplicate_children: If True, also all children objects are recursively duplicated.
         :return: A new mesh object, which is a duplicate of this object.
         """
         new_entity = self.blender_obj.copy()
         new_entity.data = self.blender_obj.data.copy()
         bpy.context.collection.objects.link(new_entity)
-        return MeshObject(new_entity)
+
+        duplicate_obj = MeshObject(new_entity)
+
+        if duplicate_children:
+            for child in self.get_children():
+                duplicate_child = child.duplicate(duplicate_children=duplicate_children)
+                duplicate_child.set_parent(duplicate_obj)
+
+        return duplicate_obj
 
     def get_mesh(self) -> bpy.types.Mesh:
         """ Returns the blender mesh of the object.
@@ -245,21 +254,6 @@ class MeshObject(Entity):
         :param hide_object: Determines whether the object should be hidden in rendering.
         """
         self.blender_obj.hide_render = hide_object
-
-    def set_parent(self, new_parent: Entity):
-        """ Sets the parent of this object.
-
-        :param new_parent: The new parent object.
-        """
-        self.blender_obj.parent = new_parent.blender_obj
-        self.blender_obj.matrix_parent_inverse = Matrix(new_parent.get_local2world_mat()).inverted()
-
-    def get_parent(self) -> Optional[Entity]:
-        """ Returns the parent object.
-
-        :return: The parent object, None if it has no parent.
-        """
-        return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
