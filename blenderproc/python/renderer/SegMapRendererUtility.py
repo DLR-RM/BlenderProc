@@ -292,21 +292,29 @@ def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_c
         obj.data.materials.append(new_mat)
 
 
-def _set_world_background_color(color: mathutils.Vector):
+def _set_world_background_color(color: List[float]):
     """ Set the background color of the blender world object.
 
-    :param color: A 3-dim array containing the background color in range [0, 255]
+    :param color: A 3-dim list containing the background color.
     """
+    if len(color) != 3:
+        raise Exception("The given color has to be three dimensional.")
+
     nodes = bpy.context.scene.world.node_tree.nodes
     links = bpy.context.scene.world.node_tree.links
 
-    # Unlink any incoming link that would overwrite the default value
-    if len(nodes.get("Background").inputs['Color'].links) > 0:
-        links.remove(nodes.get("Background").inputs['Color'].links[0])
-    # Set strength to 1 as it would act as a multiplier
-    nodes.get("Background").inputs['Strength'].default_value = 1
-    nodes.get("Background").inputs['Color'].default_value = color + [1]
+    background_node = Utility.get_the_one_node_with_type(nodes, "Background")
 
+    # Unlink any incoming link that would overwrite the default value
+    if len(background_node.inputs['Color'].links) > 0:
+        links.remove(background_node.inputs['Color'].links[0])
+    # Set strength to 1 as it would act as a multiplier
+    background_node.inputs['Strength'].default_value = 1
+    background_node.inputs['Color'].default_value = color + [1]
+
+    # Make sure the background node is connected to the output node
+    output_node = Utility.get_the_one_node_with_type(nodes, "Output")
+    links.new(background_node.outputs["Background"], output_node.inputs["Surface"])
 
 def _colorize_objects_for_instance_segmentation(objects: List[bpy.types.Object], use_alpha_channel: bool,
                                                 render_colorspace_size_per_dimension: int) \
