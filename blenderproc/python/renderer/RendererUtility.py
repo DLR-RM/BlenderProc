@@ -669,17 +669,17 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                 for i, device in enumerate(devices):
                     # Only use gpus with specified ids
                     if desired_gpu_ids is None or i in desired_gpu_ids:
-                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        print(f"Device {device.name} of type {device.type} found and used.")
                         device.use = True        
                         found = True
                     else:
                         device.use = False
 
                 if not found:
-                    raise Exception("The specified gpu ids lead to no selected gpu at all. Valid gpu ids are " + str(list(range(len(devices)))))
+                    raise RuntimeError(f"The specified gpu ids lead to no selected gpu at all. Valid gpu ids are {list(range(len(devices)))}")
 
                 break
 
         if not found:
-            raise Exception("No GPU could be found with the specified device types: " + str(desired_gpu_device_type))
+            raise RuntimeError(f"No GPU could be found with the specified device types: {desired_gpu_device_type}")
 

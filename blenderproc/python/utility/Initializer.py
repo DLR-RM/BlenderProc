@@ -1,9 +1,9 @@
 import os
 import random
 from numpy import random as np_random
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 import bpy
 
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
 import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
@@ -14,16 +14,16 @@ def init(clean_up_scene: bool = True):
     """ Initializes BlenderProc.
 
     Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and the camera.
-    This method should only be called once in the beginning. If you want to cleanup the scene afterwards, use bproc.cleanup()
+    This method should only be called once in the beginning. If you want to clean up the scene afterwards, use bproc.clean_up()
 
     :param clean_up_scene: Set to False, if you want to keep all scene data.
     """
     # Check if init has already been run
     if GlobalStorage.is_in_storage("bproc_init_complete") and GlobalStorage.get("bproc_init_complete"):
-        raise Exception("BlenderProc has already been initialized via bproc.init(), this should not be done twice. If you want to cleanup the scene, use bproc.cleanup().")
+        raise RuntimeError("BlenderProc has already been initialized via bproc.init(), this should not be done twice. If you want to clean up the scene, use bproc.clean_up().")
 
     if clean_up_scene:
-        cleanup(cleanup_camera=True)
+        clean_up(clean_up_camera=True)
 
     # Set language if necessary
     if bpy.context.preferences.view.language != "en_US":
@@ -52,20 +52,20 @@ def init(clean_up_scene: bool = True):
     # Remember init was completed
     GlobalStorage.add("bproc_init_complete", True)
 
-def cleanup(cleanup_camera: bool = False):
+def clean_up(clean_up_camera: bool = False):
     """ Resets the scene to its clean state.
     
     This method removes all objects, camera poses and cleans up the world background.
     All (renderer) settings and the UI are kept as they are.
 
-    :param cleanup_camera: If True, also the camera is set back to its clean state.
+    :param clean_up_camera: If True, also the camera is set back to its clean state.
     """
     # Switch to right context
     if bpy.context.object is not None and bpy.context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode='OBJECT')
 
     # Clean up
-    Initializer._remove_all_data(cleanup_camera)
+    Initializer._remove_all_data(clean_up_camera)
     Initializer._remove_custom_properties()
 
     # Create new world
@@ -73,7 +73,7 @@ def cleanup(cleanup_camera: bool = False):
     bpy.context.scene.world = new_world
     new_world["category_id"] = 0
 
-    if cleanup_camera:
+    if clean_up_camera:
         # Create the camera
         cam = bpy.data.cameras.new("Camera")
         cam_ob = bpy.data.objects.new("Camera", cam)
