@@ -639,8 +639,8 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
         desired_gpu_device_type = [desired_gpu_device_type]
 
     # Make sure desired_gpu_device_type is a list
-    if desired_gpu_ids is not None and not isinstance(desired_gpu_device_type, list):
-        desired_gpu_device_type = [desired_gpu_device_type]
+    if desired_gpu_ids is not None and not isinstance(desired_gpu_ids, list):
+        desired_gpu_ids = [desired_gpu_ids]
 
     # Decide between gpu and cpu rendering
     if not desired_gpu_device_type or use_only_cpu:
