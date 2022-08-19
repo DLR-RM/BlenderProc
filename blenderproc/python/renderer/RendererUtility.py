@@ -620,6 +620,9 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                                     Possible choices are ["OPTIX", "CUDA", "METAL", "HIP"]. Default is ["OPTIX", "CUDA", "HIP"] on linux/windows and ["METAL"] on supported mac devices.
     :param desired_gpu_ids: One or multiple GPU ids to specifically use. If none is given, all suitable GPUs are used.
     """
+    # Mark beginning of selection to avoid confusion when calling set_render_devices multiple times:
+    print("Selecting render devices...")
+
     if desired_gpu_device_type is None:
         # If no gpu types are specified, use the default types based on the OS
         if platform == "darwin":
