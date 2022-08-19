@@ -10,17 +10,20 @@ from blenderproc.python.utility.DefaultConfig import DefaultConfig
 import blenderproc.python.renderer.RendererUtility as RendererUtility
 
 
-def init():
+def init(clean_up_scene: bool = True):
     """ Initializes BlenderProc.
 
     Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and the camera.
     This method should only be called once in the beginning. If you want to cleanup the scene afterwards, use bproc.cleanup()
+
+    :param clean_up_scene: Set to False, if you want to keep all scene data.
     """
     # Check if init has already been run
     if GlobalStorage.is_in_storage("bproc_init_complete") and GlobalStorage.get("bproc_init_complete"):
         raise Exception("BlenderProc has already been initialized via bproc.init(), this should not be done twice. If you want to cleanup the scene, use bproc.cleanup().")
 
-    cleanup(cleanup_camera=True)
+    if clean_up_scene:
+        cleanup(cleanup_camera=True)
 
     # Set language if necessary
     if bpy.context.preferences.view.language != "en_US":

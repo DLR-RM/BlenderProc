@@ -52,7 +52,7 @@ class InitializerModule(Module):
         compute_device = self.config.get_string("compute_device", "GPU")
         compute_device_type = self.config.get_string("compute_device_type", None)
         use_experimental_features = self.config.get_bool("use_experimental_features", False)
-        init(horizon_color, compute_device, compute_device_type, use_experimental_features, clean_up_scene=False)
+        init(clean_up_scene=False)
         RendererUtility.set_world_background(horizon_color)
         RendererUtility.set_render_devices(compute_device == "CPU", compute_device_type)
         if use_experimental_features:
