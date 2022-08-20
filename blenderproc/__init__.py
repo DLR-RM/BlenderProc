@@ -20,7 +20,7 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     from .api import utility
     from .api import sampler
     from .api import math
-    from .python.utility.Initializer import init
+    from .python.utility.Initializer import init, clean_up
     from .api import postprocessing
     from .api import writer
     from .api import material
