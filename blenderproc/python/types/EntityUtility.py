@@ -73,7 +73,7 @@ class Entity(Struct):
         :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
         :return: The rotation at the specified frame.
         """
-        warnings.warn("This function will be deprecated. Use get_rotation_euler() instead."
+        warnings.warn("This function will be deprecated. Use get_rotation_euler() instead.")
         return self.get_rotation_euler(frame)
 
     def get_rotation_euler(self, frame: int = None) -> np.ndarray:
