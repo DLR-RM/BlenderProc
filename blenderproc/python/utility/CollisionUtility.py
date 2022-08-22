@@ -185,5 +185,5 @@ class CollisionUtility:
         # Compute direction
         p2 = nearest - point
         # Compute dot product between direction and normal vector
-        a = p2.normalized().dot((Euler(obj.get_rotation()).to_matrix() @ normal).normalized())
+        a = p2.normalized().dot((Euler(obj.get_rotation_euler()).to_matrix() @ normal).normalized())
         return a >= 0.0

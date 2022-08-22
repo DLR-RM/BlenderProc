@@ -110,7 +110,7 @@ class ObjectReplacer:
             check_collision_with = []
         # New object takes location, rotation and rough scale of original object
         obj_to_add.set_location(obj_to_remove.get_location())
-        obj_to_add.set_rotation_euler(obj_to_remove.get_rotation())
+        obj_to_add.set_rotation_euler(obj_to_remove.get_rotation_euler())
         if scale:
             obj_to_add.set_scale(
                 ObjectReplacer._bb_ratio(obj_to_remove.get_bound_box(True), obj_to_add.get_bound_box(True)))
