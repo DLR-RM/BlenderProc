@@ -132,6 +132,7 @@ class MeshObject(Entity):
         bb_center = np.mean(bb, axis=0)
         bb_min_z_value = np.min(bb, axis=0)[2]
         bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_all(action='SELECT')
         bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
         bpy.ops.object.mode_set(mode='OBJECT')
         self.deselect()
