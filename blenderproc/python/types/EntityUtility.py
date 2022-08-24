@@ -91,7 +91,7 @@ class Entity(Struct):
         :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
         :return: The 3x3 local2world rotation matrix.
         """
-        return np.array(Euler(self.get_rotation(frame)).to_matrix())
+        return np.array(Euler(self.get_rotation_euler(frame)).to_matrix())
     
     def get_scale(self, frame: int = None) -> np.ndarray:
         """ Returns the scale of the entity along all three axes.
