@@ -128,7 +128,7 @@ def construct_random_room(used_floor_area: float, interior_objects: List[MeshObj
     # Add the loaded objects, which couldn't be placed
     list_of_deleted_objects.extend([obj for obj in interior_objects if obj not in placed_objects])
     # Delete them all
-    delete_multiple(list_of_deleted_objects)
+    delete_multiple(list_of_deleted_objects, remove_all_offspring=True)
 
     if floor_obj is not None:
         placed_objects.append(floor_obj)
