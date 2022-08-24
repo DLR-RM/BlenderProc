@@ -143,23 +143,36 @@ class Entity(Struct):
         """
         return convert_to_entity_subclass(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
-    def get_children(self) -> List["Entity"]:
+    def get_children(self, return_all_offspring: bool = False) -> List["Entity"]:
         """ Returns the children objects.
 
+        :param return_all_offspring: If this is True all children and their children are recursively found and returned
         :return: A list of all children objects.
         """
-        return convert_to_entities(self.blender_obj.children, convert_to_subclasses=True)
+        def collect_offspring(entity: bpy.types.Object) -> List[bpy.types.Object]:
+            """
+            Recursively collects the offspring for an entity
+            """
+            offspring = []
+            for child in entity.children:
+                offspring.append(child)
+                offspring.extend(collect_offspring(child))
+            return offspring
+        if return_all_offspring:
+            used_children = collect_offspring(self.blender_obj)
+        else:
+            used_children = self.blender_obj.children
+        return convert_to_entities(used_children, convert_to_subclasses=True)
 
     def delete(self, remove_all_offspring: bool = False):
         """ Deletes the entity and maybe all of its offspring
 
         :param remove_all_offspring: If this is True all children and their children are recursively deleted
         """
+        selected_objects = [self]
         if remove_all_offspring:
-            for child in self.get_children():
-                child.delete(remove_all_offspring)
-
-        bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
+            selected_objects.extend(self.get_children(return_all_offspring=True))
+        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in selected_objects]})
 
     def is_empty(self) -> bool:
         """ Returns whether the entity is from type "EMPTY".
@@ -237,19 +250,12 @@ def delete_multiple(entities: List[Union["Entity"]], remove_all_offspring: bool 
     :param entities: A list of entities that should be deleted
     :param remove_all_offspring: If this is True all children and their children are recursively deleted
     """
-    def collect_offspring(node: Entity) -> List[Entity]:
-        """
-        Recursively collects the offspring for a node
-        """
-        offspring = [node]
-        for child in node.get_children():
-            offspring.extend(collect_offspring(child))
-        return offspring
 
     if remove_all_offspring:
         all_nodes = []
         for entity in entities:
-            all_nodes.extend(collect_offspring(entity))
+            all_nodes.append(entity)
+            all_nodes.extend(entity.get_children(return_all_offspring=True))
         # avoid doubles
         all_nodes = set(all_nodes)
         bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in all_nodes]})
