@@ -1,5 +1,6 @@
 from typing import Union, Optional
 import numpy as np
+import warnings
 
 import bpy
 
@@ -39,6 +40,14 @@ class Entity(Struct):
         """
         self.blender_obj.rotation_euler = rotation_euler
         Utility.insert_keyframe(self.blender_obj, "rotation_euler", frame)
+    
+    def set_rotation_mat(self, rotation_mat: Union[Matrix, np.ndarray], frame: int = None):
+        """ Sets the rotation of the entity using a rotation matrix.
+
+        :param rotation_mat: The 3x3 local to world rotation matrix.
+        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        """
+        self.set_rotation_euler(Matrix(rotation_mat).to_euler(), frame)
 
     def set_scale(self, scale: Union[list, np.ndarray, Vector], frame: int = None):
         """ Sets the scale of the entity along all three axes.
@@ -64,9 +73,26 @@ class Entity(Struct):
         :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
         :return: The rotation at the specified frame.
         """
+        warnings.warn("This function will be deprecated. Use get_rotation_euler() instead.")
+        return self.get_rotation_euler(frame)
+
+    def get_rotation_euler(self, frame: int = None) -> np.ndarray:
+        """ Returns the rotation of the entity in euler angles.
+
+        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
+        :return: The rotation at the specified frame.
+        """
         with KeyFrame(frame):
             return np.array(self.blender_obj.rotation_euler)
+        
+    def get_rotation_mat(self, frame: int = None) -> np.ndarray:
+        """ Gets the rotation matrix of the entity.
 
+        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :return: The 3x3 local2world rotation matrix.
+        """
+        return np.array(Euler(self.get_rotation_euler(frame)).to_matrix())
+    
     def get_scale(self, frame: int = None) -> np.ndarray:
         """ Returns the scale of the entity along all three axes.
 

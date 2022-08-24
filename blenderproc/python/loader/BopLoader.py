@@ -266,7 +266,7 @@ class BopLoader:
         """
 
         obj.set_location(obj.get_location(), frame_id)
-        obj.set_rotation_euler(obj.get_rotation(), frame_id)
+        obj.set_rotation_euler(obj.get_rotation_euler(), frame_id)
 
     @staticmethod
     def _get_ref_cam_extrinsics_intrinsics(sc_camera: dict, cam_id: int, insts: dict, scale: float) -> np.ndarray:
