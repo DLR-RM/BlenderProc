@@ -1,16 +1,21 @@
+"""
+The RandomRoomConstructor can construct a random shaped room, based on a given floor size. It also places objects
+without collision inside the created room.
+"""
+
 import warnings
 import math
 from typing import Tuple, List, Dict
+import random
 
 import bpy
 import bmesh
 import mathutils
 import numpy as np
-import random
 
 from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
-from blenderproc.python.types.EntityUtility import Entity, delete_multiple
+from blenderproc.python.types.EntityUtility import delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.object.FaceSlicer import FaceSlicer
 
@@ -21,6 +26,26 @@ def construct_random_room(used_floor_area: float, interior_objects: List[MeshObj
                           create_ceiling: bool = True, assign_material_to_ceiling: bool = False,
                           placement_tries_per_face: int = 3,
                           amount_of_objects_per_sq_meter: float = 3.0):
+    """
+    Constructs a random room based on the given parameters, each room gets filled with the objects in the
+    `interior_objects` list.
+
+    :param used_floor_area: The amount of square meters used for this room (e.g. 25 qm)
+    :param interior_objects: List of interior objects, which are sampled inside this room
+    :param materials: List of materials, which will be used for the floor, ceiling, and the walls
+    :param amount_of_extrusions: Amount of extrusions performed on the basic floor shape, zero equals a rectangular room
+    :param fac_from_square_room: Maximum allowed factor between the length of two main sides of a rectangular room
+    :param corridor_width: Minimum corridor width in meters, is used for the extrusions
+    :param wall_height: Height of the walls of the room
+    :param amount_of_floor_cuts: The floor plan gets cut with each iteration, allowing for the finding of new edges
+                                 which are used to create extrusions.
+    :param only_use_big_edges: If this is all edges are sorted by length and only the bigger half is used
+    :param create_ceiling: If this is true a ceiling is created for the room
+    :param assign_material_to_ceiling: If this is True the ceiling also gets a material assigned
+    :param placement_tries_per_face: How many tries should be performed per face to place an object, a higher amount
+                                     will ensure that the amount of objects per sq meter are closer to the desired value
+    :param amount_of_objects_per_sq_meter: How many objects should be placed on each square meter of room
+    """
     # internally the first basic rectangular is counted as one
     amount_of_extrusions += 1
 
@@ -102,7 +127,7 @@ def construct_random_room(used_floor_area: float, interior_objects: List[MeshObj
             else:
                 # face size is bigger than one step
                 amount_of_steps = int((face_size + current_accumulated_face_size) / step_size)
-                for i in range(amount_of_steps):
+                for _ in range(amount_of_steps):
                     for _ in range(placement_tries_per_face):
                         found_spot = _sample_new_object_poses_on_face(current_obj, face_bb,
                                                                      bvh_cache_for_intersection,
@@ -171,8 +196,8 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
         if 1.0 - running_sum > 1e-7:
             size_sequence.append(1.0 - running_sum)
         if amount_of_extrusions != len(size_sequence):
-            print("Amount of extrusions was reduced to: {}. To avoid rooms, which are smaller "
-                  "than 1e-7".format(len(size_sequence)))
+            print(f"Amount of extrusions was reduced to: {len(size_sequence)}. To avoid rooms, "
+                  f"which are smaller than 1e-7")
             amount_of_extrusions = len(size_sequence)
     else:
         size_sequence = [1.0]
@@ -391,10 +416,9 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
                 raise Exception("No floor object was constructed!")
             bpy.ops.object.select_all(action='DESELECT')
             return True, cur_created_obj
-        else:
-            obj.object_mode()
-            bpy.ops.object.select_all(action='DESELECT')
-            return False, None
+        obj.object_mode()
+        bpy.ops.object.select_all(action='DESELECT')
+        return False, None
 
     # if only one rectangle was created, the wall extrusion creates a full room with ceiling and floor, if not
     # only the floor gets created and the ceiling is missing
@@ -405,7 +429,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
         if not created and used_split_height[1] == "Floor":
             only_rectangle_mode = True
             break
-        elif created and created_obj is not None:
+        if created and created_obj is not None:
             if "Floor" == used_split_height[1]:
                 floor_obj = created_obj
             elif "Ceiling" == used_split_height[1]:
