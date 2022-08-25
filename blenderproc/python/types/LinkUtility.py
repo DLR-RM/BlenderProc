@@ -153,7 +153,7 @@ class Link(Entity):
         offset_mat = self.ik_bone_controller.matrix
 
         # offset location by ik offset to base bones
-        location = location + (self.ik_bone.head - self.bone.head)
+        location += (self.ik_bone.head - self.bone.head)
         location = Vector([location[0], location[1], location[2], 1.])
 
         # move to current frame

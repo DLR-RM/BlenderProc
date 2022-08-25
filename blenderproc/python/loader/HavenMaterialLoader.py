@@ -131,7 +131,7 @@ def load_haven_mat(folder_path: Union[str, Path] = "resources/haven", used_asset
 
     # add the "textures" folder, if that is not already the case
     if haven_folder.name != "textures" and (haven_folder / "textures").exists():
-        haven_folder = haven_folder / "textures"
+        haven_folder /= "textures"
 
     texture_names: List[str] = os.listdir(haven_folder)
     texture_names.sort()

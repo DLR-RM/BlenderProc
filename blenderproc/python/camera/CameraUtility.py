@@ -59,7 +59,7 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
     """
     rotation_matrix = Vector(forward_vec).to_track_quat('-Z', up_axis).to_matrix()
     if inplane_rot is not None:
-        rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
+        rotation_matrix @= Euler((0.0, 0.0, inplane_rot)).to_matrix()
     return np.array(rotation_matrix)
 
 

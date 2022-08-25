@@ -77,7 +77,7 @@ class Hdf5Writer(WriterInterface):
                     # Build path (path attribute is format string)
                     file_path = output_type["path"]
                     if '%' in file_path:
-                        file_path = file_path % frame
+                        file_path %= frame
 
                     # Check if file exists
                     if not os.path.exists(file_path):

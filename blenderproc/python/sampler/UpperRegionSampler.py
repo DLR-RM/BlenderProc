@@ -66,7 +66,7 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
         vec1 = face[1] - face[0]
         vec2 = face[3] - face[0]
         normal = np.cross(vec1, vec2)
-        normal = normal / np.linalg.norm(normal)
+        normal /= np.linalg.norm(normal)
         return (vec1, vec2), normal
 
     # determine for each object in objects the region, where to sample on

@@ -451,7 +451,7 @@ class CocoWriterUtility:
         padded_binary_mask = np.pad(binary_mask, pad_width=1, mode='constant', constant_values=0)
         contours = np.array(measure.find_contours(padded_binary_mask, 0.5))
         # Reverse padding
-        contours = contours - 1
+        contours -= 1
         for contour in contours:
             # Make sure contour is closed
             contour = CocoWriterUtility.close_contour(contour)
