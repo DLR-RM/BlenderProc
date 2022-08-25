@@ -1,3 +1,5 @@
+"""A procedural Blender pipeline for photorealistic rendering."""
+
 import os
 import sys
 from .version import __version__

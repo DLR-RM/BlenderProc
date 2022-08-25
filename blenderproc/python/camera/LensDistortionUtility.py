@@ -1,16 +1,3 @@
-import os
-from typing import Union, Callable, Any, List, Dict, Tuple, Optional
-
-import numpy as np
-import yaml
-import bpy
-from scipy.ndimage import map_coordinates
-
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
-import blenderproc.python.camera.CameraUtility as CameraUtility
-from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
-
-
 """
 This file provides to functions to first set up the lens distortion used in this particular BlenderProc
 run and then to apply the said lens distortion parameters to an image rendered by Blender. Both functions must be
@@ -21,7 +8,21 @@ For more information on lens distortion see: https://en.wikipedia.org/wiki/Disto
 Note that, unlike in that wikipedia entry as of early 2021, we're here using the undistorted-to-distorted formulation.
 """
 
-def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0, use_global_storage: bool = False) -> np.ndarray:
+import os
+from typing import Union, List, Tuple, Optional
+
+import numpy as np
+import yaml
+import bpy
+from scipy.ndimage import map_coordinates
+
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.camera import CameraUtility
+from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
+
+
+def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0,
+                        use_global_storage: bool = False) -> np.ndarray:
     """
     This function applies the lens distortion parameters to obtain an distorted-to-undistorted mapping for all
     natural pixels coordinates of the goal distorted image into the real pixel coordinates of the undistorted
@@ -31,7 +32,7 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     values by interpolation. Note that when adapting the internal image resolution demanded from Blender, the
     camera main point (cx,cy) of the K intrinsic matrix is (internally and temporarily) shifted.
 
-    This function has to be used together with bproc.postprocessing.apply_lens_distortion(), else only the 
+    This function has to be used together with bproc.postprocessing.apply_lens_distortion(), else only the
     resolution is increased but the image(s) will not be distorted.
 
     :param k1: First radial distortion parameter (of 3rd degree in radial distance) as defined
@@ -61,7 +62,8 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
             This parameter shares one degree of freedom (j1) with p1; as a consequence, either both
             parameters are given or none. The use of these parameters is discouraged since either current
             cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
-    :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global storage (backward compat for configs)
+    :use_global_storage: Whether to save the mapping coordinates and original image resolution in a global
+                         storage (backward compat for configs)
     :return: mapping coordinates from distorted to undistorted image pixels
     """
     if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
@@ -110,7 +112,6 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     y = P_und[1, :]
     res = [1e3]
     it = 0
-    factor = 1.0
     while res[-1] > 0.15:
         r2 = np.square(x) + np.square(y)
         radial_part = (1 + k1 * r2 + k2 * r2 * r2 + k3 * r2 * r2 * r2)
@@ -132,14 +133,17 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
             if error > 1e9:
                 print("Some (corner) pixels of the desired image are not defined by the used lens distortion model.")
                 print("We invite you to double-check your distortion model.")
-                print("The parameters k3,p1,p2 can easily overshoot for regions where the calibration software had no datapoints.")
+                print("The parameters k3,p1,p2 can easily overshoot for regions where the calibration "
+                      "software had no datapoints.")
                 print("You can either:")
                 print("- take more projections (ideally image-filling) at the image corners and repeat calibration,")
                 print("- reduce the # of released parameters to calibrate to k1,k2, or")
                 print("- reduce the target image size (subtract some lines and columns from the desired resolution")
                 print("  and subtract at most that number of lines and columns from the main point location).")
-                print("BlenderProc will not generate incomplete images with void regions since these are not useful for ML (data leakage).")
-                print("For that, you can use the Matlab code in robotic.de/callab, which robustifies against these unstable pixels.")
+                print("BlenderProc will not generate incomplete images with void regions since these are not "
+                      "useful for ML (data leakage).")
+                print("For that, you can use the Matlab code in robotic.de/callab, which robustifies against "
+                      "these unstable pixels.")
                 raise Exception("The iterative distortion algorithm is unstable.")
 
         # update undistorted projection
@@ -201,7 +205,8 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
                           orig_res_y: Optional[int] = None,
                           use_interpolation: bool = True) -> Union[List[np.ndarray], np.ndarray]:
     """
-    This functions applies the lens distortion mapping that needs to be precalculated by `bproc.camera.set_lens_distortion()`.
+    This functions applies the lens distortion mapping that needs to be precalculated by
+    `bproc.camera.set_lens_distortion()`.
 
     Without calling this function the `set_lens_distortion` fct. only increases the image resolution and
     changes the K matrix of the camera.
@@ -210,11 +215,12 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
     :param mapping_coords: an array of pixel mappings from undistorted to distorted image
     :param orig_res_x: original and output width resolution of the image
     :param orig_res_y: original and output height resolution of the image
-    :param use_interpolation: if this is True, for each pixel an interpolation will be performed, if this is false the nearest pixel will be used
+    :param use_interpolation: if this is True, for each pixel an interpolation will be performed, if this is false
+                              the nearest pixel will be used
     :return: a list of images or an image that have been distorted, now in the desired (original) resolution
     """
 
-    if mapping_coords is None or orig_res_x is None or orig_res_y is None: 
+    if mapping_coords is None or orig_res_x is None or orig_res_y is None:
         # if lens distortion was used apply it now
         if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
             # extract the necessary params from the GlobalStorage
@@ -262,15 +268,13 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
         data = image_distorted.astype(used_dtpye)
         if len(input_image.shape) == 2:
             return data[:, :, 0]
-        else:
-            return data
+        return data
     if isinstance(image, list):
         return [_internal_apply(img) for img in image]
-    elif isinstance(image, np.ndarray):
+    if isinstance(image, np.ndarray):
         return _internal_apply(image)
-    else:
-        raise Exception(f"This type can not be worked with here: {type(image)}, only "
-                        f"np.ndarray or list of np.ndarray are supported")
+    raise Exception(f"This type can not be worked with here: {type(image)}, only "
+                    f"np.ndarray or list of np.ndarray are supported")
 
 
 def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, read_the_extrinsics: bool = False,
@@ -285,7 +289,7 @@ def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, rea
     :return: mapping coordinates from distorted to undistorted image pixels, as returned from set_lens_distortion()
     """
     if not os.path.exists(camera_intrinsics_file_path):
-        raise Exception("The camera intrinsics file does not exist: {}".format(camera_intrinsics_file_path))
+        raise Exception(f"The camera intrinsics file does not exist: {camera_intrinsics_file_path}")
 
     def _is_number(value: str) -> bool:
         # check if the given string value is a digit (float or int)
@@ -347,17 +351,20 @@ def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, rea
     # check version and origin parameters
     if extracted_camera_parameters.get("version") is None or extracted_camera_parameters["version"] != 2:
         if extracted_camera_parameters.get("version") is None:
-            raise Exception("The version tag is not set in the DLR-RMC camera calibration file!")
-        else:
-            raise Exception("Only version 2 is supported for the DLR-RMC camera calibration file, not {}".format(extracted_camera_parameters["version"]))
+            raise RuntimeError("The version tag is not set in the DLR-RMC camera calibration file!")
+        raise RuntimeError(f"Only version 2 is supported for the DLR-RMC camera calibration "
+                           f"file, not {extracted_camera_parameters['version']}")
     if extracted_camera_parameters.get("origin") is None or extracted_camera_parameters["origin"] != "center":
-        raise Exception("The origin in the DLR-RMC camera calibration file has to be defined and set to center for BlenderProc distortion to work.")
+        raise RuntimeError("The origin in the DLR-RMC camera calibration file has to be defined and "
+                           "set to center for BlenderProc distortion to work.")
     # set intrinsics based on the yaml-read matrix called A and the yaml-read camera image size
-    CameraUtility.set_intrinsics_from_K_matrix(extracted_camera_parameters.get("A"), extracted_camera_parameters["width"],
+    CameraUtility.set_intrinsics_from_K_matrix(extracted_camera_parameters.get("A"),
+                                               extracted_camera_parameters["width"],
                                                extracted_camera_parameters["height"])
     # setup the lens distortion and adapt intrinsics so that it can be later used in the PostProcessing
     mapping_coords = set_lens_distortion(extracted_camera_parameters["k1"], extracted_camera_parameters.get("k2", 0.0),
-                                         extracted_camera_parameters.get("k3", 0.0), extracted_camera_parameters.get("p1", 0.0),
+                                         extracted_camera_parameters.get("k3", 0.0),
+                                         extracted_camera_parameters.get("p1", 0.0),
                                          extracted_camera_parameters.get("p2", 0.0))
     if read_the_extrinsics:
         cam2world = np.eye(4)
