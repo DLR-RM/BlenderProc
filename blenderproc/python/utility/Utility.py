@@ -2,6 +2,7 @@ import os
 import csv
 import threading
 from typing import List, Dict, Any, Tuple, Optional, Union
+from pathlib import Path
 
 import bpy
 import time
@@ -21,12 +22,14 @@ from blenderproc.python.types.StructUtilityFunctions import get_instances
 from blenderproc.version import __version__
 
 
-def resolve_path(path: str) -> str:
+def resolve_path(path: Union[str, Path]) -> str:
     """ Returns an absolute path. If given path is relative, current working directory is put in front.
 
     :param path: The path to resolve.
     :return: The absolute path.
     """
+    if isinstance(path, Path):
+        path = str(path.absolute())
     path = path.strip()
 
     if path.startswith("/"):

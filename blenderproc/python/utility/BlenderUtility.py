@@ -178,7 +178,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
     else:
         raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
-def collect_all_orphan_datablocks() -> Dict[str, Any]:
+def collect_all_orphan_data_blocks() -> Dict[str, Any]:
     """ Returns all orphan data blocks grouped by their type
 
     :return: A dict of sets

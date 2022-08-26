@@ -1,3 +1,5 @@
+"""Load the haven environmental data to set it as an HDRi background."""
+
 import glob
 import os
 import random
@@ -15,7 +17,7 @@ def set_world_background_hdr_img(path_to_hdr_file):
     """
 
     if not os.path.exists(path_to_hdr_file):
-        raise Exception("The given path does not exists: {}".format(path_to_hdr_file))
+        raise FileNotFoundError(f"The given path does not exists: {path_to_hdr_file}")
 
     world = bpy.context.scene.world
     nodes = world.node_tree.nodes
@@ -42,10 +44,10 @@ def get_random_world_background_hdr_img_path_from_haven(data_path: str) -> str:
     if os.path.exists(data_path):
         data_path = os.path.join(data_path, "hdris")
         if not os.path.exists(data_path):
-            raise Exception("The folder: {} does not contain a folder name hdfris. Please use the "
-                            "download script.".format(data_path))
+            raise FileNotFoundError(f"The folder: {data_path} does not contain a folder name hdfris. "
+                                    f"Please use the download script.")
     else:
-        raise Exception("The data path does not exists: {}".format(data_path))
+        raise FileNotFoundError(f"The data path does not exists: {data_path}")
 
     hdr_files = glob.glob(os.path.join(data_path, "*", "*.hdr"))
     # this will be ensure that the call is deterministic

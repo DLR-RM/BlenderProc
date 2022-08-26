@@ -1,3 +1,5 @@
+"""Loads the Replica dataset."""
+
 import os
 from typing import List, Union
 from pathlib import Path
@@ -9,7 +11,8 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_with_e
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 
-def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str, use_smooth_shading: bool = False) -> List[MeshObject]:
+def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
+                                use_smooth_shading: bool = False) -> List[MeshObject]:
     """
     Loads a segmented replica file
 
@@ -19,9 +22,13 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
     :return: The list of loaded and separated mesh objects.
     """
     try:
+        # This import is done inside to avoid having the requirement that BlenderProc depends on plyfile
+        #pylint: disable=import-outside-toplevel
         import plyfile
-    except ModuleNotFoundError:
-        raise Exception("This function needs the plyfile lib, install it via:\n\tblenderproc pip install plyfile")
+        #pylint: enable=import-outside-toplevel
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError("This function needs the plyfile lib, install it via:"
+                                  "\n\tblenderproc pip install plyfile") from e
 
     if isinstance(data_path, str):
         data_path = Path(data_path)
@@ -34,7 +41,7 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
     json_file_path = current_folder / "habitat" / "info_semantic.json"
 
     class_mapping = {}
-    with open(json_file_path, "r") as file:
+    with open(json_file_path, "r", encoding="utf-8") as file:
         data = json.load(file)
 
     for ele in data["classes"]:
@@ -63,10 +70,7 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
 
     objs = []
     for current_class_id in used_class_ids:
-        if current_class_id in class_mapping:
-            used_obj_name = class_mapping[current_class_id]
-        else:
-            used_obj_name = "undefined"
+        used_obj_name = class_mapping.get(current_class_id, default="undefined")
         obj = create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
         # add this new data to the mesh object
         mesh = obj.get_mesh()

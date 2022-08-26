@@ -1,4 +1,4 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
+"""Loading an 3D model in a certain pose from the AMASS dataset."""
 
 import glob
 import json
@@ -11,6 +11,7 @@ import bpy
 import mathutils
 import numpy as np
 
+from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
@@ -23,16 +24,17 @@ def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_m
     use the pose parameters to generate the mesh and loads it to the scene.
 
     :param data_path: The path to the AMASS Dataset folder in resources folder.
-    :param sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
-                                Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
-                                'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
+    :param sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted
+                           from. Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
+                           'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT',
+                           'H36M', 'TCD_handMocap', 'BML']
     :param temp_dir: A temp directory which is used for writing the temporary .obj file.
-    :param body_model_gender: The model gender, pose will represented using male, female or neutral body shape.
-                                   Available:[male, female, neutral]. If None is selected a random one is choosen.
+    :param body_model_gender: The model gender pose is represented by either using male, female or neutral body shape.
+                              Available:[male, female, neutral]. If None is selected a random one is chosen.
     :param subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
-                            If left empty a random subject id is picked.
+                       If left empty a random subject id is picked.
     :param sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
-                             If set to -1 a random sequence id is selected.
+                        If set to -1 a random sequence id is selected.
     :param frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
     :param num_betas: Number of body parameters
     :param num_dmpls: Number of DMPL parameters
@@ -44,24 +46,26 @@ def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_m
         temp_dir = Utility.get_temporary_directory()
 
     # Install required additonal packages
-    SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"])
+    SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx",
+                            "git+https://github.com/abahnasy/human_body_prior"])
 
     # Get the currently supported mocap datasets by this loader
     taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
-    supported_mocap_datasets = AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, data_path)
+    supported_mocap_datasets = _AMASSLoader.get_supported_mocap_datasets(taxonomy_file_path, data_path)
 
     # selected_obj = self._files_with_fitting_ids
-    pose_body, betas = AMASSLoader._get_pose_parameters(supported_mocap_datasets, num_betas, sub_dataset_id, subject_id, sequence_id, frame_id)
+    pose_body, betas = _AMASSLoader.get_pose_parameters(supported_mocap_datasets, num_betas,
+                                                        sub_dataset_id, subject_id, sequence_id, frame_id)
     # load parametric Model
-    body_model, faces = AMASSLoader._load_parametric_body_model(data_path, body_model_gender, num_betas, num_dmpls)
+    body_model, faces = _AMASSLoader.load_parametric_body_model(data_path, body_model_gender, num_betas, num_dmpls)
     # Generate Body representations using SMPL model
     body_repr = body_model(pose_body=pose_body, betas=betas)
     # Generate .obj file represents the selected pose
-    generated_obj = AMASSLoader._write_body_mesh_to_obj_file(body_repr, faces, temp_dir)
+    generated_obj = _AMASSLoader.write_body_mesh_to_obj_file(body_repr, faces, temp_dir)
 
     loaded_obj = load_obj(generated_obj)
 
-    AMASSLoader._correct_materials(loaded_obj)
+    _AMASSLoader.correct_materials(loaded_obj)
 
     # set the shading mode explicitly to smooth
     for obj in loaded_obj:
@@ -80,11 +84,19 @@ def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_m
 
     return loaded_obj
 
-class AMASSLoader:
+class _AMASSLoader:
     """
-    AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets by representing them within a common framework and parameterization. All of the mocap data is convereted into realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal representation as well as a fully rigged surface mesh. Warning: Only one part of the AMASS database is currently supported by the loader! Please refer to the AMASSLoader example for more information about the currently supported datasets.
+    AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets
+    by representing them within a common framework and parameterization. All the mocap data is converted into
+    realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal
+    representation as well as a fully rigged surface mesh. Warning: Only one part of the AMASS database is currently
+    supported by the loader! Please refer to the AMASSLoader example for more information about the currently
+    supported datasets.
 
-    Any human pose recorded in these motions could be reconstructed using the following parameters: `"sub_dataset_identifier"`, `"sequence id"`, `"frame id"` and `"model gender"` which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.
+    Any human pose recorded in these motions could be reconstructed using the following parameters:
+    `"sub_dataset_identifier"`, `"sequence id"`, `"frame id"` and `"model gender"` which will represent the pose,
+    these parameters specify the exact pose to be generated based on the selected mocap dataset and motion
+    category recorded in this dataset.
 
     Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other
     module is loaded first in the config file.
@@ -96,18 +108,28 @@ class AMASSLoader:
 
 
     @staticmethod
-    def _get_pose_parameters(supported_mocap_datasets: dict, num_betas: int, used_sub_dataset_id: str, used_subject_id: str, used_sequence_id: int, used_frame_id: int) -> Tuple["torch.Tensor", "torch.Tensor"]:
-        """ Extract pose and shape parameters corresponding to the requested pose from the database to be processed by the parametric model
+    def get_pose_parameters(supported_mocap_datasets: dict, num_betas: int, used_sub_dataset_id: str,
+                            used_subject_id: str, used_sequence_id: int,
+                            used_frame_id: int) -> Tuple["torch.Tensor", "torch.Tensor"]:
+        """ Extract pose and shape parameters corresponding to the requested pose from the database to be
+        processed by the parametric model
 
         :param supported_mocap_datasets: A dict which maps sub dataset names to their paths.
         :param num_betas: Number of body parameters
-        :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
-        :param used_subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
-        :param used_sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
+        :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object
+                                    should be extracted from.
+        :param used_subject_id: Type of motion from which the pose should be extracted, this is dataset
+                                dependent parameter.
+        :param used_sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent
+                                 certain action.
         :param used_frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
         :return: tuple of arrays contains the parameters. Type: tuple
         """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on torch
+        #pylint: disable=import-outside-toplevel
         import torch
+        #pylint: enable=import-outside-toplevel
+
         # check if the sub_dataset is supported
         if used_sub_dataset_id in supported_mocap_datasets:
             # get path from dictionary
@@ -120,9 +142,9 @@ class AMASSLoader:
                 if len(possible_subject_ids) > 0:
                     used_subject_id_str = os.path.basename(random.choice(possible_subject_ids))
                 else:
-                    raise Exception("No subjects found in folder: {}".format(sub_dataset_path))
+                    raise FileNotFoundError(f"No subjects found in folder: {sub_dataset_path}")
             else:
-                used_subject_id_str = "{:02d}".format(int(used_subject_id))
+                used_subject_id_str = f"{int(used_sequence_id):02d}"
 
             if used_sequence_id < 0:
                 # if no sequence id was selected
@@ -132,15 +154,13 @@ class AMASSLoader:
                     used_sequence_id = os.path.basename(random.choice(possible_sequence_ids))
                     used_sequence_id = used_sequence_id[used_sequence_id.find("_")+1:used_sequence_id.rfind("_")]
                 else:
-                    raise Exception("No sequences found in folder: {}".format(os.path.join(sub_dataset_path,
-                                                                                           used_subject_id_str)))
-            else:
-                used_sequence_id = used_sequence_id
+                    raise FileNotFoundError(f"No sequences found in folder: "
+                                            f"{os.path.join(sub_dataset_path, used_subject_id_str)}")
             subject_path = os.path.join(sub_dataset_path, used_subject_id_str)
             used_subject_id_str_reduced = used_subject_id_str[:used_subject_id_str.find("_")] \
                 if "_" in used_subject_id_str else used_subject_id_str
             sequence_path = os.path.join(subject_path, used_subject_id_str_reduced +
-                                         "_{:02d}_poses.npz".format(int(used_sequence_id)))
+                                         f"_{int(used_sequence_id):02d}_poses.npz")
             if os.path.exists(sequence_path):
                 # load AMASS dataset sequence file which contains the coefficients for the whole motion sequence
                 sequence_body_data = np.load(sequence_path)
@@ -155,50 +175,52 @@ class AMASSLoader:
                     # use GPU to accelerate mesh calculations
                     comp_device = torch.device( "cuda" if torch.cuda.is_available() else "cpu")
                     # parameters that control the body pose
-                    # refer to http://files.is.tue.mpg.de/black/papers/amass.pdf, Section 3.1 for more information about the parameter representation and the below chosen values
+                    # refer to http://files.is.tue.mpg.de/black/papers/amass.pdf, Section 3.1 for more
+                    # information about the parameter representation and the below chosen values
                     pose_body = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, 3:66]).to(comp_device)
                     # parameters that control the body shape
                     betas = torch.Tensor(sequence_body_data['betas'][:num_betas][np.newaxis]).to(comp_device)
                     return pose_body, betas
-                else:
-                    raise Exception(
-                        "Requested frame id is beyond sequence range, for the selected sequence, chooose frame id "
-                        "within the following range: [{}, {}]".format(0, no_of_frames_per_sequence))
-
-            else:
-                raise Exception(
-                    "Invalid sequence/subject: {} category identifiers, please choose a "
-                    "valid one. Used path: {}".format(used_subject_id, sequence_path))
-
-        else:
-            raise Exception(
-                "The requested mocap dataset is not yest supported, please choose anothe one from the following "
-                "supported datasets: {}".format([key for key, value in supported_mocap_datasets.items()]))
+                raise RuntimeError(f"Requested frame id is beyond sequence range, for the selected sequence, choose "
+                                   f"frame id within the following range: [0, {no_of_frames_per_sequence}]")
+            raise RuntimeError(f"Invalid sequence/subject: {used_subject_id} category identifiers, please choose a "
+                               f"valid one. Used path: {sequence_path}")
+        raise RuntimeError(f"The requested mocap dataset is not yest supported, please choose another one "
+                           f"from the following supported datasets: {list(supported_mocap_datasets.keys())}")
 
     @staticmethod
-    def _load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int,
-                                    num_dmpls: int) -> Tuple["BodyModel", np.array]:
+    def load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int,
+                                   num_dmpls: int) -> Tuple["BodyModel", np.array]:
         """ loads the parametric model that is used to generate the mesh object
 
         :return:  parametric model. Type: tuple.
         """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on torch
+        #pylint: disable=import-outside-toplevel
         import torch
         from human_body_prior.body_model.body_model import BodyModel
+        #pylint: enable=import-outside-toplevel
 
-        bm_path = os.path.join(data_path, 'body_models', 'smplh', used_body_model_gender, 'model.npz')  # body model
-        dmpl_path = os.path.join(data_path, 'body_models', 'dmpls', used_body_model_gender, 'model.npz')  # deformation model
+        # body model
+        bm_path = os.path.join(data_path, 'body_models', 'smplh', used_body_model_gender, 'model.npz')
+        # deformation model
+        dmpl_path = os.path.join(data_path, 'body_models', 'dmpls', used_body_model_gender, 'model.npz')
         if not os.path.exists(bm_path) or not os.path.exists(dmpl_path):
-            raise Exception("Parametric Body model doesn't exist, please follow download instructions section in AMASS Example")
+            raise FileNotFoundError("Parametric Body model doesn't exist, please follow download "
+                                    "instructions section in AMASS Example")
         comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        body_model = BodyModel(bm_path=bm_path, num_betas=num_betas, num_dmpls=num_dmpls, path_dmpl=dmpl_path).to(comp_device)
+        body_model = BodyModel(bm_path=bm_path, num_betas=num_betas, num_dmpls=num_dmpls,
+                               path_dmpl=dmpl_path).to(comp_device)
         faces = body_model.f.detach().cpu().numpy()
         return body_model, faces
 
     @staticmethod
-    def _get_supported_mocap_datasets(taxonomy_file_path: str, data_path: str) -> dict:
-        """ get latest updated list from taxonomoy json file about the supported mocap datasets supported in the loader module and update.supported_mocap_datasets list
+    def get_supported_mocap_datasets(taxonomy_file_path: str, data_path: str) -> dict:
+        """ Get latest updated list from taxonomoy json file about the supported mocap datasets supported in the
+            loader module and update.supported_mocap_datasets list
 
-        :param taxonomy_file_path: path to taxomomy.json file which contains the supported datasets and their respective paths. Type: string.
+        :param taxonomy_file_path: path to taxomomy.json file which contains the supported datasets and their
+                                   respective paths. Type: string.
         :param data_path: path to the AMASS dataset root folder. Type: string.
         """
 
@@ -206,24 +228,26 @@ class AMASSLoader:
         # be filled from taxonomy.json file which indicates the supported datastests
         supported_mocap_datasets = {}
         if os.path.exists(taxonomy_file_path):
-            with open(taxonomy_file_path, "r") as f:
+            with open(taxonomy_file_path, "r", encoding="utf-8") as f:
                 loaded_data = json.load(f)
                 for block in loaded_data:
                     if "sub_data_id" in block:
                         sub_dataset_id = block["sub_data_id"]
                         supported_mocap_datasets[sub_dataset_id] = os.path.join(data_path, block["path"])
         else:
-            raise Exception("The taxonomy file could not be found: {}".format(taxonomy_file_path))
+            raise FileNotFoundError(f"The taxonomy file could not be found: {taxonomy_file_path}")
 
         return supported_mocap_datasets
 
 
     @staticmethod
-    def _write_body_mesh_to_obj_file(body_represenstation: "torch.Tensor", faces: np.array, temp_dir: str) -> str:
-        """ write the generated pose as obj file on the desk.
+    def write_body_mesh_to_obj_file(body_representation: "torch.Tensor", faces: np.array, temp_dir: str) -> str:
+        """ Write the generated pose as obj file on the desk.
 
-        :param body_represenstation: parameters generated from the BodyModel model which represent the obj pose and shape. Type: torch.Tensor
+        :param body_representation: parameters generated from the BodyModel model which represent the obj
+                                     pose and shape. Type: torch.Tensor
         :param faces: face parametric model which is used to generate the face mesh. Type: numpy.array
+        :param temp_dir: Path to the folder in which the generated pose as obj will be stored
         :return: path to generated obj file. Type: string.
         """
         # Generate temp object with name = timestamp
@@ -231,13 +255,14 @@ class AMASSLoader:
         obj_file_name = datetime.strftime(starttime, '%Y%m%d_%H%M') + ".obj"
         # Write to an .obj file
         outmesh_path = os.path.join(temp_dir, obj_file_name)
-        with open(outmesh_path, 'w') as fp:
-            fp.write("".join(['v {:f} {:f} {:f}\n'.format(v[0], v[1], v[2]) for v in body_represenstation.v[0].detach().cpu().numpy()]))
-            fp.write("".join(['f {} {} {}\n'.format(f[0], f[1], f[2]) for f in faces + 1]))
+        with open(outmesh_path, 'w', encoding="utf-8") as fp:
+            fp.write("".join([f'v {v[0]:f} {v[1]:f} {v[2]:f}\n' for v in
+                              body_representation.v[0].detach().cpu().numpy()]))
+            fp.write("".join([f'f {f[0]} {f[1]} {f[2]}\n' for f in faces + 1]))
         return outmesh_path
 
     @staticmethod
-    def _correct_materials(objects: List[MeshObject]):
+    def correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
         :param objects: Mesh objects where the material might be wrong.
@@ -249,7 +274,7 @@ class AMASSLoader:
                 # Create a principled node and set the default color
                 principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
                 # Pick random skin color value
-                skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
+                skin_tone_hex = np.random.choice(_AMASSLoader.human_skin_colors)
                 skin_tone_rgb = Utility.hex_to_rgba(skin_tone_hex)[:3]
 
                 # this is done to make the chance higher that the representation of skin tones is more diverse
@@ -264,7 +289,7 @@ class AMASSLoader:
 
                 texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
-                    # find the image texture node which is connect to alpha
+                    # find the image texture node which is connected to alpha
                     node_connected_to_the_alpha = None
                     for node_links in principled_bsdf.inputs["Alpha"].links:
                         if "ShaderNodeTexImage" in node_links.from_node.bl_idname:
@@ -274,7 +299,6 @@ class AMASSLoader:
                         invert_node = material.new_node("ShaderNodeInvert")
                         invert_node.inputs["Fac"].default_value = 1.0
                         material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
-                                                                  invert_node.inputs["Color"],
-                                                                  invert_node.outputs["Color"],
-                                                                  principled_bsdf.inputs["Alpha"])
-
+                                                                   invert_node.inputs["Color"],
+                                                                   invert_node.outputs["Color"],
+                                                                   principled_bsdf.inputs["Alpha"])
