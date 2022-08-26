@@ -32,7 +32,7 @@ def by_attr(elements: List[Struct], attr_name: str, value: Any, filtered_data_ty
     :return: The elements from the given list that match the given value at the specified attribute.
     """
     elements = all_with_type(elements, filtered_data_type)
-    return list(filter(lambda struct: Filter.check_equality(struct.get_attr(attr_name), value, regex), elements))
+    return list(filter(lambda struct: _Filter.check_equality(struct.get_attr(attr_name), value, regex), elements))
 
 
 def one_by_attr(elements: List[Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None,
@@ -49,7 +49,7 @@ def one_by_attr(elements: List[Struct], attr_name: str, value: Any, filtered_dat
     :return: The one element from the given list that matches the given value at the specified attribute.
     """
     elements = by_attr(elements, attr_name, value, filtered_data_type, regex)
-    return Filter.check_list_has_length_one(elements)
+    return _Filter.check_list_has_length_one(elements)
 
 
 def by_cp(elements: List[Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None,
@@ -65,7 +65,7 @@ def by_cp(elements: List[Struct], cp_name: str, value: Any, filtered_data_type: 
     """
     elements = all_with_type(elements, filtered_data_type)
     return list(
-        filter(lambda struct: struct.has_cp(cp_name) and Filter.check_equality(struct.get_cp(cp_name), value, regex),
+        filter(lambda struct: struct.has_cp(cp_name) and _Filter.check_equality(struct.get_cp(cp_name), value, regex),
                elements))
 
 
@@ -83,7 +83,7 @@ def one_by_cp(elements: List[Struct], cp_name: str, value: Any, filtered_data_ty
     :return: The one element from the given list that matches the given value at the specified custom property.
     """
     elements = by_cp(elements, cp_name, value, filtered_data_type, regex)
-    return Filter.check_list_has_length_one(elements)
+    return _Filter.check_list_has_length_one(elements)
 
 
 def by_attr_in_interval(elements: List[Struct], attr_name: str, min_value: Any = None, max_value: Any = None,
@@ -119,7 +119,7 @@ def by_attr_outside_interval(elements: List[Struct], attr_name: str, min_value: 
     return [e for e in elements if e not in in_interval]
 
 
-class Filter:
+class _Filter:
     """Static class for filtering elements based on different elements. """
 
     @staticmethod

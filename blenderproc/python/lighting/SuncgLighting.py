@@ -27,19 +27,19 @@ def light_suncg_scene(lightbulb_emission_strength: float = 15, lampshade_emissio
 
             # In the case of the lamp
             if obj_id in lights:
-                SuncgLighting.make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength,
-                                                 lampshade_emission_strength)
+                _SuncgLighting.make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength,
+                                                  lampshade_emission_strength)
 
             # Make the windows emit light
             if obj_id in windows:
-                SuncgLighting.make_window_emissive(obj, collection_of_mats)
+                _SuncgLighting.make_window_emissive(obj, collection_of_mats)
 
             # Also make ceilings slightly emit light
             if obj.get_name().startswith("Ceiling#"):
-                SuncgLighting.make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
+                _SuncgLighting.make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
 
 
-class SuncgLighting:
+class _SuncgLighting:
     """ Adds light properties to the SUNCG scenes. """
 
     @staticmethod
