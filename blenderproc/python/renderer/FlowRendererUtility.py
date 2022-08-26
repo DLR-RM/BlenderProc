@@ -1,3 +1,5 @@
+"""Provides functionality to render an optical flow image."""
+
 import os
 from typing import Dict, List, Union
 
@@ -5,7 +7,7 @@ import bpy
 import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import load_image
-import blenderproc.python.renderer.RendererUtility as RendererUtility
+from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
@@ -23,7 +25,8 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     :param temp_dir: The directory to write intermediate data to.
     :param get_forward_flow: Whether to render forward optical flow.
     :param get_backward_flow: Whether to render backward optical flow.
-    :param blender_image_coordinate_style: Whether to specify the image coordinate system at the bottom left (blender default; True) or top left (standard convention; False).
+    :param blender_image_coordinate_style: Whether to specify the image coordinate system at the bottom left
+                                           (blender default; True) or top left (standard convention; False).
     :param forward_flow_output_file_prefix: The file prefix that should be used when writing forward flow to a file.
     :param forward_flow_output_key: The key which should be used for storing forward optical flow values.
     :param backward_flow_output_file_prefix: The file prefix that should be used when writing backward flow to a file.
@@ -32,8 +35,8 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     :return: dict of lists of raw renderer outputs. Keys can be 'forward_flow', 'backward_flow'
     """
     if get_forward_flow is False and get_backward_flow is False:
-        raise Exception(
-            "Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
+        raise RuntimeError("Take the FlowRenderer Module out of the config if both forward and "
+                           "backward flow are set to False!")
 
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
@@ -41,14 +44,14 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         temp_dir = Utility.get_temporary_directory()
 
     with UndoAfterExecution():
-        RendererUtility._render_init()
+        RendererUtility.render_init()
         # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)
         RendererUtility.set_noise_threshold(0)
         RendererUtility.set_denoiser(None)
         RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
-        FlowRendererUtility._output_vector_field(get_forward_flow, get_backward_flow, output_dir)
+        _FlowRendererUtility.output_vector_field(get_forward_flow, get_backward_flow, output_dir)
 
         # only need to render once; both fwd and bwd flow will be saved
         temporary_fwd_flow_file_path = os.path.join(temp_dir, 'fwd_flow_')
@@ -59,25 +62,25 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             # temporarily save respective vector fields
             if get_forward_flow:
-                file_path = temporary_fwd_flow_file_path + "%04d" % frame + ".exr"
+                file_path = temporary_fwd_flow_file_path + f"{frame:04d}" + ".exr"
                 fwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
                 if not blender_image_coordinate_style:
                     fwd_flow_field[:, :, 1] = fwd_flow_field[:, :, 1] * -1
 
-                fname = os.path.join(output_dir, forward_flow_output_file_prefix) + '%04d' % frame
+                file_name = os.path.join(output_dir, forward_flow_output_file_prefix) + f"{frame:04d}"
                 forward_flow = fwd_flow_field * -1  # invert forward flow to point at next frame
-                np.save(fname + '.npy', forward_flow[:, :, :2])
+                np.save(file_name + '.npy', forward_flow[:, :, :2])
 
             if get_backward_flow:
-                file_path = temporary_bwd_flow_file_path + "%04d" % frame + ".exr"
+                file_path = temporary_bwd_flow_file_path + f"{frame:04d}" + ".exr"
                 bwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
                 if not blender_image_coordinate_style:
                     bwd_flow_field[:, :, 1] = bwd_flow_field[:, :, 1] * -1
 
-                fname = os.path.join(output_dir, backward_flow_output_file_prefix) + '%04d' % frame
-                np.save(fname + '.npy', bwd_flow_field[:, :, :2])
+                file_name = os.path.join(output_dir, backward_flow_output_file_prefix) + f"{frame:04d}"
+                np.save(file_name + '.npy', bwd_flow_field[:, :, :2])
 
     load_keys = set()
     # register desired outputs
@@ -91,10 +94,10 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
 
 
-class FlowRendererUtility():
+class _FlowRendererUtility():
 
     @staticmethod
-    def _output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
+    def output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
         """ Configures compositor to output speed vectors.
 
         :param forward_flow: Whether to render forward optical flow.

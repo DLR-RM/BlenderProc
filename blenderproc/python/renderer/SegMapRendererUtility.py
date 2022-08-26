@@ -1,3 +1,5 @@
+"""Provides functionality to render a segmentation image."""
+
 import csv
 import os
 from typing import List, Tuple, Union, Dict, Optional, Any
@@ -8,7 +10,7 @@ import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from blenderproc.python.material import MaterialLoaderUtility
-import blenderproc.python.renderer.RendererUtility as RendererUtility
+from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 
 
@@ -17,8 +19,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                   default_values: Optional[Dict[str, int]] = None, file_prefix: str = "segmap_",
                   output_key: str = "segmap", segcolormap_output_file_prefix: str = "instance_attribute_map_",
                   segcolormap_output_key: str = "segcolormap", use_alpha_channel: bool = False,
-                  render_colorspace_size_per_dimension: int = 2048) -> \
-        Dict[str, Union[np.ndarray, List[np.ndarray]]]:
+                  render_colorspace_size_per_dimension: int = 2048) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Renders segmentation maps for all frames
 
     :param output_dir: The directory to write images to.
@@ -46,7 +47,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
         default_values = {"class": 0}
 
     with UndoAfterExecution():
-        RendererUtility._render_init()
+        RendererUtility.render_init()
         # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)
         RendererUtility.set_noise_threshold(0)
@@ -60,9 +61,9 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
         # Get objects with meshes (i.e. not lights or cameras)
         objs_with_mats = get_all_blender_mesh_objects()
 
-        colors, num_splits_per_dimension, objects = _colorize_objects_for_instance_segmentation(objs_with_mats,
-                                                                                                use_alpha_channel,
-                                                                                                render_colorspace_size_per_dimension)
+        result = _colorize_objects_for_instance_segmentation(objs_with_mats, use_alpha_channel,
+                                                             render_colorspace_size_per_dimension)
+        colors, num_splits_per_dimension, objects = result
 
         bpy.context.scene.cycles.filter_width = 0.0
 
@@ -89,7 +90,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
         elif isinstance(attributes, list):
             result_channels = len(attributes)
         else:
-            raise Exception("The type of this is not supported here: {}".format(attributes))
+            raise RuntimeError(f"The type of this is not supported here: {attributes}")
 
         # define them for the avoid rendering case
         there_was_an_instance_rendering = False
@@ -107,7 +108,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
             save_in_csv_attributes: Dict[int, Dict[str, Any]] = {}
             for suffix in suffixes:
-                file_path = temporary_segmentation_file_path + ("%04d" % frame) + suffix + ".exr"
+                file_path = temporary_segmentation_file_path + f"{frame:04d}" + suffix + ".exr"
                 segmentation = load_image(file_path)
                 print(file_path, segmentation.shape)
 
@@ -153,8 +154,8 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                             if current_attribute in default_values:
                                 default_value = default_values[current_attribute]
                             elif attribute in default_values:
-                                default_value = default_values[attribute]                        
-                        # iterate over all object ids
+                                default_value = default_values[attribute]
+                                # iterate over all object ids
                         for object_id in object_ids:
                             # Convert np.uint8 to int, such that the save_in_csv_attributes dict can later be serialized
                             object_id = int(object_id)
@@ -176,13 +177,13 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                                 value = default_value
                                 num_default_values += 1
                             else:
-                                # if the requested current_attribute is not a custom property or a attribute
+                                # if the requested current_attribute is not a custom property or an attribute
                                 # or there is a default value stored
                                 # it throws an exception
-                                raise Exception("The obj: {} does not have the "
-                                                "attribute: {}, striped: {}. Maybe try a default "
-                                                "value.".format(current_obj.name, current_attribute, attribute))
-                            
+                                raise RuntimeError(f"The obj: {current_obj.name} does not have the "
+                                                   f"attribute: {current_attribute}, striped: {attribute}. "
+                                                   f"Maybe try a default value.")
+
                             # save everything which is not instance also in the .csv
                             if isinstance(value, (int, float, np.integer, np.floating)):
                                 was_used = True
@@ -192,13 +193,13 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                                 save_in_csv_attributes[object_id][attribute] = value
                             else:
                                 save_in_csv_attributes[object_id] = {attribute: value}
-                                
+
                     if was_used and num_default_values < len(object_ids):
                         channels.append(org_attribute)
                         combined_result_map.append(resulting_map)
-                        return_dict.setdefault("{}_segmaps{}".format(org_attribute, suffix), []).append(resulting_map)
+                        return_dict.setdefault(f"{org_attribute}_segmaps{suffix}", []).append(resulting_map)
 
-                fname = final_segmentation_file_path + ("%04d" % frame) + suffix
+                fname = final_segmentation_file_path + f"{frame:04d}" + suffix
                 # combine all resulting images to one image
                 resulting_map = np.stack(combined_result_map, axis=2)
                 # remove the unneeded third dimension
@@ -215,8 +216,8 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
 
                 # write color mappings to file
                 # TODO: Remove unnecessary csv file when we give up backwards compatibility
-                csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + ("%04d.csv" % frame))
-                with open(csv_file_path, 'w', newline='') as csvfile:
+                csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + f"{frame:04d}")
+                with open(csv_file_path, 'w', newline='', encoding="utf-8") as csvfile:
                     # get from the first element the used field names
                     fieldnames = ["idx"]
                     # get all used object element keys
@@ -224,22 +225,22 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                         fieldnames.extend(list(object_element.keys()))
                         break
                     for channel_name in channels:
-                        fieldnames.append("channel_{}".format(channel_name))
+                        fieldnames.append(f"channel_{channel_name}")
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
                     # save for each object all values in one row
                     for obj_idx, object_element in save_in_csv_attributes.items():
                         object_element["idx"] = obj_idx
                         for i, channel_name in enumerate(channels):
-                            object_element["channel_{}".format(channel_name)] = i
+                            object_element[f"channel_{channel_name}"] = i
                         writer.writerow(object_element)
             else:
                 if len(list_of_attributes) > 0:
-                    raise Exception("There were attributes specified in the may_by, which could not be saved as "
-                                    "there was no \"instance\" may_by key used. This is true for this/these "
-                                    "keys: {}".format(", ".join(list_of_attributes)))
+                    raise RuntimeError(f"There were attributes specified in the may_by, which could not be saved as "
+                                       f"there was no \"instance\" may_by key used. This is true for this/these "
+                                       f"keys: {', '.join(list_of_attributes)}")
                 # if there was no instance rendering no .csv file is generated!
-                # delete all saved infos about .csv
+                # delete all saved info about .csv
                 save_in_csv_attributes = {}
 
     Utility.register_output(output_dir, file_prefix, output_key, ".npy", "2.0.0")
@@ -266,10 +267,10 @@ def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_c
     # Create new material emitting the given color
     new_mat = bpy.data.materials.new(name="segmentation")
     new_mat.use_nodes = True
-    # sampling as light,conserves memory, by not keeping a referennce to it for multiple importance sampling.
-    # This shouldn't change the results because with an emmission of 1 the colorized objects aren't emmitting light.
-    # Also blenderproc's segmap render settings are configured so that there is only a single sample to distribute, 
-    # multiple importance shouldn't affect the noise of the render anyways.
+    # sampling as light,conserves memory, by not keeping a reference to it for multiple importance sampling.
+    # This shouldn't change the results because with an emission of 1 the colorized objects aren't emitting light.
+    # Also, BlenderProc's segmap render settings are configured so that there is only a single sample to distribute,
+    # multiple importance shouldn't affect the noise of the render anyway.
     # This fixes issue #530
     new_mat.cycles.sample_as_light = False
     nodes = new_mat.node_tree.nodes
@@ -282,9 +283,9 @@ def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_c
 
     # Set material to be used for coloring all faces of the given object
     if len(obj.material_slots) > 0:
-        for i in range(len(obj.material_slots)):
+        for i, material_slot in enumerate(obj.material_slots):
             if use_alpha_channel:
-                obj.data.materials[i] = MaterialLoaderUtility.add_alpha_texture_node(obj.material_slots[i].material,
+                obj.data.materials[i] = MaterialLoaderUtility.add_alpha_texture_node(material_slot.material,
                                                                                      new_mat)
             else:
                 obj.data.materials[i] = new_mat
@@ -315,6 +316,7 @@ def _set_world_background_color(color: List[float]):
     # Make sure the background node is connected to the output node
     output_node = Utility.get_the_one_node_with_type(nodes, "Output")
     links.new(background_node.outputs["Background"], output_node.inputs["Surface"])
+
 
 def _colorize_objects_for_instance_segmentation(objects: List[bpy.types.Object], use_alpha_channel: bool,
                                                 render_colorspace_size_per_dimension: int) \
