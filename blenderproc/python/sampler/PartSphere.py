@@ -1,10 +1,14 @@
-from typing import Union
+""" Samples a point from the surface or from the interior of solid sphere which is split in two parts. """
+
+from typing import Union, Optional, List
 import numpy as np
 from mathutils import Vector
 
 from blenderproc.python.sampler.Sphere import sphere
 
-def part_sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str, dist_above_center: float = 0.0, part_sphere_dir_vector: Union[Vector, np.ndarray, list] = None) -> np.ndarray:
+
+def part_sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str, dist_above_center: float = 0.0,
+                part_sphere_dir_vector: Optional[Union[Vector, np.ndarray, List[float]]] = None) -> np.ndarray:
     """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 
     https://math.stackexchange.com/a/87238
@@ -27,8 +31,9 @@ def part_sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: st
     :param mode: Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
                  from the 2-sphere), INTERIOR (sampling from the 3-ball).
     :param dist_above_center: The distance above the center, which should be used. Default: 0.0 (half of the sphere).
-    :param part_sphere_dir_vector: The direction in which the sphere should be split, the end point of the vector, will be in the middle of
-                                   the sphere pointing towards the middle of the resulting surface. Default: [0, 0, 1].
+    :param part_sphere_dir_vector: The direction in which the sphere should be split, the end point of the vector,
+                                   will be in the middle of the sphere pointing towards the middle of the
+                                   resulting surface. Default: [0, 0, 1].
     :return: A random point lying inside or on the surface of a solid sphere.
     """
     if part_sphere_dir_vector is None:
@@ -38,7 +43,7 @@ def part_sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: st
     part_sphere_dir_vector /= np.linalg.norm(part_sphere_dir_vector)
 
     if dist_above_center >= radius:
-        raise Exception("The dist_above_center value is bigger or as big as the radius!")
+        raise ValueError("The dist_above_center value is bigger or as big as the radius!")
 
     while True:
         location = sphere(center, radius, mode)

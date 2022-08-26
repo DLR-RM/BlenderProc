@@ -1,8 +1,10 @@
+""" Uniformly samples 3-dimensional value over the bounding box of the specified objects """
+
 import math
 import random
-import numpy as np
-
 from typing import List, Union, Optional, Tuple
+
+import numpy as np
 from mathutils import Vector
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -13,9 +15,11 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
                  max_height: float = 1.0, use_ray_trace_check: bool = False,
                  upper_dir: Optional[Union[Vector, np.ndarray, List[float]]] = None,
                  use_upper_dir: bool = True) -> np.ndarray:
-    """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
-        defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
-        sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
+    """
+    Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
+    defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
+    sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from
+    the face.
 
     Example 1: Sample a location on the surface of the given objects with height above this
     surface in range of [1.5, 1.8].
@@ -29,15 +33,16 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
         )
 
     :param objects_to_sample_on: Objects, on which to sample on.
-    :param face_sample_range: Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
-                              both face vectors between which points are sampled. Default: [0.0, 1.0]
+    :param face_sample_range: Restricts the area on the face where objects are sampled. Specifically describes
+                              relative lengths of both face vectors between which points are sampled.
+                              Default: [0.0, 1.0]
     :param min_height: Minimum distance to the bounding box that a point is sampled on.
     :param max_height: Maximum distance to the bounding box that a point is sampled on.
-    :param use_ray_trace_check: Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
-                                position is the position accepted).
+    :param use_ray_trace_check: Toggles using a ray casting towards the sampled object (if the object is directly
+                                below the sampled position is the position accepted).
     :param upper_dir: The 'up' direction of the sampling box. Default: [0.0, 0.0, 1.0].
-    :param use_upper_dir: Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
-                          position is the position accepted).
+    :param use_upper_dir: Toggles using a ray casting towards the sampled object (if the object is directly
+                          below the sampled position is the position accepted).
     :return: Sampled value.
     """
     if face_sample_range is None:
@@ -52,8 +57,7 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
         objects_to_sample_on = [objects_to_sample_on]
 
     if max_height < min_height:
-        raise Exception("The minimum height ({}) must be smaller "
-                        "than the maximum height ({})!".format(min_height, max_height))
+        raise RuntimeError(f"The minimum height ({min_height}) must be smaller than the maximum height ({max_height})!")
 
     regions = []
 
@@ -95,7 +99,7 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
             base_point = selected_face[0]
             regions.append(Region2D(vectors, normal, base_point))
         else:
-            raise Exception("Couldn't find a face, for this obj: {}".format(obj.get_name()))
+            raise RuntimeError(f"Couldn't find a face, for this obj: {obj.get_name()}")
 
     if regions and len(regions) == len(objects_to_sample_on):
         selected_region_id = random.randint(0, len(regions) - 1)
@@ -104,12 +108,12 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
             inv_world_matrix = np.linalg.inv(obj.get_local2world_mat())
         while True:
             ret = selected_region.sample_point(face_sample_range)
-            dir = upper_dir if use_upper_dir else selected_region.normal()
-            ret += dir * random.uniform(min_height, max_height)
+            dir_val = upper_dir if use_upper_dir else selected_region.normal()
+            ret += dir_val * random.uniform(min_height, max_height)
             if use_ray_trace_check:
                 # transform the coords into the reference frame of the object
                 c_ret = inv_world_matrix @ np.concatenate((ret, [1]), 0)
-                c_dir = inv_world_matrix @ np.concatenate((dir * -1.0, [0]), 0)
+                c_dir = inv_world_matrix @ np.concatenate((dir_val * -1.0, [0]), 0)
                 # check if the object was hit
                 hit, _, _, _ = obj.ray_cast(c_ret[:3], c_dir[:3])
                 if hit:  # if the object was hit return
@@ -117,11 +121,10 @@ def upper_region(objects_to_sample_on: Union[MeshObject, List[MeshObject]],
             else:
                 break
         return np.array(ret)
-    else:
-        raise Exception("The amount of regions is either zero or does not match the amount of objects!")
+    raise RuntimeError("The amount of regions is either zero or does not match the amount of objects!")
 
 
-class Region2D(object):
+class Region2D:
     """ Helper class for UpperRegionSampler: Defines a 2D region in 3D.
     """
 

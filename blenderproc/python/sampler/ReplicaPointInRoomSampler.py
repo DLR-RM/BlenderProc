@@ -1,3 +1,5 @@
+""" Allows the sampling in Replica scenes """
+
 import ast
 from typing import Union, List, Dict
 import random
@@ -7,6 +9,9 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class ReplicaPointInRoomSampler:
+    """
+    Allows the sampling in Replica scenes
+    """
 
     def __init__(self, room_bounding_box: Dict[str, np.ndarray], replica_floor: Union[MeshObject, List[MeshObject]],
                  height_list_file_path: str):

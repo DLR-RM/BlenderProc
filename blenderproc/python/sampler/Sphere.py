@@ -1,7 +1,10 @@
-import numpy as np
+""" Samples a point from the surface or from the interior of solid sphere. """
+
 from typing import Union
 
+import numpy as np
 from mathutils import Vector
+
 
 def sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str) -> np.ndarray:
     """ Samples a point from the surface or from the interior of solid sphere.
@@ -45,7 +48,7 @@ def sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str) ->
         raise Exception("Unknown sampling mode: " + mode)
 
     # Normalize
-    sampled_point = list(map(lambda x: magnitude*x/norm, direction))
+    sampled_point = list(map(lambda x: magnitude * x / norm, direction))
 
     # Add center
     location = np.array(sampled_point) + center
