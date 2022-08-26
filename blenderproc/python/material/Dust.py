@@ -1,11 +1,16 @@
+"""Provides the functionality to add a dust effect to a material."""
+
 import warnings
 from typing import List
-
-from blenderproc.python.types.MaterialUtility import Material
-import bpy
 import random
 
-def add_dust(material: Material, strength: float, texture_nodes: List[bpy.types.Texture] = None, texture_scale: float = 0.1):
+import bpy
+
+from blenderproc.python.types.MaterialUtility import Material
+
+
+def add_dust(material: Material, strength: float, texture_nodes: List[bpy.types.Texture] = None,
+             texture_scale: float = 0.1):
     """ Adds a dust film to the material, where the strength determines how much dust is used.
 
     This will be added right before the output of the material.
@@ -13,9 +18,10 @@ def add_dust(material: Material, strength: float, texture_nodes: List[bpy.types.
     :param material: Used material
     :param strength: This determines the strength of the dust, 0 means no dust 1.0 means full dust. Values above 1.0 are
                         possible, but create a thick film out of dust, which hides the material completely.
-    :param texture_nodes: If a specific dust texture should be used, this can be specified.  If this is empty a random noise texture is generated.
-    :param texture_scale: This scale is used to scale down the used noise texture (even for the case where a random noise texture
-                            is used).
+    :param texture_nodes: If a specific dust texture should be used, this can be specified.  If this is empty a random
+                          noise texture is generated.
+    :param texture_scale: This scale is used to scale down the used noise texture (even for the case where a random
+                          noise texture is used).
     """
 
     group_node = material.new_node("ShaderNodeGroup")
