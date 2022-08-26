@@ -10,7 +10,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 class CollisionUtility:
 
     @staticmethod
-    def check_intersections(obj: MeshObject, bvh_cache: Dict[str, mathutils.bvhtree.BVHTree],
+    def check_intersections(obj: MeshObject, bvh_cache: Optional[Dict[str, mathutils.bvhtree.BVHTree]],
                             objects_to_check_against: List[MeshObject],
                             list_of_objects_with_no_inside_check: List[MeshObject]):
         """ Checks if a object intersects with any object given in the list.
@@ -42,7 +42,9 @@ class CollisionUtility:
             if intersection:
                 skip_inside_check = collision_obj in list_of_objects_with_no_inside_check
                 # then check for more refined collisions
-                intersection, bvh_cache = CollisionUtility.check_mesh_intersection(obj, collision_obj, bvh_cache=bvh_cache, skip_inside_check=skip_inside_check)
+                intersection, bvh_cache = CollisionUtility.check_mesh_intersection(obj, collision_obj,
+                                                                                   bvh_cache=bvh_cache,
+                                                                                   skip_inside_check=skip_inside_check)
             if intersection:
                 no_collision = False
                 break
@@ -78,7 +80,8 @@ class CollisionUtility:
         return CollisionUtility.check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
 
     @staticmethod
-    def check_bb_intersection_on_values(min_b1: list, max_b1: list, min_b2: list, max_b2: list, used_check=lambda a, b: a >= b):
+    def check_bb_intersection_on_values(min_b1: list, max_b1: list, min_b2: list, max_b2: list,
+                                        used_check=lambda a, b: a >= b):
         """
         Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
         namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
@@ -169,19 +172,20 @@ class CollisionUtility:
         return inter, bvh_cache
 
     @staticmethod
-    def is_point_inside_object(obj: MeshObject, obj_BVHtree: mathutils.bvhtree.BVHTree, point: Union[Vector, np.ndarray]) -> bool:
+    def is_point_inside_object(obj: MeshObject, obj_bvh_tree: mathutils.bvhtree.BVHTree,
+                               point: Union[Vector, np.ndarray]) -> bool:
         """ Checks whether the given point is inside the given object.
 
         This only works if the given object is watertight and has correct normals
 
         :param obj: The object
-        :param obj_BVHtree: A bvh tree of the object
+        :param obj_bvh_tree: A bvh tree of the object
         :param point: The point to check
         :return: True, if the point is inside the object
         """
         point = Vector(point)
         # Look for closest point on object
-        nearest, normal, _, _ = obj_BVHtree.find_nearest(point)
+        nearest, normal, _, _ = obj_bvh_tree.find_nearest(point)
         # Compute direction
         p2 = nearest - point
         # Compute dot product between direction and normal vector

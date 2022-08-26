@@ -96,7 +96,7 @@ class Initializer:
         CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
 
         # Init renderer
-        RendererUtility._render_init()
+        RendererUtility.render_init()
         RendererUtility.set_world_background(DefaultConfig.world_background)
         RendererUtility.set_max_amount_of_samples(DefaultConfig.samples)
         RendererUtility.set_noise_threshold(DefaultConfig.sampling_noise_threshold)

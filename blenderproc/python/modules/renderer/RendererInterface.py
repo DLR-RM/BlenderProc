@@ -126,7 +126,7 @@ class RendererInterface(Module):
         :param use_denoiser: If true, a denoiser is used, only use this on color information
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
-        RendererUtility._render_init()
+        RendererUtility.render_init()
         RendererUtility.set_max_amount_of_samples(self.config.get_int("samples", max_amount_of_samples))
 
         if self.config.has_param("use_adaptive_sampling"):
