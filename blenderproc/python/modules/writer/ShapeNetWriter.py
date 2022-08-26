@@ -1,6 +1,6 @@
 from blenderproc.python.modules.utility.ItemWriter import ItemWriter
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 
 class ShapeNetWriter(WriterInterface):
@@ -25,7 +25,7 @@ class ShapeNetWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.object_writer = ItemWriter(WriterUtility._get_shapenet_attribute)
+        self.object_writer = ItemWriter(_WriterUtility._get_shapenet_attribute)
 
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""

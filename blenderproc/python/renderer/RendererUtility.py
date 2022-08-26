@@ -15,7 +15,7 @@ from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
 def set_denoiser(denoiser: Optional[str]):
@@ -507,7 +507,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         raise RuntimeError("No camera poses have been registered, therefore nothing can be rendered. A camera "
                            "pose can be registered via bproc.camera.add_camera_pose().")
 
-    return WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
+    return _WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
 
 
 def set_output_format(file_format: Optional[str] = None, color_depth: Optional[int] = None,

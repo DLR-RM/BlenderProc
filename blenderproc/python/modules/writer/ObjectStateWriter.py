@@ -1,7 +1,7 @@
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.modules.utility.ItemWriter import ItemWriter
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
 class ObjectStateWriter(WriterInterface):
@@ -9,7 +9,7 @@ class ObjectStateWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.object_writer = ItemWriter(WriterUtility.get_common_attribute)
+        self.object_writer = ItemWriter(_WriterUtility.get_common_attribute)
 
     def run(self):
         """ Collect all mesh objects and writes their id, name and pose."""

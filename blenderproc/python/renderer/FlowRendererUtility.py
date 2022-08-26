@@ -9,7 +9,7 @@ import numpy as np
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.renderer import RendererUtility
 from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
 def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forward_flow: bool = True,
@@ -91,7 +91,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         Utility.register_output(output_dir, backward_flow_output_file_prefix, backward_flow_output_key, '.npy', '2.0.0')
         load_keys.add(backward_flow_output_key)
 
-    return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
+    return _WriterUtility.load_registered_outputs(load_keys) if return_data else {}
 
 
 class _FlowRendererUtility():

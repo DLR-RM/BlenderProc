@@ -301,7 +301,7 @@ def set_camera_parameters_from_config_file(camera_intrinsics_file_path: str, rea
         except ValueError:
             return False
 
-    with open(camera_intrinsics_file_path, "r") as file:
+    with open(camera_intrinsics_file_path, "r", encoding="utf-8") as file:
         final_lines = []
         for line in file.readlines():
             line = line.strip()

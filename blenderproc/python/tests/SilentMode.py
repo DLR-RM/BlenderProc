@@ -7,7 +7,7 @@ class SilentMode(object):
 
     def __init__(self):
         if SilentMode._global_output is None:
-            SilentMode._global_output = open(os.devnull, "w")
+            SilentMode._global_output = open(os.devnull, "w", encoding="utf-8")
 
     def __enter__(self):
         """

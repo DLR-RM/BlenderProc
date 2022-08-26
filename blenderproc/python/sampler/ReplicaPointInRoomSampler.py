@@ -22,7 +22,7 @@ class ReplicaPointInRoomSampler:
         if isinstance(self.floor_object, list) and not self.floor_object:
             raise Exception("The floor object list can not be empty!")
 
-        with open(height_list_file_path) as file:
+        with open(height_list_file_path, "r", encoding="utf-8") as file:
             self.floor_height_values = [float(val) for val in ast.literal_eval(file.read())]
 
     def sample(self, height: float, max_tries: int = 1000) -> np.ndarray:

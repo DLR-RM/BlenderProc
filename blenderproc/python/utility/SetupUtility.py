@@ -147,7 +147,7 @@ class SetupUtility:
         # Make sure to update the pip package list cache, if it does not exist or changes have been made
         cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
         if packages_were_installed or not os.path.exists(cache_path):
-            with open(cache_path, "w") as f:
+            with open(cache_path, "w", encoding="utf-8") as f:
                 json.dump(SetupUtility.installed_packages, f)
 
         # If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away
@@ -255,7 +255,7 @@ class SetupUtility:
             if not force_update:
                 cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
                 if os.path.exists(cache_path):
-                    with open(cache_path, "r") as f:
+                    with open(cache_path, "r", encoding="utf-8") as f:
                         SetupUtility.installed_packages = json.load(f)
                         SetupUtility.package_list_is_from_cache = True
                     return
@@ -333,7 +333,7 @@ class SetupUtility:
         :param path_to_run_file: path to the used python script
         """
         if os.path.exists(path_to_run_file):
-            with open(path_to_run_file, "r") as file:
+            with open(path_to_run_file, "r", encoding="utf-8") as file:
                 text = file.read()
                 lines = [l.strip() for l in text.split("\n")]
                 lines = [l for l in lines if l and not l.startswith("#")]

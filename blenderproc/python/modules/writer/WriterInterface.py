@@ -4,7 +4,7 @@ import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.Utility import Utility, resolve_path
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 class WriterInterface(Module):
     """
@@ -100,7 +100,7 @@ class WriterInterface(Module):
         :param version: The version number original data. Type: String. Default: 1.0.0.
         :return: The post-processed image that was loaded using the file path.
         """
-        data = WriterUtility.load_output_file(resolve_path(file_path), self.write_alpha_channel, remove=False)
+        data = _WriterUtility.load_output_file(resolve_path(file_path), self.write_alpha_channel, remove=False)
         data, new_key, new_version = self._apply_postprocessing(key, data, version)
         if isinstance(data, np.ndarray):
             print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)

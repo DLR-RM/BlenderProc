@@ -19,7 +19,7 @@ class LabelIdMapping:
 		:param id_col_name: The name of the column which should be used as id.
 		:return: The built label mapping object.
 		"""
-		with open(path, 'r') as csv_file:
+		with open(path, 'r', encoding="utf-8") as csv_file:
 			reader = csv.DictReader(csv_file)
 			mapping = LabelIdMapping()
 

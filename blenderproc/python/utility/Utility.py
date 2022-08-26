@@ -8,7 +8,6 @@ import bpy
 import time
 import inspect
 import importlib
-import warnings
 import numpy as np
 import json
 from sys import platform
@@ -314,7 +313,7 @@ class Utility:
         # Read in lights
         lights: Dict[str, Tuple[List[str], List[str]]] = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt"))) as f:
+        with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt")), "r", encoding="utf-8") as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -338,7 +337,7 @@ class Utility:
 
         # Read in windows
         windows = []
-        with open(resolve_resource(os.path.join('suncg', 'ModelCategoryMapping.csv')), 'r') as csvfile:
+        with open(resolve_resource(os.path.join('suncg', 'ModelCategoryMapping.csv')), 'r', encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":

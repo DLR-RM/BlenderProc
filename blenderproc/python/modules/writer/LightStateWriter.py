@@ -2,7 +2,7 @@ import bpy
 
 from blenderproc.python.modules.utility.ItemWriter import ItemWriter
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
 class LightStateWriter(WriterInterface):
@@ -11,7 +11,7 @@ class LightStateWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.light_writer = ItemWriter(WriterUtility.get_light_attribute)
+        self.light_writer = ItemWriter(_WriterUtility.get_light_attribute)
 
     def run(self):
         """ Collection all lights and writes them to a numpy file if no hdf5 file was available"""

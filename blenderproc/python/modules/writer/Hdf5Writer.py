@@ -1,4 +1,4 @@
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 import os
 
@@ -82,7 +82,7 @@ class Hdf5Writer(WriterInterface):
                     # Check if file exists
                     if not os.path.exists(file_path):
                         # If not try stereo suffixes
-                        path_l, path_r = WriterUtility._get_stereo_path_pair(file_path)
+                        path_l, path_r = _WriterUtility.get_stereo_path_pair(file_path)
                         if not os.path.exists(path_l) or not os.path.exists(path_r):
                             raise Exception("File not found: " + file_path)
                         else:
@@ -91,7 +91,7 @@ class Hdf5Writer(WriterInterface):
                         use_stereo = False
 
                     if use_stereo:
-                        path_l, path_r = WriterUtility._get_stereo_path_pair(file_path)
+                        path_l, path_r = _WriterUtility.get_stereo_path_pair(file_path)
 
                         img_l, new_key, new_version = self._load_and_postprocess(path_l, output_type["key"],
                                                                                    output_type["version"])
@@ -99,21 +99,21 @@ class Hdf5Writer(WriterInterface):
                                                                                    output_type["version"])
 
                         if self.config.get_bool("stereo_separate_keys", False):
-                            WriterUtility._write_to_hdf_file(f, new_key + "_0", img_l)
-                            WriterUtility._write_to_hdf_file(f, new_key + "_1", img_r)
+                            _WriterUtility.write_to_hdf_file(f, new_key + "_0", img_l)
+                            _WriterUtility.write_to_hdf_file(f, new_key + "_1", img_r)
                         else:
                             data = np.array([img_l, img_r])
-                            WriterUtility._write_to_hdf_file(f, new_key, data)
+                            _WriterUtility.write_to_hdf_file(f, new_key, data)
 
                     else:
                         data, new_key, new_version = self._load_and_postprocess(file_path, output_type["key"],
                                                                                 output_type["version"])
 
-                        WriterUtility._write_to_hdf_file(f, new_key, data)
+                        _WriterUtility.write_to_hdf_file(f, new_key, data)
 
-                    WriterUtility._write_to_hdf_file(f, new_key + "_version", np.string_([new_version]))
+                    _WriterUtility.write_to_hdf_file(f, new_key + "_version", np.string_([new_version]))
 
                 blender_proc_version = Utility.get_current_version()
                 if blender_proc_version:
-                    WriterUtility._write_to_hdf_file(f, "blender_proc_version", np.string_(blender_proc_version))
+                    _WriterUtility.write_to_hdf_file(f, "blender_proc_version", np.string_(blender_proc_version))
 
