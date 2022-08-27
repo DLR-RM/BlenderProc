@@ -1,6 +1,6 @@
 from typing import Union, List, Optional
 import numpy as np
-from mathutils import Vector, Euler, Color, Matrix, Quaternion
+from mathutils import Vector, Euler, Matrix
 
 import bpy
 
@@ -11,6 +11,9 @@ from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.types.InertialUtility import Inertial
 
 
+# as all attributes are accessed via the __getattr__ and __setattr__ in this module, we need to remove the member
+# init check
+# pylint: disable=no-member
 class URDFObject(Entity):
     def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
         super().__init__(bpy_object=armature)
@@ -210,7 +213,8 @@ class URDFObject(Entity):
         object.__setattr__(self, "ik_link", ik_link)
 
     def create_ik_bone_controller(self, link: Optional[Link] = None,
-                                  relative_location: Union[List[float], Vector] = [0., 0., 0.], use_rotation: bool = True,
+                                  relative_location: Optional[Union[List[float], Vector]] = None,
+                                  use_rotation: bool = True,
                                   chain_length: int = 0):
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
 
@@ -224,6 +228,8 @@ class URDFObject(Entity):
         if self.ik_bone_controller is not None:
             raise NotImplementedError("URDFObject already has an ik bone controller. More than one ik controllers are "
                                       "currently not supported!")
+        if relative_location is None:
+            relative_location = [0., 0., 0.]
         if link is None:
             link = self.links[-1]
         ik_bone_controller, ik_bone_constraint, offset = link._create_ik_bone_controller(
@@ -358,11 +364,10 @@ class URDFObject(Entity):
                   f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
                   f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
             return True
-        else:
-            print(f'Pose is not within given constraints:\n'
-                  f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
-                  f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
-            return False
+        print(f'Pose is not within given constraints:\n'
+              f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
+              f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
+        return False
 
     def _set_ik_bone_offset(self, offset: Matrix):
         """ Sets the location offset between the control and constraint bone.
@@ -370,3 +375,5 @@ class URDFObject(Entity):
         :param offset: The location offset.
         """
         object.__setattr__(self, "ik_bone_offset", offset)
+
+# pylint: enable=no-member

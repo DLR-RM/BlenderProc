@@ -1,3 +1,5 @@
+""" The material class containing the texture and material properties. """
+
 from typing import List, Union
 
 import bpy
@@ -8,6 +10,11 @@ from blenderproc.python.utility.Utility import Utility
 
 
 class Material(Struct):
+    """
+    The material class containing the texture and material properties, which are assigned to the surfaces
+    of MeshObjects.
+    """
+
 
     def __init__(self, material: bpy.types.Material):
         super().__init__(material)
@@ -60,7 +67,7 @@ class Material(Struct):
         :return: The list of nodes with the given type.
         """
         return Utility.get_nodes_with_type(self.nodes, node_type, created_in_func)
-    
+
     def get_nodes_created_in_func(self, created_in_func: str) -> List[bpy.types.Node]:
         """ Returns all nodes which are of the given node_type
 
@@ -73,7 +80,7 @@ class Material(Struct):
         """ Creates a new node in the material's node tree.
 
         :param node_type: The desired type of the new node.
-        :param created_in_func: Save the function name in which this node was created as a custom property. 
+        :param created_in_func: Save the function name in which this node was created as a custom property.
                                 Allows to later retrieve and delete specific nodes again.
         :return: The new node.
         """
@@ -126,12 +133,13 @@ class Material(Struct):
         """ Maps existing vertex color to the base color of the principled bsdf node or a new background color node.
 
         :param layer_name: Name of the vertex color layer. Type: string.
-        :param active_shading: Whether to keep the principled bsdf shader. If True, the material properties influence light
-                               reflections such as specularity, roughness, etc. alter the object's appearance. Type: bool.
+        :param active_shading: Whether to keep the principled bsdf shader. If True, the material properties
+                               influence light reflections such as specularity, roughness, etc. alter the
+                               object's appearance. Type: bool.
         """
-        
+
         if active_shading:
-            # create new shader node attribute          
+            # create new shader node attribute
             attr_node = self.nodes.new(type='ShaderNodeAttribute')
             attr_node.attribute_name = layer_name
             # connect it to base color of principled bsdf
@@ -141,7 +149,8 @@ class Material(Struct):
             # create new vertex color shade node
             vcol = self.nodes.new(type="ShaderNodeVertexColor")
             vcol.layer_name = layer_name
-            node_connected_to_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(self.blender_obj)
+            result = Utility.get_node_connected_to_the_output_and_unlink_it(self.blender_obj)
+            node_connected_to_output, material_output = result
             # remove principled bsdf
             self.nodes.remove(node_connected_to_output)
             background_color_node = self.nodes.new(type="ShaderNodeBackground")
@@ -149,25 +158,29 @@ class Material(Struct):
                 self.links.new(vcol.outputs['Color'], background_color_node.inputs['Color'])
                 self.links.new(background_color_node.outputs["Background"], material_output.inputs["Surface"])
             else:
-                raise Exception("Material '{}' has no node connected to the output, "
-                                "which has as a 'Base Color' input.".format(self.blender_obj.name))
+                raise RuntimeError(f"Material '{self.blender_obj.name}' has no node connected to the output, "
+                                   f"which has as a 'Base Color' input.")
+
     def remove_emissive(self):
         """ Remove emissive part of the material.
         """
         for node in self.get_nodes_created_in_func(self.make_emissive.__name__):
             self.remove_node(node)
-        
-    def make_emissive(self, emission_strength: float, replace: bool = False, emission_color: List[float] = None, 
+
+    def make_emissive(self, emission_strength: float, replace: bool = False, emission_color: List[float] = None,
                       non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
 
         :param emission_strength: The strength of the emitted light.
-        :param replace: When replace is set to True, the existing material will be completely replaced by the emission shader, otherwise it still looks the same, while emitting light.
+        :param replace: When replace is set to True, the existing material will be completely replaced by the emission
+                        shader, otherwise it still looks the same, while emitting light.
         :param emission_color: The color of the light to emit. Default: Color of the original object.
-        :param non_emissive_color_socket: An output socket that defines how the material should look like. By default that is the output of the principled shader node. Has no effect if replace is set to True.
+        :param non_emissive_color_socket: An output socket that defines how the material should look like. By default,
+                                          that is the output of the principled shader node. Has no effect if replace
+                                          is set to True.
         """
         self.remove_emissive()
-        
+
         output_node = self.get_the_one_node_with_type("OutputMaterial")
 
         if not replace:
@@ -209,7 +222,9 @@ class Material(Struct):
         """ Sets value of an input to the principled shader node.
 
         :param input_name: The name of the input socket of the principled shader node.
-        :param value: The value to set. Can be a simple value to use as default_value, a socket which will be connected to the input or an image which will be used for a new TextureNode connected to the input.
+        :param value: The value to set. Can be a simple value to use as default_value, a socket which will be
+                      connected to the input or an image which will be used for a new TextureNode connected to
+                      the input.
         """
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
 
@@ -224,9 +239,11 @@ class Material(Struct):
             if principled_bsdf.inputs[input_name].links:
                 self.links.remove(principled_bsdf.inputs[input_name].links[0])
             principled_bsdf.inputs[input_name].default_value = value
-            
+
     def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.NodeSocket]:
-        """ Gets the default value or the connected node socket to an input socket of the principled shader node of the material.
+        """
+        Gets the default value or the connected node socket to an input socket of the principled shader
+        node of the material.
 
         :param input_name: The name of the input socket of the principled shader node.
         :return: the connected socket to the input socket or the default_value of the given input_name
@@ -240,14 +257,11 @@ class Material(Struct):
                 if len(principled_bsdf.inputs[input_name].links) == 1:
                     # return the connected node
                     return principled_bsdf.inputs[input_name].links[0].from_socket
-                else:
-                    raise Exception(f"The input socket has more than one input link: "
-                                    f"{[link.from_node.name for link in principled_bsdf.inputs[input_name].links]}")
-            else:
-                # else return the default value
-                return principled_bsdf.inputs[input_name].default_value
-        else:
-            raise Exception(f"The input name could not be found in the inputs: {input_name}")
+                raise RuntimeError(f"The input socket has more than one input link: "
+                                   f"{[link.from_node.name for link in principled_bsdf.inputs[input_name].links]}")
+            # else return the default value
+            return principled_bsdf.inputs[input_name].default_value
+        raise RuntimeError(f"The input name could not be found in the inputs: {input_name}")
 
     def get_node_connected_to_the_output_and_unlink_it(self):
         """
@@ -265,21 +279,24 @@ class Material(Struct):
                 break
         return node_connected_to_the_output, material_output
 
-    def infuse_texture(self, texture: bpy.types.Texture, mode: str = "overlay", connection: str = "Base Color", texture_scale :float = 0.05, strength: float = 0.5, invert_texture: bool = False):
+    def infuse_texture(self, texture: bpy.types.Texture, mode: str = "overlay", connection: str = "Base Color",
+                       texture_scale: float = 0.05, strength: float = 0.5, invert_texture: bool = False):
         """ Overlays the selected material with a texture, this can be either a color texture like for example dirt or
         it can be a texture, which is used as an input to the Principled BSDF of the given material.
 
         :param texture: A texture which should be infused in the material.
-        :param mode: The mode determines how the texture is used. There are three options: "overlay" in which the selected
-                     texture is overlayed over a preexisting one. If there is none, nothing happens. The second option: "mix"
-                     is similar to overlay, just that the textures are mixed there. The last option: "set" replaces any existing
-                     texture and is even added if there was none before.
-        :param connection: By default the "Base Color" input of the principled shader will be used. This can be changed to any valid
-                           input of a principled shader. Default: "Base Color". For available check the blender documentation.
-        :param texture_scale: The used texture can be scaled down or up by a factor, to make it match the preexisting UV mapping. Make
-                              sure that the object has a UV mapping beforehand.
+        :param mode: The mode determines how the texture is used. There are three options: "overlay" in which
+                     the selected texture is overlayed over a preexisting one. If there is none, nothing happens.
+                     The second option: "mix" is similar to overlay, just that the textures are mixed there.
+                     The last option: "set" replaces any existing texture and is even added if there was none before.
+        :param connection: By default the "Base Color" input of the principled shader will be used. This can be
+                           changed to any valid input of a principled shader. Default: "Base Color". For available
+                           check the blender documentation.
+        :param texture_scale: The used texture can be scaled down or up by a factor, to make it match the
+                              preexisting UV mapping. Make sure that the object has a UV mapping beforehand.
         :param strength: The strength determines how much the newly generated texture is going to be used.
-        :param invert_texture: It might be sometimes useful to invert the input texture, this can be done by setting this to True.
+        :param invert_texture: It might be sometimes useful to invert the input texture, this can be done by
+                               setting this to True.
         """
         used_mode = mode.lower()
         if used_mode not in ["overlay", "mix", "set"]:
@@ -327,16 +344,18 @@ class Material(Struct):
                 self.link(texture_node_output, principled_bsdf.inputs[used_connector])
 
     def infuse_material(self, material: "Material", mode: str = "mix", mix_strength: float = 0.5):
-        """ Infuse a material inside of another material. The given material, will be adapted and the used material, will
+        """
+        Infuse a material inside another material. The given material, will be adapted and the used material, will
         be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
-        this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
+        this includes the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
 
         :param material: Material to infuse.
         :param mode: The mode determines how the two materials are mixed. There are two options "mix" in which the
-                     preexisting material is mixed with the selected one in "used_material" or "add" in which they are just
-                    added on top of each other. Available: ["mix", "add"]
-        :param mix_strength: In the "mix" mode a strength can be set to determine how much of each material is going to be used.
-                             A strength of 1.0 means that the new material is going to be used completely.
+                     preexisting material is mixed with the selected one in "used_material" or "add" in which
+                     they are just added on top of each other. Available: ["mix", "add"]
+        :param mix_strength: In the "mix" mode a strength can be set to determine how much of each material is
+                             going to be used. A strength of 1.0 means that the new material is going to be used
+                             completely.
         """
         # determine the mode
         used_mode = mode.lower()
@@ -411,6 +430,4 @@ class Material(Struct):
         if key not in ["links", "nodes", "blender_obj"]:
             raise RuntimeError("The API class does not allow setting any attribute. Use the corresponding method or "
                                "directly access the blender attribute via entity.blender_obj.attribute_name")
-        else:
-            object.__setattr__(self, key, value)
-
+        object.__setattr__(self, key, value)

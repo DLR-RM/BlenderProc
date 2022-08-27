@@ -1,7 +1,9 @@
+""" An armature object, which can be connected with Link objects to other armature objects. """
+
 from typing import Union, List, Optional
+
 import numpy as np
 from mathutils import Euler, Vector
-
 import bpy
 
 from blenderproc.python.utility.Utility import Utility
@@ -9,18 +11,27 @@ from blenderproc.python.types.EntityUtility import Entity
 
 
 class Armature(Entity):
+    """
+    An armature object, which can be connected with Link objects to other armature objects.
+
+    It enables the transformation of different objects.
+    """
+
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object=bpy_object)
 
-    def set_rotation_euler(self, rotation_euler: Union[float, list, Euler, np.ndarray], mode: str = "absolute", frame: int = None):
-        """ Rotates the armature based on euler angles. Validates values with given constraints.
+    def set_rotation_euler(self, rotation_euler: Union[float, list, Euler, np.ndarray], frame: Optional[int] = None,
+                           mode: str = "absolute"):
+        """ Rotates the armature based on euler angles. Validate values with given constraints.
 
-        :param rotation_euler: The amount of rotation (in radians). Either three floats for x, y and z axes, or a single float.
-                               In the latter case, the axis of rotation is derived based on the rotation constraint. If
-                               these are not properly set (i.e., two axes must have equal min/max values) an exception will be thrown.
-        :param mode: One of ["absolute", "relative"]. For absolute rotations we clip the rotation value based on the constraints.
-                     For relative we don't - this will result in inverse motion after the constraint's limits have been reached.
+        :param rotation_euler: The amount of rotation (in radians). Either three floats for x, y and z axes, or
+                               a single float. In the latter case, the axis of rotation is derived based on the
+                               rotation constraint. If these are not properly set (i.e., two axes must have equal
+                               min/max values) an exception will be thrown.
         :param frame: Keyframe where to insert the respective rotations.
+        :param mode: One of ["absolute", "relative"]. For absolute rotations we clip the rotation value based on
+                     the constraints. For relative, we don't - this will result in inverse motion after the
+                     constraint's limits have been reached.
         """
         assert mode in ["absolute", "relative"]
         bpy.ops.object.select_all(action='DESELECT')
@@ -32,13 +43,16 @@ class Armature(Entity):
         if mode == "absolute":
             if isinstance(rotation_euler, float):
                 axis = self._determine_rotation_axis()
-                rotation_euler = self._clip_value_from_constraint(value=rotation_euler, constraint_name="Limit Rotation", axis=axis)
+                rotation_euler = self._clip_value_from_constraint(value=rotation_euler,
+                                                                  constraint_name="Limit Rotation", axis=axis)
                 current_rotation_euler = bone.rotation_euler
                 current_rotation_euler[["X", "Y", "Z"].index(axis)] = rotation_euler
                 bone.rotation_euler = current_rotation_euler
                 print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
             else:
-                bone.rotation_euler = Vector([self._clip_value_from_constraint(value=rot_euler, constraint_name="Limit Rotation", axis=axis)
+                bone.rotation_euler = Vector([self._clip_value_from_constraint(value=rot_euler,
+                                                                               constraint_name="Limit Rotation",
+                                                                               axis=axis)
                                               for rot_euler, axis in zip(rotation_euler, ["X", "Y", "Z"])])
                 print(f"Set rotation_euler of armature {self.get_name()} to {rotation_euler}")
         # in relative mode we add the rotation to the current value
@@ -57,12 +71,14 @@ class Armature(Entity):
             bpy.context.scene.frame_end += 1
 
     def _determine_rotation_axis(self):
-        """ Determines the single rotation axis and checks if the constraints are set well to have only one axis of freedom.
+        """
+        Determines the single rotation axis and checks if the constraints are set well to have
+        only one axis of freedom.
 
         :return: The single rotation axis ('X', 'Y' or 'Z').
         """
         c = self.get_constraint(constraint_name="Limit Rotation")
-        assert c is not None, f"Tried to determine the single rotation axis but no rotation constraints are set!"
+        assert c is not None, "Tried to determine the single rotation axis but no rotation constraints are set!"
 
         axes = ['X', 'Y', 'Z']
         if c.use_limit_x and c.min_x == c.max_x:
@@ -80,7 +96,9 @@ class Armature(Entity):
         return axes[0]
 
     def _clip_value_from_constraint(self, value: float, constraint_name: str, axis: str) -> float:
-        """ Checks if an axis is constraint, and clips the value to the min/max of this constraint. If the constraint does not exist, nothing is done.
+        """
+        Checks if an axis is constraint, and clips the value to the min/max of this constraint.
+        If the constraint does not exist, nothing is done.
 
         :param value: Value to be clipped.
         :param constraint_name: Name of the constraint.
@@ -89,12 +107,12 @@ class Armature(Entity):
         """
         c = self.get_constraint(constraint_name=constraint_name)
         if c is not None:
-            min_value = eval(f"c.min_{axis.lower()}")
-            max_value = eval(f"c.max_{axis.lower()}")
+            min_value = {"x": c.min_x, "y": c.min_y, "z": c.min_z}[axis.lower()]
+            max_value = {"x": c.max_x, "y": c.max_y, "z": c.max_z}[axis.lower()]
             print(f"Clipping {value} to be in range {min_value}, {max_value}")
             if value < min_value:
                 return min_value
-            elif value > max_value:
+            if value > max_value:
                 return max_value
         return value
 
@@ -107,12 +125,16 @@ class Armature(Entity):
             self.blender_obj.pose.bones["Bone"].constraints.new(constraint_name.upper().replace(' ', '_'))
         return self.blender_obj.pose.bones["Bone"].constraints[constraint_name]
 
-    def set_rotation_constraint(self, x_limits: Optional[List[float]] = None, y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
+    def set_rotation_constraint(self, x_limits: Optional[List[float]] = None,
+                                y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
         """ Sets rotation constraints on the armature's bone.
 
-        :param x_limits: A list of two float values specifying min/max radiant values along the x-axis or None if no constraint should be applied.
-        :param y_limits: A list of two float values specifying min/max radiant values along the y-axis or None if no constraint should be applied.
-        :param z_limits: A list of two float values specifying min/max radiant values along the z-axis or None if no constraint should be applied.
+        :param x_limits: A list of two float values specifying min/max radiant values along the x-axis or
+                         None if no constraint should be applied.
+        :param y_limits: A list of two float values specifying min/max radiant values along the y-axis or
+                         None if no constraint should be applied.
+        :param z_limits: A list of two float values specifying min/max radiant values along the z-axis or
+                         None if no constraint should be applied.
         """
         if x_limits is None and y_limits is None and z_limits is None:
             return
@@ -131,12 +153,16 @@ class Armature(Entity):
             constraint.min_z, constraint.max_z = z_limits
         constraint.owner_space = "LOCAL"
 
-    def set_location_constraint(self, x_limits: Optional[List[float]] = None, y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
+    def set_location_constraint(self, x_limits: Optional[List[float]] = None,
+                                y_limits: Optional[List[float]] = None, z_limits: Optional[List[float]] = None):
         """ Sets location constraints on the armature's bone.
 
-        :param x_limits: A list of two float values specifying min/max values along the x-axis or None if no constraint should be applied.
-        :param y_limits: A list of two float values specifying min/max values along the y-axis or None if no constraint should be applied.
-        :param z_limits: A list of two float values specifying min/max values along the z-axis or None if no constraint should be applied.
+        :param x_limits: A list of two float values specifying min/max values along the x-axis or
+                         None if no constraint should be applied.
+        :param y_limits: A list of two float values specifying min/max values along the y-axis or
+                         None if no constraint should be applied.
+        :param z_limits: A list of two float values specifying min/max values along the z-axis or
+                         None if no constraint should be applied.
         """
         if x_limits is None and y_limits is None and z_limits is None:
             return
