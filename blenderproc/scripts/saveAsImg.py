@@ -1,5 +1,8 @@
+""" Save a hdf5 container as image """
+
 import argparse
 import os
+from typing import Optional
 
 import h5py
 import numpy as np
@@ -11,46 +14,50 @@ except ModuleNotFoundError:
 
 
 def save_array_as_image(array, key, file_path):
+    """ Save array as an image, using the vis_data function"""
     vis_data(key, array, None, "", save_to_file=file_path)
 
 
-
-def convert_hdf(base_file_path, output_folder=None):
+def convert_hdf(base_file_path: str, output_folder: Optional[str] = None):
+    """ Convert a hdf5 file to images """
     if os.path.exists(base_file_path):
         if os.path.isfile(base_file_path):
-            base_name = str(os.path.basename(base_file_path)).split('.')[0]
+            base_name = str(os.path.basename(base_file_path)).split('.', maxsplit=1)[0]
             if output_folder is not None:
                 base_name = os.path.join(output_folder, base_name)
             with h5py.File(base_file_path, 'r') as data:
-                print("{}:".format(base_file_path))
-                keys = [key for key in data.keys()]
-                for key in keys:
-                    val = np.array(data[key])
+                print(f"{base_file_path}:")
+                for key, val in data.items():
+                    val = np.array(val)
                     if np.issubdtype(val.dtype, np.string_) or len(val.shape) == 1:
                         pass  # metadata
                     else:
-                        print("key: {}  {} {}".format(key, val.shape, val.dtype.name))
+                        print(f"key: {key} {val.shape} {val.dtype.name}")
 
                         if val.shape[0] != 2:
                             # mono image
-                            file_path = '{}_{}.png'.format(base_name, key)
+                            file_path = f'{base_name}_{key}.png'
                             save_array_as_image(val, key, file_path)
                         else:
                             # stereo image
                             for image_index, image_value in enumerate(val):
-                                file_path = '{}_{}_{}.png'.format(base_name, key, image_index)
+                                file_path = f'{base_name}_{key}_{image_index}.png'
                                 save_array_as_image(image_value, key, file_path)
         else:
             print("The path is not a file")
     else:
-        print("The file does not exist: {}".format(base_file_path))
+        print(f"The file does not exist: {base_file_path}")
 
 
 def cli():
+    """
+    Command line function
+    """
     parser = argparse.ArgumentParser("Script to save images out of a hdf5 files.")
     parser.add_argument('hdf5', nargs='+', help='Path to hdf5 file/s')
-    parser.add_argument('--output_dir', default=None, help="Determines where the data is going to be saved. Default: Current directory")
-    
+    parser.add_argument('--output_dir', default=None,
+                        help="Determines where the data is going to be saved. Default: Current directory")
+
     args = parser.parse_args()
 
     if isinstance(args.hdf5, str):
@@ -60,6 +67,7 @@ def cli():
             convert_hdf(file, args.output_dir)
     else:
         print("Input must be a path")
+
 
 if __name__ == "__main__":
     cli()

@@ -1,13 +1,16 @@
-from sys import version_info
-if version_info.major == 2:
-    raise Exception("This script only works with python3.x!")
+""" Download the scenenet dataset. """
 
 import os
-from urllib.request import urlretrieve, build_opener, install_opener
-from blenderproc.python.utility.SetupUtility import SetupUtility
 import argparse
+from urllib.request import urlretrieve, build_opener, install_opener
+
+from blenderproc.python.utility.SetupUtility import SetupUtility
+
 
 def cli():
+    """
+    Command line function
+    """
     parser = argparse.ArgumentParser("Downloads the scenenet dataset")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
     args = parser.parse_args()
@@ -29,13 +32,15 @@ def cli():
 
     # unzip the zip file
     print("Unzip the zip file.")
-    SetupUtility.extract_file(scenenet_dir, zip_file_path) 
+    SetupUtility.extract_file(scenenet_dir, zip_file_path)
 
     os.remove(zip_file_path)
-    os.rename(os.path.join(scenenet_dir, "robotvault-downloadscenenet-cfe5ab85ddcc"), os.path.join(scenenet_dir, "SceneNetData"))
+    os.rename(os.path.join(scenenet_dir, "robotvault-downloadscenenet-cfe5ab85ddcc"),
+              os.path.join(scenenet_dir, "SceneNetData"))
 
     print("Please also download the texture library from here: http://tinyurl.com/zpc9ppb")
     print("This is a google drive folder downloading via script is tedious.")
+
 
 if __name__ == "__main__":
     cli()
