@@ -42,9 +42,9 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
     # install urdfpy
     SetupUtility.setup_pip(user_required_packages=["git+https://github.com/wboerdijk/urdfpy.git"])
     # This import is done inside to avoid having the requirement that BlenderProc depends on urdfpy
-    #pylint: disable=import-outside-toplevel
+    # pylint: disable=import-outside-toplevel
     from urdfpy import URDF
-    #pylint: enable=import-outside-toplevel
+    # pylint: enable=import-outside-toplevel
 
     if fk_offset is None:
         fk_offset = [0., -1., 0.]
