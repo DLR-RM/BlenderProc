@@ -1,16 +1,18 @@
+""" This module provides a collection of utility functions tied closely to Blender. """
+
 from collections import defaultdict
+from typing import List, Tuple, Dict, Any
+import ssl
 
 import bpy
 import bmesh
-import mathutils
 from mathutils import Vector
-
 import numpy as np
 import imageio
-from typing import Union, List, Tuple, Callable, Optional, Dict, Any
+import cv2
 
 from blenderproc.python.utility.Utility import Utility
-import cv2
+
 
 def add_object_only_with_vertices(vertices: List[List[float]], name: str = 'NewVertexObject') -> bpy.types.Object:
     """
@@ -71,6 +73,7 @@ def add_object_only_with_direction_vectors(vertices: List[List[float]], normals:
     bm.free()
     return obj
 
+
 def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bpy.types.Object:
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
@@ -104,6 +107,7 @@ def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bp
     bm.to_mesh(mesh)
     bm.free()
     return obj
+
 
 def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     """
@@ -142,41 +146,49 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
     if file_ending in ["exr", "png"]:
         try:
             return imageio.imread(file_path)[:, :, :num_channels]
-        except ValueError as e:
-            print("It seems the freeimage library which is necessary to read .exr files cannot be found on your computer.")
+        except ValueError:
+            print("It seems the freeimage library which is necessary to read .exr files cannot "
+                  "be found on your computer.")
             print("Gonna try to download it automatically.")
-    
+
             # Since PEP 476 the certificate of https connections is verified per default.
-            # However, in the blender python env no local certificates seem to be found which makes certification impossible.
+            # However, in the blender python env no local certificates seem to be found which makes
+            # certification impossible.
             # Therefore, we have to switch certificate verification off for now.
-            import ssl
             if hasattr(ssl, '_create_unverified_context'):
+                # pylint: disable=protected-access
                 prev_context = ssl._create_default_https_context
                 ssl._create_default_https_context = ssl._create_unverified_context
-    
+                # pylint: enable=protected-access
+
             # Download free image library
             imageio.plugins.freeimage.download()
-    
+
             # Undo certificate check changes
             if hasattr(ssl, '_create_unverified_context'):
+                # pylint: disable=protected-access
                 ssl._create_default_https_context = prev_context
-    
+                # pylint: enable=protected-access
+
             try:
                 # Try again
                 return imageio.imread(file_path)[:, :, :num_channels]
-            except ValueError as e:
-                error = "The automatic installation of the freeimage library failed, so you need to install the imageio .exr extension manually. This is quite simple: \n"
-                error += "Use a different python environment (not blenders internal environment), `pip install imageio`.\n"
+            except ValueError as e2:
+                error = "The automatic installation of the freeimage library failed, so you need to install " \
+                        "the imageio .exr extension manually. This is quite simple: \n"
+                error += "Use a different python environment (not blenders internal environment), " \
+                         "`pip install imageio`.\n"
                 error += 'And then execute the following command in this env: \n'
                 error += '`python -c "import imageio; imageio.plugins.freeimage.download()"`\n'
                 error += "Now everything should work -> run the pipeline again."
-                raise Exception(error)
+                raise RuntimeError(error) from e2
     elif file_ending in ["jpg"]:
         img = cv2.imread(file_path)  # reads an image in the BGR format
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         return img
     else:
         raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
+
 
 def collect_all_orphan_data_blocks() -> Dict[str, Any]:
     """ Returns all orphan data blocks grouped by their type
@@ -349,16 +361,16 @@ def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.Shad
     copy_links(nodes, group.nodes, group.links)
 
     # add the group input and output node to the created group
-    group_input, group_output = add_group_nodes(group)
+    _, group_output = add_group_nodes(group)
 
     # check if the selection of nodes goes over a material, if so replace the material output with the output of
     # the group
     material_outputs = Utility.get_nodes_with_type(group.nodes, "OutputMaterial")
     if len(material_outputs) == 1:
-        for input in material_outputs[0].inputs:
-            group.outputs.new(input.bl_idname, input.name)
-            for link in input.links:
-                group.links.new(link.from_socket, group_output.inputs[input.name])
+        for input_node in material_outputs[0].inputs:
+            group.outputs.new(input_node.bl_idname, input_node.name)
+            for link in input_node.links:
+                group.links.new(link.from_socket, group_output.inputs[input_node.name])
         # remove the material output, the material output should never be inside of a group
         group.nodes.remove(material_outputs[0])
     return group

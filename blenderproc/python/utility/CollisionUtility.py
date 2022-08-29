@@ -1,19 +1,24 @@
+""" This module provides a collection of functions to check if objects collide. """
+
+from typing import Union, Optional, Dict, Tuple, List
+
 import mathutils
 import numpy as np
 from mathutils import Vector, Euler, Matrix
-from typing import Union, Optional, Dict, Tuple, List
-import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class CollisionUtility:
+    """
+    This class provides utility functions to check if two objects intersect with each other.
+    """
 
     @staticmethod
     def check_intersections(obj: MeshObject, bvh_cache: Optional[Dict[str, mathutils.bvhtree.BVHTree]],
                             objects_to_check_against: List[MeshObject],
                             list_of_objects_with_no_inside_check: List[MeshObject]):
-        """ Checks if a object intersects with any object given in the list.
+        """ Checks if an object intersects with any object given in the list.
 
         The bvh_cache adds all current objects to the bvh tree, which increases the speed.
 
@@ -80,8 +85,8 @@ class CollisionUtility:
         return CollisionUtility.check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
 
     @staticmethod
-    def check_bb_intersection_on_values(min_b1: list, max_b1: list, min_b2: list, max_b2: list,
-                                        used_check=lambda a, b: a >= b):
+    def check_bb_intersection_on_values(min_b1: List[float], max_b1: List[float], min_b2: List[float],
+                                        max_b2: List[float], used_check=lambda a, b: a >= b):
         """
         Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
         namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
@@ -91,7 +96,7 @@ class CollisionUtility:
         :param max_b1: List of maximum bounding box points for b1.
         :param min_b2: List of minimum bounding box points for b2.
         :param max_b2: List of maximum bounding box points for b2.
-        :param used_check: The operation used inside of the is_overlapping1D. With that it possible to change the \
+        :param used_check: The operation used inside the is_overlapping1D. With that it possible to change the \
                            collision check from volume and surface check to pure surface or volume checks.
         :return: True if the two bounding boxes intersect with each other
         """
@@ -153,7 +158,9 @@ class CollisionUtility:
 
         # Optionally check whether obj2 is contained in obj1
         if not inter and not skip_inside_check:
-            inter = CollisionUtility.is_point_inside_object(obj1, obj1_BVHtree, Matrix(obj2.get_local2world_mat()) @ obj2.get_mesh().vertices[0].co)
+            inter = CollisionUtility.is_point_inside_object(obj1, obj1_BVHtree,
+                                                            Matrix(obj2.get_local2world_mat()) @
+                                                            obj2.get_mesh().vertices[0].co)
             if inter:
                 print("Warning: Detected that " + obj2.get_name() + " is completely inside " + obj1.get_name() +
                       ". This might be wrong, if " + obj1.get_name() +
@@ -162,7 +169,8 @@ class CollisionUtility:
 
         # Optionally check whether obj1 is contained in obj2
         if not inter and not skip_inside_check:
-            inter = CollisionUtility.is_point_inside_object(obj2, obj2_BVHtree, Matrix(obj1.get_local2world_mat()) @ obj1.get_mesh().vertices[0].co)
+            inter = CollisionUtility.is_point_inside_object(obj2, obj2_BVHtree, Matrix(obj1.get_local2world_mat())
+                                                            @ obj1.get_mesh().vertices[0].co)
             if inter:
                 print("Warning: Detected that " + obj1.get_name() + " is completely inside " + obj2.get_name() +
                       ". This might be wrong, if " + obj2.get_name() + " is not water tight or has incorrect "

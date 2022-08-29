@@ -1,26 +1,31 @@
+""" This module provides functions to init a BlenderProc scene. """
+
 import os
 import random
+
 from numpy import random as np_random
 import bpy
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
-import blenderproc.python.camera.CameraUtility as CameraUtility
+from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
-import blenderproc.python.renderer.RendererUtility as RendererUtility
+from blenderproc.python.renderer import RendererUtility
 
 
 def init(clean_up_scene: bool = True):
     """ Initializes BlenderProc.
 
-    Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and the camera.
-    This method should only be called once in the beginning. If you want to clean up the scene afterwards, use bproc.clean_up()
+    Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and
+    the camera. This method should only be called once in the beginning. If you want to clean up the scene afterwards,
+    use bproc.clean_up()
 
     :param clean_up_scene: Set to False, if you want to keep all scene data.
     """
     # Check if init has already been run
     if GlobalStorage.is_in_storage("bproc_init_complete") and GlobalStorage.get("bproc_init_complete"):
-        raise RuntimeError("BlenderProc has already been initialized via bproc.init(), this should not be done twice. If you want to clean up the scene, use bproc.clean_up().")
+        raise RuntimeError("BlenderProc has already been initialized via bproc.init(), this should not be done twice. "
+                           "If you want to clean up the scene, use bproc.clean_up().")
 
     if clean_up_scene:
         clean_up(clean_up_camera=True)
@@ -41,20 +46,21 @@ def init(clean_up_scene: bool = True):
 
     random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
     if random_seed:
-        print("Got random seed: {}".format(random_seed))
+        print(f"Got random seed: {random_seed}")
         try:
             random_seed = int(random_seed)
         except ValueError as e:
             raise e
         random.seed(random_seed)
         np_random.seed(random_seed)
-    
+
     # Remember init was completed
     GlobalStorage.add("bproc_init_complete", True)
 
+
 def clean_up(clean_up_camera: bool = False):
     """ Resets the scene to its clean state.
-    
+
     This method removes all objects, camera poses and cleans up the world background.
     All (renderer) settings and the UI are kept as they are.
 
@@ -65,8 +71,10 @@ def clean_up(clean_up_camera: bool = False):
         bpy.ops.object.mode_set(mode='OBJECT')
 
     # Clean up
+    # pylint: disable=protected-access
     Initializer._remove_all_data(clean_up_camera)
     Initializer._remove_custom_properties()
+    # pylint: enable=protected-access
 
     # Create new world
     new_world = bpy.data.worlds.new("World")
@@ -85,15 +93,22 @@ def clean_up(clean_up_camera: bool = False):
 
 
 class Initializer:
+    """
+    This is the initializer class used to init a BlenderProc scene.
+    """
 
     @staticmethod
     def set_default_parameters():
         """ Loads and sets default parameters defined in DefaultConfig.py """
         # Set default intrinsics
-        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, 
-                                                         DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, 
-                                                         DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, DefaultConfig.lens_unit)
-        CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
+        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x,
+                                                         DefaultConfig.resolution_y, DefaultConfig.clip_start,
+                                                         DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x,
+                                                         DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x,
+                                                         DefaultConfig.shift_y, DefaultConfig.lens_unit)
+        CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode,
+                                            DefaultConfig.stereo_convergence_distance,
+                                            DefaultConfig.stereo_interocular_distance)
 
         # Init renderer
         RendererUtility.render_init()
@@ -121,25 +136,26 @@ class Initializer:
                                           DefaultConfig.enable_transparency,
                                           DefaultConfig.jpg_quality)
 
-
     @staticmethod
     def _remove_all_data(remove_camera: bool = True):
-        """ Remove all data blocks except opened scripts, the default scene and the camera. 
-        
+        """ Remove all data blocks except opened scripts, the default scene and the camera.
+
         :param remove_camera: If True, also the default camera is removed.
         """
         # Go through all attributes of bpy.data
         for collection in dir(bpy.data):
             data_structure = getattr(bpy.data, collection)
             # Check that it is a data collection
-            if isinstance(data_structure, bpy.types.bpy_prop_collection) and hasattr(data_structure, "remove") and collection not in ["texts"]:
+            if isinstance(data_structure, bpy.types.bpy_prop_collection) and hasattr(data_structure, "remove") \
+                    and collection not in ["texts"]:
                 # Go over all entities in that collection
                 for block in data_structure:
                     # Skip the default scene
                     if isinstance(block, bpy.types.Scene) and block.name == "Scene":
                         continue
                     # If desired, skip camera
-                    if not remove_camera and (isinstance(block, bpy.types.Object) or isinstance(block, bpy.types.Camera)) and block.name == "Camera":
+                    if not remove_camera and isinstance(block, (bpy.types.Object, bpy.types.Camera)) \
+                            and block.name == "Camera":
                         continue
                     data_structure.remove(block)
 
