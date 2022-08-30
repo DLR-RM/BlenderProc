@@ -35,9 +35,8 @@ def load_scenenet(file_path: str, texture_folder: str, label_mapping: LabelIdMap
     if unknown_texture_folder is None:
         unknown_texture_folder = os.path.join(texture_folder, "unknown")
 
-    # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to
     # blender search the whole root directory recursively!
-    loaded_objects = load_obj(filepath=file_path, use_image_search=False)
+    loaded_objects = load_obj(filepath=file_path)
     loaded_objects.sort(key=lambda ele: ele.get_name())
     # sample materials for each object
     _SceneNetLoader.random_sample_materials_for_each_obj(loaded_objects, texture_folder, unknown_texture_folder)
