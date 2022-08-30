@@ -99,7 +99,7 @@ class SetupUtility:
 
         # Based on the OS determined the three paths
         current_python_version = "python3.10"
-        if platform == ["linux", "linux2"]:
+        if platform in ["linux", "linux2"]:
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
