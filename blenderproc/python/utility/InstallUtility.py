@@ -10,8 +10,6 @@ import ssl
 from platform import machine
 from typing import List, Union, Tuple
 
-import args
-
 if version_info.major == 3:
     from urllib.request import urlretrieve
     from urllib.error import URLError
@@ -31,7 +29,7 @@ class InstallUtility:
     """
 
     @staticmethod
-    def determine_blender_install_path(is_config: bool, used_args: args.NameSpace,
+    def determine_blender_install_path(is_config: bool, used_args: "argparse.NameSpace",
                                        user_args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
