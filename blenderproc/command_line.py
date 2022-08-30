@@ -34,7 +34,8 @@ def cli():
             'haven': "Downloads HDRIs, Textures and Models from polyhaven.com.",
             'ikea': "Downloads the IKEA dataset.",
             'pix3d': "Downloads the Pix3D dataset.",
-            'scenenet': "Downloads the scenenet dataset."
+            'scenenet': "Downloads the scenenet dataset.",
+            'matterport3d': "Downloads the Matterport3D dataset."
         },
         "pip": {
             'install': "Installs package in the Blender python environment",
@@ -239,6 +240,8 @@ def cli():
             from blenderproc.scripts.download_pix3d import cli as current_cli
         elif args.mode == "download" and args.download_mode == "scenenet":
             from blenderproc.scripts.download_scenenet import cli as current_cli
+        elif args.mode == "download" and args.download_mode == "matterport3d":
+            from blenderproc.scripts.download_matterport3d import cli as current_cli
         else:
             raise RuntimeError(f"There is no linked script for the command: {args.mode}. "
                                f"Options are: {options[args.mode]}")
