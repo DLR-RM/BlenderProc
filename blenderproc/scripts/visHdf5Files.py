@@ -110,7 +110,7 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
         # Go through all channels
         for i in range(data.shape[2]):
             # Try to determine label
-            channel_label = channel_labels.get(i, default=i)
+            channel_label = channel_labels.get(i, i)
 
             # Visualize channel
             if save_to_file is None:

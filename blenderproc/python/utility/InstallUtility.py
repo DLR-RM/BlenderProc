@@ -45,8 +45,8 @@ class InstallUtility:
             # Don't parse placeholder args in batch mode.
             config = config_parser.parse(used_args.file, user_args, False)
             setup_config = config["setup"]
-            custom_blender_path = setup_config.get("custom_blender_path", default=used_args.custom_blender_path)
-            blender_install_path = setup_config.get("blender_install_path", default=used_args.blender_install_path)
+            custom_blender_path = setup_config.get("custom_blender_path", used_args.custom_blender_path)
+            blender_install_path = setup_config.get("blender_install_path", used_args.blender_install_path)
         else:
             custom_blender_path = used_args.custom_blender_path
             blender_install_path = used_args.blender_install_path

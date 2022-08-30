@@ -135,7 +135,7 @@ class _SceneNetLoader:
             obj_name = obj.get_name().lower().split(".")[0]
 
             # If it's one of the cases that the category have different names in both idsets.
-            obj_name = normalize_name.get(obj_name, default=obj_name)  # Then normalize it.
+            obj_name = normalize_name.get(obj_name, obj_name)  # Then normalize it.
 
             if label_mapping.has_label(obj_name):
                 obj.set_cp("category_id", label_mapping.id_from_label(obj_name))

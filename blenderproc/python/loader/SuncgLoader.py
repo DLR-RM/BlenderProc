@@ -101,7 +101,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping,
 
             # Lookup if the object belongs to a room
             object_id = int(node["id"].split("_")[-1])
-            parent = room_per_object.get(object_id, default=level_obj)
+            parent = room_per_object.get(object_id, level_obj)
 
             if node["type"] == "Room":
                 loaded_objects += _SuncgLoader.load_room(node, metadata, material_adjustments, transform, house_id,

@@ -70,7 +70,7 @@ def load_replica_segmented_mesh(data_path: Union[str, Path], data_set_name: str,
 
     objs = []
     for current_class_id in used_class_ids:
-        used_obj_name = class_mapping.get(current_class_id, default="undefined")
+        used_obj_name = class_mapping.get(current_class_id, "undefined")
         obj = create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
         # add this new data to the mesh object
         mesh = obj.get_mesh()
