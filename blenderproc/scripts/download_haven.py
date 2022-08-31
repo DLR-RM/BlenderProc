@@ -25,7 +25,7 @@ def cli():
 
     def download_file(url, output_path):
         # Download
-        request = requests.get(url)
+        request = requests.get(url, timeout=30)
         # Write to file
         with open(output_path, "wb") as file:
             file.write(request.content)
@@ -40,7 +40,7 @@ def cli():
 
         # Download listing
         response = requests.get(f"https://api.polyhaven.com/assets?t={item_type}"
-                                f"&categories={','.join(args.categories)}")
+                                f"&categories={','.join(args.categories)}", timeout=30)
         data = response.json()
 
         # Filter for tags
@@ -60,7 +60,7 @@ def cli():
                 print(f"({i}/{len(data)}) Skipping {item_id} as it already exists")
 
     def download_texture(item_id: str, output_dir: str):
-        request = requests.get(f"https://api.polyhaven.com/files/{item_id}")
+        request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
 
         # Go over all available texture types
@@ -83,7 +83,7 @@ def cli():
 
     def download_hdri(item_id, output_dir):
         # Collect metadata to hdri
-        request = requests.get(f"https://api.polyhaven.com/files/{item_id}")
+        request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
 
         # Check resolution is available
@@ -97,7 +97,7 @@ def cli():
 
     def download_model(item_id, output_dir):
         # Collect metadata to model
-        request = requests.get(f"https://api.polyhaven.com/files/{item_id}")
+        request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
 
         # Check resolution is available
