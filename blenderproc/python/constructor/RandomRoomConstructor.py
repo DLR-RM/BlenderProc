@@ -17,7 +17,7 @@ from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.EntityUtility import delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
-from blenderproc.python.object.FaceSlicer import _FaceSlicer
+from blenderproc.python.object.FaceSlicer import FaceSlicer
 
 
 def construct_random_room(used_floor_area: float, interior_objects: List[MeshObject], materials: List[Material],
@@ -395,9 +395,9 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
         bm = obj.mesh_as_bmesh()
         bm.faces.ensure_lookup_table()
         # Select faces at given height that should be separate from the mesh
-        counter = _FaceSlicer.select_at_height_value(bm, used_split_height, compare_height,
-                                                     mathutils.Vector(up_vec), compare_angle,
-                                                     obj.get_local2world_mat())
+        counter = FaceSlicer.select_at_height_value(bm, used_split_height, compare_height,
+                                                    mathutils.Vector(up_vec), compare_angle,
+                                                    obj.get_local2world_mat())
         # if any faces are selected split them up
         if counter:
             bpy.ops.mesh.separate(type='SELECTED')
