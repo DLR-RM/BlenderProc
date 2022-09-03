@@ -28,7 +28,7 @@ authors:
   - name: Klaus Strobl
     orcid: 0000-0001-8123-0606
     affiliation: 1
-  - name: Tomas Hodan
+  - name: Tomáš Hodaň
     orcid: 0000-0003-0576-9997
     affiliation: 3
   - name: Rudolph Triebel
