@@ -1,10 +1,11 @@
 """ This module provides a collection of utility functions tied closely to Blender. """
 
 from collections import defaultdict
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Dict, Any, Optional, Union
 import ssl
 
 import bpy
+import addon_utils
 import bmesh
 from mathutils import Vector
 import numpy as np
@@ -371,6 +372,70 @@ def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.Shad
             group.outputs.new(input_node.bl_idname, input_node.name)
             for link in input_node.links:
                 group.links.new(link.from_socket, group_output.inputs[input_node.name])
-        # remove the material output, the material output should never be inside of a group
+        # remove the material output, the material output should never be inside a group
         group.nodes.remove(material_outputs[0])
     return group
+
+
+def add_dynamic_sky_as_world_background(scene_brightness: Optional[float] = None,
+                                        sky_color: Optional[Union[np.ndarray, List[float], Vector]] = None,
+                                        horizon_color: Optional[Union[np.ndarray, List[float], Vector]] = None,
+                                        cloud_color: Optional[Union[np.ndarray, List[float], Vector]] = None,
+                                        cloud_opacity: Optional[float] = None, cloud_density: Optional[float] = None,
+                                        sun_color: Optional[Union[np.ndarray, List[float], Vector]] = None,
+                                        sun_value: Optional[float] = None, sun_soft_hard: Optional[float] = None,
+                                        sun_direction: Optional[Union[np.ndarray, List[float], Vector]] = None):
+
+    # makes the integration of complex materials easier
+    addon_utils.enable("lighting_dynamic_sky")
+    res = bpy.ops.sky.dyn()
+    if "FINISHED" not in res:
+        raise RuntimeError("The activation of the dynamic sky addon failed.")
+    if not hasattr(bpy.context.scene, "dynamic_sky_name"):
+        raise ValueError("The scene does not have a dynamic sky name, the creation probably failed.")
+
+    # access the newly created sky
+    dynamic_sky = bpy.data.worlds.get(bpy.context.scene.dynamic_sky_name)
+    # set the newly created dynamic sky
+    bpy.context.scene.world = dynamic_sky
+
+    # check if the colors are correctly formatted
+    for color, name in [(sky_color, "sky"), (horizon_color, "horizon"), (cloud_color, "cloud"), (sun_color, "sun")]:
+        if color is not None:
+            if not isinstance(color, (np.ndarray, list, Vector)):
+                raise ValueError(f"The input for the {name}_color has to be a list, np.ndarray or a mathutils.Vector, "
+                                 f"type: {type(color)}!")
+            if len(color) != 4:
+                raise ValueError(f"The input for the {name}_color has to have four elements")
+
+    nodes = bpy.context.scene.world.node_tree.nodes
+    if scene_brightness is not None and scene_brightness < 1e-7:
+        raise ValueError(f"The scene brightness value can not be so low: {scene_brightness}")
+
+    # set the values for each value, these values are extracted from the lighting_dynamic_sky.py
+    for node_key, input_key, value in [("Scene_Brightness", "Strength", scene_brightness),
+                                       ("Cloud_density", "Fac", cloud_density),
+                                       ("Cloud_opacity", "Fac", cloud_opacity),
+                                       ("Sun_value", "Gamma", sun_value),
+                                       ("Sun_color", "Color1", sun_color),
+                                       ("Sky_and_Horizon_colors", "Color1", sky_color),
+                                       ("Sky_and_Horizon_colors", "Color2", horizon_color),
+                                       ("Sky_normal", 0, sun_direction),
+                                       ("Soft_hard", "Fac", sun_soft_hard)]:
+        if value is not None:
+            current_node = nodes.get(node_key)
+            if current_node is None:
+                raise RuntimeError(f"The key: {node_key} could not be found!")
+            # convert to list to avoid errors
+            if isinstance(value, (np.ndarray, list, Vector)):
+                value = list(value)
+            if node_key in ["Sky_normal"]:
+                current_node.outputs[input_key].default_value = value
+            else:
+                current_node.inputs[input_key].default_value = value
+
+
+
+
+
+

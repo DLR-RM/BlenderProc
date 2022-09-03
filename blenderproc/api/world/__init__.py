@@ -1,1 +1,2 @@
 from blenderproc.python.loader.HavenEnvironmentLoader import set_world_background_hdr_img
+from blenderproc.python.utility.BlenderUtility import add_dynamic_sky_as_world_background
