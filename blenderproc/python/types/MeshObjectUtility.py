@@ -1,6 +1,6 @@
 """ All mesh objects are captured in this class. """
-
-from typing import List, Union, Tuple, Optional
+import random
+from typing import List, Union, Tuple, Optional, Callable
 from sys import platform
 
 import bpy
@@ -520,6 +520,162 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
             setattr(modifier, key, value)
+
+    def subdivide_surface(self, number_of_cuts: int):
+        bpy.ops.object.select_all(action='DESELECT')
+        self.select()
+        bpy.context.view_layer.objects.active = self.blender_obj
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.mesh.subdivide(number_cuts=number_of_cuts)
+        bpy.ops.object.mode_set(mode="OBJECT")
+        self.deselect()
+
+    def randomly_distort_surface_along_normals(self, distortion_values: Union[float, List[float], Callable[[], float]],
+                                               amount_of_distortions: int,
+                                               manipulation_sizes: Union[float, List[float], Callable[[], float]]):
+        bpy.ops.object.select_all(action='DESELECT')
+        self.select()
+        bpy.context.view_layer.objects.active = self.blender_obj
+        bpy.ops.object.mode_set(mode="EDIT")
+        bm = bmesh.from_edit_mesh(self.get_mesh())
+        bm.verts.ensure_lookup_table()
+        # deselect all vertices
+        for v in bm.verts:
+            v.select = False
+        for _ in range(amount_of_distortions):
+            # next distortion value
+            if isinstance(distortion_values, (float, int)):
+                distortion_value = distortion_values
+            elif isinstance(distortion_values, list):
+                distortion_value = random.choice(distortion_values)
+            elif callable(distortion_values):
+                distortion_value = distortion_values()
+            else:
+                raise TypeError("The distortion value must be either a float, a list full of floats, or a function "
+                                "returning a float value")
+            # next manipulation_size
+            if isinstance(manipulation_sizes, (float, int)):
+                manipulation_size = manipulation_sizes
+            elif isinstance(manipulation_sizes, list):
+                manipulation_size = random.choice(manipulation_sizes)
+            elif callable(manipulation_sizes):
+                manipulation_size = manipulation_sizes()
+            else:
+                raise TypeError("The manipulation size must be either a float, a list full of floats, or a function "
+                                "returning a float value")
+            random_index = int(random.uniform(0, len(bm.verts)))
+            vertex = bm.verts[random_index]
+
+            vertex.select = True
+            bpy.ops.transform.translate(value=distortion_value * vertex.normal, orient_axis_ortho='X',
+                                        orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+                                        orient_matrix_type='GLOBAL', constraint_axis=(False, False, True),
+                                        mirror=True, use_proportional_edit=True,
+                                        proportional_edit_falloff='SMOOTH', proportional_size=manipulation_size,
+                                        use_proportional_connected=False, use_proportional_projected=False)
+
+            vertex.select = False
+        bmesh.update_edit_mesh(self.get_mesh())
+
+        bpy.ops.object.mode_set(mode="OBJECT")
+        self.deselect()
+
+    def add_particle_system(self, used_particle_objects: List["MeshObject"],
+                            amount_of_particles: int = 100,
+                            amount_of_children_per_particle: int = 10,
+                            move_the_origin_of_all_objects_to_the_bottom: bool = True,
+                            randomize_scale_of_objects: float = 0.5,
+                            randomize_rotation_around_z: bool = True,
+                            children_clumping_factor: float = 0.0):
+        """
+        This adds a particle system to the current object, which means that the objects in the
+        `used_particle_objects` list are sampled randomly over the surface of the objects.
+
+        The objects in the list are only duplicated and will not change in any way in this function. This means if
+        they are not placed afterwards in the scene they should be removed `obj.delete()`.
+
+        :param used_particle_objects: List of objects, which are used as particles, all objects are copied. The
+                                      original objects stay untouched and are neither moved nor changed in any way.
+        :param amount_of_particles: Amount of objects sampled on the full surface of the object
+        :param amount_of_children_per_particle: Amount of children per sampled particle, this increases the number
+                                                of objects on the surface. Children are easier placed on the object
+                                                then real particles, reducing the computational overhead.
+        :param move_the_origin_of_all_objects_to_the_bottom: This moves the origin of the object, down to the middle,
+                                                             ensuring that the object is placed on top of the surface.
+        :param randomize_scale_of_objects: A float value between 0 and 1, which indicates the amount of randomness on
+                                           the scale of the object. Zero means no random scale, while one means maximal
+                                           random scale.
+        :param randomize_rotation_around_z: If this is False the objects will have the same orientation as the copied
+                                            objects.
+        :param children_clumping_factor: This clumping factor lies between -1 and 1. For zero there is no change, a
+                                         value of -1 means that all children are heavily clumped around its parent,
+                                         while a value of 1 tries to even remove any clumping that exists through the
+                                         sampling.
+        """
+
+        if amount_of_children_per_particle <= 0 and abs(children_clumping_factor) > 1e-7:
+            raise ValueError("The amount of children has to be above zero, if a children clumping factor is set!")
+
+        if not 0 <= randomize_scale_of_objects <= 1.0:
+            raise ValueError("The randomization value for the scale has to be in the range of 0 to 1.")
+
+        old_particle_systems = set(self.blender_obj.particle_systems)
+        self.add_modifier("PARTICLE_SYSTEM")
+        # this allows reusing this function several times, creating new particle systems every time
+        newly_created_particle_system = list(set(self.blender_obj.particle_systems) - old_particle_systems)
+
+        # create a collection of the used_particle_objects
+        duplicated_objects = [obj.duplicate(duplicate_children=True) for obj in used_particle_objects]
+        for obj in duplicated_objects:
+            obj.set_name(obj.get_name() + "_duplicated_for_particles")
+            if move_the_origin_of_all_objects_to_the_bottom:
+                obj.persist_transformation_into_mesh(location=True, rotation=True, scale=True)
+                obj.move_origin_to_bottom_mean_point()
+                # if the rotation is randomized the object has to be first rotated into the plane
+                # we do not know why (blender weirdness)
+                if randomize_rotation_around_z:
+                    obj.set_rotation_euler([0, np.pi * 0.5, 0])
+                    obj.persist_transformation_into_mesh(location=True, rotation=True, scale=True)
+
+        collection = bpy.data.collections.new(f"{self.get_name()}_particle_collection")
+
+        for obj in duplicated_objects:
+            collection.objects.link(obj.blender_obj)
+
+        # change settings to hair as this can be used to place objects on the surface
+        for particles in newly_created_particle_system:
+            particles.settings.type = "HAIR"
+            # set the rendering type to collection
+            particles.settings.render_type = "COLLECTION"
+            particles.settings.instance_collection = collection
+            # set the amount of particles
+            particles.settings.count = amount_of_particles
+
+            # ensure that the size stays the same
+            particles.settings.hair_length = 1
+            particles.settings.particle_size = 1
+
+            if randomize_scale_of_objects > 0.0:
+                # the particle size is increased as `size_random` only decreases the size of the objects
+                # this way the objects are randomly sized around the actual size of the object
+                particles.settings.particle_size = 1 + randomize_scale_of_objects
+                particles.settings.size_random = randomize_scale_of_objects
+
+            if randomize_rotation_around_z:
+                # add random rotations to the objects
+                particles.settings.use_advanced_hair = True
+                particles.settings.use_rotations = True
+                particles.settings.use_rotation_instance = True
+                particles.settings.rotation_mode = 'NOR'
+                particles.settings.phase_factor_random = 2
+
+            # add children
+            if amount_of_children_per_particle > 0:
+                particles.settings.child_type = 'INTERPOLATED'
+                particles.settings.rendered_child_count = amount_of_children_per_particle
+                if abs(children_clumping_factor) > 1e-7:
+                    particles.settings.clump_factor = children_clumping_factor
+                    particles.settings.use_clump_noise = True
 
 
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
