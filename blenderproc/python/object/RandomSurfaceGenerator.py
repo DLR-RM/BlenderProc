@@ -16,7 +16,7 @@ def generate_random_surface(surface_resolution: int = 1000, surface_size: float 
 
     def random_manipulation_size():
         if np.random.uniform(0, 1) < 0.8:
-            return np.random.uniform(4.0, 8.0)
+            return np.random.uniform(0.1, 8.0)
         else:
             return np.random.uniform(8.0, 20.0)
 
@@ -25,5 +25,6 @@ def generate_random_surface(surface_resolution: int = 1000, surface_size: float 
                                                    manipulation_sizes=random_manipulation_size)
 
     surface.add_modifier("SUBSURF", render_levels=2)
+    surface.set_shading_mode("SMOOTH")
 
     return surface
