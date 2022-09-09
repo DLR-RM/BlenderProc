@@ -7,7 +7,7 @@ from mathutils import Vector
 from blenderproc.python.sampler.Sphere import sphere
 
 
-def part_sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str, dist_above_center: float = 0.0,
+def part_sphere(center: Union[Vector, np.ndarray, List[float]], radius: float, mode: str, dist_above_center: float = 0.0,
                 part_sphere_dir_vector: Optional[Union[Vector, np.ndarray, List[float]]] = None) -> np.ndarray:
     """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 

@@ -62,7 +62,7 @@ class RockEssentialsRockLoader:
             else:
                 obj = obj_list[i % len(obj_list)]
             bpy.ops.wm.append(filepath=os.path.join(path, "Object", obj), filename=obj,
-                              directory=os.path.join(path + "Object"))
+                              directory=os.path.join(path, "Object"))
             loaded_obj = MeshObject(bpy.context.scene.objects[obj])
             # set custom name for easier tracking in the scene
             loaded_obj.set_name(obj + "_" + str(subsec_num) + "_" + str(i))
