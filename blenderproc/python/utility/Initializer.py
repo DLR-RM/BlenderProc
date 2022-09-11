@@ -42,7 +42,7 @@ def init(clean_up_scene: bool = True):
     RendererUtility.set_render_devices()
 
     # Set default parameters
-    Initializer.set_default_parameters()
+    _Initializer.set_default_parameters()
 
     random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
     if random_seed:
@@ -71,10 +71,8 @@ def clean_up(clean_up_camera: bool = False):
         bpy.ops.object.mode_set(mode='OBJECT')
 
     # Clean up
-    # pylint: disable=protected-access
-    Initializer._remove_all_data(clean_up_camera)
-    Initializer._remove_custom_properties()
-    # pylint: enable=protected-access
+    _Initializer.remove_all_data(clean_up_camera)
+    _Initializer.remove_custom_properties()
 
     # Create new world
     new_world = bpy.data.worlds.new("World")
@@ -92,7 +90,7 @@ def clean_up(clean_up_camera: bool = False):
     reset_keyframes()
 
 
-class Initializer:
+class _Initializer:
     """
     This is the initializer class used to init a BlenderProc scene.
     """
@@ -137,7 +135,7 @@ class Initializer:
                                           DefaultConfig.jpg_quality)
 
     @staticmethod
-    def _remove_all_data(remove_camera: bool = True):
+    def remove_all_data(remove_camera: bool = True):
         """ Remove all data blocks except opened scripts, the default scene and the camera.
 
         :param remove_camera: If True, also the default camera is removed.
@@ -160,7 +158,7 @@ class Initializer:
                     data_structure.remove(block)
 
     @staticmethod
-    def _remove_custom_properties():
+    def remove_custom_properties():
         """ Remove all custom properties registered at global entities like the scene. """
         for key in bpy.context.scene.keys():
             del bpy.context.scene[key]

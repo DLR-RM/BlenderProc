@@ -53,7 +53,7 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
 
     :param forward_vec: The forward vector which specifies the direction the camera should look.
     :param up_axis: The up axis, usually Y.
-    :param inplane_rot: The inplane rotation in radians. If None is given, the inplane rotation is determined only1G
+    :param inplane_rot: The inplane rotation in radians. If None is given, the inplane rotation is determined only
                         based on the up vector.
     :return: The corresponding rotation matrix.
     """
@@ -175,7 +175,7 @@ def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int,
 
     if abs(K[0][1]) > 1e-7:
         raise ValueError(f"Skew is not supported by blender and therefore "
-                         f"nor by BlenderProc, set this to zero: {K[0][1]} and recalibrate")
+                         f"not by BlenderProc, set this to zero: {K[0][1]} and recalibrate")
 
     fx, fy = K[0][0], K[1][1]
     cx, cy = K[0][2], K[1][2]

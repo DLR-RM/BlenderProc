@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import argparse
+from typing import Callable
 
 import requests
 
@@ -21,16 +22,16 @@ def cli():
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
 
-    output_dir = Path(args.output_folder)
+    args_output_dir = Path(args.output_folder)
 
-    def download_file(url, output_path):
+    def download_file(url: str, output_path: str):
         # Download
         request = requests.get(url, timeout=30)
         # Write to file
         with open(output_path, "wb") as file:
             file.write(request.content)
 
-    def download_items(item_type, output_dir, item_download_func):
+    def download_items(item_type: str, output_dir: Path, item_download_func: Callable[[str, Path], None]):
         # Filter for type
         if args.types and item_type not in args.types:
             return
@@ -59,7 +60,7 @@ def cli():
             else:
                 print(f"({i}/{len(data)}) Skipping {item_id} as it already exists")
 
-    def download_texture(item_id: str, output_dir: str):
+    def download_texture(item_id: str, output_dir: Path):
         request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
 
@@ -81,7 +82,7 @@ def cli():
                 download_url = data[key][args.resolution][args.format]["url"]
                 download_file(download_url, output_dir / download_url.split("/")[-1])
 
-    def download_hdri(item_id, output_dir):
+    def download_hdri(item_id: str, output_dir: Path):
         # Collect metadata to hdri
         request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
@@ -95,7 +96,7 @@ def cli():
         download_url = data["hdri"][args.resolution]["hdr"]["url"]
         download_file(download_url, output_dir / download_url.split("/")[-1])
 
-    def download_model(item_id, output_dir):
+    def download_model(item_id: str, output_dir: Path):
         # Collect metadata to model
         request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)
         data = request.json()
@@ -115,9 +116,9 @@ def cli():
             destination.parent.mkdir(parents=True, exist_ok=True)
             download_file(texture_data["url"], destination)
 
-    download_items("textures", output_dir / "textures", download_texture)
-    download_items("hdris", output_dir / "hdris", download_hdri)
-    download_items("models", output_dir / "models", download_model)
+    download_items("textures", args_output_dir / "textures", download_texture)
+    download_items("hdris", args_output_dir / "hdris", download_hdri)
+    download_items("models", args_output_dir / "models", download_model)
 
 
 if __name__ == "__main__":

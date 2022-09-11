@@ -198,11 +198,9 @@ def cli():
                 shutil.rmtree(temp_dir)
 
         # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
-        # pylint: disable=unused-argument
-        def handle_sigterm(signum, frame):
+        def handle_sigterm(_signum, _frame):
             clean_temp_dir()
             p.terminate()
-        # pylint: enable=unused-argument
 
         signal.signal(signal.SIGTERM, handle_sigterm)
 

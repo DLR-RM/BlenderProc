@@ -3,7 +3,8 @@
 import os
 import csv
 import threading
-from typing import List, Dict, Any, Tuple, Optional, Union
+from types import TracebackType
+from typing import List, Dict, Any, Tuple, Optional, Union, Type
 from pathlib import Path
 import time
 import inspect
@@ -613,7 +614,9 @@ class BlockStopWatch:
         print(f"#### Start - {self.block_name} ####")
         self.start = time.time()
 
-    def __exit__(self, type_val, value, traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
         print(f"#### Finished - {self.block_name} (took {time.time() - self.start:.3f} seconds) ####")
 
 
@@ -636,7 +639,9 @@ class UndoAfterExecution:
             self.struct_instances = get_instances()
             bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
-    def __exit__(self, type_val, value, traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
         if self._perform_undo_op:
             bpy.ops.ed.undo_push(message="after " + self.check_point_name)
             # The current state points to "after", now by calling undo we go back to "before"
@@ -678,7 +683,9 @@ class KeyFrame:
             self._prev_frame = bpy.context.scene.frame_current
             bpy.context.scene.frame_set(self._frame)
 
-    def __exit__(self, type_val, value, traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
         KeyFrame.state.depth -= 1
         if self._prev_frame is not None:
             bpy.context.scene.frame_set(self._prev_frame)
@@ -695,9 +702,9 @@ class KeyFrame:
 class NumpyEncoder(json.JSONEncoder):
     """ A json encoder that is also capable of serializing numpy arrays """
 
-    def default(self, o: Any):
+    def default(self, obj: Any):
         # If its a numpy array
-        if isinstance(o, np.ndarray):
+        if isinstance(obj, np.ndarray):
             # Convert it to a list
-            return o.tolist()
-        return json.JSONEncoder.default(self, o)
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
