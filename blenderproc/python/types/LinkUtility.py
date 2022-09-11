@@ -68,7 +68,7 @@ class Link(Entity):
 
     def _set_rotation_euler(self, bone: bpy.types.PoseBone,
                             rotation_euler: Union[float, List[float], Euler, np.ndarray], mode: str = "absolute"):
-        """ Rotates the bone based on euler angles. Validate values with given constraints.
+        """ Rotates the bone based on euler angles. Validates values with given constraints.
 
         :param bone: The bone to be rotated.
         :param rotation_euler: The amount of rotation (in radians). Either three floats for x, y and z axes, or a

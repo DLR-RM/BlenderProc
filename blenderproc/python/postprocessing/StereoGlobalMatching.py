@@ -137,8 +137,8 @@ class _StereoGlobalMatching:
 
     @staticmethod
     # https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py
-    def fill_in_fast(depth_map, max_depth=100.0, custom_kernel=None,
-                     extrapolate=False, blur_type='bilateral'):
+    def fill_in_fast(depth_map: np.ndarray, max_depth: float = 100.0, custom_kernel: Optional[np.ndarra] = None,
+                     extrapolate: bool = False, blur_type: str = 'bilateral'):
         """Fast, in-place depth completion.
 
         :param depth_map: projected depths
