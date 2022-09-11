@@ -1,6 +1,6 @@
 """ This module provides a collection of functions to check if objects collide. """
 
-from typing import Union, Optional, Dict, Tuple, List
+from typing import Union, Optional, Dict, Tuple, List, Callable
 
 import mathutils
 import numpy as np
