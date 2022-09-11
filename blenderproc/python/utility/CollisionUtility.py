@@ -86,7 +86,8 @@ class CollisionUtility:
 
     @staticmethod
     def check_bb_intersection_on_values(min_b1: List[float], max_b1: List[float], min_b2: List[float],
-                                        max_b2: List[float], used_check: Callable[[float, float], bool] =lambda a, b: a >= b):
+                                        max_b2: List[float],
+                                        used_check: Callable[[float, float], bool] = lambda a, b: a >= b):
         """
         Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
         namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional

@@ -77,7 +77,7 @@ class Light(Entity):
         Utility.insert_keyframe(self.blender_obj.data, "type", frame)
 
     def setup_as_projector(self, pattern: np.ndarray, frame: Optional[int] = None):
-        """ Sets a spotlight source as projector of a pattern image. Sets location and angle of projector to current
+        r""" Sets a spotlight source as projector of a pattern image. Sets location and angle of projector to current
         camera. Adjusts scale of pattern image to fit field-of-view of camera:
         :math:`(0.5 + \frac{X}{Z \cdot F}, 0.5 + \frac{X}{Z \cdot F \cdot r}, 0)`
         where $F$ is focal length and $r$ aspect ratio.
