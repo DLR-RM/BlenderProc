@@ -517,11 +517,11 @@ class Link(Entity):
                           of the previously selected mode.
         """
         if self.bone is None:
-            return
+            return None
         assert mode in ["fk", "ik"]
         if mode == "fk":  # turn off copy rotation constraints of fk bone and base bone
             if self.get_fk_ik_mode() == "fk":
-                return
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -562,7 +562,7 @@ class Link(Entity):
                 fk_bone_mat = np.array(self.fk_bone.matrix)
                 fk_bone_mat[:3, -1] = np.array(self.ik_bone_controller.matrix)[:3, -1]
                 self.ik_bone_controller.matrix = Matrix(fk_bone_mat)
-        return
+        return None
 
     def get_joint_rotation(self, frame: int = None) -> float:
         """ Get current joint rotation based on euler angles.

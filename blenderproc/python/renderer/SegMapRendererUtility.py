@@ -155,7 +155,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                                 default_value = default_values[current_attribute]
                             elif attribute in default_values:
                                 default_value = default_values[attribute]
-                                # iterate over all object ids
+                        # iterate over all object ids
                         for object_id in object_ids:
                             # Convert np.uint8 to int, such that the save_in_csv_attributes dict can later be serialized
                             object_id = int(object_id)
