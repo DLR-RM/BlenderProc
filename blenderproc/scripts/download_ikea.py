@@ -1,17 +1,16 @@
-from sys import version_info, path
-
-if version_info.major == 2:
-    raise Exception("This script only works with python3.x!")
+""" Downloads the ikea dataset """
 
 import os
-from urllib.request import urlretrieve, build_opener, install_opener
 import glob
-import numpy as np
 import subprocess
 import shutil
 import argparse
+from urllib.request import urlretrieve, build_opener, install_opener
+
+import numpy as np
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
+
 
 def split_object_according_to_groups(file_path, folder):
     """
@@ -20,20 +19,19 @@ def split_object_according_to_groups(file_path, folder):
     :param file_path: Path to the .obj file
     :param folder: Folder in which the resulting split .obj files we be saved
     """
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         text = file.read()
         lines = text.split("\n")
         start_info = ""
         for line in lines:
             if line.strip().startswith("g "):
                 break
-            else:
-                start_info += line + "\n"
+            start_info += line + "\n"
 
         list_of_split_ids = [i for i, line in enumerate(lines) if line.strip().startswith("g ")]
         last_i = list_of_split_ids[0]
         group_counter = 0
-        for index, current_i in enumerate(list_of_split_ids[1:]):
+        for current_i in list_of_split_ids[1:]:
             current_text = start_info
             current_lines = lines[last_i: current_i]
             face_lines = [l[len("f "):].strip().split(" ") for l in current_lines if l.strip().startswith("f ")]
@@ -52,15 +50,19 @@ def split_object_according_to_groups(file_path, folder):
                     final_lins.append(line)
             last_i = current_i
 
-            amount_of_faces = sum([1 for l in final_lins if l.startswith("f ")])
+            amount_of_faces = sum(1 for l in final_lins if l.startswith("f "))
             if amount_of_faces > 10:
                 current_text += "\n".join(final_lins)
-                with open(os.path.join(folder, "{}_{}.obj".format(os.path.basename(folder), group_counter)), "w") as f:
-                    f.write(current_text)
+                file_path_obj = os.path.join(folder, f"{os.path.basename(folder)}_{group_counter}.obj")
+                with open(file_path_obj, "w", encoding="utf-8") as file:
+                    file.write(current_text)
                 group_counter += 1
 
 
 def cli():
+    """
+    Command line function
+    """
     parser = argparse.ArgumentParser("Downloads the IKEA dataset")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
     args = parser.parse_args()
@@ -84,7 +86,7 @@ def cli():
     # unzip the zip file
     print("Unzipping the zip file...")
     ikea_dir = os.path.join(ikea_dir, "IKEA")
-    SetupUtility.extract_file(ikea_dir, zip_file_path) 
+    SetupUtility.extract_file(ikea_dir, zip_file_path)
     os.remove(zip_file_path)
 
     subprocess.call("chmod -R a+rw *", shell=True, cwd=ikea_dir)
@@ -161,6 +163,7 @@ def cli():
     for ele in ["d1748541564ade6cfe63adf1a76042f0_obj0_object.obj", "c5e1449fc0ee6833f072f21dd9a7251_obj0_object.obj"]:
         path = os.path.join(ikea_dir, "IKEA_wardrobe_PAX", ele)
         delete_obj_file(path)
+
 
 if __name__ == "__main__":
     cli()

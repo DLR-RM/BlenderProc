@@ -1,7 +1,7 @@
 import bpy
 
 from blenderproc.python.modules.utility.ItemWriter import ItemWriter
-from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 
 
@@ -33,7 +33,7 @@ class CameraStateWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.object_writer = ItemWriter(WriterUtility.get_cam_attribute)
+        self.object_writer = ItemWriter(_WriterUtility.get_cam_attribute)
 
     def run(self):
         """ Collect camera and camera object and write them to a file."""

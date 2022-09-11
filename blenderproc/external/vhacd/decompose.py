@@ -1,3 +1,4 @@
+""" Decompose script from Khaled Mamou """
 # ----------------
 # V-HACD Blender add-on
 # Copyright (c) 2014, Alain Ducharme
@@ -8,8 +9,11 @@
 # including commercial applications, and to alter it and redistribute it freely,
 # subject to the following restrictions:
 #
-# 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-# 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+# 1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software.
+#    If you use this software in a product, an acknowledgment in the product documentation would be appreciated but
+#    is not required.
+# 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original
+#    software.
 # 3. This notice may not be removed or altered from any source distribution.
 
 #
@@ -19,15 +23,15 @@
 import os
 from sys import platform
 from typing import Optional
+from subprocess import Popen
+import shutil
 
 import git
 import numpy as np
-
 import bpy
 from mathutils import Matrix
 import bmesh
-from subprocess import Popen
-import shutil
+
 
 def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000,
                          name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True,
@@ -45,13 +49,16 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     :param remove_doubles: Remove double vertices before decomposition.
     :param apply_modifiers: Apply modifiers before decomposition.
     :param apply_transforms: Apply transforms before decomposition.
-    :param depth: maximum number of clipping stages. During each split stage, all the model parts (with a concavity higher than the user defined threshold) are clipped according the "best" clipping plane
+    :param depth: maximum number of clipping stages. During each split stage, all the model parts (with a concavity
+                  higher than the user defined threshold) are clipped according the "best" clipping plane
     :param max_num_vertices_per_ch: controls the maximum number of triangles per convex-hull
-    :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
+    :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash.
+                      If the same mesh is decomposed a second time, the result is loaded from the cache and the actual
+                      decomposition is skipped.
     :return: The list of convex parts composing the given object.
     """
-    if platform != "linux" and platform != "linux2":
-        raise Exception("Convex decomposition is at the moment only available on linux.")
+    if platform in ["linux", "linux2"]:
+        raise RuntimeError("Convex decomposition is at the moment only available on linux.")
 
     # Download v-hacd library if necessary
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
@@ -61,12 +68,14 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
 
         print("Building v-hacd")
         if "NO_OPENCL" in os.environ and os.environ["NO_OPENCL"] == "1":
-            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " + os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=ON")
+            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " +
+                      os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=ON")
         else:
-            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " + os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=OFF")
+            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " +
+                      os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=OFF")
 
     off_filename = os.path.join(temp_dir, "vhacd.obj")
-    logFileName = os.path.join(temp_dir, "vhacd_log.txt")
+    log_file_name = os.path.join(temp_dir, "vhacd_log.txt")
 
     # Apply modifiers
     bpy.ops.object.select_all(action="DESELECT")
@@ -117,31 +126,31 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
             raise FileNotFoundError("The vhacd binary was not found, the build script probably failed!")
 
         # Run V-HACD
-        print("\nExporting mesh for V-HACD: {}...".format(off_filename))
+        print(f"\nExporting mesh for V-HACD: {off_filename}...")
         obj_export(mesh, off_filename)
         bpy.data.meshes.remove(mesh)
         cmd_line = f'"{vhacd_binary}" {off_filename} -r {resolution} -v {max_num_vertices_per_ch} -d {depth}'
-        if os.path.exists(os.path.basename(logFileName)):
-            cmd_line += f"2>&1 > {logFileName}"
-        print("Running V-HACD...\n{}\n".format(cmd_line))
-        vhacd_process = Popen(cmd_line, bufsize=-1, close_fds=True, shell=True, cwd=temp_dir)
-        vhacd_process.wait()
-        outFileName = os.path.join(temp_dir, "decomp.obj")
+        if os.path.exists(os.path.basename(log_file_name)):
+            cmd_line += f"2>&1 > {log_file_name}"
+        print(f"Running V-HACD...\n{cmd_line}\n")
+        with Popen(cmd_line, bufsize=-1, close_fds=True, shell=True, cwd=temp_dir) as vhacd_process:
+            vhacd_process.wait()
+        out_file_name = os.path.join(temp_dir, "decomp.obj")
 
         # Import convex parts
-        if not os.path.exists(outFileName):
-            raise Exception("No output produced by convex decomposition of object " + obj.get_name())
+        if not os.path.exists(out_file_name):
+            raise RuntimeError(f"No output produced by convex decomposition of object {obj.get_name()}")
 
         if cache_dir is not None:
             # Create cache dir, if it not exists yet
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir, exist_ok=True)
             # Copy decomposition into cache dir
-            shutil.copyfile(outFileName, os.path.join(cache_dir, str(mesh_hash) + ".obj"))
+            shutil.copyfile(out_file_name, os.path.join(cache_dir, str(mesh_hash) + ".obj"))
     else:
-        outFileName = os.path.join(cache_dir, str(mesh_hash) + ".obj")
+        out_file_name = os.path.join(cache_dir, str(mesh_hash) + ".obj")
 
-    bpy.ops.import_scene.obj(filepath=outFileName, axis_forward="Y", axis_up="Z")
+    bpy.ops.import_scene.obj(filepath=out_file_name, axis_forward="Y", axis_up="Z")
     imported = bpy.context.selected_objects
 
     # Name and transform the loaded parts
@@ -158,12 +167,14 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
 
     return imported
 
+
 def obj_export(mesh, fullpath):
     """ Export triangulated mesh to Object File Format """
     with open(fullpath, "wb") as off:
+        # pylint: disable=consider-using-f-string
         for vert in mesh.vertices:
             off.write(str.encode("v {:g} {:g} {:g}\n".format(*vert.co)))
         for face in mesh.polygons:
             vertices = np.array(face.vertices) + 1
             off.write(str.encode("f {} {} {}\n".format(*vertices)))
-
+        # pylint: enable=consider-using-f-string

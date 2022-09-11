@@ -1,3 +1,5 @@
+"""Provides functionality to render a Normalized Object Coordinate Space (NOCS) image."""
+
 from typing import Optional, Dict, List
 
 import bpy
@@ -11,7 +13,8 @@ from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objec
 from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 
 
-def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", output_key: str = "nocs", return_data: bool = True) -> Dict[str, List[np.ndarray]]:
+def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", output_key: str = "nocs",
+                return_data: bool = True) -> Dict[str, List[np.ndarray]]:
     """ Renders the Normalized Object Coordinate Space (NOCS).
 
     Colors each object based on its local coordinates.
@@ -29,7 +32,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
         output_dir = Utility.get_temporary_directory()
 
     with UndoAfterExecution():
-        nocs_material = NOCSRendererUtility.create_nocs_material()
+        nocs_material = _NOCSRendererUtility.create_nocs_material()
 
         # Set the NOCS material to all objects
         for obj in get_all_blender_mesh_objects():
@@ -43,7 +46,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
         set_world_background([0, 0, 0])
 
         # Set all fast rendering parameters with only one ray per pixel
-        RendererUtility._render_init()
+        RendererUtility.render_init()
         # the amount of samples must be one and there can not be any noise threshold
         RendererUtility.set_max_amount_of_samples(1)
         RendererUtility.set_noise_threshold(0)
@@ -54,10 +57,11 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
         # Use exr as output format, as it uses a linear colorspace and uses float16
         RendererUtility.set_output_format("OPEN_EXR", 16, enable_transparency=True)
         # Render and ret
-        return RendererUtility.render(output_dir, file_prefix, output_key, load_keys={output_key}, return_data=return_data, keys_with_alpha_channel={output_key})
+        return RendererUtility.render(output_dir, file_prefix, output_key, load_keys={output_key},
+                                      return_data=return_data, keys_with_alpha_channel={output_key})
 
 
-class NOCSRendererUtility:
+class _NOCSRendererUtility:
 
     @staticmethod
     def create_nocs_material() -> Material:

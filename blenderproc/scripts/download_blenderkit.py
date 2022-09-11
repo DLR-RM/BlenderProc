@@ -1,25 +1,31 @@
-from sys import version_info
-from urllib.error import HTTPError
+""" Download blenderkit """
 
-if version_info.major == 2:
-    raise Exception("This script only works with python3.x!")
-
-import urllib.request, json
-from urllib.request import urlretrieve, build_opener, install_opener, urlopen
 from pathlib import Path
-import uuid
 import argparse
+import uuid
+from typing import List
+import json
 
-def download_blendkit_assets(asset_types, output_dir):
+import urllib.request
+from urllib.error import HTTPError
+from urllib.request import urlretrieve, build_opener, install_opener
+
+
+def download_blendkit_assets(asset_types: List[str], output_dir: str):
+    """
+    Download the blenderkit dataset
+    """
     output_dir = Path(output_dir)
     assets = {}
     for asset_type in asset_types:
         page = 1
-        print("Downloading {} assets".format(asset_type))
+        print(f"Downloading {asset_type} assets")
         while True:
-            print("Download metadata: page {}".format(page))
+            print(f"Download metadata: page {page}")
             try:
-                with urllib.request.urlopen("https://www.blenderkit.com/api/v1/search/?query=asset_type:{}+order:_score+is_free:True&addon_version=1.0.30&page={}".format(asset_type, str(page))) as url:
+                url_path = f"https://www.blenderkit.com/api/v1/search/?query=asset_type:{asset_type}+order:_score+" \
+                           f"is_free:True&addon_version=1.0.30&page={page}"
+                with urllib.request.urlopen(url_path) as url:
                     data = json.loads(url.read().decode())
                     # Extract results
                     assets.setdefault(asset_type, []).extend(data["results"])
@@ -27,15 +33,14 @@ def download_blendkit_assets(asset_types, output_dir):
                 if e.code == 404:
                     # We reached the end
                     break
-                else:
-                    raise
+                raise e
             # Goto next page
             page += 1
 
         total_assets = len(assets.setdefault(asset_type, []))
-        print("Retrieved metadata for {} assets".format(total_assets))
+        print(f"Retrieved metadata for {total_assets} assets")
 
-        # Create ouput directory
+        # Create output directory
         blenderkit_mat_dir = output_dir / ''.join([asset_type, 's'])
         blenderkit_mat_dir.mkdir(exist_ok=True, parents=True)
         # Create a random scene uuid which is necessary for downloading files
@@ -52,21 +57,21 @@ def download_blendkit_assets(asset_types, output_dir):
             # Check if asset has already been downloaded
             output_path = blenderkit_mat_dir / (asset["id"] + ".blend")
             if output_path.exists():
-                print("Skipping asset: {} of {}/{}".format(asset["id"], i, total_assets))
+                print(f"Skipping asset: {asset['id']} of {i}/{total_assets}")
                 continue
 
-            print("Download asset: {} of {}/{}".format(asset["id"], i, total_assets))
+            print(f"Download asset: {asset['id']} of {i}/{total_assets}")
 
             # Try to find url to blend file
             download_url = None
             for file in asset["files"]:
                 if file["fileType"] == "blend":
                     if download_url is not None:
-                        print("Warning: asset " + asset["id"] + " has more than one blend file in downloads.")
+                        print(f"Warning: asset {asset['id']} has more than one blend file in downloads.")
                     download_url = file["downloadUrl"]
 
             if download_url is None:
-                print("Warning: asset " + asset["id"] + " has no blend file in downloads.")
+                print(f"Warning: asset {asset['id']} has no blend file in downloads.")
                 continue
 
             # Download metadata for blend file
@@ -80,12 +85,17 @@ def download_blendkit_assets(asset_types, output_dir):
 
 
 def cli():
+    """
+    Command line function
+    """
     parser = argparse.ArgumentParser("Downloads materials and models from blenderkit")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved")
-    parser.add_argument('--asset_types', nargs="+", help="Which type of assets to download", default=["material", "model"], choices=["material", "model"])
+    parser.add_argument('--asset_types', nargs="+", help="Which type of assets to download",
+                        default=["material", "model"], choices=["material", "model"])
     args = parser.parse_args()
 
     download_blendkit_assets(args.asset_types, args.output_dir)
+
 
 if __name__ == "__main__":
     cli()

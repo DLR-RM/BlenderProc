@@ -1,27 +1,32 @@
+"""Useful functions ot evaluate the objects in the camera's viewport."""
+
 import numbers
 import sys
+from typing import Union, List, Set
 from collections import defaultdict
 
 import bpy
 import numpy as np
 from mathutils import Matrix
 from mathutils.bvhtree import BVHTree
-from typing import Union, List, Set
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], proximity_checks: dict,
                                    bvh_tree: BVHTree, sqrt_number_of_rays: int = 10) -> bool:
-    """ Check if there are obstacles in front of the camera which are too far or too close based on the given proximity_checks.
+    """ Check if there are obstacles in front of the camera which are too far or too close based on the given
+        proximity_checks.
 
     :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
-    :param proximity_checks: A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing
-                             thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min.
-                             The operators are combined in conjunction (i.e boolean AND). This can also be used to avoid the
-                             background in images, with the no_background: True option.
+    :param proximity_checks: A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries
+                             containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical
+                             threshold in case of max or min. The operators are combined in conjunction
+                             (i.e boolean AND). This can also be used to avoid the background in images, with the
+                             no_background: True option.
     :param bvh_tree: A bvh tree containing all objects that should be considered here.
-    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
+    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the
+                                visible objects.
     :return: True, if the given camera pose does not violate any of the specified proximity_checks.
     """
     if not proximity_checks:  # if no checks are in the settings all positions are accepted
@@ -40,21 +45,22 @@ def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], 
     vec_x = frame[1] - frame[0]
     vec_y = frame[3] - frame[0]
 
-    sum = 0.0
+    sum_value = 0.0
     sum_sq = 0.0
 
     range_distance = sys.float_info.max
 
     # Input validation
     for operator in proximity_checks:
-        if (operator == "min" or operator == "max") and not isinstance(proximity_checks[operator], numbers.Number):
-            raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
-        if operator == "avg" or operator == "var":
+        if operator in ["min", "max"] and not isinstance(proximity_checks[operator], numbers.Number):
+            raise RuntimeError("Threshold must be a number in perform_obstacle_in_view_check")
+        if operator in ["avg", "var"]:
             if "min" not in proximity_checks[operator] or "max" not in proximity_checks[operator]:
-                raise Exception("Please specify the accepted interval for the avg and var operators "
-                                "in perform_obstacle_in_view_check")
-            if not isinstance(proximity_checks[operator]["min"], numbers.Number) or not isinstance(proximity_checks[operator]["max"], numbers.Number):
-                raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
+                raise RuntimeError("Please specify the accepted interval for the avg and var operators "
+                                   "in perform_obstacle_in_view_check")
+            if not isinstance(proximity_checks[operator]["min"], numbers.Number) or \
+                    not isinstance(proximity_checks[operator]["max"], numbers.Number):
+                raise ValueError("Threshold must be a number in perform_obstacle_in_view_check")
 
     # If there are no average or variance operators, we can decrease the ray range distance for efficiency
     if "avg" not in proximity_checks and "var" not in proximity_checks:
@@ -88,23 +94,23 @@ def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], 
                 if "max" in proximity_checks and dist >= proximity_checks["max"]:
                     return False
                 if "avg" in proximity_checks:
-                    sum += dist
+                    sum_value += dist
                 if "var" in proximity_checks:
                     if not "avg" in proximity_checks:
-                        sum += dist
+                        sum_value += dist
                     sum_sq += dist * dist
             elif "no_background" in proximity_checks and proximity_checks["no_background"]:
                 return False
 
     if "avg" in proximity_checks:
-        avg = sum / (sqrt_number_of_rays * sqrt_number_of_rays)
+        avg = sum_value / (sqrt_number_of_rays * sqrt_number_of_rays)
         # Check that the average distance is not within the accepted interval
         if avg >= proximity_checks["avg"]["max"] or avg <= proximity_checks["avg"]["min"]:
             return False
 
     if "var" in proximity_checks:
         if not "avg" in proximity_checks:
-            avg = sum / (sqrt_number_of_rays * sqrt_number_of_rays)
+            avg = sum_value / (sqrt_number_of_rays * sqrt_number_of_rays)
         sq_avg = avg * avg
 
         avg_sq = sum_sq / (sqrt_number_of_rays * sqrt_number_of_rays)
@@ -123,12 +129,13 @@ def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_
     Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
 
     :param cam2world_matrix: The world matrix which describes the camera orientation to check.
-    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
+    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the
+                                visible objects.
     :return: A set of objects visible hit by the sent rays.
     """
     cam2world_matrix = Matrix(cam2world_matrix)
 
-    visible_objects = set()
+    visible_objects_set = set()
     cam_ob = bpy.context.scene.camera
     cam = cam_ob.data
 
@@ -148,29 +155,32 @@ def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_
             # Compute current point on plane
             end = frame[0] + vec_x * x / float(sqrt_number_of_rays - 1) + vec_y * y / float(sqrt_number_of_rays - 1)
             # Send ray from the camera position through the current point on the plane
-            _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
+            _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(),
+                                                                   position, end - position)
             # Add hit object to set
             if hit_object:
-                visible_objects.add(MeshObject(hit_object))
+                visible_objects_set.add(MeshObject(hit_object))
 
-    return visible_objects
+    return visible_objects_set
 
 
-def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_objects: list = None, special_objects_weight: float = 2, sqrt_number_of_rays: int = 10) -> float:
+def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_objects: list = None,
+                         special_objects_weight: float = 2, sqrt_number_of_rays: int = 10) -> float:
     """ Evaluate the interestingness/coverage of the scene.
 
     This module tries to look at as many objects at possible, this might lead to
     a focus on the same objects from similar angles.
 
     Only for SUNCG and 3D Front:
-        Least interesting objects: walls, ceilings, floors.
+        The least interesting objects: walls, ceilings, floors.
 
     :param cam2world_matrix: The world matrix which describes the camera pose to check.
-    :param special_objects: Objects that weights differently in calculating whether the scene is interesting or not, uses the
-                            coarse_grained_class or if not SUNCG, 3D Front, the category_id.
-    :param special_objects_weight: Weighting factor for more special objects, used to estimate the interestingness of the scene. Default:
-                                   2.0.
-    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
+    :param special_objects: Objects that weights differently in calculating whether the scene is interesting or not,
+                            uses the coarse_grained_class or if not SUNCG, 3D Front, the category_id.
+    :param special_objects_weight: Weighting factor for more special objects, used to estimate how interesting the
+                                   scene is. Default: 2.0.
+    :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the
+                                visible objects.
     :return: the scoring of the scene.
     """
     cam2world_matrix = Matrix(cam2world_matrix)
@@ -200,7 +210,8 @@ def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_ob
             # Compute current point on plane
             end = frame[0] + vec_x * x / float(sqrt_number_of_rays - 1) + vec_y * y / float(sqrt_number_of_rays - 1)
             # Send ray from the camera position through the current point on the plane
-            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), position, end - position)
+            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(),
+                                                                     position, end - position)
 
             if hit:
                 is_of_special_dataset = "is_suncg" in hit_object or "is_3d_front" in hit_object
@@ -247,23 +258,24 @@ def decrease_interest_score(interest_score: float, min_interest_score: float, in
     """
     if interest_score <= min_interest_score:
         return False, interest_score
-    else:
-        return True, interest_score - interest_score_step
+    return True, interest_score - interest_score_step
 
 
-def check_novel_pose(cam2world_matrix: Union[Matrix, np.ndarray], existing_poses: List[Union[Matrix, np.ndarray]], check_pose_novelty_rot: bool,
-                     check_pose_novelty_translation: bool, min_var_diff_rot: float = -1, min_var_diff_translation: float = -1):
+def check_novel_pose(cam2world_matrix: Union[Matrix, np.ndarray], existing_poses: List[Union[Matrix, np.ndarray]],
+                     check_pose_novelty_rot: bool, check_pose_novelty_translation: bool,
+                     min_var_diff_rot: float = -1, min_var_diff_translation: float = -1):
     """ Checks if a newly sampled pose is novel based on variance checks.
 
     :param cam2world_matrix: The world matrix which describes the camera pose to check.
     :param existing_poses: The list of already sampled valid poses.
     :param check_pose_novelty_rot: Checks that a sampled new pose is novel with respect to the rotation component.
-    :param check_pose_novelty_translation: Checks that a sampled new pose is novel with respect to the translation component.
-    :param min_var_diff_rot: Considers a pose novel if it increases the variance of the rotation component of all poses sampled by
-                             this parameter's value in percentage. If set to -1, then it would only check that the variance is
-                             increased. Default: sys.float_info.min.
-    :param min_var_diff_translation: Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance
-                                     is increased. Default: sys.float_info.min.
+    :param check_pose_novelty_translation: Checks that a sampled new pose is novel with respect to the
+                                           translation component.
+    :param min_var_diff_rot: Considers a pose novel if it increases the variance of the rotation component of all
+                             poses sampled by this parameter's value in percentage. If set to -1, then it would only
+                             check that the variance is increased. Default: sys.float_info.min.
+    :param min_var_diff_translation: Same as min_var_diff_rot but for translation. If set to -1, then it would only
+                                     check that the variance is increased. Default: sys.float_info.min.
     :return: True, if the given pose is novel.
     """
     def _variance_constraint(array, new_val, old_var, diff_threshold, mode):
@@ -275,7 +287,7 @@ def check_novel_pose(cam2world_matrix: Union[Matrix, np.ndarray], existing_poses
             return False
 
         diff = ((var - old_var) / old_var) * 100.0
-        print("Variance difference {}: {}".format(mode, diff))
+        print(f"Variance difference {mode}: {diff}")
         if diff < diff_threshold:  # Check if the variance increased sufficiently
             array.pop()
             return False
@@ -295,7 +307,8 @@ def check_novel_pose(cam2world_matrix: Union[Matrix, np.ndarray], existing_poses
             translations = [Matrix(pose).to_translation() for pose in existing_poses]
             var_translation = np.var(translations)
 
-            if not _variance_constraint(translations, cam2world_matrix.to_translation(), var_translation, min_var_diff_translation, "translation"):
+            if not _variance_constraint(translations, cam2world_matrix.to_translation(), var_translation,
+                                        min_var_diff_translation, "translation"):
                 return False
 
     return True

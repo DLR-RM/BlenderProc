@@ -1,40 +1,48 @@
+""" This module provides a collection of utility functions tied closely to BlenderProc. """
+
 import os
 import csv
 import threading
-from typing import List, Dict, Any, Tuple, Optional, Union
-
-import bpy
+from types import TracebackType
+from typing import List, Dict, Any, Tuple, Optional, Union, Type
+from pathlib import Path
 import time
 import inspect
 import importlib
-import warnings
-import numpy as np
 import json
 from sys import platform
+
+import bpy
+import numpy as np
+
 if platform != "win32":
     # importing git doesn't work under windows
     import git
 
+# pylint: disable=wrong-import-position
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
 from blenderproc.version import __version__
+# pylint: enable=wrong-import-position
 
 
-def resolve_path(path: str) -> str:
+def resolve_path(path: Union[str, Path]) -> str:
     """ Returns an absolute path. If given path is relative, current working directory is put in front.
 
     :param path: The path to resolve.
     :return: The absolute path.
     """
+    if isinstance(path, Path):
+        path = str(path.absolute())
     path = path.strip()
 
     if path.startswith("/"):
         return path
-    elif path.startswith("~"):
+    if path.startswith("~"):
         return path.replace("~", os.getenv("HOME"))
-    else:
-        return os.path.join(os.getcwd(), path)
+    return os.path.join(os.getcwd(), path)
+
 
 def resolve_resource(relative_resource_path: str) -> str:
     """ Returns an absolute path to the given BlenderProc resource.
@@ -44,6 +52,7 @@ def resolve_resource(relative_resource_path: str) -> str:
     """
     return resolve_path(os.path.join(Utility.blenderproc_root, "blenderproc", "resources", relative_resource_path))
 
+
 def num_frames() -> int:
     """ Returns the currently total number of registered frames.
 
@@ -51,12 +60,14 @@ def num_frames() -> int:
     """
     return bpy.context.scene.frame_end - bpy.context.scene.frame_start
 
+
 def reset_keyframes() -> None:
     """ Removes registered keyframes from all objects and resets frame_start and frame_end """
     bpy.context.scene.frame_start = 0
     bpy.context.scene.frame_end = 0
     for a in bpy.data.actions:
         bpy.data.actions.remove(a)
+
 
 def set_keyframe_render_interval(frame_start: Optional[int] = None, frame_end: Optional[int] = None):
     """ Sets frame_start and/or frame_end which determine the frames that will be rendered.
@@ -69,7 +80,11 @@ def set_keyframe_render_interval(frame_start: Optional[int] = None, frame_end: O
     if frame_end is not None:
         bpy.context.scene.frame_end = frame_end
 
+
 class Utility:
+    """
+    The main utility class, helps with different BlenderProc functions.
+    """
     blenderproc_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
     temp_dir = ""
     used_temp_id = None
@@ -127,14 +142,14 @@ class Utility:
                 amount_of_repetitions = Config(module_config).get_int("amount_of_repetitions")
 
             with BlockStopWatch("Initializing module " + module_config["module"]):
-                for i in range(amount_of_repetitions):
+                for _ in range(amount_of_repetitions):
                     module_class = None
                     # For backwards compatibility we allow to specify a modules also without "Module" suffix.
                     for suffix in ["Module", ""]:
                         try:
                             # Try to load the module using the current suffix
-                            module = importlib.import_module(
-                                "blenderproc.python.modules." + module_config["module"] + suffix)
+                            module = importlib.import_module("blenderproc.python.modules." +
+                                                             module_config["module"] + suffix)
                         except ModuleNotFoundError:
                             # Try next suffix
                             continue
@@ -148,8 +163,8 @@ class Utility:
 
                     # Throw an error if no module/class with the specified name + any suffix has been found
                     if module_class is None:
-                        raise Exception(
-                            "The module blenderproc.python.modules." + module_config["module"] + " was not found!")
+                        raise RuntimeError(f"The module blenderproc.python.modules.{module_config['module']} "
+                                           f"was not found!")
 
                     # Create module
                     modules.append(module_class(Config(config)))
@@ -166,7 +181,7 @@ class Utility:
             return __version__
         try:
             repo = git.Repo(search_parent_directories=True)
-        except git.InvalidGitRepositoryError as e:
+        except git.InvalidGitRepositoryError:
             return __version__
         return repo.head.object.hexsha
 
@@ -211,7 +226,10 @@ class Utility:
         :param rgb: tuple of three with rgb integers.
         :return: Hex string.
         """
-        return '#%02x%02x%02x' % tuple(rgb)
+        if len(rgb) != 3:
+            raise ValueError(f"The given rgb has to have 3 values: {rgb}")
+
+        return f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
 
     @staticmethod
     def insert_node_instead_existing_link(links: bpy.types.NodeLinks, source_socket: bpy.types.NodeSocket,
@@ -259,13 +277,14 @@ class Utility:
         return node_connected_to_the_output, material_output
 
     @staticmethod
-    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str, created_in_func: str = "") -> List[bpy.types.Node]:
+    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str,
+                            created_in_func: Optional[str] = None) -> List[bpy.types.Node]:
         """
         Returns all nodes which are of the given node_type
 
         :param nodes: list of nodes of the current material
         :param node_type: node types
-        :param created_in_func: only return nodes created by the specified function
+        :param created_in_func: Only return nodes created by the specified function
         :return: list of nodes, which belong to the type
         """
         nodes_with_type = [node for node in nodes if node_type in node.bl_idname]
@@ -274,9 +293,10 @@ class Utility:
         return nodes_with_type
 
     @staticmethod
-    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str, created_in_func: str = "") -> bpy.types.Node:
+    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str,
+                                   created_in_func: str = "") -> bpy.types.Node:
         """
-        Returns the one nodes which is of the given node_type
+        Returns the one node which is of the given node_type
 
         This function will only work if there is only one of the nodes of this type.
 
@@ -288,13 +308,12 @@ class Utility:
         node = Utility.get_nodes_with_type(nodes, node_type, created_in_func)
         if node and len(node) == 1:
             return node[0]
-        else:
-            raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
+        raise RuntimeError(f"There is not only one node of this type: {node_type}, there are: {len(node)}")
 
     @staticmethod
     def get_nodes_created_in_func(nodes: List[bpy.types.Node], created_in_func: str) -> List[bpy.types.Node]:
         """ Returns all nodes which are created in the given function
-        
+
         :param nodes: list of nodes of the current material
         :param created_in_func: return all nodes created in the given function
         :return: The list of nodes with the given type.
@@ -310,8 +329,9 @@ class Utility:
         """
         # Read in lights
         lights: Dict[str, Tuple[List[str], List[str]]] = {}
-        # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt"))) as f:
+        # File format: <obj id> <number of lightbulb materials> <lightbulb material names>
+        #              <number of lampshade materials> <lampshade material names>
+        with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt")), "r", encoding="utf-8") as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -322,20 +342,21 @@ class Utility:
                 # Read in lightbulb materials
                 number = int(row[index])
                 index += 1
-                for i in range(number):
+                for _ in range(number):
                     lights[row[0]][0].append(row[index])
                     index += 1
 
                 # Read in lampshade materials
                 number = int(row[index])
                 index += 1
-                for i in range(number):
+                for _ in range(number):
                     lights[row[0]][1].append(row[index])
                     index += 1
 
         # Read in windows
         windows = []
-        with open(resolve_resource(os.path.join('suncg', 'ModelCategoryMapping.csv')), 'r') as csvfile:
+        with open(resolve_resource(os.path.join('suncg', 'ModelCategoryMapping.csv')), 'r',
+                  encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":
@@ -400,8 +421,7 @@ class Utility:
                 parameters[key] = config.data[key]
 
         if not config.has_param('provider'):
-            raise Exception(
-                "Each provider needs a provider label, this one does not contain one: {}".format(config.data))
+            raise RuntimeError(f"Each provider needs a provider label, this one does not contain one: {config.data}")
 
         return Utility.build_provider(config.get_string("provider"), parameters)
 
@@ -431,11 +451,11 @@ class Utility:
 
         # Calculate the center of each block and use them as equidistant values
         r_mid_point = block_length // 2
-        for r in range(num_splits_per_dimension):
+        for _ in range(num_splits_per_dimension):
             g_mid_point = block_length // 2
-            for g in range(num_splits_per_dimension):
+            for _ in range(num_splits_per_dimension):
                 b_mid_point = block_length // 2
-                for b in range(num_splits_per_dimension):
+                for _ in range(num_splits_per_dimension):
                     values.append([r_mid_point, g_mid_point, b_mid_point])
                     b_mid_point += block_length
                 g_mid_point += block_length
@@ -447,10 +467,13 @@ class Utility:
                                                         space_size_per_dimension: int) -> np.ndarray:
         """ Maps the given values back to their original indices.
 
-        This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.
+        This function calculates for each given value the corresponding index in the list of values created by the
+        generate_equidistant_values() method.
 
         :param values: An array of shape [M, N, 3];
-        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equidistant values.
+        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the
+                                         equidistant values.
+        :param space_size_per_dimension: The space size used for the 3D cube.
         :return: A 2-dim array of indices corresponding to the given values.
         """
         # Calc the side length of a block.
@@ -461,8 +484,10 @@ class Utility:
         values = np.clip(values, 0, space_size_per_dimension)
         # Calculate the block indices per dimension
         values /= block_length
-        # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
-        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :,1] * num_splits_per_dimension + values[:, :, 2]
+        # Compute the global index of the block (corresponds to the three nested for loops inside
+        # generate_equidistant_values())
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + \
+                 values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
 
@@ -473,10 +498,10 @@ class Utility:
         :param output: A dict containing key and path of the new output type.
         """
         registered_outputs = Utility.get_registered_outputs()
-        for i,reg_out in enumerate(registered_outputs):
+        for i, reg_out in enumerate(registered_outputs):
             if output["key"] == reg_out["key"]:
                 registered_outputs[i] = output
-        GlobalStorage.set("output", registered_outputs)      
+        GlobalStorage.set("output", registered_outputs)
 
     @staticmethod
     def add_output_entry(output: Dict[str, str]):
@@ -517,7 +542,8 @@ class Utility:
         """ Returns the output which was registered with the given key.
 
         :param key: The output key to look for.
-        :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.
+        :return: The dict containing all information registered for that output. If no output with the given
+                 key exists, None is returned.
         """
         for output in Utility.get_registered_outputs():
             if output["key"] == key:
@@ -529,7 +555,7 @@ class Utility:
     def get_registered_outputs() -> List[Dict[str, Any]]:
         """ Returns a list of outputs which were registered.
 
-        :return: A list of dicts containing all information registered for the outputs. 
+        :return: A list of dicts containing all information registered for the outputs.
         """
         outputs = []
         if GlobalStorage.is_in_storage("output"):
@@ -552,9 +578,9 @@ class Utility:
                 print("Warning! Detected output entries with duplicate keys and paths")
                 return True
             if output["key"] == _output["key"] or output["path"] == _output["path"]:
-                raise Exception("Can not have two output entries with the same key/path but not same path/key." +
-                                "Original entry's data: key:{} path:{}, Entry to be registered: key:{} path:{}"
-                                .format(_output["key"], _output["path"], output["key"], output["path"]))
+                raise RuntimeError("Can not have two output entries with the same key/path but not same path/key." +
+                                   f"Original entry's data: key:{_output['key']} path:{_output['path']}, Entry to be "
+                                   f"registered: key:{output['key']} path:{output['path']}")
 
         return False
 
@@ -573,22 +599,26 @@ class Utility:
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
+
 class BlockStopWatch:
     """ Calls a print statement to mark the start and end of this block and also measures execution time.
 
     Usage: with BlockStopWatch('text'):
     """
 
-    def __init__(self, block_name):
+    def __init__(self, block_name: str):
         self.block_name = block_name
+        self.start: float = 0.0
 
     def __enter__(self):
-        print("#### Start - " + self.block_name + " ####")
+        print(f"#### Start - {self.block_name} ####")
         self.start = time.time()
 
-    def __exit__(self, type, value, traceback):
-        print("#### Finished - " + self.block_name + " (took " + (
-                    "%.3f" % (time.time() - self.start)) + " seconds) ####")
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
+        print(f"#### Finished - {self.block_name} (took {time.time() - self.start:.3f} seconds) ####")
+
 
 class UndoAfterExecution:
     """ Reverts all changes done to the blender project inside this block.
@@ -601,34 +631,43 @@ class UndoAfterExecution:
             check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
         self.check_point_name = check_point_name
         self._perform_undo_op = perform_undo_op
+        self.struct_instances: List[Tuple[str, "Struct"]] = []
 
     def __enter__(self):
         if self._perform_undo_op:
-            from blenderproc.python.types.StructUtility import Struct
             # Collect all existing struct instances
             self.struct_instances = get_instances()
             bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
         if self._perform_undo_op:
             bpy.ops.ed.undo_push(message="after " + self.check_point_name)
             # The current state points to "after", now by calling undo we go back to "before"
             bpy.ops.ed.undo()
             # After applying undo, all references to blender objects are invalid.
-            # Therefore we now go over all instances and update their references using their name as unique identifier.
+            # Therefore, we now go over all instances and update their references using their name as unique identifier.
             for name, struct in self.struct_instances:
                 struct.update_blender_ref(name)
 
+
 # KeyFrameState should be thread-specific
-class KeyFrameState(threading.local):
+class _KeyFrameState(threading.local):
+    """
+    This class is only used in the KeyFrame class
+    """
     def __init__(self):
-        super(KeyFrameState, self).__init__()
+        super().__init__()
         self.depth = 0
 
 
 class KeyFrame:
+    """
+    A content manager for setting the frame correctly.
+    """
     # Remember how many KeyFrame context manager have been applied around the current execution point
-    state = KeyFrameState()
+    state = _KeyFrameState()
 
     def __init__(self, frame: int):
         """ Sets the frame number for its complete block.
@@ -644,7 +683,9 @@ class KeyFrame:
             self._prev_frame = bpy.context.scene.frame_current
             bpy.context.scene.frame_set(self._frame)
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
         KeyFrame.state.depth -= 1
         if self._prev_frame is not None:
             bpy.context.scene.frame_set(self._prev_frame)
@@ -661,7 +702,7 @@ class KeyFrame:
 class NumpyEncoder(json.JSONEncoder):
     """ A json encoder that is also capable of serializing numpy arrays """
 
-    def default(self, obj):
+    def default(self, obj: Any):
         # If its a numpy array
         if isinstance(obj, np.ndarray):
             # Convert it to a list

@@ -1,22 +1,27 @@
-import bpy
-import numpy as np
-from mathutils import Matrix, Vector, Euler
+""" A collection of math functions. """
+
 from typing import Union, List
 
-def change_coordinate_frame_of_point(point: Union[np.ndarray, list, Vector], new_frame: List[str]) -> np.ndarray:
+import numpy as np
+from mathutils import Matrix, Vector, Euler
+
+
+def change_coordinate_frame_of_point(point: Union[np.ndarray, List[float], Vector],
+                                     new_frame: List[str]) -> np.ndarray:
     """ Transforms the given point into another coordinate frame.
 
     Example: [1, 2, 3] and ["X", "-Z", "Y"] => [1, -3, 2]
 
     :param point: The point to convert in form of a np.ndarray, list or mathutils.Vector.
-    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame
+                      based on the axes of the current frame. Available: ["X", "Y", "Z", "-X", "-Y", "-Z"].
     :return: The converted point also in form of a np.ndarray
     """
-    assert len(new_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(new_frame)
+    assert len(new_frame) == 3, f"The specified coordinate frame has more or less than tree axes: {new_frame}"
     point = np.array(point)
 
     output = []
-    for i, axis in enumerate(new_frame):
+    for axis in new_frame:
         axis = axis.upper()
 
         if axis.endswith("X"):
@@ -26,47 +31,55 @@ def change_coordinate_frame_of_point(point: Union[np.ndarray, list, Vector], new
         elif axis.endswith("Z"):
             output.append(point[2])
         else:
-            raise Exception("Invalid axis: " + axis)
+            raise ValueError(f"Invalid axis: {axis}")
 
         if axis.startswith("-"):
             output[-1] *= -1
 
     return np.array(output)
 
-def change_target_coordinate_frame_of_transformation_matrix(matrix: Union[np.ndarray, Matrix], new_frame: list) -> np.ndarray:
+
+def change_target_coordinate_frame_of_transformation_matrix(matrix: Union[np.ndarray, Matrix],
+                                                            new_frame: List[str]) -> np.ndarray:
     """ Changes the coordinate frame the given transformation matrix is mapping to.
 
     Given a matrix $T_A^B$ that maps from A to B, this function can be used
     to change the axes of B into B' and therefore end up with $T_A^B'$.
 
     :param matrix: The matrix to convert in form of a np.ndarray or mathutils.Matrix
-    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame
+                      based on the axes of the current frame. Available: ["X", "Y", "Z", "-X", "-Y", "-Z"].
     :return: The converted matrix is in form of a np.ndarray
     """
-    tmat = MathUtility._build_coordinate_frame_changing_transformation_matrix(new_frame)
+    tmat = MathUtility.build_coordinate_frame_changing_transformation_matrix(new_frame)
 
     # Apply transformation matrix
     output = np.matmul(tmat, matrix)
     return output
 
-def change_source_coordinate_frame_of_transformation_matrix(matrix: Union[np.ndarray, Matrix], new_frame: list) -> np.ndarray:
+
+def change_source_coordinate_frame_of_transformation_matrix(matrix: Union[np.ndarray, Matrix],
+                                                            new_frame: list) -> np.ndarray:
     """ Changes the coordinate frame the given transformation matrix is mapping from.
 
     Given a matrix $T_A^B$ that maps from A to B, this function can be used
     to change the axes of A into A' and therefore end up with $T_A'^B$.
 
     :param matrix: The matrix to convert in form of a np.ndarray or mathutils.Matrix
-    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+    :param new_frame: An array containing three elements, describing each axis of the new coordinate frame
+                      based on the axes of the current frame. Available: ["X", "Y", "Z", "-X", "-Y", "-Z"].
     :return: The converted matrix is in form of a np.ndarray
     """
-    tmat = MathUtility._build_coordinate_frame_changing_transformation_matrix(new_frame)
+    tmat = MathUtility.build_coordinate_frame_changing_transformation_matrix(new_frame)
     tmat = np.linalg.inv(tmat)
 
     # Apply transformation matrix
     output = np.matmul(matrix, tmat)
     return output
 
-def build_transformation_mat(translation: Union[np.ndarray, list, Vector], rotation: Union[np.ndarray, List[list], Matrix]) -> np.ndarray:
+
+def build_transformation_mat(translation: Union[np.ndarray, List[float], Vector],
+                             rotation: Union[np.ndarray, List[List[float]], Matrix]) -> np.ndarray:
     """ Build a transformation matrix from translation and rotation parts.
 
     :param translation: A (3,) vector representing the translation part.
@@ -80,26 +93,34 @@ def build_transformation_mat(translation: Union[np.ndarray, list, Vector], rotat
     if translation.shape[0] == 3:
         mat[:3, 3] = translation
     else:
-        raise Exception("translation has invalid shape: {}. Must be (3,) or (3,1) vector.".format(translation.shape))
-    if rotation.shape == (3,3):
-        mat[:3,:3] = rotation
+        raise RuntimeError(f"Translation has invalid shape: {translation.shape}. Must be (3,) or (3,1) vector.")
+    if rotation.shape == (3, 3):
+        mat[:3, :3] = rotation
     elif rotation.shape[0] == 3:
-        mat[:3,:3] = np.array(Euler(rotation).to_matrix())
+        mat[:3, :3] = np.array(Euler(rotation).to_matrix())
     else:
-        raise Exception("rotation has invalid shape: {}. Must be rotation matrix of shape (3,3) or Euler angles of shape (3,) or (3,1).".format(rotation.shape))
+        raise RuntimeError(f"Rotation has invalid shape: {rotation.shape}. Must be rotation matrix of shape "
+                           f"(3,3) or Euler angles of shape (3,) or (3,1).")
 
     return mat
 
+
 class MathUtility:
+    """
+    Math utility class
+    """
 
     @staticmethod
-    def _build_coordinate_frame_changing_transformation_matrix(destination_frame: list) -> np.ndarray:
+    def build_coordinate_frame_changing_transformation_matrix(destination_frame: List[str]) -> np.ndarray:
         """ Builds a transformation matrix that switches the coordinate frame.
 
-        :param destination_frame: An array containing three elements, describing each axis of the destination coordinate frame based on the axes of the source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+        :param destination_frame: An array containing three elements, describing each axis of the destination
+                                  coordinate frame based on the axes of the source frame.
+                                  Available: ["X", "Y", "Z", "-X", "-Y", "-Z"].
         :return: The transformation matrix
         """
-        assert len(destination_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(destination_frame)
+        assert len(destination_frame) == 3, f"The specified coordinate frame has more or less than " \
+                                            f"tree axes: {destination_frame}"
 
         # Build transformation matrix that maps the given matrix to the specified coordinate frame.
         tmat = np.zeros((4, 4))

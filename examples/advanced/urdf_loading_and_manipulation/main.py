@@ -62,7 +62,7 @@ print("Current visual poses:", robot.get_all_visual_local2world_mats())
 
 # set a light source
 light = bproc.types.Light()
-light.set_type(type="POINT")
+light.set_type(light_type="POINT")
 light.set_location(location=[5, 5, 5])
 light.set_energy(energy=1000)
 

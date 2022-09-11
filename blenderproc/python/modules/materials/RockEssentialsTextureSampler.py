@@ -224,4 +224,4 @@ class RockEssentialsTextureSampler(LoaderInterface):
 
         # and scale the texture
         for point in ground_tile.data.uv_layers.active.data[:]:
-            point.uv = point.uv * uv_scaling
+            point.uv *= uv_scaling

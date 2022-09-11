@@ -1,11 +1,12 @@
+"""Use stereo global matching to calculate an distance image. """
+
 from typing import Tuple, List, Optional
+
 import bpy
 import cv2
 import numpy as np
 
-import blenderproc.python.camera.CameraUtility as CameraUtility
-from blenderproc.python.postprocessing.SGMUtility import fill_in_fast
-from blenderproc.python.postprocessing.SGMUtility import resize
+from blenderproc.python.camera import CameraUtility
 
 
 def stereo_global_matching(color_images: List[np.ndarray], depth_max: Optional[float] = None, window_size: int = 7,
@@ -17,7 +18,8 @@ def stereo_global_matching(color_images: List[np.ndarray], depth_max: Optional[f
     3. Write the results to a numpy file.
 
     :param color_images: A list of stereo images, where each entry has the shape [2, height, width, 3].
-    :param depth_max: The maximum depth value for clipping the resulting depth values. If None, distance_start + distance_range that were configured for distance rendering are used.
+    :param depth_max: The maximum depth value for clipping the resulting depth values. If None,
+                      distance_start + distance_range that were configured for distance rendering are used.
     :param window_size: Semi-global matching kernel size. Should be an odd number.
     :param num_disparities: Semi-global matching number of disparities. Should be > 0 and divisible by 16.
     :param min_disparity: Semi-global matching minimum disparity.
@@ -45,19 +47,24 @@ def stereo_global_matching(color_images: List[np.ndarray], depth_max: Optional[f
     depth_frames = []
     disparity_frames = []
     for color_image in color_images:
-        depth, disparity = StereoGlobalMatching._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
+        depth, disparity = _StereoGlobalMatching.stereo_global_matching(color_image[0], color_image[1], baseline,
+                                                                        depth_max, focal_length, window_size,
+                                                                        num_disparities, min_disparity,
+                                                                        disparity_filter, depth_completion)
 
         depth_frames.append(depth)
         disparity_frames.append(disparity)
 
     return depth_frames, disparity_frames
 
-class StereoGlobalMatching:
+
+class _StereoGlobalMatching:
 
     @staticmethod
-    def _sgm(left_color_image: np.ndarray, right_color_image: np.ndarray, baseline: float, depth_max: float,
-             focal_length: float, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0,
-             disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+    def stereo_global_matching(left_color_image: np.ndarray, right_color_image: np.ndarray, baseline: float,
+                               depth_max: float, focal_length: float, window_size: int = 7, num_disparities: int = 32,
+                               min_disparity: int = 0, disparity_filter: bool = True,
+                               depth_completion: bool = True) -> Tuple[np.ndarray, np.ndarray]:
         """ Semi global matching funciton, for more details on what this function does check the original paper
         https://elib.dlr.de/73119/1/180Hirschmueller.pdf
 
@@ -74,10 +81,10 @@ class StereoGlobalMatching:
         :return: depth, disparity
          """
         if window_size % 2 == 0:
-            raise Exception("Window size must be an odd number")
+            raise ValueError("Window size must be an odd number")
 
         if not (num_disparities > 0 and num_disparities % 16 == 0):
-            raise Exception("Number of disparities must be > 0 and divisible by 16")
+            raise ValueError("Number of disparities must be > 0 and divisible by 16")
 
         left_matcher = cv2.StereoSGBM_create(
             minDisparity=min_disparity,
@@ -124,7 +131,77 @@ class StereoGlobalMatching:
         depth[depth < 0] = 0.0
 
         if depth_completion:
-            depth = fill_in_fast(depth, depth_max)
+            depth = _StereoGlobalMatching.fill_in_fast(depth, depth_max)
 
         return depth, disparity_to_be_written
 
+    @staticmethod
+    # https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py
+    def fill_in_fast(depth_map: np.ndarray, max_depth: float = 100.0, custom_kernel: Optional[np.ndarra] = None,
+                     extrapolate: bool = False, blur_type: str = 'bilateral'):
+        """Fast, in-place depth completion.
+
+        :param depth_map: projected depths
+        :param max_depth: max depth value for inversion
+        :param custom_kernel: kernel to apply initial dilation
+        :param extrapolate: whether to extrapolate by extending depths to top of the frame, and applying a 31x31 \
+                            full kernel dilation
+        :param blur_type: 'bilateral' - preserves local structure (recommended), 'gaussian' - provides lower RMSE
+        :return: depth_map: dense depth map
+        """
+
+        # Full kernels
+        FULL_KERNEL_5 = np.ones((5, 5), np.uint8)
+        FULL_KERNEL_7 = np.ones((7, 7), np.uint8)
+        FULL_KERNEL_31 = np.ones((31, 31), np.uint8)
+
+        if custom_kernel is None:
+            custom_kernel = FULL_KERNEL_5
+
+        # Invert
+        valid_pixels = (depth_map > 0.1)
+        depth_map[valid_pixels] = max_depth - depth_map[valid_pixels]
+
+        # Dilate
+        depth_map = cv2.dilate(depth_map, custom_kernel)
+
+        # Hole closing
+        depth_map = cv2.morphologyEx(depth_map, cv2.MORPH_CLOSE, FULL_KERNEL_5)
+
+        # Fill empty spaces with dilated values
+        empty_pixels = (depth_map < 0.1)
+        dilated = cv2.dilate(depth_map, FULL_KERNEL_7)
+        depth_map[empty_pixels] = dilated[empty_pixels]
+
+        # Extend the highest pixel to top of image
+        if extrapolate:
+            top_row_pixels = np.argmax(depth_map > 0.1, axis=0)
+            top_pixel_values = depth_map[top_row_pixels, range(depth_map.shape[1])]
+
+            for pixel_col_idx in range(depth_map.shape[1]):
+                depth_map[0:top_row_pixels[pixel_col_idx], pixel_col_idx] = \
+                    top_pixel_values[pixel_col_idx]
+
+            # Large Fill
+            empty_pixels = depth_map < 0.1
+            dilated = cv2.dilate(depth_map, FULL_KERNEL_31)
+            depth_map[empty_pixels] = dilated[empty_pixels]
+
+        # Median blur
+        depth_map = cv2.medianBlur(depth_map, 5)
+
+        # Bilateral or Gaussian blur
+        if blur_type == 'bilateral':
+            # Bilateral blur
+            depth_map = cv2.bilateralFilter(depth_map, 5, 1.5, 2.0)
+        elif blur_type == 'gaussian':
+            # Gaussian blur
+            valid_pixels = (depth_map > 0.1)
+            blurred = cv2.GaussianBlur(depth_map, (5, 5), 0)
+            depth_map[valid_pixels] = blurred[valid_pixels]
+
+        # Invert
+        valid_pixels = (depth_map > 0.1)
+        depth_map[valid_pixels] = max_depth - depth_map[valid_pixels]
+
+        return depth_map

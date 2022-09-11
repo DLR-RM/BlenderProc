@@ -1,20 +1,21 @@
-from typing import Union, Optional
-import numpy as np
+""" The base class of all things, which can be placed in the scene, in BlenderProc. """
+
+from typing import Union, Optional, List
 import warnings
 
 import bpy
+import numpy as np
+from mathutils import Vector, Euler, Matrix
 
 from blenderproc.python.types.StructUtility import Struct
 from blenderproc.python.utility.Utility import Utility, KeyFrame
-from mathutils import Vector, Euler, Matrix
-
-from typing import List
 
 
 class Entity(Struct):
-
-    def __init__(self, bpy_object: bpy.types.Object):
-        super().__init__(bpy_object)
+    """
+    The entity class of all objects which can be placed inside the scene. They have a 6D pose consisting of location
+    and rotation.
+    """
 
     def update_blender_ref(self, name: str):
         """ Updates the contained blender reference using the given name of the instance.
@@ -23,80 +24,89 @@ class Entity(Struct):
         """
         self.blender_obj = bpy.data.objects[name]
 
-    def set_location(self, location: Union[list, Vector, np.ndarray], frame: int = None):
+    def set_location(self, location: Union[list, Vector, np.ndarray], frame: Optional[int] = None):
         """ Sets the location of the entity in 3D world coordinates.
 
         :param location: The location to set.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         """
         self.blender_obj.location = location
         Utility.insert_keyframe(self.blender_obj, "location", frame)
 
-    def set_rotation_euler(self, rotation_euler: Union[list, Euler, np.ndarray], frame: int = None):
+    def set_rotation_euler(self, rotation_euler: Union[list, Euler, np.ndarray], frame: Optional[int] = None):
         """ Sets the rotation of the entity in euler angles.
 
         :param rotation_euler: The euler angles to set.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         """
         self.blender_obj.rotation_euler = rotation_euler
         Utility.insert_keyframe(self.blender_obj, "rotation_euler", frame)
-    
-    def set_rotation_mat(self, rotation_mat: Union[Matrix, np.ndarray], frame: int = None):
+
+    def set_rotation_mat(self, rotation_mat: Union[Matrix, np.ndarray], frame: Optional[int] = None):
         """ Sets the rotation of the entity using a rotation matrix.
 
         :param rotation_mat: The 3x3 local to world rotation matrix.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         """
         self.set_rotation_euler(Matrix(rotation_mat).to_euler(), frame)
 
-    def set_scale(self, scale: Union[list, np.ndarray, Vector], frame: int = None):
+    def set_scale(self, scale: Union[list, np.ndarray, Vector], frame: Optional[int] = None):
         """ Sets the scale of the entity along all three axes.
 
         :param scale: The scale to set.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         """
         self.blender_obj.scale = scale
         Utility.insert_keyframe(self.blender_obj, "scale", frame)
 
-    def get_location(self, frame: int = None) -> np.ndarray:
+    def get_location(self, frame: Optional[int] = None) -> np.ndarray:
         """ Returns the location of the entity in 3D world coordinates.
 
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         :return: The location at the specified frame.
         """
         with KeyFrame(frame):
             return np.array(self.blender_obj.location)
 
-    def get_rotation(self, frame: int = None) -> np.ndarray:
+    def get_rotation(self, frame: Optional[int] = None) -> np.ndarray:
         """ Returns the rotation of the entity in euler angles.
 
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         :return: The rotation at the specified frame.
         """
         warnings.warn("This function will be deprecated. Use get_rotation_euler() instead.")
         return self.get_rotation_euler(frame)
 
-    def get_rotation_euler(self, frame: int = None) -> np.ndarray:
+    def get_rotation_euler(self, frame: Optional[int] = None) -> np.ndarray:
         """ Returns the rotation of the entity in euler angles.
 
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         :return: The rotation at the specified frame.
         """
         with KeyFrame(frame):
             return np.array(self.blender_obj.rotation_euler)
-        
-    def get_rotation_mat(self, frame: int = None) -> np.ndarray:
+
+    def get_rotation_mat(self, frame: Optional[int] = None) -> np.ndarray:
         """ Gets the rotation matrix of the entity.
 
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         :return: The 3x3 local2world rotation matrix.
         """
         return np.array(Euler(self.get_rotation_euler(frame)).to_matrix())
-    
-    def get_scale(self, frame: int = None) -> np.ndarray:
+
+    def get_scale(self, frame: Optional[int] = None) -> np.ndarray:
         """ Returns the scale of the entity along all three axes.
 
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
         :return: The scale at the specified frame.
         """
         with KeyFrame(frame):
@@ -175,6 +185,7 @@ class Entity(Struct):
         :param return_all_offspring: If this is True all children and their children are recursively found and returned
         :return: A list of all children objects.
         """
+
         def collect_offspring(entity: bpy.types.Object) -> List[bpy.types.Object]:
             """
             Recursively collects the offspring for an entity
@@ -184,6 +195,7 @@ class Entity(Struct):
                 offspring.append(child)
                 offspring.extend(collect_offspring(child))
             return offspring
+
         if return_all_offspring:
             used_children = collect_offspring(self.blender_obj)
         else:
@@ -209,10 +221,9 @@ class Entity(Struct):
 
     def __setattr__(self, key, value):
         if key != "blender_obj":
-            raise Exception(
-                "The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
-        else:
-            object.__setattr__(self, key, value)
+            raise RuntimeError("The entity class does not allow setting any attribute. Use the corresponding "
+                               "method or directly access the blender attribute via entity.blender_obj.attribute_name")
+        object.__setattr__(self, key, value)
 
     def __eq__(self, other):
         if isinstance(other, Entity):
@@ -245,13 +256,13 @@ def convert_to_entities(blender_objects: list, convert_to_subclasses: bool = Fal
     """ Converts the given list of blender objects to entities
 
     :param blender_objects: List of blender objects.
-    :param convert_to_subclasses: If True, each blender object will be wrapped into a entity subclass based on the type of object.
+    :param convert_to_subclasses: If True, each blender object will be wrapped into an entity subclass based
+                                  on the type of object.
     :return: The list of entities.
     """
     if not convert_to_subclasses:
         return [Entity(obj) for obj in blender_objects]
-    else:
-        return [convert_to_entity_subclass(obj) for obj in blender_objects]
+    return [convert_to_entity_subclass(obj) for obj in blender_objects]
 
 
 def convert_to_entity_subclass(blender_object: bpy.types.Object) -> "Entity":
@@ -261,13 +272,16 @@ def convert_to_entity_subclass(blender_object: bpy.types.Object) -> "Entity":
     :return: The wrapped object.
     """
     if blender_object.type == 'MESH':
+        # pylint: disable=import-outside-toplevel,cyclic-import
         from blenderproc.python.types.MeshObjectUtility import MeshObject
+        # pylint: enable=import-outside-toplevel,cyclic-import
         return MeshObject(blender_object)
-    elif blender_object.type == 'LIGHT':
+    if blender_object.type == 'LIGHT':
+        # pylint: disable=import-outside-toplevel,cyclic-import
         from blenderproc.python.types.LightUtility import Light
+        # pylint: enable=import-outside-toplevel,cyclic-import
         return Light(blender_obj=blender_object)
-    else:
-        return Entity(blender_object)
+    return Entity(blender_object)
 
 
 def delete_multiple(entities: List[Union["Entity"]], remove_all_offspring: bool = False):

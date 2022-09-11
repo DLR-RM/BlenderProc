@@ -1,7 +1,8 @@
+"""Replaces mesh objects with other meshes objects, while checking for collisions"""
+
 import random
 from typing import Callable, List, Optional
 
-import bpy
 import numpy as np
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
@@ -12,7 +13,10 @@ def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace
                     ignore_collision_with: Optional[List[MeshObject]] = None, replace_ratio: float = 1,
                     copy_properties: bool = True, max_tries: int = 100,
                     relative_pose_sampler: Callable[[MeshObject], None] = None):
-    """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with in following steps:
+    """
+    Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the
+    objects to replace with in following steps:
+
     1. Randomly select a subset of objects_to_be_replaced.
     2. For each of these objects, sample other objects from objects_to_replace_with and try to replace them.
     3. In each try, the poses of the objects are aligned and a check for collisions with other objects is done.
@@ -24,7 +28,8 @@ def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace
     :param replace_ratio: Ratio of objects in the original scene, which will be replaced.
     :param copy_properties: Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with.
     :param max_tries: Maximum number of tries to replace one object.
-    :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with (after it has been aligned to the object to replace).
+    :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with
+                                  (after it has been aligned to the object to replace).
     """
     if ignore_collision_with is None:
         ignore_collision_with = []
@@ -50,8 +55,8 @@ def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace
         tries = 0
         while tries < max_tries:
             current_object_to_replace_with = np.random.choice(objects_to_replace_with)
-            if ObjectReplacer.replace(current_object_to_be_replaced, current_object_to_replace_with,
-                                      check_collision_with, relative_pose_sampler=relative_pose_sampler):
+            if _ObjectReplacer.replace(current_object_to_be_replaced, current_object_to_replace_with,
+                                       check_collision_with, relative_pose_sampler=relative_pose_sampler):
 
                 # Duplicate the added object to be able to add it again
                 duplicate_new_object = current_object_to_replace_with.duplicate()
@@ -75,13 +80,13 @@ def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace
             print("Could not replace " + current_object_to_be_replaced.get_name())
 
 
-class ObjectReplacer:
+class _ObjectReplacer:
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the
         objects to replace with, can be selected over Selectors (getter.Entity).
     """
 
     @staticmethod
-    def _bb_ratio(bb1: np.ndarray, bb2: np.ndarray) -> list:
+    def bb_ratio(bb1: np.ndarray, bb2: np.ndarray) -> list:
         """ Rough estimation of the ratios between two bounding boxes sides, not axis aligned
 
         :param bb1: bounding box 1. Type: float multi-dimensional array of 8 * 3.
@@ -104,7 +109,8 @@ class ObjectReplacer:
         :param obj_to_add: An object to put in the scene instead of obj_to_remove.
         :param check_collision_with: A list of objects, which are not checked for collisions with.
         :param scale: Scales obj_to_add to match obj_to_remove dimensions.
-        :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with (after it has been aligned to the object to replace).
+        :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with
+                                      (after it has been aligned to the object to replace).
         """
         if check_collision_with is None:
             check_collision_with = []
@@ -112,10 +118,11 @@ class ObjectReplacer:
         obj_to_add.set_location(obj_to_remove.get_location())
         obj_to_add.set_rotation_euler(obj_to_remove.get_rotation_euler())
         if scale:
-            obj_to_add.set_scale(
-                ObjectReplacer._bb_ratio(obj_to_remove.get_bound_box(True), obj_to_add.get_bound_box(True)))
+            obj_to_add.set_scale(_ObjectReplacer.bb_ratio(obj_to_remove.get_bound_box(True),
+                                                          obj_to_add.get_bound_box(True)))
         if relative_pose_sampler is not None:
             relative_pose_sampler(obj_to_add)
 
         # Check for collision between the new object and other objects in the scene
-        return CollisionUtility.check_intersections(obj_to_add, None, [obj for obj in check_collision_with if obj != obj_to_add and obj != obj_to_remove], [])
+        objects_to_check_against = [obj for obj in check_collision_with if obj not in (obj_to_add, obj_to_remove)]
+        return CollisionUtility.check_intersections(obj_to_add, None, objects_to_check_against, [])

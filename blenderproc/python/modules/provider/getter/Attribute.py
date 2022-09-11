@@ -201,6 +201,6 @@ class Attribute(Provider):
         :return: The average value of all values of the input list.
         """
         ref_result = self._sum(raw_result)
-        ref_result = ref_result/float(len(raw_result))
+        ref_result /=float(len(raw_result))
 
         return ref_result

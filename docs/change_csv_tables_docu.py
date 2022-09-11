@@ -154,7 +154,7 @@ class ConfigElement(object):
             line = first_part + line[line.rfind(self.ele_type) + len(self.ele_type)+1:]
         else:
             line = line[line.find("\"")+1: line.rfind("\"")].strip()
-        self.description = self.description + " " + line
+        self.description += " " + line
         self.description = self.description.replace("  ", " ")
 
     def set_default(self, line):

@@ -1,5 +1,9 @@
-import numpy as np
+""" Provides a function to generate random pattern """
+
 import random
+import itertools
+
+import numpy as np
 import cv2
 
 
@@ -15,10 +19,9 @@ def generate_random_pattern_img(width: int, height: int, n_points: int) -> np.nd
     m_width = int(width // np.sqrt(n_points))
     m_height = int(height // np.sqrt(n_points))
 
-    for i in range(width // m_width):
-        for j in range(height // m_height):
-            x_idx = random.randint(i * m_width, (i + 1) * m_width - 1)
-            y_idx = random.randint(j * m_height, (j + 1) * m_height - 1)
-            pattern_img = cv2.circle(pattern_img, (x_idx, y_idx), 1, (255, 255, 255, 255), -1)
+    for i, j in itertools.product(range(width // m_width), range(height // m_height)):
+        x_idx = random.randint(i * m_width, (i + 1) * m_width - 1)
+        y_idx = random.randint(j * m_height, (j + 1) * m_height - 1)
+        pattern_img = cv2.circle(pattern_img, (x_idx, y_idx), 1, (255, 255, 255, 255), -1)
 
     return pattern_img

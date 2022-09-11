@@ -1,3 +1,5 @@
+"""Loading URDF files."""
+
 from typing import List, Union, Optional
 import os
 import warnings
@@ -23,23 +25,32 @@ from blenderproc.python.types.BoneUtility import set_location_constraint, set_ro
 
 
 def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
-              fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
-              ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]) -> URDFObject:
+              fk_offset: Optional[Union[List[float], Vector, np.array]] = None,
+              ik_offset: Optional[Union[List[float], Vector, np.array]] = None) -> URDFObject:
     """ Loads an urdf object from an URDF file.
 
     :param urdf_file: Path to the URDF file.
     :param weight_distribution: One of ['envelope', 'automatic', 'rigid']. For more information please see
                                 https://docs.blender.org/manual/en/latest/animation/armatures/skinning/parenting.html.
-    :param fk_offset: Offset between fk (forward kinematic) bone chain and link bone chain. This does not have any effect on the
-                      transformations, but can be useful for visualization in blender.
-    :param ik_offset: Offset between ik (inverse kinematic) bone chain and link bone chain. Effects on the transformation (e.g.
-                      `urdf_object.set_location_ik()`) are being handled internally. Useful for visualization in
-                      blender.
+    :param fk_offset: Offset between fk (forward kinematic) bone chain and link bone chain. This does not have any
+                      effect on the transformations, but can be useful for visualization in blender.
+    :param ik_offset: Offset between ik (inverse kinematic) bone chain and link bone chain. Effects on the
+                      transformation (e.g. `urdf_object.set_location_ik()`) are being handled internally. Useful for
+                      visualization in blender.
     :return: URDF object instance.
     """
     # install urdfpy
     SetupUtility.setup_pip(user_required_packages=["git+https://github.com/wboerdijk/urdfpy.git"])
+    # This import is done inside to avoid having the requirement that BlenderProc depends on urdfpy
+    # pylint: disable=import-outside-toplevel
     from urdfpy import URDF
+    # pylint: enable=import-outside-toplevel
+
+    if fk_offset is None:
+        fk_offset = [0., -1., 0.]
+
+    if ik_offset is None:
+        ik_offset = [0., 1., 0.]
 
     # load urdf tree representation
     urdf_tree = URDF.load(urdf_file)
@@ -104,17 +115,17 @@ def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfp
     if not valid_joint_trees:  # happens for the very first link
         warnings.warn(f"WARNING: There is no joint defined for the link {link_name}!")
         return None
-    elif len(valid_joint_trees) == 1:
+    if len(valid_joint_trees) == 1:
         return valid_joint_trees[0]
-    else:  # this should not happen - fault in the urdf file
-        raise NotImplementedError(f"More than one ({len(valid_joint_trees)}) joints map onto a single link with name "
-                                  f"{link_name}")
+    raise NotImplementedError(f"More than one ({len(valid_joint_trees)}) joints map onto a single link with name "
+                              f"{link_name}")
 
 
 def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_joint_trees: List["urdfpy.Joint"],
                 parent_bone_name: Optional[str] = None, create_recursive: bool = True,
-                parent_origin: Optional[Matrix] = None, fk_offset: Union[List[float], Vector, np.array] = [0., -1., 0.],
-                ik_offset: Union[List[float], Vector, np.array] = [0., 1., 0.]):
+                parent_origin: Optional[Matrix] = None,
+                fk_offset: Union[List[float], Vector, np.array] = None,
+                ik_offset: Union[List[float], Vector, np.array] = None):
     """ Creates deform, fk and ik bone for a specific joint. Can loop recursively through the child(ren).
 
     :param armature: The armature which encapsulates all bones.
@@ -129,6 +140,12 @@ def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_jo
                       `urdf_object.set_location_ik()`) are being handled internally. Useful for visualization in
                       blender.
     """
+    if fk_offset is None:
+        fk_offset = [0., -1., 0.]
+
+    if ik_offset is None:
+        ik_offset = [0., 1., 0.]
+
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.objects.active = armature
     bpy.ops.object.mode_set(mode='EDIT', toggle=False)
@@ -231,16 +248,17 @@ def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"
     :return: List of links.
     """
     links = []
-    for i, link_tree in enumerate(link_trees):
+    for link_tree in link_trees:
         visuals, collisions, inertial = [], [], None
 
         if link_tree.visuals:
-            visuals = [load_visual_collision_obj(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path) for visual_tree in
-                       link_tree.visuals]
+            visuals = [load_visual_collision_obj(visual_tree, name=f"{link_tree.name}_visual", urdf_path=urdf_path)
+                       for visual_tree in link_tree.visuals]
 
         if link_tree.collisions:
-            collisions = [load_visual_collision_obj(collision_tree, name=f"{link_tree.name}_collision", urdf_path=urdf_path) for
-                          collision_tree in link_tree.collisions]
+            collisions = [load_visual_collision_obj(collision_tree, name=f"{link_tree.name}_collision",
+                                                    urdf_path=urdf_path)
+                          for collision_tree in link_tree.collisions]
 
         if link_tree.inertial:
             inertial = load_inertial(link_tree.inertial, name=f"{link_tree.name}_inertial")
@@ -318,8 +336,8 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = N
                 # load in default coordinate system
                 obj = load_obj(filepath=relative_path, forward_axis='Y_FORWARD', up_axis='Z_UP')[0]
             else:
-                warnings.warn(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; urdf "
-                              f"filename: {urdf_path})")
+                warnings.warn(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; "
+                              f"urdf filename: {urdf_path})")
         else:
             raise NotImplementedError(f"Couldn't load mesh file for {geometry_tree} (filename: "
                                       f"{geometry_tree.mesh.filename})")
@@ -434,16 +452,15 @@ def get_size_from_geometry(geometry: "urdfpy.Geometry") -> Optional[float]:
     """
     if geometry.box is not None:
         return max(geometry.geometry.size)
-    elif geometry.cylinder is not None:
+    if geometry.cylinder is not None:
         return max(geometry.geometry.radius, geometry.geometry.length)
-    elif geometry.mesh is not None:
+    if geometry.mesh is not None:
         if hasattr(geometry.geometry, "scale") and geometry.geometry.scale is not None:
             return max(geometry.geometry.scale)
-        elif hasattr(geometry.geometry, "size") and geometry.geometry.size is not None:
+        if hasattr(geometry.geometry, "size") and geometry.geometry.size is not None:
             return max(geometry.geometry.size)
         return None
-    elif geometry.sphere is not None:
+    if geometry.sphere is not None:
         return geometry.geometry.radius
-    else:
-        print(f"Warning: Failed to derive size from geometry model {geometry}. Setting scale to 0.2!")
-        return None
+    print(f"Warning: Failed to derive size from geometry model {geometry}. Setting scale to 0.2!")
+    return None

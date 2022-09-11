@@ -1,14 +1,17 @@
-# This file can be used to execute the pipeline from the blender scripting UI
-import os
-import bpy
+""" This module can be used to execute the pipeline from the blender scripting UI """
 import sys
+
+import bpy
 
 # Add path to custom packages inside the blender main directory
 from blenderproc.python.utility.SetupUtility import SetupUtility
-python_bin, packages_path, packages_import_path, pre_python_package_path = SetupUtility.determine_python_paths(None, None)
+
+_, _, packages_import_path, _ = SetupUtility.determine_python_paths(None, None)
 sys.path.append(packages_import_path)
 
+# pylint: disable=wrong-import-position
 from blenderproc.python.modules.main.Pipeline import Pipeline
+# pylint: enable=wrong-import-position
 
 # Replace placeholders manually or use --debug command line argument
 config_path = "###CONFIG_PATH###"
@@ -33,5 +36,5 @@ try:
     pipeline = Pipeline(config_path, args, temp_dir, avoid_output=True)
     pipeline.run()
 finally:
-    # Revert back to previous view
+    # Revert to previous view
     bpy.ops.screen.back_to_previous()

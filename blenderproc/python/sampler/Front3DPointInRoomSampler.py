@@ -1,3 +1,5 @@
+"""Allows the sampling 3D Front scenes"""
+
 import random
 from typing import List
 
@@ -7,12 +9,16 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class Front3DPointInRoomSampler:
+    """
+    Allows the sampling 3D Front scenes
+    """
 
     def __init__(self, front3d_objects: List[MeshObject], amount_of_objects_needed_per_room: int = 2):
         """ Collects the floors of all rooms with at least N objects.
 
         :param front3d_objects: The list of front3d objects that should be considered.
-        :param amount_of_objects_needed_per_room: The number of objects a rooms needs to have, such that it is considered for sampling.
+        :param amount_of_objects_needed_per_room: The number of objects a rooms needs to have, such that it is
+                                                  considered for sampling.
         """
         front3d_objects = [obj for obj in front3d_objects if obj.has_cp("is_3D_future")]
 
@@ -31,8 +37,8 @@ class Front3DPointInRoomSampler:
                 is_above = floor_obj.position_is_above_object(obj.get_location())
                 if is_above:
                     floor_obj_counters[floor_obj.get_name()] += 1
-        self.used_floors = [obj for obj in floor_objs if floor_obj_counters[obj.get_name()] > amount_of_objects_needed_per_room]
-
+        self.used_floors = [obj for obj in floor_objs if
+                            floor_obj_counters[obj.get_name()] > amount_of_objects_needed_per_room]
 
     def sample(self, height: float, max_tries: int = 1000) -> np.ndarray:
         """ Samples a point inside one of the loaded Front3d rooms.
@@ -64,4 +70,4 @@ class Front3DPointInRoomSampler:
             if floor_obj.position_is_above_object(point):
                 return point
 
-        raise Exception("Cannot sample any point inside the loaded front3d rooms.")
+        raise RuntimeError("Cannot sample any point inside the loaded front3d rooms.")
