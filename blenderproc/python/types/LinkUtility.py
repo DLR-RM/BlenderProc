@@ -1,6 +1,6 @@
 """ All link objects are captured in this class. """
 
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Tuple
 
 import bpy
 import numpy as np
@@ -451,7 +451,7 @@ class Link(Entity):
 
     def create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
                                    use_rotation: bool = True,
-                                   chain_length: int = 0) -> (bpy.types.PoseBone, bpy.types.PoseBone, Matrix):
+                                   chain_length: int = 0) -> Tuple[bpy.types.PoseBone, bpy.types.PoseBone, Matrix]:
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
 
         :param relative_location: Relative location of the ik bone controller w.r.t. the bone's location. This can be
