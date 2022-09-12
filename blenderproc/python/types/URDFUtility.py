@@ -238,7 +238,7 @@ class URDFObject(Entity):
             relative_location = [0., 0., 0.]
         if link is None:
             link = self.links[-1]
-        ik_bone_controller, ik_bone_constraint, offset = link._create_ik_bone_controller(
+        ik_bone_controller, ik_bone_constraint, offset = link.create_ik_bone_controller(
             relative_location=relative_location, use_rotation=use_rotation, chain_length=chain_length)
         self._set_ik_bone_controller(ik_bone_controller)
         self._set_ik_bone_constraint(ik_bone_constraint)

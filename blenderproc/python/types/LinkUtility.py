@@ -449,7 +449,7 @@ class Link(Entity):
                 obj.blender_obj.vertex_groups[0].add(vertices, 1.0, 'REPLACE')
         bpy.ops.object.select_all(action='DESELECT')
 
-    def _create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
+    def create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
                                    use_rotation: bool = True,
                                    chain_length: int = 0) -> (bpy.types.PoseBone, bpy.types.PoseBone, Matrix):
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
@@ -545,7 +545,7 @@ class Link(Entity):
 
         else:  # turn off copy rotation constraints of ik bone and base bone
             if self.get_fk_ik_mode() == "ik":
-                return
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
