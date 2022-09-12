@@ -36,7 +36,7 @@ class Link(Entity):
         object.__setattr__(self, 'collision_local2link_mats', [])
         object.__setattr__(self, 'inertial_local2link_mat', None)
 
-    def set_parent(self, parent: "Link"):
+    def set_link_parent(self, parent: "Link"):
         """ Sets the parent of this link.
 
         :param parent: Parent link.
@@ -44,14 +44,14 @@ class Link(Entity):
         assert isinstance(parent, Link)
         object.__setattr__(self, "parent", parent)
 
-    def get_parent(self) -> "Link":
+    def get_link_parent(self) -> "Link":
         """ Returns this link's parent.
 
         :return: Parent link.
         """
         return self.parent
 
-    def set_child(self, child: "Link"):
+    def set_link_child(self, child: "Link"):
         """ Sets the child of this link.
 
         :param child: Child link.
@@ -59,7 +59,7 @@ class Link(Entity):
         assert isinstance(child, Link)
         object.__setattr__(self, "child", child)
 
-    def get_child(self) -> "Link":
+    def get_link_child(self) -> "Link":
         """ Returns this link's child.
 
         :return: Child link.
