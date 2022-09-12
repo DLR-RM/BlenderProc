@@ -1,3 +1,5 @@
+""" All URDF objects are captured in this class. """
+
 from typing import Union, List, Optional
 import numpy as np
 from mathutils import Vector, Euler, Matrix
@@ -15,6 +17,10 @@ from blenderproc.python.types.InertialUtility import Inertial
 # init check
 # pylint: disable=no-member
 class URDFObject(Entity):
+    """
+    This class represents an URDF object, which is comprised of an armature and one or multiple links. Among others, it
+    serves as an interface for manipulation of the URDF model.
+    """
     def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
         super().__init__(bpy_object=armature)
 

@@ -1,3 +1,5 @@
+""" All link objects are captured in this class. """
+
 from typing import Union, List, Optional
 
 import bpy
@@ -16,6 +18,10 @@ from blenderproc.python.types.InertialUtility import Inertial
 # init check
 # pylint: disable=no-member
 class Link(Entity):
+    """
+    Every instance of this class is a link which is usually part of an URDFObject. It can have objects attached to it,
+    and different types of armature bones for manipulation.
+    """
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object)
 
