@@ -33,12 +33,10 @@ with open(args.camera, "r") as f:
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+bproc.renderer.enable_semantic_segmentation(map_by=["class", "instance", "name"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-# Render segmentation masks (per class and per instance)
-data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

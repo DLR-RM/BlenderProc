@@ -1,12 +1,14 @@
 """A set of function to post process the produced images."""
 
-from typing import Union, List
+from typing import Union, List, Optional, Dict, Any
 
 import numpy as np
+import bpy
 import cv2
 from scipy import stats
 
 from blenderproc.python.camera import CameraUtility
+from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 
 
 def dist2depth(dist: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
@@ -195,6 +197,147 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
         image = image[:, :, 0]  # All channels have the same value, so just extract any single channel
 
     return image
+
+
+def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
+                                  map_by: Union[str, List[str]],
+                                  default_values: Optional[Dict[str, int]]) \
+        -> Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]]:
+
+    return_dict: Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]] = {}
+    is_stereo_case = bpy.context.scene.render.use_multiview
+
+    # convert a single image to a list of stereo images
+    if isinstance(image, list):
+        if len(image) == 0:
+            raise RuntimeError("The given image list is empty")
+        if hasattr(image[0], "shape") and len(image[0].shape) == 2 and not is_stereo_case:
+            # convert list of images to np.ndarray
+            image = np.array(image)[:, np.newaxis, :, :]  # reshape for the stereo case
+    elif hasattr(image, "shape") and len(image.shape) == 3:
+        if not is_stereo_case:
+            image = np.array(image)[:, np.newaxis, :, :]  # reshape for stereo case
+        else:
+            # this is a single image in stereo mode -> make a list out of it
+            image = np.array(image)[np.newaxis, :, :, :]
+    elif hasattr(image, "shape") and len(image.shape) == 2:
+        if is_stereo_case:
+            raise RuntimeError("The amount of dimensions for an image must be higher than two in stereo mode!")
+        # add stereo case and make a list out of it
+        image = np.array(image)[np.newaxis, np.newaxis, :, :]
+
+    # convert to int, to avoid rounding errors
+    image = np.array(image).astype(np.int64)
+
+    # convert map by to a list
+    if not isinstance(map_by, list):
+        map_by = [map_by]
+
+    for frame_image in image:
+        non_image_attributes: Dict[int, Dict[str, Any]] = {}
+        mapped_results_stereo_dict: Dict[str, List[np.ndarray]] = {}
+        for stereo_image in frame_image:
+
+            # map object ids in the image to the used objects
+            object_ids = np.unique(stereo_image).astype(int)
+            object_ids_to_object = {}
+            for obj in get_all_blender_mesh_objects():
+                if obj.pass_index in object_ids:
+                    object_ids_to_object[obj.pass_index] = obj
+            object_ids_to_object[0] = bpy.context.scene.world
+
+            for map_by_attribute in map_by:
+
+                # create result map
+                resulting_map = np.zeros((stereo_image.shape[0], stereo_image.shape[1]), dtype=np.float64)
+
+                found_dtype = None
+                found_a_non_csv_value = False
+
+                map_by_attribute = map_by_attribute.lower()
+                current_attribute = map_by_attribute
+                if map_by_attribute == "class" or map_by_attribute == "cp_category_id":
+                    # class mode
+                    current_attribute = "cp_category_id"
+                if map_by_attribute == "instance":
+                    mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(stereo_image)
+                else:
+                    # for the current attribute remove cp_ and _csv, if present
+                    attribute = current_attribute
+                    if attribute.startswith("cp_"):
+                        attribute = attribute[len("cp_"):]
+                    # check if a default value was specified
+                    default_value_set = False
+                    default_value = None
+                    if default_values and current_attribute in default_values:
+                        default_value_set = True
+                        default_value = default_values[current_attribute]
+                    elif default_values and attribute in default_values:
+                        default_value_set = True
+                        default_value = default_values[attribute]
+
+                    for object_id in object_ids:
+                        # get current object
+                        current_obj = object_ids_to_object[object_id]
+
+                        # if the current obj has an attribute with that name -> get it
+                        if hasattr(current_obj, attribute):
+                            value = getattr(current_obj, attribute)
+                        # if the current object has a custom property with that name -> get it
+                        elif current_attribute.startswith("cp_") and attribute in current_obj:
+                            value = current_obj[attribute]
+                        elif current_attribute.startswith("cf_"):
+                            if current_attribute == "cf_basename":
+                                value = current_obj.name
+                                if "." in value:
+                                    value = value[:value.rfind(".")]
+                        elif default_value_set:
+                            # if none of the above applies use the default value
+                            value = default_value
+                        else:
+                            # if the requested current_attribute is not a custom property or an attribute
+                            # or there is a default value stored
+                            # it throws an exception
+                            raise RuntimeError(f"The obj: {current_obj.name} does not have the "
+                                               f"attribute: {current_attribute}, striped: {attribute}. "
+                                               f"Maybe try a default value.")
+
+                        # save everything which is not instance also in the .csv
+                        if isinstance(value, (int, float, np.integer, np.floating)):
+                            found_a_non_csv_value = True
+                            resulting_map[stereo_image == object_id] = value
+                            found_dtype = type(value)
+
+                        if object_id in non_image_attributes:
+                            non_image_attributes[object_id][attribute] = value
+                        else:
+                            non_image_attributes[object_id] = {attribute: value}
+
+                    if found_a_non_csv_value:
+                        resulting_map = resulting_map.astype(found_dtype)
+                        mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(resulting_map)
+
+        # combine stereo image and add to output
+        for key, list_of_stereo_images in mapped_results_stereo_dict.items():
+            if len(list_of_stereo_images) == 1:
+                return_dict.setdefault(key, []).append(list_of_stereo_images[0])
+            else:
+                stereo_image = np.stack(list_of_stereo_images, axis=0)
+                return_dict.setdefault(key, []).append(stereo_image)
+
+        # combine non image attributes
+        mappings = []
+        for object_id, attribute_dict in non_image_attributes.items():
+            # converting to int to being able to save it to a hdf5 container
+            mappings.append({"idx": int(object_id), **attribute_dict})
+        return_dict.setdefault("instance_attribute_maps", []).append(mappings)
+
+    # check if only one image was provided as input
+    if image.shape[0] == 1:
+        # remove the list in the return dict, as there was only a single input image
+        # this still works with stereo image as they are fused together in here
+        return {key: value[0] for key, value in return_dict.items()}
+    return return_dict
 
 
 class _PostProcessingUtility:

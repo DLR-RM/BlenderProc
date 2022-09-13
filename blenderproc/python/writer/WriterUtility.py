@@ -11,7 +11,8 @@ import bpy
 import mathutils
 import h5py
 
-from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
+from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels, \
+    semantic_segmentation_mapping
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth, depth2dist
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.BlenderUtility import load_image
@@ -129,7 +130,18 @@ class _WriterUtility:
                             output_file = dist2depth(output_file)
                         if "convert_to_distance" in reg_out and reg_out["convert_to_distance"]:
                             output_file = depth2dist(output_file)
-                        output_data_dict.setdefault(reg_out['key'], []).append(output_file)
+
+                        # semantic seg must be last
+                        if "is_semantic_segmentation" in reg_out and reg_out["is_semantic_segmentation"]\
+                                and "semantic_segmentation_mapping" in reg_out \
+                                and "semantic_segmentation_default_values" in reg_out:
+                            output_file = semantic_segmentation_mapping(output_file,
+                                                                        reg_out["semantic_segmentation_mapping"],
+                                                                        reg_out["semantic_segmentation_default_values"])
+                            for key, output_info in output_file.items():
+                                output_data_dict.setdefault(key, []).append(output_info)
+                        else:
+                            output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
                     # per run outputs
                     output_path = resolve_path(reg_out['path'])
