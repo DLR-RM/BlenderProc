@@ -36,7 +36,5 @@ bproc.renderer.enable_depth_output(activate_antialiasing=False)
 # render the whole pipeline
 data = bproc.renderer.render()
 
-data["colors"][0] += 100
-
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
