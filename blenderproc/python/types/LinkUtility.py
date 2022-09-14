@@ -1,4 +1,6 @@
-from typing import Union, List, Optional
+""" All link objects are captured in this class. """
+
+from typing import Union, List, Optional, Tuple
 
 import bpy
 import numpy as np
@@ -16,6 +18,10 @@ from blenderproc.python.types.InertialUtility import Inertial
 # init check
 # pylint: disable=no-member
 class Link(Entity):
+    """
+    Every instance of this class is a link which is usually part of an URDFObject. It can have objects attached to it,
+    and different types of armature bones for manipulation.
+    """
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object)
 
@@ -36,7 +42,7 @@ class Link(Entity):
         object.__setattr__(self, 'collision_local2link_mats', [])
         object.__setattr__(self, 'inertial_local2link_mat', None)
 
-    def set_parent(self, parent: "Link"):
+    def set_link_parent(self, parent: "Link"):
         """ Sets the parent of this link.
 
         :param parent: Parent link.
@@ -44,14 +50,14 @@ class Link(Entity):
         assert isinstance(parent, Link)
         object.__setattr__(self, "parent", parent)
 
-    def get_parent(self) -> "Link":
+    def get_link_parent(self) -> "Link":
         """ Returns this link's parent.
 
         :return: Parent link.
         """
         return self.parent
 
-    def set_child(self, child: "Link"):
+    def set_link_child(self, child: "Link"):
         """ Sets the child of this link.
 
         :param child: Child link.
@@ -59,7 +65,7 @@ class Link(Entity):
         assert isinstance(child, Link)
         object.__setattr__(self, "child", child)
 
-    def get_child(self) -> "Link":
+    def get_link_child(self) -> "Link":
         """ Returns this link's child.
 
         :return: Child link.
@@ -68,7 +74,7 @@ class Link(Entity):
 
     def _set_rotation_euler(self, bone: bpy.types.PoseBone,
                             rotation_euler: Union[float, List[float], Euler, np.ndarray], mode: str = "absolute"):
-        """ Rotates the bone based on euler angles. Validate values with given constraints.
+        """ Rotates the bone based on euler angles. Validates values with given constraints.
 
         :param bone: The bone to be rotated.
         :param rotation_euler: The amount of rotation (in radians). Either three floats for x, y and z axes, or a
@@ -443,9 +449,9 @@ class Link(Entity):
                 obj.blender_obj.vertex_groups[0].add(vertices, 1.0, 'REPLACE')
         bpy.ops.object.select_all(action='DESELECT')
 
-    def _create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
+    def create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
                                    use_rotation: bool = True,
-                                   chain_length: int = 0) -> (bpy.types.PoseBone, bpy.types.PoseBone, Matrix):
+                                   chain_length: int = 0) -> Tuple[bpy.types.PoseBone, bpy.types.PoseBone, Matrix]:
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
 
         :param relative_location: Relative location of the ik bone controller w.r.t. the bone's location. This can be
@@ -517,11 +523,11 @@ class Link(Entity):
                           of the previously selected mode.
         """
         if self.bone is None:
-            return
+            return None
         assert mode in ["fk", "ik"]
         if mode == "fk":  # turn off copy rotation constraints of fk bone and base bone
             if self.get_fk_ik_mode() == "fk":
-                return
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -539,7 +545,7 @@ class Link(Entity):
 
         else:  # turn off copy rotation constraints of ik bone and base bone
             if self.get_fk_ik_mode() == "ik":
-                return
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -562,7 +568,7 @@ class Link(Entity):
                 fk_bone_mat = np.array(self.fk_bone.matrix)
                 fk_bone_mat[:3, -1] = np.array(self.ik_bone_controller.matrix)[:3, -1]
                 self.ik_bone_controller.matrix = Matrix(fk_bone_mat)
-        return
+        return None
 
     def get_joint_rotation(self, frame: int = None) -> float:
         """ Get current joint rotation based on euler angles.

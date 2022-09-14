@@ -1,3 +1,5 @@
+""" All URDF objects are captured in this class. """
+
 from typing import Union, List, Optional
 import numpy as np
 from mathutils import Vector, Euler, Matrix
@@ -15,6 +17,10 @@ from blenderproc.python.types.InertialUtility import Inertial
 # init check
 # pylint: disable=no-member
 class URDFObject(Entity):
+    """
+    This class represents an URDF object, which is comprised of an armature and one or multiple links. Among others, it
+    serves as an interface for manipulation of the URDF model.
+    """
     def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
         super().__init__(bpy_object=armature)
 
@@ -93,7 +99,7 @@ class URDFObject(Entity):
 
         # remove link from the urdf instance and determine child / parent
         link_to_be_removed = self.links.pop(index)
-        child = link_to_be_removed.get_child()
+        child = link_to_be_removed.get_link_child()
 
         # remove bones and assign old bone pose to child bone
         if child is not None and link_to_be_removed.bone is not None:
@@ -112,7 +118,7 @@ class URDFObject(Entity):
             edit_bones[child.ik_bone.name].head -= offset
             edit_bones[child.ik_bone.name].tail -= offset
 
-            grand_child = child.get_child()
+            grand_child = child.get_link_child()
             while grand_child is not None:
                 edit_bones[grand_child.bone.name].head -= offset
                 edit_bones[grand_child.bone.name].tail -= offset
@@ -120,7 +126,7 @@ class URDFObject(Entity):
                 edit_bones[grand_child.fk_bone.name].tail -= offset
                 edit_bones[grand_child.ik_bone.name].head -= offset
                 edit_bones[grand_child.ik_bone.name].tail -= offset
-                grand_child = grand_child.get_child()
+                grand_child = grand_child.get_link_child()
 
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.context.view_layer.update()
@@ -128,11 +134,11 @@ class URDFObject(Entity):
             # do the same for the link objects
             for obj in child.get_all_objs():
                 obj.set_location(location=obj.get_location() - offset)
-            grand_child = child.get_child()
+            grand_child = child.get_link_child()
             while grand_child is not None:
                 for obj in grand_child.get_all_objs():
                     obj.set_location(location=obj.get_location() - offset)
-                grand_child = grand_child.get_child()
+                grand_child = grand_child.get_link_child()
 
             if link_to_be_removed == self.ik_link:
                 self._set_ik_link(None)
@@ -232,7 +238,7 @@ class URDFObject(Entity):
             relative_location = [0., 0., 0.]
         if link is None:
             link = self.links[-1]
-        ik_bone_controller, ik_bone_constraint, offset = link._create_ik_bone_controller(
+        ik_bone_controller, ik_bone_constraint, offset = link.create_ik_bone_controller(
             relative_location=relative_location, use_rotation=use_rotation, chain_length=chain_length)
         self._set_ik_bone_controller(ik_bone_controller)
         self._set_ik_bone_constraint(ik_bone_constraint)
