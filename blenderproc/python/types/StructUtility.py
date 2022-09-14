@@ -64,7 +64,8 @@ class Struct:
             return value
 
     def set_cp(self, key: str, value: Any, frame: int = None):
-        """ Sets the custom property with the given key.
+        """ Sets the custom property with the given key. The key can not be the same as any member over the stored
+        blender object.
 
         Keyframes can be only set for custom properties for the types int, float or bool.
 
@@ -73,6 +74,9 @@ class Struct:
         :param frame: The frame number which the value should be set to. If None is given, the current
                       frame number is used.
         """
+        if hasattr(self.blender_obj, key):
+            raise ValueError(f"The given key: {key} is already an attribute of the blender object and can not be "
+                             f"used as an custom property, please change the custom property name.")
         self.blender_obj[key] = value
         if isinstance(self.blender_obj[key], (float, int)):
             Utility.insert_keyframe(self.blender_obj, "[\"" + key + "\"]", frame)
