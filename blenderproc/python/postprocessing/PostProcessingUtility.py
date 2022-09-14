@@ -4,6 +4,7 @@ from typing import Union, List, Optional, Dict, Any
 
 import numpy as np
 import bpy
+import mathutils
 import cv2
 from scipy import stats
 
@@ -256,41 +257,40 @@ def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
 
                 map_by_attribute = map_by_attribute.lower()
                 current_attribute = map_by_attribute
-                if map_by_attribute == "class" or map_by_attribute == "cp_category_id":
+                if map_by_attribute in ["class", "category_id"]:
                     # class mode
-                    current_attribute = "cp_category_id"
+                    current_attribute = "category_id"
                 if map_by_attribute == "instance":
                     mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(stereo_image)
                 else:
-                    # for the current attribute remove cp_ and _csv, if present
-                    attribute = current_attribute
-                    if attribute.startswith("cp_"):
-                        attribute = attribute[len("cp_"):]
                     # check if a default value was specified
                     default_value_set = False
                     default_value = None
                     if default_values and current_attribute in default_values:
                         default_value_set = True
                         default_value = default_values[current_attribute]
-                    elif default_values and attribute in default_values:
+                    elif default_values and current_attribute in default_values:
                         default_value_set = True
-                        default_value = default_values[attribute]
+                        default_value = default_values[current_attribute]
 
                     for object_id in object_ids:
                         # get current object
                         current_obj = object_ids_to_object[object_id]
 
                         # if the current obj has an attribute with that name -> get it
-                        if hasattr(current_obj, attribute):
-                            value = getattr(current_obj, attribute)
+                        if hasattr(current_obj, current_attribute):
+                            value = getattr(current_obj, current_attribute)
                         # if the current object has a custom property with that name -> get it
-                        elif current_attribute.startswith("cp_") and attribute in current_obj:
-                            value = current_obj[attribute]
+                        elif current_attribute in current_obj:
+                            value = current_obj[current_attribute]
                         elif current_attribute.startswith("cf_"):
                             if current_attribute == "cf_basename":
                                 value = current_obj.name
                                 if "." in value:
                                     value = value[:value.rfind(".")]
+                            else:
+                                raise ValueError(f"The given attribute is a custom function: \"cf_\", but it is not "
+                                                 f"defined here: {current_attribute}")
                         elif default_value_set:
                             # if none of the above applies use the default value
                             value = default_value
@@ -298,9 +298,8 @@ def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                             # if the requested current_attribute is not a custom property or an attribute
                             # or there is a default value stored
                             # it throws an exception
-                            raise RuntimeError(f"The obj: {current_obj.name} does not have the "
-                                               f"attribute: {current_attribute}, striped: {attribute}. "
-                                               f"Maybe try a default value.")
+                            raise RuntimeError(f"The object \"{current_obj.name}\" does not have the "
+                                               f"attribute: \"{current_attribute}\". Maybe try a default value.")
 
                         # save everything which is not instance also in the .csv
                         if isinstance(value, (int, float, np.integer, np.floating)):
@@ -308,14 +307,20 @@ def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                             resulting_map[stereo_image == object_id] = value
                             found_dtype = type(value)
 
+                        if isinstance(value, (mathutils.Vector, mathutils.Matrix)):
+                            value = np.array(value)
+
                         if object_id in non_image_attributes:
-                            non_image_attributes[object_id][attribute] = value
+                            non_image_attributes[object_id][current_attribute] = value
                         else:
-                            non_image_attributes[object_id] = {attribute: value}
+                            non_image_attributes[object_id] = {current_attribute: value}
 
                     if found_a_non_csv_value:
                         resulting_map = resulting_map.astype(found_dtype)
                         mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(resulting_map)
+                    elif "instance" not in map_by:
+                        raise ValueError(f"The map_by key \"{map_by_attribute}\" requires that the instance map is "
+                                         f"stored as well in the output. Change it to: {map_by + ['instance']}")
 
         # combine stereo image and add to output
         for key, list_of_stereo_images in mapped_results_stereo_dict.items():
