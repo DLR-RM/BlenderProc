@@ -408,9 +408,10 @@ def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "
         "version": "2.0.0"
     })
 
-def enable_semantic_segmentation(map_by: Union[str, List[str]] = "class", output_dir: Optional[str] = None,
-                                 default_values: Optional[Dict[str, Any]] = None,
-                                 file_prefix: str = "segmap_", output_key: str = "segmap"):
+
+def enable_segmentation_output(map_by: Union[str, List[str]] = "class", output_dir: Optional[str] = None,
+                               default_values: Optional[Dict[str, Any]] = None,
+                               file_prefix: str = "segmap_", output_key: str = "segmap"):
     # give all objects an id, background is always zero
     for index, obj in enumerate(get_all_blender_mesh_objects()):
         obj.pass_index = index + 1
@@ -446,6 +447,7 @@ def enable_semantic_segmentation(map_by: Union[str, List[str]] = "class", output
 
     # set the threshold low to avoid noise in alpha materials
     bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = 0.05
+
 
 def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: str = "diffuse_",
                                 output_key: str = "diffuse"):
