@@ -25,7 +25,7 @@ authors:
   - name: Markus Knauer
     orcid: 0000-0001-8229-9410
     affiliation: 1
-  - name: Klaus Strobl
+  - name: Klaus H. Strobl
     orcid: 0000-0001-8123-0606
     affiliation: 1
   - name: Tomáš Hodaň
@@ -58,8 +58,8 @@ Deep learning thrives on the existence of vast and diverse datasets.
 Collecting those in the real world is often either too complicated or expensive. 
 With `BlenderProc2`, we present a tool enabling the generation of vast and diverse datasets with a few lines of Python code.
 A particular focus is placed on the acknowledgment of the simulation-to-real gap and how to tackle this particular challenge in the dataset generation process.
-Even though the first version of `BlenderProc` was one of the first tools to generate photo-realistic, synthetic datasets, many more exist nowadays, compared in \autoref{tab:features} [@NDDS; @Stillleben; @nvisii; @habitat].
-In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-to-use python API, whereas the first version relied on a Yaml-based configuration approach [@denninger2019blenderproc; @denninger2020blenderproc].
+Even though the first version of `BlenderProc` was one of the first tools to generate photo-realistic, synthetic datasets, many more tools exist nowadays, compared in \autoref{tab:features} [@NDDS; @Stillleben; @nvisii; @habitat].
+In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-to-use python API, whereas the first version used a YAML-based configuration approach [@denninger2019blenderproc; @denninger2020blenderproc].
 
 ![An apple randomly sampled in the 3D FRONT dataset [@Front3D].](images/front_3d_object_sampling.jpg){ width=50% }
 
@@ -91,18 +91,17 @@ real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign \\
 \end{table}
 
 
-There are two groups of data generators.
-The first group is focused on speed and can generate several dozen images per second. 
-However, they generally rely on game engines to produce their images. These game engines focus on producing an image that can trick the human mind into believing a scene is real, which is not the same as generating a real image. 
-In contrast to that in the second group, the generation speed is not the focus but the final image's realism. 
-This realism is achieved by using a path tracer that traces the path of each light beam from a light source to the camera.
+There are two groups of visual data generators.
+The first group is focused on speed and can generate dozens of images per second by typically relying on game engines to produce their images. These game engines, however, focus on producing an image that can trick the human mind into believing that a scene is real, which is not the same as generating a real image. 
+In contrast to that, in the second group, we focus on the realism of the final images instead of on their generation speed. 
+This realism is achieved by using a path tracer that follows the path of light beams from a light source to the camera.
 Physical material properties then determine how the light interacts with the 3D scene and appears in the image.
 
-The most significant advantage of `BlenderProc2` is its large toolbox, as it provides tools to set, for example, the intrinsic parameters of your camera or import a complete URDF model to specify a robot.
-Further, it is possible to construct rooms randomly and drop or place objects from the BOP datasets in them, allowing the training of networks to succeed in the task of 6D pose estimation. 
-One can also emulate an active stereo sensor with a random or designed noise pattern or sample random items on surfaces in an existing dataset, where `BlenderProc2` provides tools to extract the correct surface per object category.
+The most significant advantage of `BlenderProc2` is its large toolbox, as it provides tools to set, for example, the intrinsic parameters of a camera (including its lens distortion) or to import a complete URDF model to specify a robot.
+Further, it is possible to construct random rooms and automatically drop or place objects from the BOP datasets in them, e.g. allowing the training of networks to succeed in the task of 6D pose estimation. 
+It is also possible to emulate an active stereo sensor with a random or designed pattern of structured light or to sample random items or surfaces within an existing dataset, where `BlenderProc2` provides tools to extract the correct surface per object category.
 Finally, we do not only support the rendering of color, depth, distance, surface normals, and semantic segmentation. 
-It is also possible to render optical flow and normalized object coordinate (NOCS) and then save the data either in the `hdf5` container or in the BOP or COCO format.
+`BlenderProc2` is also capable of rendering optical flow and normalized object coordinates (NOCS) and then save the data either in the `hdf5` container or in the BOP or COCO formats.
 
 # Acknowledgements
 
