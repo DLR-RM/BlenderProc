@@ -147,8 +147,9 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
                 raise Exception("The iterative distortion algorithm is unstable.")
 
         # update undistorted projection
-        x -= (x_ - P_und[0, :])  # * factor
-        y -= (y_ - P_und[1, :])  # * factor
+        # this can not be changed to x -=, for whatever reasons
+        x = x - (x_ - P_und[0, :])  # * factor
+        y = y - (y_ - P_und[1, :])  # * factor
 
     # u and v are now the pixel coordinates on the undistorted image that
     # will distort into the row,column coordinates of the distorted image
