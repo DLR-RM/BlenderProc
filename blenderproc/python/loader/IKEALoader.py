@@ -103,6 +103,7 @@ def load_ikea(data_dir: str = 'resources/IKEA', obj_categories: Optional[Union[L
             bpy.context.view_layer.objects.active = obj.blender_obj
             # scale object down
             bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')
             bpy.ops.transform.resize(value=(scale, scale, scale))
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.ops.object.select_all(action='DESELECT')
