@@ -50,7 +50,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
         temp_dir = Utility.get_temporary_directory()
 
     scale = 0.001 if mm2m else 1
-    has_external_texture = bop_dataset_name in ["ycbv", "ruapc"]
+    has_external_texture = bop_dataset_name in ["ycbv", "ruapc", "hope"]
     if obj_ids is None:
         obj_ids = []
     allow_duplication = obj_ids or sample_objects
