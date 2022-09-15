@@ -1,8 +1,10 @@
 from typing import Union
 import numpy as np
+import os
 import bpy
 
 import blenderproc.python.camera.CameraUtility as CameraUtility
+from blenderproc.python.utility.Utility import Utility
 
 
 def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
@@ -170,6 +172,193 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
             filtered_img = image
 
     return filtered_img
+
+
+def add_gaussian_shifts(image: Union[list, np.ndarray], std: float = 1/2.0) -> Union[list, np.ndarray]:
+    """
+    Randomly shifts the pixels of the input depth image in x and y direction.
+
+    :param image: Input depth image(s)
+    :param std: Standard deviation of pixel shifts, defaults to 1/2.0
+    :return: Augmented images
+    """
+    
+    if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
+        return [add_gaussian_shifts(img, std=std) for img in image]
+    
+    import cv2
+
+    rows, cols = image.shape 
+    gaussian_shifts = np.random.normal(0, std, size=(rows, cols, 2))
+    gaussian_shifts = gaussian_shifts.astype(np.float32)
+
+    # creating evenly spaced coordinates  
+    xx = np.linspace(0, cols-1, cols)
+    yy = np.linspace(0, rows-1, rows)
+
+    # get xpixels and ypixels 
+    xp, yp = np.meshgrid(xx, yy)
+
+    xp = xp.astype(np.float32)
+    yp = yp.astype(np.float32)
+
+    xp_interp = np.minimum(np.maximum(xp + gaussian_shifts[:, :, 0], 0.0), cols)
+    yp_interp = np.minimum(np.maximum(yp + gaussian_shifts[:, :, 1], 0.0), rows)
+
+    depth_interp = cv2.remap(image, xp_interp, yp_interp, cv2.INTER_LINEAR)
+
+    return depth_interp
+    
+
+def _filterDisp(disp, dot_pattern_, invalid_disp_):
+
+    size_filt_ = 9
+
+    xx = np.linspace(0, size_filt_-1, size_filt_)
+    yy = np.linspace(0, size_filt_-1, size_filt_)
+
+    xf, yf = np.meshgrid(xx, yy)
+
+    xf = xf - int(size_filt_ / 2.0)
+    yf = yf - int(size_filt_ / 2.0)
+
+    sqr_radius = (xf**2 + yf**2)
+    vals = sqr_radius * 1.2**2 
+
+    vals[vals==0] = 1 
+    weights_ = 1 /vals  
+
+    fill_weights = 1 / ( 1 + sqr_radius)
+    fill_weights[sqr_radius > 9] = -1.0 
+
+    disp_rows, disp_cols = disp.shape 
+    dot_pattern_rows, dot_pattern_cols = dot_pattern_.shape
+
+    lim_rows = np.minimum(disp_rows - size_filt_, dot_pattern_rows - size_filt_)
+    lim_cols = np.minimum(disp_cols - size_filt_, dot_pattern_cols - size_filt_)
+
+    center = int(size_filt_ / 2.0)
+
+    window_inlier_distance_ = 0.2
+
+    out_disp = np.ones_like(disp) * invalid_disp_
+
+    interpolation_map = np.zeros_like(disp)
+
+    for r in range(0, lim_rows):
+
+        for c in range(0, lim_cols):
+
+            if dot_pattern_[r+center, c+center] > 0:
+                                
+                # c and r are the top left corner 
+                window  = disp[r:r+size_filt_, c:c+size_filt_] 
+                dot_win = dot_pattern_[r:r+size_filt_, c:c+size_filt_] 
+  
+                valid_dots = dot_win[window < invalid_disp_]
+
+                n_valids = np.sum(valid_dots) / 255.0 
+                n_thresh = np.sum(dot_win) / 255.0 
+
+                if n_valids > n_thresh / 1.2: 
+
+                    mean = np.mean(window[window < invalid_disp_])
+
+                    diffs = np.abs(window - mean)
+                    diffs = np.multiply(diffs, weights_)
+
+                    cur_valid_dots = np.multiply(np.where(window<invalid_disp_, dot_win, 0), 
+                                                 np.where(diffs < window_inlier_distance_, 1, 0))
+
+                    n_valids = np.sum(cur_valid_dots) / 255.0
+
+                    if n_valids > n_thresh / 1.2: 
+                    
+                        accu = window[center, center] 
+
+                        assert(accu < invalid_disp_)
+
+                        out_disp[r+center, c + center] = round((accu)*8.0) / 8.0
+
+                        interpolation_window = interpolation_map[r:r+size_filt_, c:c+size_filt_]
+                        disp_data_window     = out_disp[r:r+size_filt_, c:c+size_filt_]
+
+                        substitutes = np.where(interpolation_window < fill_weights, 1, 0)
+                        interpolation_window[substitutes==1] = fill_weights[substitutes ==1 ]
+
+                        disp_data_window[substitutes==1] = out_disp[r+center, c+center]
+
+    return out_disp
+
+def add_kinect_v1_noise(image: Union[list, np.ndarray], baseline_m: float = 0.075, pattern_path: str = 'kinect-pattern_3x3.png', visualize: bool = False) -> Union[list, np.ndarray]:
+    """
+    Adds Kinect v1 noise to depth images.
+    Code adapted from https://github.com/ankurhanda/simkinect 
+    Method: Intrinsic Scene Properties from a Single RGB-D Image, CVPR13, Barron et al.
+
+    :param image: depth image(s) in meters
+    :param baseline_m: baseline of the sensor in meters
+    :param pattern_path: Path to IR pattern from the Kinect V1 or other structured light sensors 
+    :param visualize: whether to visualize the depth images
+    :return: Noisy depth image(s)
+    """
+    
+    if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
+        return [add_kinect_v1_noise(img, baseline_m=baseline_m, pattern_path=pattern_path, visualize=visualize) for img in image]
+    
+    import cv2
+    
+    if not os.path.exists(pattern_path):
+        pattern_path = os.path.join(Utility.get_temporary_directory(), "kinect-pattern_3x3.png")
+        if not os.path.exists(pattern_path):
+            import urllib.request
+            import ssl
+            ssl._create_default_https_context = ssl._create_unverified_context
+            urllib.request.urlretrieve("https://github.com/ankurhanda/simkinect/blob/master/data/kinect-pattern_3x3.png?raw=true", pattern_path)
+            print('Loading kinect pattern 3x3')        
+    # reading the image directly in gray with 0 as input 
+    dot_pattern_ = cv2.imread(pattern_path, 0)
+    
+    # tile the original pattern for higher resolution depth images
+    tile_size = ((image.shape[0] - 1) // 480 + 1, (image.shape[1] - 1) // 640 + 1)
+    dot_pattern_ = np.tile(dot_pattern_, tile_size)
+
+    # various variables to handle the noise modelling
+    scale_factor  = 100     # converting depth from m to cm 
+    focal_length  = CameraUtility.get_intrinsics_as_K_matrix()[0,0]   # focal length of the camera used 
+    invalid_disp_ = 99999999.9
+
+    # Our depth images were scaled by 5000 to store in png format so dividing to get 
+    # depth in meters 
+    depth = image.astype('float')
+    h, w = depth.shape 
+
+    depth_interp = add_gaussian_shifts(depth)
+
+    disp_= focal_length * baseline_m / (depth_interp + 1e-10)
+    depth_f = np.round(disp_ * 8.0)/8.0
+
+    out_disp = _filterDisp(depth_f, dot_pattern_, invalid_disp_)
+
+    depth = focal_length * baseline_m / out_disp
+    depth[out_disp == invalid_disp_] = 0 
+
+    # The depth here needs to converted to cms so scale factor is introduced 
+    # though often this can be tuned from [100, 200] to get the desired banding / quantisation effects 
+    noisy_depth = (35130/np.round((35130/np.round(depth*scale_factor)) + np.random.normal(size=(h, w))*(1.0/6.0) + 0.5))/scale_factor 
+
+    if visualize:
+        # Displaying side by side the orignal depth map and the noisy depth map with barron noise cvpr 2013 model
+        cv2.namedWindow('Adding Kinect Noise', cv2.WINDOW_AUTOSIZE)
+        # cv2.imshow('Adding Kinect Noise', np.hstack((depth_uint16, noisy_depth)))
+        cv2.imshow('Adding Kinect Noise', np.hstack((image.astype('uint16'), noisy_depth.astype('uint16'))))
+        key = cv2.waitKey(0)
+
+        # Press esc or 'q' to close the image window
+        if key & 0xFF == ord('q') or key == 27:
+            cv2.destroyAllWindows()
+        
+    return noisy_depth
 
 
 def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
