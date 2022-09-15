@@ -8,7 +8,8 @@ import bpy
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 
 
-def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]] = None, **kwargs) -> List[MeshObject]:
+def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]] = None,
+             use_legacy_obj_import: bool = False, **kwargs) -> List[MeshObject]:
     """ Import all objects for the given file and returns the loaded objects
 
     In .obj files a list of objects can be saved in.
@@ -17,6 +18,8 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
     :param filepath: the filepath to the location where the data is stored
     :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading
                            (the dict is updated in this function)
+    :param use_legacy_obj_import: If this is true the old legacy obj importer in python is used. It is slower, but
+                                  it correctly imports the textures in the ShapeNet dataset.
     :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
     :return: The list of loaded mesh objects.
     """
@@ -35,7 +38,10 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
         previously_selected_objects = bpy.context.selected_objects
         if filepath.endswith('.obj'):
             # load an .obj file:
-            bpy.ops.wm.obj_import(filepath=filepath, **kwargs)
+            if use_legacy_obj_import:
+                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+            else:
+                bpy.ops.wm.obj_import(filepath=filepath, **kwargs)
         elif filepath.endswith('.ply'):
             # load a .ply mesh
             bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
