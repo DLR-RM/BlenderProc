@@ -1,11 +1,16 @@
+""" Allows the sampling in the SUNCG scenes """
 import random
 from typing import Tuple, List, Optional
+
 import numpy as np
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class SuncgPointInRoomSampler:
+    """
+    Allows the sampling in the SUNCG scenes
+    """
 
     def __init__(self, suncg_objects: List[MeshObject]):
         """

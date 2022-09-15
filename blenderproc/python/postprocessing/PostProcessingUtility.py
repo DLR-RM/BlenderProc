@@ -1,14 +1,18 @@
-from typing import Union, Optional
+"""A set of function to post process the produced images."""
+
+from typing import Union, List
+
 import numpy as np
-import os
-import bpy
+import cv2
+from scipy import stats
 
-import blenderproc.python.camera.CameraUtility as CameraUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.camera import CameraUtility
 
 
-def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
+def dist2depth(dist: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
     """
+    Maps a distance image to depth image, also works with a list of images.
+
     :param dist: The distance data.
     :return: The depth data
     """
@@ -17,10 +21,10 @@ def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
 
     if isinstance(dist, list) or hasattr(dist, "shape") and len(dist.shape) > 2:
         return [dist2depth(img) for img in dist]
-    
+
     K = CameraUtility.get_intrinsics_as_K_matrix()
-    f, cx, cy = K[0,0], K[0,2], K[1,2]
-    
+    f, cx, cy = K[0, 0], K[0, 2], K[1, 2]
+
     xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
 
     # coordinate distances to principal point
@@ -34,8 +38,10 @@ def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     return depth
 
 
-def depth2dist(depth: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
+def depth2dist(depth: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
     """
+    Maps a depth image to distance image, also works with a list of images.
+
     :param depth: The depth data.
     :return: The distance data
     """
@@ -46,7 +52,7 @@ def depth2dist(depth: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
         return [depth2dist(img) for img in depth]
 
     K = CameraUtility.get_intrinsics_as_K_matrix()
-    f, cx, cy = K[0,0], K[0,2], K[1,2]
+    f, cx, cy = K[0, 0], K[0, 2], K[1, 2]
 
     xs, ys = np.meshgrid(np.arange(depth.shape[1]), np.arange(depth.shape[0]))
 
@@ -76,27 +82,27 @@ def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarra
     if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
         return [remove_segmap_noise(img) for img in image]
 
-    noise_indices = PostProcessingUtility._determine_noisy_pixels(image)
+    noise_indices = _PostProcessingUtility.determine_noisy_pixels(image)
 
     for index in noise_indices:
-        neighbors = PostProcessingUtility._get_pixel_neighbors(image, index[0], index[
+        neighbors = _PostProcessingUtility.get_pixel_neighbors(image, index[0], index[
             1])  # Extracting the indices surrounding 3x3 neighbors
         curr_val = image[index[0]][index[1]][0]  # Current value of the noisy pixel
 
         neighbor_vals = [image[neighbor[0]][neighbor[1]] for neighbor in
                          neighbors]  # Getting the values of the neighbors
-        neighbor_vals = np.unique(
-            np.array([np.array(index) for index in neighbor_vals]))  # Getting the unique values only
+        # Getting the unique values only
+        neighbor_vals = np.unique(np.array([np.array(index) for index in neighbor_vals]))
 
-        min = 10000000000
+        min_val = 10000000000
         min_idx = 0
 
         # Here we iterate through the unique values of the neighbor and find the one closest to the current noisy value
         for idx, n in enumerate(neighbor_vals):
             # Is this closer than the current closest value?
-            if n - curr_val <= min:
+            if n - curr_val <= min_val:
                 # If so, update
-                min = n - curr_val
+                min_val = n - curr_val
                 min_idx = idx
 
         # Now that we have found the closest value, assign it to the noisy value
@@ -108,9 +114,9 @@ def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarra
 
 def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges_only: bool = True,
                      rgb: bool = False) -> Union[list, np.ndarray]:
-    """ Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a replica
-        of the other). This could be desired for corrupting rendered depth maps to appear more realistic. Also trims the
-        redundant channels if they exist.
+    """ Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a
+        replica of the other). This could be desired for corrupting rendered depth maps to appear more realistic.
+        Also trims the redundant channels if they exist.
 
         :param image: Input image or list of images
         :param filter_size: Filter size, should be an odd number.
@@ -120,8 +126,6 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
         :return: filtered image
     """
 
-    import cv2
-    from scipy import stats
     if rgb:
         if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
             return [oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
@@ -129,8 +133,8 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
         intensity_img = (np.sum(image, axis=2) / 3.0)
 
         neighbors = np.array(
-            PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size, return_list=True))
-        neighbors_intensity = PostProcessingUtility._get_pixel_neighbors_stacked(intensity_img, filter_size)
+            _PostProcessingUtility.get_pixel_neighbors_stacked(image, filter_size, return_list=True))
+        neighbors_intensity = _PostProcessingUtility.get_pixel_neighbors_stacked(intensity_img, filter_size)
 
         mode_intensity = stats.mode(neighbors_intensity, axis=2)[0].reshape(image.shape[0], image.shape[1])
 
@@ -155,7 +159,7 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
         if len(image.shape) == 3 and image.shape[2] > 1:
             image = image[:, :, 0]
 
-        filtered_img = stats.mode(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size), axis=2)[0]
+        filtered_img = stats.mode(_PostProcessingUtility.get_pixel_neighbors_stacked(image, filter_size), axis=2)[0]
         filtered_img = filtered_img.reshape(filtered_img.shape[0], filtered_img.shape[1])
 
         if edges_only:
@@ -270,15 +274,15 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
         return [trim_redundant_channels(ele) for ele in image]
 
     if hasattr(image, "shape") and len(image.shape) == 3 and image.shape[2] == 3:
-        image = image[:, :, 0]  # All channles have the same value, so just extract any single channel
+        image = image[:, :, 0]  # All channels have the same value, so just extract any single channel
 
     return image
 
 
-class PostProcessingUtility:
+class _PostProcessingUtility:
 
     @staticmethod
-    def _get_pixel_neighbors(data: np.ndarray, i: int, j: int) -> np.ndarray:
+    def get_pixel_neighbors(data: np.ndarray, i: int, j: int) -> np.ndarray:
         """ Returns the valid neighbor pixel indices of the given pixel.
 
         :param data: The whole image data.
@@ -295,8 +299,8 @@ class PostProcessingUtility:
         return np.array(neighbors)
 
     @staticmethod
-    def _get_pixel_neighbors_stacked(img: np.ndarray, filter_size: int = 3,
-                                     return_list: bool = False) -> Union[list, np.ndarray]:
+    def get_pixel_neighbors_stacked(img: np.ndarray, filter_size: int = 3,
+                                    return_list: bool = False) -> Union[list, np.ndarray]:
         """
         Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.
         The neighbors are represented by shifting the input image in all directions required to simulate the filter.
@@ -331,20 +335,20 @@ class PostProcessingUtility:
         return np.dstack(tuple(channels))
 
     @staticmethod
-    def _isin(element, test_elements, assume_unique=False, invert=False):
+    def is_in(element, test_elements, assume_unique=False, invert=False):
         """ As np.isin is only available after v1.13 and blender is using 1.10.1 we have to implement it manually. """
         element = np.asarray(element)
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
     @staticmethod
-    def _determine_noisy_pixels(image: np.ndarray) -> np.ndarray:
+    def determine_noisy_pixels(image: np.ndarray) -> np.ndarray:
         """
         :param image: The image data.
-        :return: a list of 2D indices that correspond to the noisy pixels. One criteria of finding \
+        :return: a list of 2D indices that correspond to the noisy pixels. One criterion of finding \
                               these pixels is to use a histogram and find the pixels with frequencies lower than \
                               a threshold, e.g. 100.
         """
-        # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation
+        # The map was scaled to be ranging along the entire 16-bit color depth, and this is the scaling down operation
         # that should remove some noise or deviations
         image = ((image * 37) / (65536))  # assuming 16 bit color depth
         image = image.astype(np.int32)
@@ -356,6 +360,6 @@ class PostProcessingUtility:
         hist = sorted((np.asarray((b, counts)).T), key=lambda x: x[1])
         # Assuming the stray pixels wouldn't have a count of more than 100
         noise_vals = [h[0] for h in hist if h[1] <= 100]
-        noise_indices = np.argwhere(PostProcessingUtility._isin(image, noise_vals))
+        noise_indices = np.argwhere(_PostProcessingUtility.is_in(image, noise_vals))
 
         return noise_indices

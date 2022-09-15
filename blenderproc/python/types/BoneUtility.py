@@ -1,11 +1,13 @@
-import bpy
+""" Utility functions to manage the connections between nodes. """
 
 from typing import List, Optional
+
+import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
-def get_armature_from_bone(bone_name: str) -> MeshObject:
+def get_armature_from_bone(bone_name: str) -> Optional[MeshObject]:
     """ Returns the armature that holds a specified bone.
 
     :param bone_name: Name of the bone.
@@ -15,6 +17,7 @@ def get_armature_from_bone(bone_name: str) -> MeshObject:
         if obj.type == "ARMATURE":
             if obj.pose.bones.get(bone_name) is not None:
                 return obj
+    return None
 
 
 def add_constraint_if_not_existing(bone: bpy.types.PoseBone, constraint_name: str = "",
@@ -34,8 +37,7 @@ def add_constraint_if_not_existing(bone: bpy.types.PoseBone, constraint_name: st
         c = bone.constraints.new(constraint_name.upper().replace(' ', '_'))
         c.name = custom_constraint_name
         return c
-    else:
-        return None
+    return None
 
 
 def set_rotation_constraint(bone: bpy.types.PoseBone, x_limits: Optional[List[float]] = None,
@@ -224,6 +226,7 @@ def get_constraint(bone: bpy.types.PoseBone, constraint_name: str = "") -> Optio
     """
     if constraint_name in bone.constraints.keys():
         return bone.constraints[constraint_name]
+    return None
 
 
 def get_location_constraint(bone: bpy.types.PoseBone) -> Optional[bpy.types.Constraint]:

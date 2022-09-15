@@ -1,3 +1,5 @@
+"""Loading the Pix3D dataset."""
+
 import json
 import os
 import random
@@ -19,12 +21,12 @@ def load_pix3d(used_category: str, data_path: str = 'resources/pix3d') -> List[M
     :return: The list of loaded mesh objects.
     """
     data_path = resolve_path(data_path)
-    files_with_fitting_category = Pix3DLoader.get_files_with_category(used_category, data_path)
+    files_with_fitting_category = _Pix3DLoader.get_files_with_category(used_category, data_path)
 
     selected_obj = random.choice(files_with_fitting_category)
     loaded_obj = load_obj(selected_obj)
 
-    Pix3DLoader._correct_materials(loaded_obj)
+    _Pix3DLoader.correct_materials(loaded_obj)
 
     # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
     # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
@@ -40,7 +42,7 @@ def load_pix3d(used_category: str, data_path: str = 'resources/pix3d') -> List[M
     return loaded_obj
 
 
-class Pix3DLoader:
+class _Pix3DLoader:
     """
     This loads an object from Pix3D based on the given category of objects to use.
 
@@ -64,12 +66,12 @@ class Pix3DLoader:
         path_to_annotation_file = os.path.join(data_path, "pix3d.json")
         if os.path.exists(path_to_annotation_file):
             files = []
-            path_to_category_file = os.path.join(data_path, "category_{}_paths.txt".format(used_category.strip()))
+            path_to_category_file = os.path.join(data_path, f"category_{used_category.strip()}_paths.txt")
             if os.path.exists(path_to_category_file):
-                with open(path_to_category_file, "r") as f:
+                with open(path_to_category_file, "r", encoding="utf-8") as f:
                     files = f.read().split("\n")
             else:
-                with open(path_to_annotation_file, "r") as f:
+                with open(path_to_annotation_file, "r", encoding="utf-8") as f:
                     loaded_data = json.load(f)
                     for block in loaded_data:
                         if "category" in block:
@@ -78,15 +80,14 @@ class Pix3DLoader:
                                 files.append(block["model"])
                 # remove doubles
                 files = list(set(files))
-                with open(path_to_category_file, "w") as f:
+                with open(path_to_category_file, "w", encoding="utf-8") as f:
                     f.write("\n".join(files))
             files = [os.path.join(data_path, file) for file in files]
             return files
-        else:
-            raise Exception("The annotation file could not be found: {}".format(path_to_annotation_file))
+        raise FileNotFoundError(f"The annotation file could not be found: {path_to_annotation_file}")
 
     @staticmethod
-    def _correct_materials(objects: List[MeshObject]):
+    def correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
         :param objects: The list of mesh objects where the material maybe wrong.
@@ -99,7 +100,7 @@ class Pix3DLoader:
                 texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
                     principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
-                    # find the image texture node which is connect to alpha
+                    # find the image texture node which is connected to alpha
                     node_connected_to_the_alpha = None
                     for node_links in principled_bsdf.inputs["Alpha"].links:
                         if "ShaderNodeTexImage" in node_links.from_node.bl_idname:
@@ -109,6 +110,6 @@ class Pix3DLoader:
                         invert_node = material.new_node("ShaderNodeInvert")
                         invert_node.inputs["Fac"].default_value = 1.0
                         material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
-                                                                  invert_node.inputs["Color"],
-                                                                  invert_node.outputs["Color"],
-                                                                  principled_bsdf.inputs["Alpha"])
+                                                                   invert_node.inputs["Color"],
+                                                                   invert_node.outputs["Color"],
+                                                                   principled_bsdf.inputs["Alpha"])

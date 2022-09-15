@@ -1,12 +1,15 @@
+"""Loads the 3D FRONT and FUTURE dataset"""
+
 import json
 import os
 import warnings
 from math import radians
 from typing import List, Mapping
+from urllib.request import urlretrieve
+
 import bpy
 import mathutils
 import numpy as np
-from urllib.request import urlretrieve
 
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
@@ -33,25 +36,26 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
     front_3D_texture_path = resolve_path(front_3D_texture_path)
 
     if not os.path.exists(json_path):
-        raise Exception("The given path does not exists: {}".format(json_path))
+        raise FileNotFoundError(f"The given path does not exists: {json_path}")
     if not json_path.endswith(".json"):
-        raise Exception("The given path does not point to a .json file: {}".format(json_path))
+        raise FileNotFoundError(f"The given path does not point to a .json file: {json_path}")
     if not os.path.exists(future_model_path):
-        raise Exception("The 3D future model path does not exist: {}".format(future_model_path))
+        raise FileNotFoundError(f"The 3D future model path does not exist: {future_model_path}")
 
     # load data from json file
-    with open(json_path, "r") as json_file:
+    with open(json_path, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
 
     if "scene" not in data:
-        raise Exception("There is no scene data in this json file: {}".format(json_path))
+        raise ValueError(f"There is no scene data in this json file: {json_path}")
 
-    created_objects = Front3DLoader._create_mesh_objects_from_file(data, front_3D_texture_path,
+    created_objects = _Front3DLoader.create_mesh_objects_from_file(data, front_3D_texture_path,
                                                                    ceiling_light_strength, label_mapping, json_path)
 
-    all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
+    all_loaded_furniture = _Front3DLoader.load_furniture_objs(data, future_model_path,
+                                                              lamp_light_strength, label_mapping)
 
-    created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
+    created_objects += _Front3DLoader.move_and_duplicate_furniture(data, all_loaded_furniture)
 
     # add an identifier to the obj
     for obj in created_objects:
@@ -59,7 +63,8 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
 
     return created_objects
 
-class Front3DLoader:
+
+class _Front3DLoader:
     """ Loads the 3D-Front dataset.
 
     https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
@@ -74,7 +79,7 @@ class Front3DLoader:
     """
 
     @staticmethod
-    def _extract_hash_nr_for_texture(given_url: str, front_3D_texture_path: str) -> str:
+    def extract_hash_nr_for_texture(given_url: str, front_3D_texture_path: str) -> str:
         """
         Constructs the path of the hash folder and checks if the texture is available if not it is downloaded
 
@@ -98,7 +103,7 @@ class Front3DLoader:
         return hash_folder
 
     @staticmethod
-    def _get_used_image(hash_folder_path: str, saved_image_dict: Mapping[str, bpy.types.Texture]) -> bpy.types.Texture:
+    def get_used_image(hash_folder_path: str, saved_image_dict: Mapping[str, bpy.types.Texture]) -> bpy.types.Texture:
         """
         Returns a texture object for the given hash_folder_path, the textures are stored in the saved_image_dict,
         to avoid that texture are loaded multiple times
@@ -118,8 +123,8 @@ class Front3DLoader:
         return ret_used_image
 
     @staticmethod
-    def _create_mesh_objects_from_file(data: dict, front_3D_texture_path: str, ceiling_light_strength: float,
-                                       label_mapping: LabelIdMapping, json_path: str) -> List[MeshObject]:
+    def create_mesh_objects_from_file(data: dict, front_3D_texture_path: str, ceiling_light_strength: float,
+                                      label_mapping: LabelIdMapping, json_path: str) -> List[MeshObject]:
         """
         This creates for a given data json block all defined meshes and assigns the correct materials.
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
@@ -175,7 +180,7 @@ class Front3DLoader:
             if used_mat:
                 if used_mat["texture"]:
                     # extract the has folder is from the url and download it if necessary
-                    hash_folder = Front3DLoader._extract_hash_nr_for_texture(used_mat["texture"], front_3D_texture_path)
+                    hash_folder = _Front3DLoader.extract_hash_nr_for_texture(used_mat["texture"], front_3D_texture_path)
                     if hash_folder in used_materials_based_on_texture and "ceiling" not in used_obj_name.lower():
                         mat = used_materials_based_on_texture[hash_folder]
                         obj.add_material(mat)
@@ -184,20 +189,22 @@ class Front3DLoader:
                         mat = MaterialLoaderUtility.create(name=used_obj_name + "_material")
                         principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                         if used_mat["color"]:
-                            principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
+                            principled_node.inputs["Base Color"].default_value = mathutils.Vector(
+                                used_mat["color"]) / 255.0
 
-                        used_image = Front3DLoader._get_used_image(hash_folder, saved_images)
+                        used_image = _Front3DLoader.get_used_image(hash_folder, saved_images)
                         mat.set_principled_shader_value("Base Color", used_image)
 
                         if "ceiling" in used_obj_name.lower():
-                            mat.make_emissive(ceiling_light_strength, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
+                            mat.make_emissive(ceiling_light_strength,
+                                              emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
 
                         if used_mat["normaltexture"]:
                             # get the used image based on the normal texture path
                             # extract the has folder is from the url and download it if necessary
-                            hash_folder = Front3DLoader._extract_hash_nr_for_texture(used_mat["normaltexture"],
+                            hash_folder = _Front3DLoader.extract_hash_nr_for_texture(used_mat["normaltexture"],
                                                                                      front_3D_texture_path)
-                            used_image = Front3DLoader._get_used_image(hash_folder, saved_normal_images)
+                            used_image = _Front3DLoader.get_used_image(hash_folder, saved_normal_images)
 
                             # create normal texture
                             normal_texture = MaterialLoaderUtility.create_image_node(mat.nodes, used_image, True)
@@ -222,7 +229,8 @@ class Front3DLoader:
                         principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
                         # if the object is a ceiling add some light output
                         if "ceiling" in used_obj_name.lower():
-                            mat.make_emissive(ceiling_light_strength, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
+                            mat.make_emissive(ceiling_light_strength,
+                                              emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
                         else:
                             used_materials_based_on_color[used_hash] = mat
 
@@ -280,7 +288,7 @@ class Front3DLoader:
                 mesh.uv_layers.new(name="new_uv_layer")
                 mesh.uv_layers[-1].data.foreach_set("uv", used_uvs)
             else:
-                warnings.warn(f"This mesh {obj.name} does not have a specified uv map!")
+                warnings.warn(f"This mesh {obj.get_name()} does not have a specified uv map!")
 
             # this update converts the upper data into a mesh
             mesh.update()
@@ -288,14 +296,15 @@ class Front3DLoader:
             # the generation might fail if the data does not line up
             # this is not used as even if the data does not line up it is still able to render the objects
             # We assume that not all meshes in the dataset do conform with the mesh standards set in blender
-            #result = mesh.validate(verbose=False)
-            #if result:
+            # result = mesh.validate(verbose=False)
+            # if result:
             #    raise Exception("The generation of the mesh: {} failed!".format(used_obj_name))
 
         return created_objects
 
     @staticmethod
-    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, label_mapping: LabelIdMapping) -> List[MeshObject]:
+    def load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float,
+                            label_mapping: LabelIdMapping) -> List[MeshObject]:
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
@@ -351,11 +360,11 @@ class Front3DLoader:
                         if len(principled_node) == 0 and is_lamp:
                             # this material has already been transformed
                             continue
-                        elif len(principled_node) == 1:
+                        if len(principled_node) == 1:
                             principled_node = principled_node[0]
                         else:
-                            raise Exception("The amount of principle nodes can not be more than 1, "
-                                            "for obj: {}!".format(obj.get_name()))
+                            raise ValueError(f"The amount of principle nodes can not be more than 1, "
+                                             f"for obj: {obj.get_name()}!")
 
                         # Front3d .mtl files contain emission color which make the object mistakenly emissive
                         # => Reset the emission color
@@ -377,14 +386,14 @@ class Front3DLoader:
         return all_objs
 
     @staticmethod
-    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[MeshObject]:
+    def move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[MeshObject]:
         """
         Move and duplicate the furniture depending on the data in the data json dir.
         After loading each object gets a location based on the data in the json file. Some objects are used more than
         once these are duplicated and then placed.
 
         :param data: json data dir. Should contain "scene", which should contain "room"
-        :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
+        :param all_loaded_furniture: all objects which have been loaded in load_furniture_objs
         :return: The list of loaded mesh objects.
         """
         # this rotation matrix rotates the given quaternion into the blender coordinate system

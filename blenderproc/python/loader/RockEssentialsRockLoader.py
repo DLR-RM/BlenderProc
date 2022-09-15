@@ -1,9 +1,11 @@
+"""Loading the rock essential dataset: https://blendermarket.com/products/the-rock-essentials"""
+
 import os
 from random import choice
-import numpy as np
-from typing import List, Union
+from typing import List, Union, Optional
 
 import bpy
+import numpy as np
 from mathutils import Vector
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -13,23 +15,29 @@ class RockEssentialsRockLoader:
     """ Loads rocks/cliffs from a specified .blend Rocks Essentials file. """
 
     @staticmethod
-    def load_rocks(path: str, subsec_num: int, objects: list = [], sample_objects: bool = False, amount: int = None) -> List[MeshObject]:
+    def load_rocks(path: str, subsec_num: int, objects: Optional[List[str]] = None,
+                   sample_objects: bool = False, amount: int = None) -> List[MeshObject]:
         """ Loads rocks from the given blend file.
 
         :param path: Path to a .blend file containing desired rock/cliff objects in //Object// section.
-        :param subsec_num: Number of a corresponding cell (batch) in `rocks` list in configuration. Used for name generation.
-        :param objects: List of rock-/cliff-object names to be loaded. If not specified then `amount` property is used for consequential loading.
-        :param sample_objects: Toggles the uniform sampling of objects to load. Takes into account `objects` and `amount` parameters. Requires 'amount' param to be defined.
-        :param amount: Amount of rock-/cliff-object to load. If not specified, the amount will be set to the amount of suitable
-                       objects in the current section of a blend file. Must be bigger than 0.
+        :param subsec_num: Number of a corresponding cell (batch) in `rocks` list in configuration.
+                           Used for name generation.
+        :param objects: List of rock-/cliff-object names to be loaded. If not specified then `amount` property
+                        is used for consequential loading.
+        :param sample_objects: Toggles the uniform sampling of objects to load. Takes into account `objects` and
+                               `amount` parameters. Requires 'amount' param to be defined.
+        :param amount: Amount of rock-/cliff-object to load. If not specified, the amount will be set to
+                       the amount of suitable objects in the current section of a blend file. Must be bigger than 0.
         :return: List of loaded objects.
         """
         loaded_objects = []
         obj_types = ["Rock", "Cliff"]
         amount_defined = False
+        if objects is None:
+            objects = []
 
         obj_list = []
-        with bpy.data.libraries.load(path) as (data_from, data_to):
+        with bpy.data.libraries.load(path) as (data_from, _):
             # if list of names is empty
             if not objects:
                 # get list of rocks suitable for loading - objects that are rocks or cliffs
@@ -53,8 +61,8 @@ class RockEssentialsRockLoader:
                 obj = choice(obj_list)
             else:
                 obj = obj_list[i % len(obj_list)]
-            bpy.ops.wm.append(filepath=os.path.join(path, "/Object", obj), filename=obj,
-                              directory=os.path.join(path + "/Object"))
+            bpy.ops.wm.append(filepath=os.path.join(path, "Object", obj), filename=obj,
+                              directory=os.path.join(path, "Object"))
             loaded_obj = MeshObject(bpy.context.scene.objects[obj])
             # set custom name for easier tracking in the scene
             loaded_obj.set_name(obj + "_" + str(subsec_num) + "_" + str(i))
@@ -64,8 +72,10 @@ class RockEssentialsRockLoader:
         return loaded_objects
 
     @staticmethod
-    def set_rocks_properties(objects: List[MeshObject], physics: bool = False, render_levels: int = 3, high_detail_mode: bool = False, 
-                             scale: Union[Vector, np.ndarray, list] = [1, 1, 1], reflection_amount: float = None, reflection_roughness: float = None, hsv: list = None):
+    def set_rocks_properties(objects: List[MeshObject], physics: bool = False, render_levels: int = 3,
+                             high_detail_mode: bool = False, scale: Optional[Union[Vector, np.ndarray, list]] = None,
+                             reflection_amount: Optional[float] = None, reflection_roughness: Optional[float] = None,
+                             hsv: Optional[List[float]] = None):
         """ Sets rocks properties in accordance to the given parameters.
 
         :param objects: List of loaded rock mesh objects.
@@ -75,8 +85,12 @@ class RockEssentialsRockLoader:
         :param scale: Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension.
         :param reflection_amount: Reflection texture value. Default: rock-specific. Range: [0,1]
         :param reflection_roughness: Roughness texture value. Default: rock-specific. Range: [0,1]
-        :param hsv: Hue-Saturation-Value parameters of the HSV node. (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2]. Default: rock-specific.
+        :param hsv: Hue-Saturation-Value parameters of the HSV node. (3 values).
+                    Range: H: [0, 1], S: [0, 2], V: [0, 2]. Default: rock-specific.
         """
+
+        if scale is None:
+            scale = [1.0, 1.0, 1.0]
 
         for obj in objects:
             # set physics parameter

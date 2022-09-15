@@ -1,20 +1,19 @@
+""" Download cc textures from ambientCG.com """
+
 import shutil
-from sys import version_info, path
-
-if version_info.major == 2:
-    raise Exception("This script only works with python3.x!")
-
-import os
-import json
-import requests
 import argparse
 from pathlib import Path
+
+import requests
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 
 def cli():
-    parser = argparse.ArgumentParser("Downloads textures from cc0textures.com")
+    """
+    Command line function
+    """
+    parser = argparse.ArgumentParser("Downloads textures from ambientCG.com")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
     args = parser.parse_args()
 

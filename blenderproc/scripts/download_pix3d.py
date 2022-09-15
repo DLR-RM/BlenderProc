@@ -1,16 +1,18 @@
-from sys import version_info, path
-
-if version_info.major == 2:
-    raise Exception("This script only works with python3.x!")
+""" Download the Pix3D dataset """
 
 import os
-from urllib.request import urlretrieve, build_opener, install_opener
+import argparse
 import shutil
 
+from urllib.request import urlretrieve, build_opener, install_opener
+
 from blenderproc.python.utility.SetupUtility import SetupUtility
-import argparse
+
 
 def cli():
+    """
+    Command line function
+    """
     parser = argparse.ArgumentParser("Downloads the Pix3D dataset")
     parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
     args = parser.parse_args()
@@ -32,11 +34,12 @@ def cli():
 
     # unzip the zip file
     print("Unzip the zip file.")
-    SetupUtility.extract_file(pix3d_dir, zip_file_path) 
+    SetupUtility.extract_file(pix3d_dir, zip_file_path)
 
     os.remove(zip_file_path)
     shutil.rmtree(os.path.join(pix3d_dir, "img"))
     shutil.rmtree(os.path.join(pix3d_dir, "mask"))
+
 
 if __name__ == "__main__":
     cli()

@@ -1,9 +1,11 @@
+"""Loading the content of .blend files"""
+
 import re
 from typing import List, Union, Optional
 
 import bpy
 
-from blenderproc.python.utility.BlenderUtility import collect_all_orphan_datablocks
+from blenderproc.python.utility.BlenderUtility import collect_all_orphan_data_blocks
 from blenderproc.python.types.EntityUtility import Entity, convert_to_entity_subclass
 from blenderproc.python.utility.Utility import resolve_path
 
@@ -12,30 +14,32 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                data_blocks: Union[List[str], str] = "objects", link: bool = False) -> List[Entity]:
     """
     Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
-    bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
+    bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/data_block.
 
     :param path: Path to a .blend file.
-    :param obj_types: The type of objects to load. This parameter is only relevant when `data_blocks` is set to `"objects"`.
-                      Available options are: ['mesh', 'curve', 'hair', 'armature', 'empty', 'light', 'camera']
-    :param name_regrex: Regular expression representing a name pattern of entities' (everything that can be stored in a .blend
-                     file's folders, see Blender's documentation for bpy.types.ID for more info) names.
-    :param data_blocks: The datablock or a list of datablocks which should be loaded from the given .blend file.
-                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
-
-    :param link: whether to link instead of a append datablocs from .blend file. Linked objects can not be modifed.
+    :param obj_types: The type of objects to load. This parameter is only relevant when `data_blocks`
+                      is set to `"objects"`. Available options are: ['mesh', 'curve', 'hair', 'armature',
+                      'empty', 'light', 'camera']
+    :param name_regrex: Regular expression representing a name pattern of entities' (everything that can be
+                        stored in a .blend file's folders, see Blender's documentation for bpy.types.ID
+                        for more info) names.
+    :param data_blocks: The data block or a list of data blocks which should be loaded from the given .blend file.
+                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights',
+                        'materials', 'meshes', 'objects', 'textures']
+    :param link: whether to link instead of append data blocks from .blend file. Linked objects can not be modified.
     :return: The list of loaded mesh objects.
     """
     if obj_types is None:
         obj_types = ["mesh", "empty"]
     # get a path to a .blend file
     path = resolve_path(path)
-    data_blocks = BlendLoader._validate_and_standardizes_configured_list(data_blocks, BlendLoader.valid_datablocks,
+    data_blocks = _BlendLoader.validate_and_standardizes_configured_list(data_blocks, _BlendLoader.valid_data_blocks,
                                                                          "data block")
-    obj_types = BlendLoader._validate_and_standardizes_configured_list(obj_types, BlendLoader.valid_object_types,
+    obj_types = _BlendLoader.validate_and_standardizes_configured_list(obj_types, _BlendLoader.valid_object_types,
                                                                        "object type")
 
     # Remember which orphans existed beforehand
-    orphans_before = collect_all_orphan_datablocks()
+    orphans_before = collect_all_orphan_data_blocks()
 
     # Start importing blend file. All objects that should be imported need to be copied from "data_from" to "data_to"
     with bpy.data.libraries.load(path, link=link) as (data_from, data_to):
@@ -88,24 +92,26 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
         else:
             loaded_objects.extend(getattr(data_to, data_block))
 
-    # As some loaded objects were deleted again due to their type, we need also to remove the dependent datablocks that were also loaded and are now orphans
-    BlendLoader._purge_added_orphans(orphans_before, data_to)
+    # As some loaded objects were deleted again due to their type, we need also to remove the dependent
+    # data blocks that were also loaded and are now orphans
+    _BlendLoader.purge_added_orphans(orphans_before, data_to)
     return loaded_objects
 
 
-class BlendLoader:
-    valid_datablocks = [collection.lower() for collection in dir(bpy.data) if
+class _BlendLoader:
+    valid_data_blocks = [collection.lower() for collection in dir(bpy.data) if
                         isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
     valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil',
                           'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
 
     @staticmethod
-    def _validate_and_standardizes_configured_list(config_value: Union[list, str], allowed_elements: list,
-                                                   element_name: str) -> list:
+    def validate_and_standardizes_configured_list(config_value: Union[list, str], allowed_elements: list,
+                                                  element_name: str) -> list:
         """ Makes sure the given config value is a list, is lower case and only consists of valid elements.
 
         :param config_value: The configured value that should be standardized and validated.
-        :param allowed_elements: A list of valid elements. If one configured element is not contained in this list an exception is thrown.
+        :param allowed_elements: A list of valid elements. If one configured element is not contained in this list
+                                 an exception is thrown.
         :param element_name: How one element is called. Used to create an error message.
         :return: The standardized and validated config value.
         """
@@ -122,20 +128,22 @@ class BlendLoader:
         return config_value
 
     @staticmethod
-    def _purge_added_orphans(orphans_before, data_to):
+    def purge_added_orphans(orphans_before, data_to):
         """ Removes all orphans that did not exists before loading the blend file.
 
-        :param orphans_before: A dict of sets containing orphans of all kind of datablocks that existed before loading the blend file.
-        :param data_to: The list of objects that were loaded on purpose and should not be removed, even when they are orphans.
+        :param orphans_before: A dict of sets containing orphans of all kind of data_blocks that existed before
+                               loading the blend file.
+        :param data_to: The list of objects that were loaded on purpose and should not be removed, even when
+                        they are orphans.
         """
         purge_orphans = True
         while purge_orphans:
             purge_orphans = False
-            orphans_after = collect_all_orphan_datablocks()
-            # Go over all datablock types
-            for collection_name in orphans_after.keys():
+            orphans_after = collect_all_orphan_data_blocks()
+            # Go over all data_block types
+            for collection_name, orphan_block in orphans_after.items():
                 # Go over all orphans of that type that were added due to this loader
-                for orphan in orphans_after[collection_name].difference(orphans_before[collection_name]):
+                for orphan in orphan_block.difference(orphans_before[collection_name]):
                     # Check whether this orphan was loaded on purpose
                     if orphan not in getattr(data_to, collection_name):
                         # Remove the orphan

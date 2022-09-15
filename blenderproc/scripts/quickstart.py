@@ -1,4 +1,15 @@
+"""
+The quickstart example:
+
+1. A monkey object is created plus a light, which illuminates the monkey.
+2. A light is created, placed and gets a proper energy level set
+3. The camera is placed in the scene to look at the monkey
+4. A color image is rendered
+5. The rendered image is saved in an .hdf5 file container
+
+"""
 import blenderproc as bproc
+
 import numpy as np
 
 bproc.init()
@@ -18,5 +29,5 @@ bproc.camera.add_camera_pose(cam_pose)
 # Render the scene
 data = bproc.renderer.render()
 
-# Write the rendering into an hdf5 file
+# Write the rendering into a hdf5 file
 bproc.writer.write_hdf5("output/", data)

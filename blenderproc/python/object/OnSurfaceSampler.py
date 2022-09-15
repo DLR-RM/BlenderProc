@@ -1,11 +1,12 @@
+"""Sampling objects on a surface."""
+
 from typing import Callable, List, Optional, Dict
 
-import bpy
 import mathutils
+import numpy as np
 
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-import numpy as np
 
 
 def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshObject,
@@ -38,7 +39,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
         up_direction /= np.linalg.norm(up_direction)
 
     surface_bounds = surface.get_bound_box()
-    surface_height = max([up_direction.dot(corner) for corner in surface_bounds])
+    surface_height = max(up_direction.dot(corner) for corner in surface_bounds)
 
     # cache to fasten collision detection
     bvh_cache: Dict[str, mathutils.bvhtree.BVHTree] = {}
@@ -59,20 +60,20 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
                 print("Collision detected, retrying!")
                 continue
 
-            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
+            if not _OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
                 print("Not above surface, retrying!")
                 continue
 
-            OnSurfaceSampler.drop(obj, up_direction, surface_height)
+            _OnSurfaceSampler.drop(obj, up_direction, surface_height)
             # Remove bvh cache, as object has changed
             if obj.get_name() in bvh_cache:
                 del bvh_cache[obj.get_name()]
 
-            if not OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
+            if not _OnSurfaceSampler.check_above_surface(obj, surface, up_direction, check_all_bb_corners_over_surface):
                 print("Not above surface after drop, retrying!")
                 continue
 
-            if not OnSurfaceSampler.check_spacing(obj, placed_objects, min_distance, max_distance):
+            if not _OnSurfaceSampler.check_spacing(obj, placed_objects, min_distance, max_distance):
                 print("Bad spacing after drop, retrying!")
                 continue
 
@@ -80,21 +81,20 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
                 print("Collision detected after drop, retrying!")
                 continue
 
-            print("Placed object \"{}\" successfully at {} after {} iterations!".format(obj.get_name(),
-                                                                                        obj.get_location(), i + 1))
+            print(f"Placed object \"{obj.get_name()}\" successfully at {obj.get_location()} after {i + 1} iterations!")
             placed_objects.append(obj)
 
             placed_successfully = True
             break
 
         if not placed_successfully:
-            print("Giving up on {}, deleting...".format(obj.get_name()))
+            print(f"Giving up on {obj.get_name()}, deleting...")
             obj.delete()
 
     return placed_objects
 
 
-class OnSurfaceSampler:
+class _OnSurfaceSampler:
 
     @staticmethod
     def check_above_surface(obj: MeshObject, surface: MeshObject, up_direction: np.ndarray,
@@ -114,10 +114,8 @@ class OnSurfaceSampler:
                                                         check_no_objects_in_between=False):
                     return False
             return True
-        else:
-            center = np.mean(obj.get_bound_box(), axis=0)
-            return surface.position_is_above_object(center + up_direction, -up_direction,
-                                                    check_no_objects_in_between=False)
+        center = np.mean(obj.get_bound_box(), axis=0)
+        return surface.position_is_above_object(center + up_direction, -up_direction, check_no_objects_in_between=False)
 
     @staticmethod
     def check_spacing(obj: MeshObject, placed_objects: List[MeshObject], min_distance: float, max_distance: float) \
@@ -149,6 +147,6 @@ class OnSurfaceSampler:
         :param surface_height: Height of the surface above its origin.
         """
         obj_bounds = obj.get_bound_box()
-        obj_height = min([up_direction.dot(corner) for corner in obj_bounds])
+        obj_height = min(up_direction.dot(corner) for corner in obj_bounds)
 
         obj.set_location(obj.get_location() - up_direction * (obj_height - surface_height))

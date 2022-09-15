@@ -1,13 +1,21 @@
-from typing import Union
-import numpy as np
-from mathutils import Vector, Euler, Color, Matrix, Quaternion
+""" All inertial objects are captured in this class. """
 
+from typing import Union
+
+import numpy as np
 import bpy
+from mathutils import Matrix
 
 from blenderproc.python.types.EntityUtility import Entity
 
 
+# as all attributes are accessed via the __getattr__ and __setattr__ in this module, we need to remove the member
+# init check
+# pylint: disable=no-member
 class Inertial(Entity):
+    """
+    Every instance of this class is an inertial object which is usually part of an URDFObject.
+    """
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object=bpy_object)
 
@@ -65,3 +73,5 @@ class Inertial(Entity):
         :param hide_object: Determines whether the object should be hidden in rendering.
         """
         self.blender_obj.hide_render = hide_object
+
+# pylint: enable=no-member

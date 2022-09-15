@@ -1,3 +1,5 @@
+"""Allows to add a light property to the surface of objects. The surfaces are only indirectly lighting up the scene."""
+
 from typing import List
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -38,7 +40,3 @@ def light_surface(objects: List[MeshObject], emission_strength: float = 10.0, em
             material.set_cp("is_lamp", True)
 
             material.make_emissive(emission_strength=emission_strength, emission_color=emission_color)
-
-
-
-

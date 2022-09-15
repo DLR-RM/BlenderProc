@@ -1,17 +1,17 @@
+""" TestsPathManager keeps track of all used paths in the tests and allows setting them via environment variables """
+
 import os
-from os.path import dirname, abspath, join, exists
+from os.path import abspath, join, exists
 from blenderproc.python.utility.Utility import resolve_path, Utility
 
 
-class TestsPathManager(object):
+class TestsPathManager:
     """
     The TestsPathManager keeps track of all used paths in the tests and allows setting them via environment variables.
     To allow testing in environments, where the paths are not the default ones.
     """
 
     def __init__(self):
-        """
-        """
         self._main_folder = Utility.blenderproc_root
 
         # for the default resource folder, this one should always be available
@@ -24,8 +24,8 @@ class TestsPathManager(object):
 
     def _add_parameter(self, param_name: str, default_path: str, environment_key: str):
         """
-        Adds an parameter to the object, the name of the parameter is defined by the param_name. The default_path is
-        only used if it exists, if it does not exists the environment_key is used. An error is thrown if both do
+        Adds a parameter to the object, the name of the parameter is defined by the param_name. The default_path is
+        only used if it exists, if it does not exist the environment_key is used. An error is thrown if both do
         not exist.
 
         :param param_name: Name of the new parameter
@@ -42,5 +42,3 @@ class TestsPathManager(object):
 
 
 test_path_manager = TestsPathManager()
-
-

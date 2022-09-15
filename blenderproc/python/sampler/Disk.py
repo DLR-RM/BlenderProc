@@ -1,11 +1,14 @@
-from typing import Union, List
+""" Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space) """
+
+from typing import Union, List, Optional
 
 import mathutils
 import numpy as np
 from mathutils import Vector
 
 
-def disk(center: Union[Vector, np.ndarray, List[float]], radius: float, rotation: Union[Vector, np.ndarray, List[float]] = None,
+def disk(center: Union[Vector, np.ndarray, List[float]], radius: float,
+         rotation: Optional[Union[Vector, np.ndarray, List[float]]] = None,
          sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> np.ndarray:
     """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
         with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
@@ -34,15 +37,18 @@ def disk(center: Union[Vector, np.ndarray, List[float]], radius: float, rotation
 
     :param center: Center (in 3d space) of a 2d geometrical shape to sample from.
     :param radius: The radius of the disk.
-    :param rotation: List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used for
-                     sampling in 3d space.
-    :param sample_from: Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample from.
+    :param rotation: List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure
+                     used for sampling in 3d space.
+    :param sample_from: Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to
+                        sample from.
     :param start_angle: Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller than
-                        end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 degrees.
-                        Angle increases in the counterclockwise direction from the positive direction of X axis.
+                        end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than
+                        180 degrees. Angle increases in the counterclockwise direction from the positive direction
+                        of X axis.
     :param end_angle: End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than
-                      start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 degrees.
-                      Angle increases in the counterclockwise direction from the positive direction of X axis.
+                      start_angle. Arc's/sector's inner angle (between start and end) must be less or equal
+                      than 180 degrees. Angle increases in the counterclockwise direction from the positive
+                      direction of X axis.
     :return: A random point sampled point on a circle/disk/arc/sector.
     """
     if rotation is None:
@@ -69,12 +75,12 @@ def disk(center: Union[Vector, np.ndarray, List[float]], radius: float, rotation
     else:
         raise Exception("Unknown mode of operation: " + sample_from)
 
-    sampled_point = Disk._sample_point(magnitude)
+    sampled_point = _Disk.sample_point(magnitude)
 
     # sample a point until it falls into the defined sector/arc
     if sample_from in ["arc", "sector"]:
-        while not all([not Disk._is_clockwise(start_vec, sampled_point), Disk._is_clockwise(end_vec, sampled_point)]):
-            sampled_point = Disk._sample_point(magnitude)
+        while not all([not _Disk.is_clockwise(start_vec, sampled_point), _Disk.is_clockwise(end_vec, sampled_point)]):
+            sampled_point = _Disk.sample_point(magnitude)
 
     # get rotation
     rot_mat = mathutils.Euler(rotation, 'XYZ').to_matrix()
@@ -84,10 +90,10 @@ def disk(center: Union[Vector, np.ndarray, List[float]], radius: float, rotation
     return location
 
 
-class Disk:
+class _Disk:
 
     @staticmethod
-    def _sample_point(magnitude: float) -> np.ndarray:
+    def sample_point(magnitude: float) -> np.ndarray:
         """ Samples a 3d point from a two-dimensional normal distribution with the third dim equal to 0.
 
         :param magnitude: Scaling factor of a radius.
@@ -102,8 +108,8 @@ class Disk:
         return sampled_point
 
     @staticmethod
-    def _is_clockwise(rel_point: Union[Vector, np.ndarray, List[float]],
-                      sampled_point: Union[Vector, np.ndarray, List[float]]) -> bool:
+    def is_clockwise(rel_point: Union[Vector, np.ndarray, List[float]],
+                     sampled_point: Union[Vector, np.ndarray, List[float]]) -> bool:
         """ Checks if the sampled_point is in the clockwise direction in relation to the rel_point.
 
         :param rel_point: Point relative to which the test is performed.

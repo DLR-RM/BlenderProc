@@ -1,5 +1,10 @@
+""" All default values are stored here. """
+
 
 class DefaultConfig:
+    """
+    All the default config values are specified in this class.
+    """
     # Camera
     resolution_x = 512
     resolution_y = 512
@@ -38,6 +43,7 @@ class DefaultConfig:
     world_background = [0.05, 0.05, 0.05]
 
     # Setup
-    default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18", "scikit-image==0.19.2", "pypng==0.0.20", "scipy==1.7.3",
-                            "matplotlib==3.5.1", "pytz==2021.1", "h5py==3.6.0", "Pillow==8.3.2", "opencv-contrib-python==4.5.5.64", "scikit-learn==1.0.2",
-                            "python-dateutil==2.8.2"]
+    default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18",
+                            "scikit-image==0.19.2", "pypng==0.0.20", "scipy==1.7.3", "matplotlib==3.5.1",
+                            "pytz==2021.1", "h5py==3.6.0", "Pillow==8.3.2", "opencv-contrib-python==4.5.5.64",
+                            "scikit-learn==1.0.2", "python-dateutil==2.8.2"]

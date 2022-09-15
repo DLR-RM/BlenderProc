@@ -1,8 +1,10 @@
-from typing import Union, List, Optional
-import numpy as np
-from mathutils import Vector, Euler, Color, Matrix, Quaternion
+""" All link objects are captured in this class. """
+
+from typing import Union, List, Optional, Tuple
 
 import bpy
+import numpy as np
+from mathutils import Vector, Euler, Matrix
 
 from blenderproc.python.utility.Utility import KeyFrame
 from blenderproc.python.types.EntityUtility import Entity
@@ -12,7 +14,14 @@ from blenderproc.python.types.BoneUtility import get_constraint, set_ik_constrai
 from blenderproc.python.types.InertialUtility import Inertial
 
 
+# as all attributes are accessed via the __getattr__ and __setattr__ in this module, we need to remove the member
+# init check
+# pylint: disable=no-member
 class Link(Entity):
+    """
+    Every instance of this class is a link which is usually part of an URDFObject. It can have objects attached to it,
+    and different types of armature bones for manipulation.
+    """
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object)
 
@@ -33,7 +42,7 @@ class Link(Entity):
         object.__setattr__(self, 'collision_local2link_mats', [])
         object.__setattr__(self, 'inertial_local2link_mat', None)
 
-    def set_parent(self, parent: "Link"):
+    def set_link_parent(self, parent: "Link"):
         """ Sets the parent of this link.
 
         :param parent: Parent link.
@@ -41,14 +50,14 @@ class Link(Entity):
         assert isinstance(parent, Link)
         object.__setattr__(self, "parent", parent)
 
-    def get_parent(self) -> "Link":
+    def get_link_parent(self) -> "Link":
         """ Returns this link's parent.
 
         :return: Parent link.
         """
         return self.parent
 
-    def set_child(self, child: "Link"):
+    def set_link_child(self, child: "Link"):
         """ Sets the child of this link.
 
         :param child: Child link.
@@ -56,7 +65,7 @@ class Link(Entity):
         assert isinstance(child, Link)
         object.__setattr__(self, "child", child)
 
-    def get_child(self) -> "Link":
+    def get_link_child(self) -> "Link":
         """ Returns this link's child.
 
         :return: Child link.
@@ -142,8 +151,8 @@ class Link(Entity):
 
         if not isinstance(location, Vector):
             location = Vector(location)
-        assert self.ik_bone_controller is not None, f"No ik bone chain created. Please run " \
-                                                    f"'urdf_object.create_ik_bone_controller()' first!"
+        assert self.ik_bone_controller is not None, "No ik bone chain created. Please run " \
+                                                    "'urdf_object.create_ik_bone_controller()' first!"
 
         # first: determine offset to base frame
         self.ik_bone_controller.location = Vector([0., 0., 0.])
@@ -153,7 +162,7 @@ class Link(Entity):
         offset_mat = self.ik_bone_controller.matrix
 
         # offset location by ik offset to base bones
-        location = location + (self.ik_bone.head - self.bone.head)
+        location += (self.ik_bone.head - self.bone.head)
         location = Vector([location[0], location[1], location[2], 1.])
 
         # move to current frame
@@ -200,12 +209,12 @@ class Link(Entity):
         """
         c = get_constraint(bone=bone, constraint_name=constraint_name)
         if c is not None:
-            min_value = eval(f"c.min_{axis.lower()}")
-            max_value = eval(f"c.max_{axis.lower()}")
+            min_value = {"x": c.min_x, "y": c.min_y, "z": c.min_z}[axis.lower()]
+            max_value = {"x": c.max_x, "y": c.max_y, "z": c.max_z}[axis.lower()]
             print(f"Clipping {value} to be in range {min_value}, {max_value}")
             if value < min_value:
                 return min_value
-            elif value > max_value:
+            if value > max_value:
                 return max_value
         return value
 
@@ -349,8 +358,7 @@ class Link(Entity):
         if self.visuals:
             return [bone_mat @ (self.link2bone_mat.inverted() @ visual_local2link_mat) for visual_local2link_mat in
                     self.visual_local2link_mats]
-        else:
-            return None
+        return None
 
     def get_collision_local2world_mats(self) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the collision parts.
@@ -364,8 +372,7 @@ class Link(Entity):
         if self.collisions:
             return [bone_mat @ (self.link2bone_mat.inverted() @ collision_local2link_mat) for collision_local2link_mat
                     in self.collision_local2link_mats]
-        else:
-            return None
+        return None
 
     def get_inertial_local2world_mat(self) -> Matrix:
         """Returns the transformation matrix from world to the inertial part.
@@ -378,8 +385,7 @@ class Link(Entity):
             bone_mat = self.bone.matrix
         if self.inertial is not None:
             return bone_mat @ (self.link2bone_mat.inverted() @ self.inertial_local2link_mat)
-        else:
-            return None
+        return None
 
     def get_all_objs(self):
         """ Returns all meshes of this link.
@@ -443,9 +449,9 @@ class Link(Entity):
                 obj.blender_obj.vertex_groups[0].add(vertices, 1.0, 'REPLACE')
         bpy.ops.object.select_all(action='DESELECT')
 
-    def _create_ik_bone_controller(self, relative_location: Union[List[float], Vector] = [0., 0., 0.],
-                                   use_rotation=True,
-                                   chain_length=0) -> (bpy.types.PoseBone, bpy.types.PoseBone, Matrix):
+    def create_ik_bone_controller(self, relative_location: Optional[Union[List[float], Vector]] = None,
+                                   use_rotation: bool = True,
+                                   chain_length: int = 0) -> Tuple[bpy.types.PoseBone, bpy.types.PoseBone, Matrix]:
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
 
         :param relative_location: Relative location of the ik bone controller w.r.t. the bone's location. This can be
@@ -455,6 +461,10 @@ class Link(Entity):
                              parents.
         :return: Constraint and control bone.
         """
+
+        if relative_location is None:
+            relative_location = [0., 0., 0.]
+
         bpy.ops.object.select_all(action='DESELECT')
         bpy.context.view_layer.objects.active = self.armature
         bpy.ops.object.mode_set(mode='EDIT')
@@ -504,20 +514,20 @@ class Link(Entity):
         """
         return self.fk_ik_mode
 
-    def switch_fk_ik_mode(self, mode="fk", keep_pose=True):
+    def switch_fk_ik_mode(self, mode: str = "fk", keep_pose: bool = True):
         """ Switches between forward and inverse kinematics mode. Will do this automatically when switching between e.g.
             `set_rotation_euler_fk()` and `set_rotation_euler_ik()`.
 
         :param mode: One of ["fk", "ik"] denoting forward or inverse kinematics mode.
-        :param keep_pose: If specified, will keep the pose when switching modes. Otherwise will return to the old pose
+        :param keep_pose: If specified, will keep the pose when switching modes. Otherwise, will return to the old pose
                           of the previously selected mode.
         """
         if self.bone is None:
-            return
+            return None
         assert mode in ["fk", "ik"]
         if mode == "fk":  # turn off copy rotation constraints of fk bone and base bone
             if self.get_fk_ik_mode() == "fk":
-                return True
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -535,7 +545,7 @@ class Link(Entity):
 
         else:  # turn off copy rotation constraints of ik bone and base bone
             if self.get_fk_ik_mode() == "ik":
-                return True
+                return None
             bpy.context.view_layer.update()
 
             if keep_pose:
@@ -558,6 +568,7 @@ class Link(Entity):
                 fk_bone_mat = np.array(self.fk_bone.matrix)
                 fk_bone_mat[:3, -1] = np.array(self.ik_bone_controller.matrix)[:3, -1]
                 self.ik_bone_controller.matrix = Matrix(fk_bone_mat)
+        return None
 
     def get_joint_rotation(self, frame: int = None) -> float:
         """ Get current joint rotation based on euler angles.
@@ -593,3 +604,5 @@ class Link(Entity):
         visual_matrix = M1 @ M_parent_data @ M2 @ M_pose
 
         return visual_matrix.to_quaternion().angle
+
+# pylint: enable=no-member

@@ -1,6 +1,8 @@
+""" All URDF objects are captured in this class. """
+
 from typing import Union, List, Optional
 import numpy as np
-from mathutils import Vector, Euler, Color, Matrix, Quaternion
+from mathutils import Vector, Euler, Matrix
 
 import bpy
 
@@ -11,7 +13,14 @@ from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.types.InertialUtility import Inertial
 
 
+# as all attributes are accessed via the __getattr__ and __setattr__ in this module, we need to remove the member
+# init check
+# pylint: disable=no-member
 class URDFObject(Entity):
+    """
+    This class represents an URDF object, which is comprised of an armature and one or multiple links. Among others, it
+    serves as an interface for manipulation of the URDF model.
+    """
     def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
         super().__init__(bpy_object=armature)
 
@@ -90,7 +99,7 @@ class URDFObject(Entity):
 
         # remove link from the urdf instance and determine child / parent
         link_to_be_removed = self.links.pop(index)
-        child = link_to_be_removed.get_child()
+        child = link_to_be_removed.get_link_child()
 
         # remove bones and assign old bone pose to child bone
         if child is not None and link_to_be_removed.bone is not None:
@@ -109,7 +118,7 @@ class URDFObject(Entity):
             edit_bones[child.ik_bone.name].head -= offset
             edit_bones[child.ik_bone.name].tail -= offset
 
-            grand_child = child.get_child()
+            grand_child = child.get_link_child()
             while grand_child is not None:
                 edit_bones[grand_child.bone.name].head -= offset
                 edit_bones[grand_child.bone.name].tail -= offset
@@ -117,7 +126,7 @@ class URDFObject(Entity):
                 edit_bones[grand_child.fk_bone.name].tail -= offset
                 edit_bones[grand_child.ik_bone.name].head -= offset
                 edit_bones[grand_child.ik_bone.name].tail -= offset
-                grand_child = grand_child.get_child()
+                grand_child = grand_child.get_link_child()
 
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.context.view_layer.update()
@@ -125,11 +134,11 @@ class URDFObject(Entity):
             # do the same for the link objects
             for obj in child.get_all_objs():
                 obj.set_location(location=obj.get_location() - offset)
-            grand_child = child.get_child()
+            grand_child = child.get_link_child()
             while grand_child is not None:
                 for obj in grand_child.get_all_objs():
                     obj.set_location(location=obj.get_location() - offset)
-                grand_child = grand_child.get_child()
+                grand_child = grand_child.get_link_child()
 
             if link_to_be_removed == self.ik_link:
                 self._set_ik_link(None)
@@ -210,7 +219,8 @@ class URDFObject(Entity):
         object.__setattr__(self, "ik_link", ik_link)
 
     def create_ik_bone_controller(self, link: Optional[Link] = None,
-                                  relative_location: Union[List[float], Vector] = [0., 0., 0.], use_rotation: bool = True,
+                                  relative_location: Optional[Union[List[float], Vector]] = None,
+                                  use_rotation: bool = True,
                                   chain_length: int = 0):
         """ Creates an ik bone controller and a corresponding constraint bone for the respective link.
 
@@ -224,9 +234,11 @@ class URDFObject(Entity):
         if self.ik_bone_controller is not None:
             raise NotImplementedError("URDFObject already has an ik bone controller. More than one ik controllers are "
                                       "currently not supported!")
+        if relative_location is None:
+            relative_location = [0., 0., 0.]
         if link is None:
             link = self.links[-1]
-        ik_bone_controller, ik_bone_constraint, offset = link._create_ik_bone_controller(
+        ik_bone_controller, ik_bone_constraint, offset = link.create_ik_bone_controller(
             relative_location=relative_location, use_rotation=use_rotation, chain_length=chain_length)
         self._set_ik_bone_controller(ik_bone_controller)
         self._set_ik_bone_constraint(ik_bone_constraint)
@@ -358,11 +370,10 @@ class URDFObject(Entity):
                   f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
                   f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
             return True
-        else:
-            print(f'Pose is not within given constraints:\n'
-                  f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
-                  f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
-            return False
+        print(f'Pose is not within given constraints:\n'
+              f'  translation difference: {t_diff:.4f} (max: {location_error})\n'
+              f'  rotation difference: {q_diff:.4f} (max: {rotation_error})')
+        return False
 
     def _set_ik_bone_offset(self, offset: Matrix):
         """ Sets the location offset between the control and constraint bone.
@@ -370,3 +381,5 @@ class URDFObject(Entity):
         :param offset: The location offset.
         """
         object.__setattr__(self, "ik_bone_offset", offset)
+
+# pylint: enable=no-member
