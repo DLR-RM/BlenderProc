@@ -168,7 +168,7 @@ class _BopWriterUtility:
 
         # PyPNG library can save 16-bit PNG and is faster than imageio.imwrite().
         w_depth = png.Writer(im.shape[1], im.shape[0], greyscale=True, bitdepth=16)
-        with open(path, 'wb', encoding="utf-8") as f:
+        with open(path, 'wb') as f:
             w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
 
     @staticmethod
