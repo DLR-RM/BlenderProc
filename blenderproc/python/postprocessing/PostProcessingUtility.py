@@ -1,6 +1,6 @@
 """A set of function to post process the produced images."""
 
-from typing import Union, List
+from typing import Union, List, Optional
 
 import numpy as np
 import cv2
@@ -208,7 +208,7 @@ def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union
 
     # Creates the shape of the kernel
     shape = cv2.MORPH_RECT
-    kernel = cv2.getStructuringElement(shape, depth.shape[:2])
+    kernel = cv2.getStructuringElement(shape, (3,3))
 
     # Applies the minimum filter with kernel NxN
     min_depth = cv2.erode(depth, kernel)
