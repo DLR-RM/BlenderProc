@@ -26,7 +26,7 @@ Execute in the BlenderProc main directory:
 blenderproc run examples/datasets/matterport3d/main.py <MATTERPORT3D_FOLDER_PATH> examples/datasets/matterport3d/output
 ``` 
 
-* `examples/datasets/matterport3d/main.py: path to the python file with pipeline configuration.
+* `examples/datasets/matterport3d/main.py`: path to the python file with pipeline configuration.
 * `<MATTERPORT3D_FOLDER_PATH>`: path to the downloaded Matterport3D dataset
 * `examples/datasets/matterport3d/output`: path to the output directory.
 
