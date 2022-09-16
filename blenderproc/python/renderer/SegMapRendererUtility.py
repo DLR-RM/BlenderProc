@@ -107,6 +107,8 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
         # After rendering
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
             save_in_csv_attributes: Dict[int, Dict[str, Any]] = {}
+
+            there_was_an_instance_rendering = False
             for suffix in suffixes:
                 file_path = temporary_segmentation_file_path + f"{frame:04d}" + suffix + ".exr"
                 segmentation = load_image(file_path)
@@ -122,7 +124,6 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                 if max_id >= len(objects):
                     raise Exception("There are more object colors than there are objects")
                 combined_result_map = []
-                there_was_an_instance_rendering = False
                 list_of_attributes = []
                 channels = []
                 for channel_id in range(result_channels):
@@ -216,7 +217,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
 
                 # write color mappings to file
                 # TODO: Remove unnecessary csv file when we give up backwards compatibility
-                csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + f"{frame:04d}")
+                csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + f"{frame:04d}.csv")
                 with open(csv_file_path, 'w', newline='', encoding="utf-8") as csvfile:
                     # get from the first element the used field names
                     fieldnames = ["idx"]

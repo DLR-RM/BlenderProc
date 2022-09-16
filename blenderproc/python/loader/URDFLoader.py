@@ -304,8 +304,8 @@ def propagate_pose(links: List[Link], joint_tree: "urdfpy.Joint", joint_trees: L
     # determine full transformation matrix
     mat = Matrix(parent_link.get_local2world_mat()) @ Matrix(joint_tree.origin)
     child_link.set_local2world_mat(mat)
-    child_link.set_parent(parent=parent_link)
-    parent_link.set_child(child=child_link)
+    child_link.set_link_parent(parent=parent_link)
+    parent_link.set_link_child(child=child_link)
 
     for obj in child_link.get_all_objs():
         obj.set_local2world_mat(Matrix(child_link.get_local2world_mat()) @ Matrix(obj.get_local2world_mat()))

@@ -702,9 +702,9 @@ class KeyFrame:
 class NumpyEncoder(json.JSONEncoder):
     """ A json encoder that is also capable of serializing numpy arrays """
 
-    def default(self, obj: Any):
+    def default(self, o: Any):
         # If its a numpy array
-        if isinstance(obj, np.ndarray):
+        if isinstance(o, np.ndarray):
             # Convert it to a list
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
+            return o.tolist()
+        return json.JSONEncoder.default(self, o)
