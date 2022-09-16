@@ -304,6 +304,9 @@ class _SuncgLoader:
         # Go through all imported objects
         for obj in loaded_objects:
             for key in metadata.keys():
+                used_key = key
+                if key == "type":
+                    used_key = "suncg_type"
                 obj.set_cp(key, metadata[key])
 
             _SuncgLoader.transform_and_colorize_object(obj, material_adjustments, transform, parent)
