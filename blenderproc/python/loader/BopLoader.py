@@ -178,7 +178,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     return cur_objs
 
 
-def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: str = "") -> tuple[np.ndarray, int, int]:
+def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: str = "") -> Tuple[np.ndarray, int, int]:
     """
     Load and set the camera matrix and image resolution of a specified BOP dataset
 
@@ -217,7 +217,7 @@ def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: st
 class _BopLoader:
 
     @staticmethod
-    def setup_bop_toolkit(bop_dataset_path: str) -> tuple[str, str]:
+    def setup_bop_toolkit(bop_dataset_path: str) -> Tuple[str, str]:
         """
         Install the bop_toolkit from Github and set an environment variable pointing to the BOP datasets
 

@@ -57,8 +57,8 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
                       decomposition is skipped.
     :return: The list of convex parts composing the given object.
     """
-    if platform in ["linux", "linux2"]:
-        raise RuntimeError("Convex decomposition is at the moment only available on linux.")
+    if platform not in ["linux", "linux2"]:
+        raise RuntimeError(f"Convex decomposition is at the moment only available on linux")
 
     # Download v-hacd library if necessary
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):

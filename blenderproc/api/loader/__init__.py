@@ -5,6 +5,7 @@ from blenderproc.python.loader.CCMaterialLoader import load_ccmaterials
 from blenderproc.python.loader.Front3DLoader import load_front3d
 from blenderproc.python.loader.HavenMaterialLoader import load_haven_mat
 from blenderproc.python.loader.IKEALoader import load_ikea
+from blenderproc.python.loader.Matterport3DLoader import load_matterport3d
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.Pix3DLoader import load_pix3d
 from blenderproc.python.loader.ReplicaLoader import load_replica, load_replica_segmented_mesh
