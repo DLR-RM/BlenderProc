@@ -307,7 +307,7 @@ class _SuncgLoader:
                 used_key = key
                 if key == "type":
                     used_key = "suncg_type"
-                obj.set_cp(key, metadata[key])
+                obj.set_cp(used_key, metadata[key])
 
             _SuncgLoader.transform_and_colorize_object(obj, material_adjustments, transform, parent)
 
