@@ -198,10 +198,8 @@ def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union
         assert len(color) == len(depth), "Enter same number of depth and color images"
         return [add_kinect_azure_noise(d, c, missing_depth_darkness_thres) for d,c in zip(depth, color)]
 
-    import cv2
-
     # smoothing at borders
-    depth = add_gaussian_shifts(depth, 1/4)
+    depth = add_gaussian_shifts(depth, 0.25)
 
     # 0.5mm base noise, 1mm std noise @ 1m, 3.6mm std noise @ 3m
     depth = depth + (5/10000 + np.maximum((depth-0.5) * 1/1000, 0)) * np.random.normal(size=depth.shape)
@@ -225,19 +223,17 @@ def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union
     return depth
 
 
-def add_gaussian_shifts(image: Union[list, np.ndarray], std: float = 1/2.0) -> Union[list, np.ndarray]:
+def add_gaussian_shifts(image: Union[list, np.ndarray], std: float = 0.5) -> Union[list, np.ndarray]:
     """
     Randomly shifts the pixels of the input depth image in x and y direction.
 
     :param image: Input depth image(s)
-    :param std: Standard deviation of pixel shifts, defaults to 1/2.0
+    :param std: Standard deviation of pixel shifts, defaults to 0.5
     :return: Augmented images
     """
     
     if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
         return [add_gaussian_shifts(img, std=std) for img in image]
-    
-    import cv2
 
     rows, cols = image.shape 
     gaussian_shifts = np.random.normal(0, std, size=(rows, cols, 2))
