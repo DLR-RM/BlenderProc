@@ -59,7 +59,7 @@ A particular focus is placed on the acknowledgment of the simulation-to-real gap
 Even though the first version of `BlenderProc` was one of the first tools to generate photo-realistic, synthetic datasets, many more tools exist nowadays, compared in \autoref{tab:features} [@NDDS; @Stillleben; @nvisii; @habitat; @kubric].
 In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-to-use python API, whereas the first version used a YAML-based configuration approach [@denninger2019blenderproc; @denninger2020blenderproc].
 
-![An apple randomly sampled in the 3D FRONT dataset [@Front3D].](images/combined_scene.jpg){ width=50% }
+![A rendered color, distance, semantic segmentation, and surface normal image from a synthetic scene.](images/combined_scene.jpg){ width=80% }
 
 \def\checkmarktikz{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
 \newcommand{\yesSign}{{\color{green}\checkmarktikz}}
