@@ -1,16 +1,15 @@
 """ This module provides functionality to sample a spotlight, which intersects with the current camera frustum,
-without being inside of the camera frustum.
+without being inside the camera frustum.
 """
 
 from typing import Optional, Callable
 
 import bpy
 import numpy as np
-from mathutils import Vector
 
-from blenderproc.python.camera.CameraUtility import get_camera_frustum, is_point_inside_camera_frustum
+from blenderproc.python.camera.CameraUtility import get_camera_frustum, is_point_inside_camera_frustum, get_camera_pose, \
+    rotation_from_forward_vec
 from blenderproc.python.sampler.PartSphere import part_sphere
-from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import create_bvh_tree_multi_objects, get_all_mesh_objects
 from blenderproc.python.utility.Utility import KeyFrame
@@ -117,7 +116,7 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
                 if not is_point_inside_camera_frustum(sampled_pose) and is_point_inside_camera_frustum(look_at_point):
                     # check if an object is between the look at pose and the camera pose
                     if perform_look_at_pose_visibility_check:
-                        cam_location = Entity(bpy.context.scene.camera).get_location()
+                        cam_location = get_camera_pose()[:3, 3]
                         look_dir = cam_location - look_at_point
                         _, _, _, dist = bvh_tree.ray_cast(look_at_point, look_dir, np.linalg.norm(look_dir))
                         if dist is not None:
@@ -133,7 +132,7 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
 
                     # calculate the rotation matrix
                     forward_vec = look_at_point - sampled_pose
-                    rotation_matrix = Vector(forward_vec).to_track_quat('-Z', 'Y').to_matrix()
+                    rotation_matrix = rotation_from_forward_vec(forward_vec)
 
                     # save the pose and rotation
                     new_light.set_location(sampled_pose)

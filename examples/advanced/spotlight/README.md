@@ -34,7 +34,7 @@ blenderproc vis hdf5 examples/advanced/spotlight/output/0.hdf5
 
 ```python
 # add a spotlight which intersect with the sampled camera poses
-spot_light = bproc.lighting.add_intersecting_spot_lights_to_camera_poses(clip_start=10, clip_end=15)
+spot_light = bproc.lighting.add_intersecting_spot_lights_to_camera_poses(clip_start=7, clip_end=15)
 ```
 
 A new spotlight will be sampled, which will have keyframe poses for each camera pose. The `clip_start` and `clip_end` 

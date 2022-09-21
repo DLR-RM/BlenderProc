@@ -1,5 +1,6 @@
 """Camera utility, collection of useful camera functions."""
 from typing import Union, Tuple, Optional, List
+from itertools import product
 
 import bpy
 from mathutils import Matrix, Vector, Euler
@@ -54,33 +55,21 @@ def get_camera_frustum(clip_start: Optional[float] = None, clip_end: Optional[fl
 
     :param clip_start: The distance between the camera pose and the near clipping plane.
     :param clip_end: The distance between the camera pose and the far clipping plane.
-    :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame
+    :param frame: The frame number whose assigned camera pose should be used. If None is give, the current frame
                   is used.
     :return: The eight 3D coordinates of the camera frustum
     """
-    poses = [f"{int(bin(i)[2:]):03d}" for i in range(8)]
-    poses = np.array([[int(pose[p]) for p in range(3)] for pose in poses]) * 2 - 1
+    poses = np.array(list(product((-1, 1), repeat=3)))
     poses = np.concatenate([poses, np.ones((8, 1))], axis=1)
 
+    # get the current camera pose
     camera_pose = get_camera_pose(frame)
 
-    xFov, yFov = get_fov()
-    cam_ob = bpy.context.scene.camera
-    cam = cam_ob.data
-    if clip_start is None:
-        near = cam.clip_start
-    else:
-        near = clip_start
-    if clip_end is None:
-        far = cam.clip_end
-    else:
-        far = clip_end
-    height, width = 1.0 / np.tan(yFov * 0.5), 1. / np.tan(xFov * 0.5)
-    k_mat = np.array([[width, 0, 0, 0], [0, height, 0, 0],
-                      [0, 0, -(near + far) / (far - near), -(2 * near * far) / (far - near)],
-                      [0, 0, -1, 0]])
+    # get the projection matrix
+    projection_matrix = get_projection_matrix(clip_start, clip_end)
 
-    poses = poses @ np.linalg.inv(k_mat).transpose()
+    # bring the camera frustum points into the world frame
+    poses = poses @ np.linalg.inv(projection_matrix).transpose()
     poses /= poses[:, 3:]
     poses = poses @ camera_pose.transpose()
     poses /= poses[:, 3:]
@@ -95,35 +84,21 @@ def is_point_inside_camera_frustum(point: Union[List[float], Vector, np.ndarray]
     :param point: The point, which should be checked
     :param clip_start: The distance between the camera pose and the near clipping plane.
     :param clip_end: The distance between the camera pose and the far clipping plane.
-    :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame
+    :param frame: The frame number whose assigned camera pose should be used. If None is give, the current frame
                   is used.
     :return: True, if the point lies inside the camera frustum, else False
     """
     camera_pose = get_camera_pose(frame)
 
-    xFov, yFov = get_fov()
-    cam_ob = bpy.context.scene.camera
-    cam = cam_ob.data
-    if clip_start is None:
-        near = cam.clip_start
-    else:
-        near = clip_start
-    if clip_end is None:
-        far = cam.clip_end
-    else:
-        far = clip_end
-    height, width = 1.0 / np.tan(yFov * 0.5), 1. / np.tan(xFov * 0.5)
-    k_mat = np.array([[width, 0, 0, 0], [0, height, 0, 0],
-                      [0, 0, -(near + far) / (far - near), -(2 * near * far) / (far - near)],
-                      [0, 0, -1, 0]])
     point4d = np.insert(np.array(point), 3, 1, axis=0)
     point4d = point4d @ np.linalg.inv(camera_pose).transpose()
     point4d /= point4d[3]
-    point4d = point4d @ k_mat.transpose()
+    projection_matrix = get_projection_matrix(clip_start, clip_end)
+    point4d = point4d @ projection_matrix.transpose()
     point4d /= point4d[3]
     point4d = point4d[:3]
 
-    return np.all([[point4d < 1, -1 < point4d]])
+    return np.all([point4d < 1, -1 < point4d])
 
 
 def get_camera_frustum_as_object(clip_start: Optional[float] = None, clip_end: Optional[float] = None,
@@ -132,7 +107,7 @@ def get_camera_frustum_as_object(clip_start: Optional[float] = None, clip_end: O
 
     :param clip_start: The distance between the camera pose and the near clipping plane.
     :param clip_end: The distance between the camera pose and the far clipping plane.
-    :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame
+    :param frame: The frame number whose assigned camera pose should be used. If None is give, the current frame
                   is used.
     :return: The newly created MeshObject
     """
@@ -342,6 +317,32 @@ def get_view_fac_in_px(cam: bpy.types.Camera, pixel_aspect_x: float, pixel_aspec
         view_fac_in_px = pixel_aspect_ratio * resolution_y_in_px
 
     return view_fac_in_px
+
+
+def get_projection_matrix(clip_start: Optional[float] = None, clip_end: Optional[float] = None) -> np.ndarray:
+    """ Returns the projection matrix, it allows to overwrite the current used the values for the near and far
+    clipping plane.
+
+    :param clip_start: The distance between the camera pose and the near clipping plane.
+    :param clip_end: The distance between the camera pose and the far clipping plane.
+    :return: The 4x4 projection matrix of the current camera
+    """
+    if clip_start is None:
+        near = bpy.context.scene.camera.data.clip_start
+    else:
+        near = clip_start
+    if clip_end is None:
+        far = bpy.context.scene.camera.data.clip_end
+    else:
+        far = clip_end
+    # get the field of view
+    x_fov, y_fov = get_fov()
+    # convert them to height and width values
+    height, width = 1.0 / np.tan(y_fov * 0.5), 1. / np.tan(x_fov * 0.5)
+    # build up the projection matrix
+    return np.array([[width, 0, 0, 0], [0, height, 0, 0],
+                     [0, 0, -(near + far) / (far - near), -(2 * near * far) / (far - near)],
+                     [0, 0, -1, 0]])
 
 
 def get_intrinsics_as_K_matrix() -> np.ndarray:
