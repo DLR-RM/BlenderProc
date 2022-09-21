@@ -3,6 +3,7 @@
 from typing import List, Union, Tuple, Optional
 from sys import platform
 
+import warnings
 import bpy
 import numpy as np
 import bmesh
@@ -280,8 +281,8 @@ class MeshObject(Entity):
         if self.has_rigidbody_enabled():
             bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
         else:
-            raise RuntimeError(f"MeshObject {self.get_name()} has no rigid_body component enabled")
-
+            warnings.warn(f"MeshObject {self.get_name()} has no rigid_body component enabled")
+            
     def has_rigidbody_enabled(self) -> bool:
         """ Checks whether object has rigidbody element enabled
 
