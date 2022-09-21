@@ -36,14 +36,14 @@ with open(args.camera, "r") as f:
 
 # activate normal rendering
 bproc.renderer.enable_normals_output()
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 
 # Write data to coco file
 bproc.writer.write_coco_annotations(os.path.join(args.output_dir, 'coco_data'),
-                        instance_segmaps=seg_data["instance_segmaps"],
-                        instance_attribute_maps=seg_data["instance_attribute_maps"],
-                        colors=data["colors"],
-                        color_file_format="JPEG")
+                                    instance_segmaps=data["instance_segmaps"],
+                                    instance_attribute_maps=data["instance_attribute_maps"],
+                                    colors=data["colors"],
+                                    color_file_format="JPEG")

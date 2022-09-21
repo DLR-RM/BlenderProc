@@ -65,16 +65,15 @@ while tries < 10000 and poses < 5:
 
 # Enable transparency so the background becomes transparent
 bproc.renderer.set_output_format(enable_transparency=True)
+# add segmentation masks (per class and per instance)
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 
 # Render RGB images
 data = bproc.renderer.render()
 
-# Render segmentation images
-seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
-
 # Write data to coco file
 bproc.writer.write_coco_annotations(os.path.join(args.output_dir, 'coco_data'),
-                        instance_segmaps=seg_data["instance_segmaps"],
-                        instance_attribute_maps=seg_data["instance_attribute_maps"],
-                        colors=data["colors"],
-                        append_to_existing_output=True)
+                                    instance_segmaps=data["instance_segmaps"],
+                                    instance_attribute_maps=data["instance_attribute_maps"],
+                                    colors=data["colors"],
+                                    append_to_existing_output=True)

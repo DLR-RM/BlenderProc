@@ -3,7 +3,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument('urdf_file', nargs='?', default="./model.urdf", help="Path to the .urdf file")
+parser.add_argument('urdf_file', nargs='?', default="examples/resources/medical_robot/miro.urdf", help="Path to the .urdf file")
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/urdf_loading_and_manipulation/output", help="Path to where the final files will be saved")
 args = parser.parse_args()
 
@@ -77,11 +77,12 @@ rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location)
 # Add homog cam pose based on location and rotation
 cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 bproc.camera.add_camera_pose(cam2world_matrix)
-# render RGB images
-data = bproc.renderer.render()
 
 # render segmentation images
-data.update(bproc.renderer.render_segmap(use_alpha_channel=True))
+bproc.renderer.enable_segmentation_output(map_by=["instance", "name"])
+
+# render RGB images
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
