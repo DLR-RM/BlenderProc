@@ -278,9 +278,9 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
     return image
 
 
-def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
-                                  map_by: Union[str, List[str]],
-                                  default_values: Optional[Dict[str, int]]) \
+def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
+                         map_by: Union[str, List[str]],
+                         default_values: Optional[Dict[str, int]]) \
         -> Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]]:
     """ Maps an image or a list of images to the desired segmentation images plus segmentation dictionary for keys,
     which can not be stored in an image (e.g. `name`).
@@ -385,8 +385,11 @@ def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                             # if the requested current_attribute is not a custom property or an attribute
                             # or there is a default value stored
                             # it throws an exception
+                            d_error = {current_attribute: None}
                             raise RuntimeError(f"The object \"{current_obj.name}\" does not have the "
-                                               f"attribute: \"{current_attribute}\". Maybe try a default value.")
+                                               f"attribute: \"{current_attribute}\". Either set the attribute for "
+                                               f"every object or pass a default value to "
+                                               f"bproc.renderer.enable_segmentation_output(default_values={d_error}).")
 
                         # save everything which is not instance also in the .csv
                         if isinstance(value, (int, float, np.integer, np.floating)):

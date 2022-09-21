@@ -12,7 +12,7 @@ import mathutils
 import h5py
 
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels, \
-    semantic_segmentation_mapping
+    segmentation_mapping
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth, depth2dist
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.BlenderUtility import load_image
@@ -135,9 +135,9 @@ class _WriterUtility:
                         if "is_semantic_segmentation" in reg_out and reg_out["is_semantic_segmentation"]\
                                 and "semantic_segmentation_mapping" in reg_out \
                                 and "semantic_segmentation_default_values" in reg_out:
-                            output_file = semantic_segmentation_mapping(output_file,
-                                                                        reg_out["semantic_segmentation_mapping"],
-                                                                        reg_out["semantic_segmentation_default_values"])
+                            output_file = segmentation_mapping(output_file,
+                                                               reg_out["semantic_segmentation_mapping"],
+                                                               reg_out["semantic_segmentation_default_values"])
                             for key, output_info in output_file.items():
                                 output_data_dict.setdefault(key, []).append(output_info)
                         else:
