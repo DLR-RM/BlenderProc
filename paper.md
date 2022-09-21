@@ -31,9 +31,6 @@ authors:
   - name: Matthias Humt
     orcid: 0000-0002-1523-9335
     affiliation: "1, 2"
-  - name: Tomáš Hodaň
-    orcid: 0000-0003-0576-9997
-    affiliation: 3
   - name: Rudolph Triebel
     orcid: 0000-0002-7975-036X
     affiliation: "1, 2"
@@ -42,8 +39,6 @@ affiliations:
    index: 1
  - name: Technical University of Munich (TUM)
    index: 2
- - name: Reality Labs, Meta
-   index: 3
 date: 3 September 2022
 bibliography: paper.bib
 ---
