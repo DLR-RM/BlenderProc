@@ -28,6 +28,9 @@ authors:
   - name: Klaus H. Strobl
     orcid: 0000-0001-8123-0606
     affiliation: 1
+  - name: Matthias Humt
+    orcid: 0000-0002-1523-9335
+    affiliation: "1, 2"
   - name: Tomáš Hodaň
     orcid: 0000-0003-0576-9997
     affiliation: 3
@@ -58,7 +61,7 @@ Deep learning thrives on the existence of vast and diverse datasets.
 Collecting those in the real world is often either too complicated or expensive. 
 With `BlenderProc2`, we present a tool enabling the generation of vast and diverse datasets with a few lines of Python code.
 A particular focus is placed on the acknowledgment of the simulation-to-real gap and how to tackle this particular challenge in the dataset generation process.
-Even though the first version of `BlenderProc` was one of the first tools to generate photo-realistic, synthetic datasets, many more tools exist nowadays, compared in \autoref{tab:features} [@NDDS; @Stillleben; @nvisii; @habitat].
+Even though the first version of `BlenderProc` was one of the first tools to generate photo-realistic, synthetic datasets, many more tools exist nowadays, compared in \autoref{tab:features} [@NDDS; @Stillleben; @nvisii; @habitat; @kubric].
 In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-to-use python API, whereas the first version used a YAML-based configuration approach [@denninger2019blenderproc; @denninger2020blenderproc].
 
 ![An apple randomly sampled in the 3D FRONT dataset [@Front3D].](images/front_3d_object_sampling.jpg){ width=50% }
@@ -70,21 +73,21 @@ In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-
 
 \begin{table}[h]
 \centering
-\begin{tabular}{l|c | c | c | c | c}
- & NDDS & NViSII & Habitat & Stillleben & \textbf{Ours} \\
+\begin{tabular}{l|c | c | c | c | c | c}
+ & NDDS & NViSII & Habitat & Stillleben & Kubric & \textbf{Ours} \\
 \hline
-semantic segm. & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
-depth rendering & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
-optical flow & \noSign & \noSign & \yesSign & \noSign & \yesSign \\
-surface normals & \noSign & \noSign & \yesSign & \yesSign & \yesSign \\
-object pose & \yesSign & \noSign & \yesSign & \yesSign & \yesSign \\
-bounding box & \yesSign & \noSign & \yesSign & \noSign & \yesSign \\
+semantic segm. & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
+depth rendering & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
+optical flow & \noSign & \noSign & \yesSign & \noSign & \yesSign & \yesSign \\
+surface normals & \noSign & \noSign & \yesSign & \yesSign & \noSign &\yesSign \\
+object pose & \yesSign & \noSign & \yesSign & \yesSign & \noSign & \yesSign \\
+bounding box & \yesSign & \noSign & \yesSign & \noSign & \noSign & \yesSign \\
 \hline
-physics module & \yesSign & \noSign & \yesSign & \yesSign & \yesSign \\
-camera sampling & \yesSign & \noSign & \yesSign & \yesSign & \yesSign \\
+physics module & \yesSign & \noSign & \yesSign & \yesSign & \yesSign & \yesSign \\
+camera sampling & \yesSign & \noSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 \hline
-based on an open-source renderer & \yesSign & \noSign & \noSign & \yesSign & \yesSign \\
-real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign \\
+uses an open-source renderer & \yesSign & \noSign & \noSign & \yesSign & \yesSign & \yesSign \\
+real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign  & \noSign \\
 \end{tabular}
 \caption{Main features present or not present in different simulators}
 \label{tab:features}
