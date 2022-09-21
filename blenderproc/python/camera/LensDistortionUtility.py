@@ -147,7 +147,6 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
                 raise Exception("The iterative distortion algorithm is unstable.")
 
         # update undistorted projection
-        # this can not be changed to x -=, for whatever reasons
         x -= x_ - P_und[0, :]  # * factor
         y -= y_ - P_und[1, :]  # * factor
 

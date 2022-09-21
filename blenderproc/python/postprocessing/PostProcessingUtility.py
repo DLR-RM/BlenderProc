@@ -282,6 +282,15 @@ def semantic_segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                                   map_by: Union[str, List[str]],
                                   default_values: Optional[Dict[str, int]]) \
         -> Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]]:
+    """ Maps an image or a list of images to the desired segmentation images plus segmentation dictionary for keys,
+    which can not be stored in an image (e.g. `name`).
+
+    :param image: A list or single image of a scene, must contain the pass indices defined in
+                 `enable_segmentation_output`.
+    :param map_by: The keys which will be extracted from the objects, either a single key or a list of keys.
+    :param default_values: If an object does not provide a key a default key must be provided.
+    :return: A dict mapping each key in map_by to an output list of images or a dictionary containing the information
+    """
 
     return_dict: Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]] = {}
     is_stereo_case = bpy.context.scene.render.use_multiview
