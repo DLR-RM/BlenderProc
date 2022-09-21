@@ -16,7 +16,7 @@ objs = bproc.loader.load_obj(args.scene)
 # Find point of interest, all cam poses should look towards it
 poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
-for i in range(5):
+for i in range(3):
     # Sample random camera location above objects
     location = np.random.uniform([-10, -10, 8], [10, 10, 12])
     # Compute rotation based on vector going from location towards poi
@@ -27,7 +27,7 @@ for i in range(5):
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # add a spotlight which intersect with the sampled camera poses
-spot_light = bproc.lighting.add_intersecting_spot_lights_to_camera_poses(clip_start=10, clip_end=15)
+spot_light = bproc.lighting.add_intersecting_spot_lights_to_camera_poses(clip_start=7, clip_end=15)
 
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()

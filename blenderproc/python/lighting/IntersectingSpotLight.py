@@ -12,7 +12,7 @@ from blenderproc.python.camera.CameraUtility import get_camera_frustum, is_point
 from blenderproc.python.sampler.PartSphere import part_sphere
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.types.MeshObjectUtility import scene_ray_cast
+from blenderproc.python.types.MeshObjectUtility import create_bvh_tree_multi_objects, get_all_mesh_objects
 from blenderproc.python.utility.Utility import KeyFrame
 
 
@@ -38,12 +38,12 @@ def _default_look_at_pose_sampling(frustum_vertices: np.ndarray, _sampled_light_
     :return: A new 3D look at pose
     """
     middle_frustum_point = np.mean(frustum_vertices, axis=0)
-    return middle_frustum_point + np.random.normal(0, 0.5, 3)
+    return middle_frustum_point + np.random.normal(0, 1.0, 3)
 
 
 def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: float,
                                                  perform_look_at_intersection_check: bool = True,
-                                                 perform_light_pose_visibility_check: bool = True,
+                                                 perform_look_at_pose_visibility_check: bool = True,
                                                  light_pose_sampling: Optional[Callable[[np.ndarray],
                                                                                         np.ndarray]] = None,
                                                  look_at_pose_sampling: Optional[Callable[[np.ndarray, np.ndarray],
@@ -63,7 +63,7 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
 
     If the `perform_look_at_intersection_check` value is set an intersection check between the light position and
     the look at location is done, which ensures that no object is between these two points.
-    Similarly, for the `perform_light_pose_visibility_check`, a newly sampled light pose does not have an intersecting
+    Similarly, for the `perform_look_at_pose_visibility_check`, a newly sampled light pose does not have an intersecting
     object between this sampled pose and the camera location.
 
     :param clip_start: The distance between the camera pose and the near clipping plane, used for the sampling of a
@@ -72,9 +72,9 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
                      light and look at location
     :param perform_look_at_intersection_check: If this is True an intersection check between the light pose and the look
                                                at pose is done, if an object is inbetween both poses are discarded.
-    :param perform_light_pose_visibility_check: If this is True, an intersection check between the light pose and the
-                                                camera location is done, to ensure that the light is visible and not
-                                                hidden.
+    :param perform_look_at_pose_visibility_check: If this is True, an intersection check between the look at pose and
+                                                  the camera location is done, to ensure that the light is visible and
+                                                  not hidden.
     :param light_pose_sampling: This function samples a new 3D light pose based on the eight 3D coordinates of the
                                 camera frustum. If this is None, the `_default_light_pose_sampling` is used.
     :param look_at_pose_sampling: This function samples a new 3D look at pose based on the eight 3D coordinates of the
@@ -96,6 +96,10 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
 
     new_light = Light(light_type="SPOT")
     new_light.set_energy(10000)
+    # create a bvh tree to quickly check if an object is in the line of sight
+    bvh_tree = None
+    if perform_look_at_pose_visibility_check or perform_look_at_intersection_check:
+        bvh_tree = create_bvh_tree_multi_objects(get_all_mesh_objects())
 
     # iterate over each camera pose
     for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
@@ -103,27 +107,27 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
         with KeyFrame(frame_id):
             # get the vertices of the camera frustum
             vertices = get_camera_frustum(clip_start=clip_start, clip_end=clip_end)
+            found_pose = False
             for _ in range(max_tries_per_cam_pose):
                 # sample a new light position
                 sampled_pose = light_pose_sampling(vertices)
-                if perform_light_pose_visibility_check:
-                    cam_location = Entity(bpy.context.scene.camera).get_location()
-                    look_dir = cam_location - sampled_pose
-                    hit, _, _, _, _, _ = scene_ray_cast(origin=sampled_pose, direction=look_dir,
-                                                        max_distance=np.linalg.norm(look_dir))
-                    if hit:
-                        # if an object is between the light pose and the camera sample a new light pose
-                        continue
-
-                if not is_point_inside_camera_frustum(sampled_pose):
-                    # sample a look at pose
-                    look_at_point = look_at_pose_sampling(vertices, sampled_pose)
+                # sample a look at pose
+                look_at_point = look_at_pose_sampling(vertices, sampled_pose)
+                # check that the sampled pose is not inside the camera frustum and the look at point is
+                if not is_point_inside_camera_frustum(sampled_pose) and is_point_inside_camera_frustum(look_at_point):
+                    # check if an object is between the look at pose and the camera pose
+                    if perform_look_at_pose_visibility_check:
+                        cam_location = Entity(bpy.context.scene.camera).get_location()
+                        look_dir = cam_location - look_at_point
+                        _, _, _, dist = bvh_tree.ray_cast(look_at_point, look_dir, np.linalg.norm(look_dir))
+                        if dist is not None:
+                            # if an object is between the light pose and the camera sample a new light pose
+                            continue
                     # check if an object is between the sample point and the look at point
                     if perform_look_at_intersection_check:
                         look_dir = look_at_point - sampled_pose
-                        hit, _, _, _, _, _ = scene_ray_cast(origin=sampled_pose, direction=look_dir,
-                                                            max_distance=np.linalg.norm(look_dir))
-                        if hit:
+                        _, _, _, dist = bvh_tree.ray_cast(sampled_pose, look_dir, np.linalg.norm(look_dir))
+                        if dist is not None:
                             # skip this light position as it collides with something
                             continue
 
@@ -134,5 +138,8 @@ def add_intersecting_spot_lights_to_camera_poses(clip_start: float, clip_end: fl
                     # save the pose and rotation
                     new_light.set_location(sampled_pose)
                     new_light.set_rotation_mat(rotation_matrix)
+                    found_pose = True
                     break
+            if not found_pose:
+                raise RuntimeError("No pose found, increase the start and end clip or increase the amount of tries.")
     return new_light
