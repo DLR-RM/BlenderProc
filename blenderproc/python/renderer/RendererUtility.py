@@ -409,9 +409,33 @@ def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "
     })
 
 
-def enable_segmentation_output(map_by: Union[str, List[str]] = "class", output_dir: Optional[str] = None,
+def enable_segmentation_output(map_by: Union[str, List[str]] = "category_id",
                                default_values: Optional[Dict[str, Any]] = None,
+                               pass_alpha_threshold: float = 0.05,
+                               output_dir: Optional[str] = None,
                                file_prefix: str = "segmap_", output_key: str = "segmap"):
+    """ Enables segmentation output by certain keys.
+
+    The key instances is used, if a mapping of every object in the scene to an integer is requested. These integers
+    are assigned randomly and do not follow any system. They are consisted for one rendering call.
+
+    By default, the custom property `category_id` is used. It has to be set for every visible object in the scene,
+    including the background (world). One can provide a `default_value` for it to avoid errors: `{"category_id": 0}`.
+
+    Map by keys can be all custom properties or the attributes of an object such as `location` or `name`. If the value
+    can not be stored in the image itself an instance image has to be generated. The output then will contain a
+    dictionary mapping the instance ids to the attributes of the objects.
+
+    :param map_by: Map by keys, either a single str or a list of str.
+    :param default_values: A dictionary offering a default value for objects which do not provide a value
+                           for a certain key
+    :param pass_alpha_threshold: This alpha threshold is used to decide which object to use a low value means that an
+                                 object has to be nearly completely transparent to be considered transparent, while
+                                 materials such as frosted class with an alpha value of 0.5 would be considered opaque
+    :param output_dir: The temporary output dir in which the resulting .exr images are saved
+    :param file_prefix: The prefix to use for writing the files.
+    :param output_key: The key to use for registering the segmentation output.
+    """
     # give all objects an id, background is always zero
     for index, obj in enumerate(get_all_blender_mesh_objects()):
         obj.pass_index = index + 1
@@ -446,7 +470,7 @@ def enable_segmentation_output(map_by: Union[str, List[str]] = "class", output_d
     links.new(render_layer_node.outputs["IndexOB"], output_node.inputs["Image"])
 
     # set the threshold low to avoid noise in alpha materials
-    bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = 0.05
+    bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = pass_alpha_threshold
 
 
 def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: str = "diffuse_",

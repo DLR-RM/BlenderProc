@@ -32,6 +32,7 @@ with open(args.camera, "r") as f:
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+# enable segmentation masks (per class and per instance)
 bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 
 # render the whole pipeline
