@@ -1,3 +1,5 @@
+""" All inertial objects are captured in this class. """
+
 from typing import Union
 
 import numpy as np
@@ -11,6 +13,9 @@ from blenderproc.python.types.EntityUtility import Entity
 # init check
 # pylint: disable=no-member
 class Inertial(Entity):
+    """
+    Every instance of this class is an inertial object which is usually part of an URDFObject.
+    """
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object=bpy_object)
 

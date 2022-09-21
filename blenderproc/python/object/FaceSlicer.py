@@ -16,7 +16,7 @@ from blenderproc.python.utility.Utility import resolve_path
 
 def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: float = 7.5,
                              up_vector_upwards: Optional[np.array] = None,
-                             new_name_for_object: str = "Surface") -> MeshObject:
+                             new_name_for_object: str = "Surface") -> Optional[MeshObject]:
     """ Extracts normal faces like floors in the following steps:
     1. Searchs for the specified object.
     2. Splits the surfaces which point upwards at a specified level away.
@@ -36,8 +36,6 @@ def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: flo
 
     # the up vector has to have unit length
     up_vector_upwards /= np.linalg.norm(up_vector_upwards)
-
-    newly_created_object = []
 
     mesh_object.edit_mode()
     bm = mesh_object.mesh_as_bmesh()
@@ -61,7 +59,7 @@ def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: flo
     faces = [face for value, face in list_of_median_poses]
     for label, face in zip(ms.labels_, faces):
         all_labels[label] += face.calc_area()
-    max_label = all_labels.keys()[np.argmax(all_labels.values())]
+    max_label = max(all_labels, key=all_labels.get)
 
     bpy.ops.mesh.select_all(action='DESELECT')
     for f, label in zip(faces, ms.labels_):
@@ -75,7 +73,7 @@ def slice_faces_with_normals(mesh_object: MeshObject, compare_angle_degrees: flo
             selected_objects = [o for o in selected_objects
                                 if o != bpy.context.view_layer.objects.active]
             selected_objects[0].name = new_name_for_object
-            newly_created_object.append(MeshObject(selected_objects[0]))
+            newly_created_object = MeshObject(selected_objects[0])
         else:
             raise RuntimeError("There is more than one selection after splitting, this should not happen!")
     else:
@@ -289,6 +287,9 @@ class FaceSlicer:
         normal_face = face.normal.to_4d()
         normal_face[3] = 0.0
         normal_face = (mathutils.Matrix(matrix_world) @ normal_face).to_3d()
+        normal_face_length = np.linalg.norm(normal_face)
+        if normal_face_length < 1e-7:
+            return False
         normal_face /= np.linalg.norm(normal_face)
         # compare the normal to the current up_vec
         return acos(normal_face @ mathutils.Vector(up_vector)) < cmp_angle

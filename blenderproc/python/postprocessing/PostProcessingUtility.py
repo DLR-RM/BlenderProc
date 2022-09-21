@@ -1,6 +1,6 @@
 """A set of function to post process the produced images."""
 
-from typing import Union, List
+from typing import Union, List, Optional
 
 import numpy as np
 import cv2
@@ -177,6 +177,84 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
 
     return filtered_img
 
+def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union[list, np.ndarray]] = None, 
+                           missing_depth_darkness_thres: int = 15) -> Union[list, np.ndarray]:
+    """
+    Add noise, holes and smooth depth maps according to the noise characteristics of the Kinect Azure sensor.
+    https://www.mdpi.com/1424-8220/21/2/413
+
+    For further realism, consider to use the projection from depth to color image in the Azure Kinect SDK:
+    https://docs.microsoft.com/de-de/azure/kinect-dk/use-image-transformation 
+
+    :param depth: Input depth image(s) in meters
+    :param color: Optional color image(s) to add missing depth at close to black surfaces
+    :param missing_depth_darkness_thres: uint8 gray value threshold at which depth becomes invalid, i.e. 0
+    :return: Noisy depth image(s)
+    """
+
+    if isinstance(depth, list) or hasattr(depth, "shape") and len(depth.shape) > 2:
+        if color is None:
+            color = len(depth) * [None]
+        assert len(color) == len(depth), "Enter same number of depth and color images"
+        return [add_kinect_azure_noise(d, c, missing_depth_darkness_thres) for d,c in zip(depth, color)]
+
+    # smoothing at borders
+    depth = add_gaussian_shifts(depth, 0.25)
+
+    # 0.5mm base noise, 1mm std noise @ 1m, 3.6mm std noise @ 3m
+    depth = depth + (5/10000 + np.maximum((depth-0.5) * 1/1000, 0)) * np.random.normal(size=depth.shape)
+
+    # Creates the shape of the kernel
+    shape = cv2.MORPH_RECT
+    kernel = cv2.getStructuringElement(shape, (3,3))
+
+    # Applies the minimum filter with kernel NxN
+    min_depth = cv2.erode(depth, kernel)
+    max_depth = cv2.dilate(depth, kernel)
+
+    # missing depth at 0.8m min/max difference
+    depth[abs(min_depth-max_depth) > 0.8] = 0
+
+    # create missing depth at dark surfaces
+    if color is not None:
+        gray = cv2.cvtColor(color, cv2.COLOR_RGB2GRAY)
+        depth[gray<missing_depth_darkness_thres] = 0
+
+    return depth
+
+
+def add_gaussian_shifts(image: Union[list, np.ndarray], std: float = 0.5) -> Union[list, np.ndarray]:
+    """
+    Randomly shifts the pixels of the input depth image in x and y direction.
+
+    :param image: Input depth image(s)
+    :param std: Standard deviation of pixel shifts, defaults to 0.5
+    :return: Augmented images
+    """
+    
+    if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
+        return [add_gaussian_shifts(img, std=std) for img in image]
+
+    rows, cols = image.shape 
+    gaussian_shifts = np.random.normal(0, std, size=(rows, cols, 2))
+    gaussian_shifts = gaussian_shifts.astype(np.float32)
+
+    # creating evenly spaced coordinates  
+    xx = np.linspace(0, cols-1, cols)
+    yy = np.linspace(0, rows-1, rows)
+
+    # get xpixels and ypixels 
+    xp, yp = np.meshgrid(xx, yy)
+
+    xp = xp.astype(np.float32)
+    yp = yp.astype(np.float32)
+
+    xp_interp = np.minimum(np.maximum(xp + gaussian_shifts[:, :, 0], 0.0), cols)
+    yp_interp = np.minimum(np.maximum(yp + gaussian_shifts[:, :, 1], 0.0), rows)
+
+    depth_interp = cv2.remap(image, xp_interp, yp_interp, cv2.INTER_LINEAR)
+
+    return depth_interp
 
 def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """

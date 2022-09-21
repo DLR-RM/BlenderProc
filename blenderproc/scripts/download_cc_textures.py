@@ -34,7 +34,7 @@ def cli():
         # download the json file, which contains all information
         json_url = f"https://ambientcg.com/api/v2/full_json?include=downloadData&limit={offset_size}" \
                    f"&offset={current_offset}&type=material"
-        request = requests.get(json_url, headers=headers)
+        request = requests.get(json_url, headers=headers, timeout=30)
         json_data = request.json()
         current_offset += offset_size
         if "foundAssets" in json_data and len(json_data["foundAssets"]) > 0:
@@ -93,7 +93,7 @@ def cli():
         if download_assets:
             # the asset should be downloaded and has not been downloaded yet
             print(f"Download asset: {asset} of {index}/{len(data)}")
-            response = requests.get(link, headers=headers)
+            response = requests.get(link, headers=headers, timeout=30)
             SetupUtility.extract_from_response(current_folder, response)
 
     print(f"Done downloading textures, saved in {cc_texture_dir}")

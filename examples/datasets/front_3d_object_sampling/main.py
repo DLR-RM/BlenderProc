@@ -44,10 +44,8 @@ for obj in sample_surface_objects:
     # also remove the dropped objects and restore the sliced up objects.
     with bproc.utility.UndoAfterExecution():
         # Select the surfaces, where the object should be sampled on
-        droppable_surface = bproc.object.slice_faces_with_normals(obj)
-        if droppable_surface is not None and len(droppable_surface) == 1:
-            surface_obj = droppable_surface[0]
-        else:
+        surface_obj = bproc.object.slice_faces_with_normals(obj)
+        if surface_obj is None:
             continue
 
         surface_height_z = np.mean(surface_obj.get_bound_box(), axis=0)[2]
