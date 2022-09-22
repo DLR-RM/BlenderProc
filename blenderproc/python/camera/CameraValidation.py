@@ -215,9 +215,9 @@ def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_ob
 
             if hit:
                 is_of_special_dataset = "is_suncg" in hit_object or "is_3d_front" in hit_object
-                if is_of_special_dataset and "suncg_type" in hit_object and hit_object["suncg_type"] == "Object" \
-                    or is_of_special_dataset and "3D_future_type" in hit_object \
-                        and hit_object["3D_future_type"] == "Object":
+                is_suncg_object = "suncg_type" in hit_object and hit_object["suncg_type"] == "Object"
+                is_front_3d_object = "3D_future_type" in hit_object and hit_object["3D_future_type"] == "Object"
+                if is_of_special_dataset and is_suncg_object or is_of_special_dataset and is_front_3d_object:
                     # calculate the score based on the type of the object,
                     # wall, floor and ceiling objects have 0 score
                     if "coarse_grained_class" in hit_object:

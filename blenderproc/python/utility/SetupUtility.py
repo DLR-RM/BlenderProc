@@ -152,6 +152,9 @@ class SetupUtility:
         if user_required_packages is not None:
             required_packages += user_required_packages
 
+        if reinstall_packages:
+            raise ValueError("The reinstall package mode is not supported right now!")
+
         result = SetupUtility.determine_python_paths(blender_path, major_version)
         python_bin, packages_path, packages_import_path, pre_python_package_path = result
 

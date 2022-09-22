@@ -7,8 +7,8 @@ from typing import Optional, Callable
 import bpy
 import numpy as np
 
-from blenderproc.python.camera.CameraUtility import get_camera_frustum, is_point_inside_camera_frustum, get_camera_pose, \
-    rotation_from_forward_vec
+from blenderproc.python.camera.CameraUtility import get_camera_frustum, is_point_inside_camera_frustum, \
+    get_camera_pose, rotation_from_forward_vec
 from blenderproc.python.sampler.PartSphere import part_sphere
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import create_bvh_tree_multi_objects, get_all_mesh_objects
