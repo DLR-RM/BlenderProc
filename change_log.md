@@ -10,17 +10,18 @@
 ## Version 2.5.0 20th September 2022
 - segmentations are now done in the same call as any other render call, avoiding the loading of the objects for each pose
 - added the kinect azure noise model, allowing for the creation of more realistic depth images
+- added a spotlight intersection mode, which places a spotlight in the world without intersecting with the current camera frustum, while it focuses on the middle of the camera frustum, creating hard lighting situations
 - add an importer for the MatterPort3d dataset
-- the key of custom properties now can no longer have the same name as any attribute of the `blender_obj`. Custom property do not need to start with `cp_` anymore
+- the key of custom properties now can no longer have the same name as any attribute of the `blender_obj`. Custom properties do not need to start with `cp_` anymore
 - add a new paper designated for the journal of sensors
 - we now use pylint to clean up all code smells and add documentation to all functions
 - the bop loader now also supports the hope dataset
 - separate the init and clean up functions
 - rewrite the ambient CG download script, allowing resuming the download
 - turn of the cycle denoiser causing issues in certain settings
-- add a random walk feature, which allows to simulate a camera shaking or POI drift
-- the duplicate and delete fcts now support duplicating all children as well, added a get_children fct as well
-- renaming get_rotation to get_rotation_euler and add functions for setting the rotation matrix
+- add a random walk feature, which allows simulating a camera shaking or POI drift
+- the duplicate and delete fcts now support duplicating all children as well, we added a `get_children` fct as well
+- renaming `get_rotation` to `get_rotation_euler` and adding functions for setting the rotation matrix
 - fix a bug in the move_origin_to_bottom_mean fct.
 
 
