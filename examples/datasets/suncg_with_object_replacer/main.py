@@ -34,13 +34,13 @@ replace_ratio = 1.0
 bproc.object.replace_objects(
     objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "suncg_type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
 )
 
-# some of the objects won't be valid anymore
+# some objects won't be valid anymore
 objs = [obj for obj in objs if obj.is_valid()]
 
 # makes Suncg objects emit light

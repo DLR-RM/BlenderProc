@@ -57,7 +57,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping,
         level_obj = create_empty("Level#" + level["id"])
         level_obj.set_cp("suncg_type", "Level")
         if "bbox" in level:
-            level_obj.set_cp("suncg_bbox", _SuncgLoader.correct_bbox_frame(level["bbox"]))
+            level_obj.set_cp("bbox", _SuncgLoader.correct_bbox_frame(level["bbox"]))
         else:
             print("Warning: The level with id " + level[
                 "id"] + " is missing the bounding box attribute in the given house.json file!")
@@ -156,7 +156,7 @@ class _SuncgLoader:
         # Build empty room object which acts as a parent for all objects inside
         room_obj = create_empty("Room#" + node["id"])
         room_obj.set_cp("suncg_type", "Room")
-        room_obj.set_cp("suncg_bbox", _SuncgLoader.correct_bbox_frame(node["bbox"]))
+        room_obj.set_cp("bbox", _SuncgLoader.correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])
         room_obj.set_parent(parent)
         loaded_objects = [room_obj]

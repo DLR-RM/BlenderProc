@@ -20,8 +20,7 @@ class SuncgPointInRoomSampler:
         self.rooms = []
         for room_obj in suncg_objects:
             # Check if object is from type room and has bbox
-            if room_obj.has_cp("type") and room_obj.get_cp("type") == "Room" and room_obj.has_cp("bbox"):
-
+            if room_obj.has_cp("suncg_type") and room_obj.get_cp("suncg_type") == "Room" and room_obj.has_cp("bbox"):
                 # Make sure the room has a floor which is required for sampling
                 floor_obj = self._find_floor(suncg_objects, room_obj)
                 if floor_obj is not None:
@@ -64,6 +63,6 @@ class SuncgPointInRoomSampler:
         :return: The found floor object or None if none has been found.
         """
         for obj in suncg_objects:
-            if obj.get_parent() == room_obj and obj.has_cp("type") and obj.get_cp("type") == "Floor":
+            if obj.get_parent() == room_obj and obj.has_cp("suncg_type") and obj.get_cp("suncg_type") == "Floor":
                 return obj
         return None
