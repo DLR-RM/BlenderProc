@@ -339,8 +339,8 @@ def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                 # create result map
                 resulting_map = np.zeros((stereo_image.shape[0], stereo_image.shape[1]), dtype=np.float64)
 
+                # save the type of the stored variable in the resulting map
                 found_dtype = None
-                found_a_non_csv_value = False
 
                 map_by_attribute = map_by_attribute.lower()
                 current_attribute = map_by_attribute
@@ -393,7 +393,6 @@ def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
 
                         # save everything which is not instance also in the .csv
                         if isinstance(value, (int, float, np.integer, np.floating)):
-                            found_a_non_csv_value = True
                             resulting_map[stereo_image == object_id] = value
                             found_dtype = type(value)
 
@@ -405,7 +404,8 @@ def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                         else:
                             non_image_attributes[object_id] = {current_attribute: value}
 
-                    if found_a_non_csv_value:
+                    # if a value was found the resulting map should be stored
+                    if found_dtype is not None:
                         resulting_map = resulting_map.astype(found_dtype)
                         mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(resulting_map)
                     elif "instance" not in map_by:
