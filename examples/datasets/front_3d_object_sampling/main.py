@@ -11,7 +11,7 @@ parser.add_argument('treed_obj_path', help="Path to the downloaded 3D object")
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/front_3d_object_sampling/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-if not os.path.exists(args.front) or not os.path.exists(args.future_folder) or not os.path.exists(args.shapenet_path):
+if not os.path.exists(args.front) or not os.path.exists(args.future_folder) or not os.path.exists(args.treed_obj_path):
     raise OSError("One of the three folders does not exist!")
 
 bproc.init()
