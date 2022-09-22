@@ -17,6 +17,7 @@
 - we now use pylint to clean up all code smells and add documentation to all functions
 - the bop loader now also supports the hope dataset
 - separate the init and clean up functions
+- it can now be specified which GPU to use for rendering, if multiple are available
 - rewrite the ambient CG download script, allowing resuming the download
 - turn of the cycle denoiser causing issues in certain settings
 - add a random walk feature, which allows simulating a camera shaking or POI drift
