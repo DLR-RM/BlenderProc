@@ -78,6 +78,7 @@ if __name__ == "__main__":
                 resulting_file_name = os.path.join(args.output, resulting_file_name)
             print("Saved in {}".format(resulting_file_name))
             plt.imsave(resulting_file_name, final_img)
+            plt.close()
         else:
             raise Exception("The file path must point to the colors image: {}".format(image_path))
 
