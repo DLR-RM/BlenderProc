@@ -334,7 +334,7 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = N
             relative_path = os.path.join('/'.join(urdf_path.split('/')[:-1]), geometry_tree.mesh.filename)
             if os.path.isfile(relative_path):
                 # load in default coordinate system
-                obj = load_obj(filepath=relative_path, forward_axis='Y_FORWARD', up_axis='Z_UP')[0]
+                obj = load_obj(filepath=relative_path, forward_axis='Y', up_axis='Z')[0]
             else:
                 warnings.warn(f"Couldn't load mesh file for {geometry_tree} (filename: {geometry_tree.mesh.filename}; "
                               f"urdf filename: {urdf_path})")

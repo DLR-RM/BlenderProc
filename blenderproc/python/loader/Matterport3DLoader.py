@@ -43,7 +43,7 @@ def load_matterport3d(data_folder: Union[Path, str], used_house_id: Optional[str
     else:
         loaded_house_file = random.choice(all_object_files)
 
-    loaded_obj = load_obj(str(loaded_house_file), forward_axis="Y_FORWARD")
+    loaded_obj = load_obj(str(loaded_house_file), forward_axis="Y")
     if len(loaded_obj) == 1:
         obj = loaded_obj[0]
     else:
