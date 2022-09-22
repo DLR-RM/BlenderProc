@@ -89,9 +89,9 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-3.2.1
-            major_version = "3.2"
-            minor_version = "1"
+            # right new only support blender-3.3.0
+            major_version = "3.3"
+            minor_version = "0"
             blender_version = f"blender-{major_version}.{minor_version}"
             if platform in ["linux", "linux2"]:
                 blender_version += "-linux-x64"

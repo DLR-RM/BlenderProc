@@ -6,8 +6,8 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file which describes one camera pose per line, here the output of scn2cam from the SUNCGToolbox can be used")
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
-parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_basic/output", help="Path to where the final files, will be saved")
 parser.add_argument('points', type=int, default=2560, help="Number of points for random pattern. Not always exact due to rounding errors.")
+parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_basic/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
 bproc.init()

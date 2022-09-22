@@ -85,6 +85,7 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
                 plt.imshow(flow_to_rgb(data), cmap='jet')
             else:
                 plt.imsave(save_to_file, flow_to_rgb(data), cmap='jet')
+                plt.close()
         except ImportError as e:
             raise ImportError("Using .hdf5 containers, which contain flow images needs opencv-python to be "
                               "installed!") from e
@@ -123,6 +124,7 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
                 else:
                     filename = save_to_file
                 plt.imsave(filename, data[:, :, i], cmap='jet')
+                plt.close()
 
     elif key_matches(key, depth_keys):
         # Make sure the data has only one channel, otherwise matplotlib will treat it as a rgb image
@@ -137,16 +139,19 @@ def vis_data(key, data, full_hdf5_data=None, file_label="", rgb_keys=None, flow_
             plt.colorbar()
         else:
             plt.imsave(save_to_file, data, cmap='summer', vmax=depth_max)
+            plt.close()
     elif key_matches(key, rgb_keys):
         if save_to_file is None:
             plt.imshow(data)
         else:
             plt.imsave(save_to_file, data)
+            plt.close()
     else:
         if save_to_file is None:
             plt.imshow(data)
         else:
             plt.imsave(save_to_file, data)
+            plt.close()
 
 
 def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap_keys=None, segcolormap_keys=None,

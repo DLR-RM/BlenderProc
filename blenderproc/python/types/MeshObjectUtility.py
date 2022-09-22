@@ -282,7 +282,7 @@ class MeshObject(Entity):
             bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
         else:
             warnings.warn(f"MeshObject {self.get_name()} has no rigid_body component enabled")
-            
+
     def has_rigidbody_enabled(self) -> bool:
         """ Checks whether object has rigidbody element enabled
 
