@@ -1,12 +1,15 @@
 """A set of function to post process the produced images."""
 
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Dict, Any
 
 import numpy as np
+import bpy
+import mathutils
 import cv2
 from scipy import stats
 
 from blenderproc.python.camera import CameraUtility
+from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 
 
 def dist2depth(dist: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
@@ -177,14 +180,14 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
 
     return filtered_img
 
-def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union[list, np.ndarray]] = None, 
+def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union[list, np.ndarray]] = None,
                            missing_depth_darkness_thres: int = 15) -> Union[list, np.ndarray]:
     """
     Add noise, holes and smooth depth maps according to the noise characteristics of the Kinect Azure sensor.
     https://www.mdpi.com/1424-8220/21/2/413
 
     For further realism, consider to use the projection from depth to color image in the Azure Kinect SDK:
-    https://docs.microsoft.com/de-de/azure/kinect-dk/use-image-transformation 
+    https://docs.microsoft.com/de-de/azure/kinect-dk/use-image-transformation
 
     :param depth: Input depth image(s) in meters
     :param color: Optional color image(s) to add missing depth at close to black surfaces
@@ -231,19 +234,19 @@ def add_gaussian_shifts(image: Union[list, np.ndarray], std: float = 0.5) -> Uni
     :param std: Standard deviation of pixel shifts, defaults to 0.5
     :return: Augmented images
     """
-    
+
     if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
         return [add_gaussian_shifts(img, std=std) for img in image]
 
-    rows, cols = image.shape 
+    rows, cols = image.shape
     gaussian_shifts = np.random.normal(0, std, size=(rows, cols, 2))
     gaussian_shifts = gaussian_shifts.astype(np.float32)
 
-    # creating evenly spaced coordinates  
+    # creating evenly spaced coordinates
     xx = np.linspace(0, cols-1, cols)
     yy = np.linspace(0, rows-1, rows)
 
-    # get xpixels and ypixels 
+    # get xpixels and ypixels
     xp, yp = np.meshgrid(xx, yy)
 
     xp = xp.astype(np.float32)
@@ -273,6 +276,163 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
         image = image[:, :, 0]  # All channels have the same value, so just extract any single channel
 
     return image
+
+
+def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
+                         map_by: Union[str, List[str]],
+                         default_values: Optional[Dict[str, int]]) \
+        -> Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]]:
+    """ Maps an image or a list of images to the desired segmentation images plus segmentation dictionary for keys,
+    which can not be stored in an image (e.g. `name`).
+
+    :param image: A list or single image of a scene, must contain the pass indices defined in
+                 `enable_segmentation_output`.
+    :param map_by: The keys which will be extracted from the objects, either a single key or a list of keys.
+    :param default_values: If an object does not provide a key a default key must be provided.
+    :return: A dict mapping each key in map_by to an output list of images or a dictionary containing the information
+    """
+
+    return_dict: Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]] = {}
+    is_stereo_case = bpy.context.scene.render.use_multiview
+
+    # convert a single image to a list of stereo images
+    if isinstance(image, list):
+        if len(image) == 0:
+            raise RuntimeError("The given image list is empty")
+        if hasattr(image[0], "shape") and len(image[0].shape) == 2 and not is_stereo_case:
+            # convert list of images to np.ndarray
+            image = np.array(image)[:, np.newaxis, :, :]  # reshape for the stereo case
+    elif hasattr(image, "shape") and len(image.shape) == 3:
+        if not is_stereo_case:
+            image = np.array(image)[:, np.newaxis, :, :]  # reshape for stereo case
+        else:
+            # this is a single image in stereo mode -> make a list out of it
+            image = np.array(image)[np.newaxis, :, :, :]
+    elif hasattr(image, "shape") and len(image.shape) == 2:
+        if is_stereo_case:
+            raise RuntimeError("The amount of dimensions for an image must be higher than two in stereo mode!")
+        # add stereo case and make a list out of it
+        image = np.array(image)[np.newaxis, np.newaxis, :, :]
+
+    # convert to int, to avoid rounding errors
+    image = np.array(image).astype(np.int64)
+
+    # convert map by to a list
+    if not isinstance(map_by, list):
+        map_by = [map_by]
+
+    for frame_image in image:
+        non_image_attributes: Dict[int, Dict[str, Any]] = {}
+        mapped_results_stereo_dict: Dict[str, List[np.ndarray]] = {}
+        for stereo_image in frame_image:
+
+            # map object ids in the image to the used objects
+            object_ids = np.unique(stereo_image).astype(int)
+            object_ids_to_object = {}
+            for obj in get_all_blender_mesh_objects():
+                if obj.pass_index in object_ids:
+                    object_ids_to_object[obj.pass_index] = obj
+            object_ids_to_object[0] = bpy.context.scene.world
+
+            for map_by_attribute in map_by:
+
+                # create result map
+                resulting_map = np.zeros((stereo_image.shape[0], stereo_image.shape[1]), dtype=np.float64)
+
+                # save the type of the stored variable in the resulting map
+                found_dtype = None
+
+                map_by_attribute = map_by_attribute.lower()
+                current_attribute = map_by_attribute
+                if map_by_attribute in ["class", "category_id"]:
+                    # class mode
+                    current_attribute = "category_id"
+                if map_by_attribute == "instance":
+                    mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(stereo_image)
+                else:
+                    # check if a default value was specified
+                    default_value_set = False
+                    default_value = None
+                    if default_values and current_attribute in default_values:
+                        default_value_set = True
+                        default_value = default_values[current_attribute]
+                    elif default_values and current_attribute in default_values:
+                        default_value_set = True
+                        default_value = default_values[current_attribute]
+
+                    for object_id in object_ids:
+                        # get current object
+                        current_obj = object_ids_to_object[object_id]
+
+                        # if the current obj has an attribute with that name -> get it
+                        if hasattr(current_obj, current_attribute):
+                            value = getattr(current_obj, current_attribute)
+                        # if the current object has a custom property with that name -> get it
+                        elif current_attribute in current_obj:
+                            value = current_obj[current_attribute]
+                        elif current_attribute.startswith("cf_"):
+                            if current_attribute == "cf_basename":
+                                value = current_obj.name
+                                if "." in value:
+                                    value = value[:value.rfind(".")]
+                            else:
+                                raise ValueError(f"The given attribute is a custom function: \"cf_\", but it is not "
+                                                 f"defined here: {current_attribute}")
+                        elif default_value_set:
+                            # if none of the above applies use the default value
+                            value = default_value
+                        else:
+                            # if the requested current_attribute is not a custom property or an attribute
+                            # or there is a default value stored
+                            # it throws an exception
+                            d_error = {current_attribute: None}
+                            raise RuntimeError(f"The object \"{current_obj.name}\" does not have the "
+                                               f"attribute: \"{current_attribute}\". Either set the attribute for "
+                                               f"every object or pass a default value to "
+                                               f"bproc.renderer.enable_segmentation_output(default_values={d_error}).")
+
+                        # save everything which is not instance also in the .csv
+                        if isinstance(value, (int, float, np.integer, np.floating)):
+                            resulting_map[stereo_image == object_id] = value
+                            found_dtype = type(value)
+
+                        if isinstance(value, (mathutils.Vector, mathutils.Matrix)):
+                            value = np.array(value)
+
+                        if object_id in non_image_attributes:
+                            non_image_attributes[object_id][current_attribute] = value
+                        else:
+                            non_image_attributes[object_id] = {current_attribute: value}
+
+                    # if a value was found the resulting map should be stored
+                    if found_dtype is not None:
+                        resulting_map = resulting_map.astype(found_dtype)
+                        mapped_results_stereo_dict.setdefault(f"{map_by_attribute}_segmaps", []).append(resulting_map)
+                    elif "instance" not in map_by:
+                        raise ValueError(f"The map_by key \"{map_by_attribute}\" requires that the instance map is "
+                                         f"stored as well in the output. Change it to: {map_by + ['instance']}")
+
+        # combine stereo image and add to output
+        for key, list_of_stereo_images in mapped_results_stereo_dict.items():
+            if len(list_of_stereo_images) == 1:
+                return_dict.setdefault(key, []).append(list_of_stereo_images[0])
+            else:
+                stereo_image = np.stack(list_of_stereo_images, axis=0)
+                return_dict.setdefault(key, []).append(stereo_image)
+
+        # combine non image attributes
+        mappings = []
+        for object_id, attribute_dict in non_image_attributes.items():
+            # converting to int to being able to save it to a hdf5 container
+            mappings.append({"idx": int(object_id), **attribute_dict})
+        return_dict.setdefault("instance_attribute_maps", []).append(mappings)
+
+    # check if only one image was provided as input
+    if image.shape[0] == 1:
+        # remove the list in the return dict, as there was only a single input image
+        # this still works with stereo image as they are fused together in here
+        return {key: value[0] for key, value in return_dict.items()}
+    return return_dict
 
 
 class _PostProcessingUtility:

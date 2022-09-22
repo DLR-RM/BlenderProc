@@ -108,8 +108,8 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
     # when generating the mapping matrix but much slower in inference.
 
     # Init dist at undist
-    x = P_und[0, :]
-    y = P_und[1, :]
+    x = P_und[0, :].copy()
+    y = P_und[1, :].copy()
     res = [1e3]
     it = 0
     while res[-1] > 0.15:
@@ -147,8 +147,8 @@ def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, 
                 raise Exception("The iterative distortion algorithm is unstable.")
 
         # update undistorted projection
-        x -= (x_ - P_und[0, :])  # * factor
-        y -= (y_ - P_und[1, :])  # * factor
+        x -= x_ - P_und[0, :]  # * factor
+        y -= y_ - P_und[1, :]  # * factor
 
     # u and v are now the pixel coordinates on the undistorted image that
     # will distort into the row,column coordinates of the distorted image

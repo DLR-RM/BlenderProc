@@ -13,7 +13,7 @@ import numpy as np
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 
@@ -50,7 +50,7 @@ def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_m
                             "git+https://github.com/abahnasy/human_body_prior"])
 
     # Get the currently supported mocap datasets by this loader
-    taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
+    taxonomy_file_path = resolve_path(os.path.join(data_path, "taxonomy.json"))
     supported_mocap_datasets = _AMASSLoader.get_supported_mocap_datasets(taxonomy_file_path, data_path)
 
     # selected_obj = self._files_with_fitting_ids
@@ -268,6 +268,8 @@ class _AMASSLoader:
         :param objects: Mesh objects where the material might be wrong.
         """
         for obj in objects:
+            if not obj.get_materials():
+                obj.new_material("Skin material")
             for material in obj.get_materials():
                 if material is None:
                     continue
@@ -283,6 +285,8 @@ class _AMASSLoader:
                 principled_bsdf.inputs["Base Color"].default_value = mathutils.Vector([*skin_tone_rgb, 1.0])
                 principled_bsdf.inputs["Subsurface"].default_value = 0.2
                 principled_bsdf.inputs["Subsurface Color"].default_value = mathutils.Vector([*skin_tone_rgb, 1.0])
+                principled_bsdf.inputs["Subsurface Radius"].default_value = mathutils.Vector([1.0, 0.2, 0.1])
+                principled_bsdf.inputs["Subsurface IOR"].default_value = 2.5
 
                 # darker skin looks better when made less specular
                 principled_bsdf.inputs["Specular"].default_value = np.mean(skin_tone_rgb) / 255.0

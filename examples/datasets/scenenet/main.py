@@ -76,11 +76,10 @@ while tries < 10000 and poses < 5:
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+bproc.renderer.enable_segmentation_output(map_by=["category_id"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-# Also render segmentation images (Use alpha channel from textures)
-data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

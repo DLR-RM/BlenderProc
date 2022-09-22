@@ -2,7 +2,6 @@ import blenderproc as bproc
 import argparse
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")
 parser.add_argument('scene', nargs='?', default="examples/basics/semantic_segmentation/scene.blend", help="Path to the scene.obj file")
@@ -33,12 +32,11 @@ with open(args.camera, "r") as f:
 
 # activate depth rendering
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+# enable segmentation masks (per class and per instance)
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-# Render segmentation masks (per class and per instance)
-data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

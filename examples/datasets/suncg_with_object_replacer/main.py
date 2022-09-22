@@ -34,13 +34,13 @@ replace_ratio = 1.0
 bproc.object.replace_objects(
     objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "suncg_type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
 )
 
-# some of the objects won't be valid anymore
+# some objects won't be valid anymore
 objs = [obj for obj in objs if obj.is_valid()]
 
 # makes Suncg objects emit light
@@ -73,11 +73,10 @@ while tries < 10000 and poses < 5:
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.renderer.enable_segmentation_output(map_by=["category_id"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
