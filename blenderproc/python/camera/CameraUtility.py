@@ -320,7 +320,7 @@ def get_view_fac_in_px(cam: bpy.types.Camera, pixel_aspect_x: float, pixel_aspec
 
 
 def get_projection_matrix(clip_start: Optional[float] = None, clip_end: Optional[float] = None) -> np.ndarray:
-    """ Returns the projection matrix, it allows to overwrite the current used the values for the near and far
+    """ Returns the projection matrix, it allows to overwrite the current used values for the near and far
     clipping plane.
 
     :param clip_start: The distance between the camera pose and the near clipping plane.
