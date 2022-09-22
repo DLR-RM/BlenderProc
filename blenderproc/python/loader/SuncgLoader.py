@@ -55,7 +55,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping,
     for level in config["levels"]:
         # Build empty level object which acts as a parent for all rooms on the level
         level_obj = create_empty("Level#" + level["id"])
-        level_obj.set_cp("type", "Level")
+        level_obj.set_cp("suncg_type", "Level")
         if "bbox" in level:
             level_obj.set_cp("bbox", _SuncgLoader.correct_bbox_frame(level["bbox"]))
         else:
@@ -155,7 +155,7 @@ class _SuncgLoader:
         """
         # Build empty room object which acts as a parent for all objects inside
         room_obj = create_empty("Room#" + node["id"])
-        room_obj.set_cp("type", "Room")
+        room_obj.set_cp("suncg_type", "Room")
         room_obj.set_cp("bbox", _SuncgLoader.correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])
         room_obj.set_parent(parent)
@@ -304,7 +304,10 @@ class _SuncgLoader:
         # Go through all imported objects
         for obj in loaded_objects:
             for key in metadata.keys():
-                obj.set_cp(key, metadata[key])
+                used_key = key
+                if key == "type":
+                    used_key = "suncg_type"
+                obj.set_cp(used_key, metadata[key])
 
             _SuncgLoader.transform_and_colorize_object(obj, material_adjustments, transform, parent)
 

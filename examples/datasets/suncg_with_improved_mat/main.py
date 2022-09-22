@@ -68,13 +68,12 @@ bproc.renderer.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bo
 # activate normal and depth rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
+bproc.renderer.enable_segmentation_output(map_by=["category_id"])
 
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

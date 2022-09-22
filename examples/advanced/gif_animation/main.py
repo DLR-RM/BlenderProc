@@ -77,12 +77,11 @@ for frame, location in enumerate(locations):
 # activate depth rendering and normals
 bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.enable_normals_output()
+# add segmentation masks (per class and per instance)
+bproc.renderer.enable_segmentation_output(map_by=["instance", "name"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
-
-# Render segmentation masks (per class and per instance)
-data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
 
 # You could additionally write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

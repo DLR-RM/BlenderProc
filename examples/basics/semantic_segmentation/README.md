@@ -40,21 +40,19 @@ obj.set_cp("category_id", 0)
 ### SegMapRenderer
 
 ```python
-# Render segmentation masks (per class and per instance)
-data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
+# enable segmentation masks (per class and per instance)
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 ```
 
 This module can map any kind of object related information to an image or to a list of indices of the objects in the scene.
-So, if you want to map the custom property `category_id` to an image, you write `map_by=["class"]`.
-Then each pixel gets assigned the `category_id` of the object present in that pixel.
-If it is set to `instance` each pixel gets an id for the obj nr in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
+So, if you want to map the custom property `category_id` to an image, you write `map_by=["category_id"]`.
+Then each pixel gets assigned the custom property `category_id` of the object present in that pixel.
+If it is set to `instance` each pixel gets an id for the obj number in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
 It can also be set to different custom properties or attributes of the object class like: `"name"`, which returns the name of each object. 
-This can not be saved in an image, so a csv file is generated, which is attached to the `.hdf5` container in the end.
-Where it maps each instance nr to a name. 
-If there are keys, which can not be stored in an image, it is necessary to also generate an instance image.
-Furthermore, if an instance image is used all other keys are stored in the .csv.
+This can not be saved in an image, so an extra dict is generated, which is attached to the `.hdf5` container in the end.
+Where it maps each instance number to a name. 
+If there are keys, which can not be stored in an image, it is necessary to also generate an instance image, else an error message will be thrown.
 
-
-For example, it would also be possible to use the key: `"location"`. This would access the location of each object and add it to the csv file.
+For example, it would also be possible to use the attribute: `"location"`. This would access the location of each object and add it to the dictionary.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
-This can be avoided by providing a default value like: `default_values= {"location: [0,0,0]}`.
+This can be avoided by providing a default value like: `default_values={"location: [0,0,0]}`.

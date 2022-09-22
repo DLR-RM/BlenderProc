@@ -345,7 +345,7 @@ class _Front3DLoader:
                     # is needed to only clone the second appearance of this object
                     obj.set_cp("is_used", False)
                     obj.set_cp("is_3D_future", True)
-                    obj.set_cp("type", "Non-Object")  # is an non object used for the interesting score
+                    obj.set_cp("3D_future_type", "Non-Object")  # is an non object used for the interesting score
                     # set the category id based on the used obj name
                     obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
                     # walk over all materials
@@ -416,7 +416,7 @@ class _Front3DLoader:
                             created_objects.append(new_obj)
                             new_obj.set_cp("is_used", True)
                             new_obj.set_cp("room_id", room_id)
-                            new_obj.set_cp("type", "Object")  # is an object used for the interesting score
+                            new_obj.set_cp("3D_future_type", "Object")  # is an object used for the interesting score
                             new_obj.set_cp("coarse_grained_class", new_obj.get_cp("category_id"))
                             # this flips the y and z coordinate to bring it to the blender coordinate system
                             new_obj.set_location(mathutils.Vector(child["pos"]).xzy)

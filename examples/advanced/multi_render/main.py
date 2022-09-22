@@ -37,6 +37,7 @@ light.set_energy(1000)
 
 # define the camera intrinsics
 bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+bproc.renderer.enable_segmentation_output(map_by=["instance", "name"])
 
 # Do multiple times: Position the shapenet objects using the physics simulator and render between 2 and 5 images with random camera poses
 for r in range(args.runs):
@@ -76,9 +77,6 @@ for r in range(args.runs):
 
     # render the whole pipeline
     data = bproc.renderer.render()
-
-    # Render segmentation masks (per class and per instance)
-    data.update(bproc.renderer.render_segmap(map_by=["instance", "name"]))
 
     # write the data to a .hdf5 container in the run-specific output directory
     bproc.writer.write_hdf5(os.path.join(args.output_dir, str(r)), data)
