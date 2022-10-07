@@ -1,5 +1,5 @@
 ---
-title: 'BlenderProc2'
+title: 'BlenderProc2: A Procedural Pipeline for Photorealistic Rendering'
 tags:
   - Python
   - Blender
