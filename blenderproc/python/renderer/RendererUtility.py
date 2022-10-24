@@ -756,4 +756,6 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                 break
 
         if not found:
-            raise RuntimeError(f"No GPU could be found with the specified device types: {desired_gpu_device_type}")
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
+            print("Using only the CPU for rendering")
