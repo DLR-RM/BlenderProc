@@ -1,12 +1,8 @@
-from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 import xml.etree.ElementTree as ET
 from os import path
 from xml.dom import minidom
 from typing import List
 import bpy
-
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 def write_sdf(output_dir : str, world_name : str, objects: List[bpy.types.Object]):
@@ -122,44 +118,3 @@ class WorldSDFWriterUtility:
         const_attenuation = ET.SubElement(attenuation, "constant")
         const_attenuation.text = str(blender_light.constant_coefficient)
 
-    @staticmethod    
-    def export_sdf(world_el, prefix_path, mesh_objects):
-        meshes_folder_prefix = 'meshes/'
-
-        for mesh_object in mesh_objects:
-            dae_filename = mesh_object.name()+'.dae'
-            model_name = mesh_object.name()
-
-            # Deselect all objects
-            bpy.ops.object.select_all(action='DESELECT')
-        
-            mesh_object.select_set(True)    
-            # Exports the dae file and its associated textures
-            bpy.ops.wm.collada_export(filepath=prefix_path+meshes_folder_prefix+dae_filename, check_existing=False, filter_blender=False, filter_image=False, filter_movie=False, filter_python=False, filter_font=False, filter_sound=False, filter_text=False, filter_btx=False, filter_collada=True, filter_folder=True, filemode=8, use_selection=True)
-
-            # 1 model and 1 link
-            model = ET.SubElement(world_el, "model", attrib={"name":"test"})
-            static = ET.SubElement(model, "static")
-            static.text = "true"
-            link = ET.SubElement(model, "link", attrib={"name":"testlink"})
-            # for each geometry in geometry library add a <visual> tag
-            visual = ET.SubElement(link, "visual", attrib={"name":o.name})
-
-            geometry = ET.SubElement(visual, "geometry")
-            mesh = ET.SubElement(geometry, "mesh")
-            uri = ET.SubElement(mesh, "uri")
-            uri.text = dae_filename
-            submesh = ET.SubElement(mesh, "submesh")
-            submesh_name = ET.SubElement(submesh, "name")
-            submesh_name.text = o.name
-
-            ## sdf collision tags
-            collision = ET.SubElement(link, "collision", attrib={"name":"collision"})
-
-            geometry = ET.SubElement(collision, "geometry")
-            mesh = ET.SubElement(geometry, "mesh")
-            uri = ET.SubElement(mesh, "uri")
-            uri.text = dae_filename
-
-            collide_bitmask = ET.SubElement(collision, "collide_bitmask")
-            collide_bitmask.text = "0x01"
