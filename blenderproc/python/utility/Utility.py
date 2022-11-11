@@ -711,7 +711,8 @@ class NumpyEncoder(json.JSONEncoder):
             return o.tolist()
         return json.JSONEncoder.default(self, o)
 
-def fileno(file_or_fd: Union[int, IO]) -> int:
+
+def get_file_descriptor(file_or_fd: Union[int, IO]) -> int:
     """ Returns the file descriptor of the given file. 
 
     :param file_or_fd: Either a file or a file descriptor. If a file descriptor is given, it is returned directly.
@@ -719,8 +720,9 @@ def fileno(file_or_fd: Union[int, IO]) -> int:
     """
     fd = getattr(file_or_fd, 'fileno', lambda: file_or_fd)()
     if not isinstance(fd, int):
-        raise ValueError("Expected a file (`.fileno()`) or a file descriptor")
+        raise AttributeError("Expected a file (`.fileno()`) or a file descriptor")
     return fd
+
 
 @contextmanager
 def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True):
@@ -733,14 +735,14 @@ def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True
     """        
     if enabled:
         stdout = sys.stdout
-        stdout_fd = fileno(stdout)
+        stdout_fd = get_file_descriptor(stdout)
         # copy stdout_fd before it is overwritten
         # NOTE: `copied` is inheritable on Windows when duplicating a standard stream
         with os.fdopen(os.dup(stdout_fd), 'wb') as copied: 
             stdout.flush()  # flush library buffers that dup2 knows nothing about
             try:
-                os.dup2(fileno(to), stdout_fd)  # $ exec >&to
-            except ValueError:  # filename
+                os.dup2(get_file_descriptor(to), stdout_fd)  # $ exec >&to
+            except AttributeError:  # filename
                 with open(to, 'wb') as to_file:
                     os.dup2(to_file.fileno(), stdout_fd)  # $ exec > to
             try:
