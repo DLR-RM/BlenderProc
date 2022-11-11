@@ -14,7 +14,7 @@ from blenderproc.python.utility.Utility import Utility, UndoAfterExecution
 
 
 def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", output_key: str = "nocs",
-                return_data: bool = True) -> Dict[str, List[np.ndarray]]:
+                return_data: bool = True, verbose: bool = False) -> Dict[str, List[np.ndarray]]:
     """ Renders the Normalized Object Coordinate Space (NOCS).
 
     Colors each object based on its local coordinates.
@@ -26,6 +26,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
     :param file_prefix: The prefix to use for writing the images.
     :param output_key: The key to use for registering the output.
     :param return_data: Whether to load and return generated data.
+    :param verbose: If True, more details about the rendering process are printed.
     :return: A dict containing one entry "nocs" which points to the list of rendered frames.
     """
     if output_dir is None:
@@ -58,7 +59,7 @@ def render_nocs(output_dir: Optional[str] = None, file_prefix: str = "nocs_", ou
         RendererUtility.set_output_format("OPEN_EXR", 16, enable_transparency=True)
         # Render and ret
         return RendererUtility.render(output_dir, file_prefix, output_key, load_keys={output_key},
-                                      return_data=return_data, keys_with_alpha_channel={output_key})
+                                      return_data=return_data, keys_with_alpha_channel={output_key}, verbose=verbose)
 
 
 class _NOCSRendererUtility:

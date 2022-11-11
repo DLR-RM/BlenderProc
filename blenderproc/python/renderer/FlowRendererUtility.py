@@ -17,7 +17,8 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
                         forward_flow_output_file_prefix: str = "forward_flow_",
                         forward_flow_output_key: str = "forward_flow",
                         backward_flow_output_file_prefix: str = "backward_flow_",
-                        backward_flow_output_key: str = "backward_flow", return_data: bool = True) -> \
+                        backward_flow_output_key: str = "backward_flow", return_data: bool = True,
+                        verbose: bool = False) -> \
         Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Renders the optical flow (forward and backward) for all frames.
 
@@ -32,6 +33,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     :param backward_flow_output_file_prefix: The file prefix that should be used when writing backward flow to a file.
     :param backward_flow_output_key: The key which should be used for storing backward optical flow values.
     :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer outputs. Keys can be 'forward_flow', 'backward_flow'
     """
     if get_forward_flow is False and get_backward_flow is False:
@@ -56,7 +58,8 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         # only need to render once; both fwd and bwd flow will be saved
         temporary_fwd_flow_file_path = os.path.join(temp_dir, 'fwd_flow_')
         temporary_bwd_flow_file_path = os.path.join(temp_dir, 'bwd_flow_')
-        RendererUtility.render(temp_dir, "bwd_flow_", None, load_keys=set())
+        print(f"Rendering {bpy.context.scene.frame_end - bpy.context.scene.frame_start} frames of optical flow...")
+        RendererUtility.render(temp_dir, "bwd_flow_", None, load_keys=set(), verbose=verbose)
 
         # After rendering: convert to optical flow or calculate hsv visualization, if desired
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):

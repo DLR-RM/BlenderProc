@@ -2,15 +2,17 @@
 
 import os
 import csv
+import sys
 import threading
 from types import TracebackType
-from typing import List, Dict, Any, Tuple, Optional, Union, Type
+from typing import IO, List, Dict, Any, Tuple, Optional, Union, Type
 from pathlib import Path
 import time
 import inspect
 import importlib
 import json
 from sys import platform
+from contextlib import contextmanager
 
 import bpy
 import numpy as np
@@ -708,3 +710,74 @@ class NumpyEncoder(json.JSONEncoder):
             # Convert it to a list
             return o.tolist()
         return json.JSONEncoder.default(self, o)
+
+class BlockStdOut:
+    """
+    A content manager for setting the frame correctly.
+    """    
+
+    def __init__(self, enable: bool = True):
+        """ Sets the frame number for its complete block.
+
+        :param frame: The frame number to set. If None is given, nothing is changed.
+        """
+        self._enable = enable
+
+    def __enter__(self):
+        if self._enable:
+            logfile = 'blender_render.log'
+            open(logfile, 'a').close()
+            old = os.dup(1)
+            sys.stdout.flush()
+            os.close(1)
+            os.open(logfile, os.O_WRONLY)
+
+    def __exit__(self, exc_type: Optional[Type[BaseException]],
+                 exc_value: Optional[BaseException],
+                 traceback: Optional[TracebackType]):
+         if self._enable:
+            os.close(1)
+            os.dup(old)
+            os.close(old)
+            sys.stdout.write('\r')
+
+def fileno(file_or_fd: Union[int, IO]) -> int:
+    """ Returns the file descriptor of the given file. 
+
+    :param file_or_fd: Either a file or a file descriptor. If a file descriptor is given, it is returned directly.
+    """
+    fd = getattr(file_or_fd, 'fileno', lambda: file_or_fd)()
+    if not isinstance(fd, int):
+        raise ValueError("Expected a file (`.fileno()`) or a file descriptor")
+    return fd
+
+@contextmanager
+def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True):
+    """ Redirects all stdout to the given file.
+
+    From https://stackoverflow.com/a/22434262.
+
+    :param to: The file which should be the new target for stdout. Can be a path, file or file descriptor.
+    :param enabled: If False, then this context manager does nothing.
+    """        
+    if enabled:
+        stdout = sys.stdout
+        stdout_fd = fileno(stdout)
+        # copy stdout_fd before it is overwritten
+        # NOTE: `copied` is inheritable on Windows when duplicating a standard stream
+        with os.fdopen(os.dup(stdout_fd), 'wb') as copied: 
+            stdout.flush()  # flush library buffers that dup2 knows nothing about
+            try:
+                os.dup2(fileno(to), stdout_fd)  # $ exec >&to
+            except ValueError:  # filename
+                with open(to, 'wb') as to_file:
+                    os.dup2(to_file.fileno(), stdout_fd)  # $ exec > to
+            try:
+                yield
+            finally:
+                # restore stdout to its previous value
+                # NOTE: dup2 makes stdout_fd inheritable unconditionally
+                stdout.flush()
+                os.dup2(copied.fileno(), stdout_fd)  # $ exec >&copied
+    else:
+        yield

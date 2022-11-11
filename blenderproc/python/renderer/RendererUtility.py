@@ -5,6 +5,7 @@ from typing import Union, Dict, List, Set, Optional, Any
 import math
 import sys
 import platform
+import time
 
 import mathutils
 import bpy
@@ -14,7 +15,7 @@ from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, stdout_redirected
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
@@ -525,7 +526,7 @@ def map_file_format_to_file_ending(file_format: str) -> str:
 
 def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
            load_keys: Optional[Set[str]] = None, return_data: bool = True,
-           keys_with_alpha_channel: Optional[Set[str]] = None) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
+           keys_with_alpha_channel: Optional[Set[str]] = None, verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
 
     This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -537,6 +538,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param load_keys: Set of output keys to load when available
     :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
+    :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
     """
     if output_dir is None:
@@ -561,10 +563,19 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         if len(get_all_blender_mesh_objects()) == 0:
             raise Exception("There are no mesh-objects to render, "
                             "please load an object before invoking the renderer.")
+        # Print what is rendered
+        if load_keys:
+            registered_output_keys = [output["key"] for output in Utility.get_registered_outputs()]
+            keys_to_render = sorted([key for key in load_keys if key in registered_output_keys])
+            print(f"Rendering {bpy.context.scene.frame_end - bpy.context.scene.frame_start} frames of {', '.join(keys_to_render)}...")
+
         # As frame_end is pointing to the next free frame, decrease it by one, as
         # blender will render all frames in [frame_start, frame_ned]
-        bpy.context.scene.frame_end -= 1
-        bpy.ops.render.render(animation=True, write_still=True)
+        bpy.context.scene.frame_end -= 1     
+        begin = time.time()   
+        with stdout_redirected(enabled=not verbose):
+            bpy.ops.render.render(animation=True, write_still=True)
+        print(f"Finished rendering after {time.time() - begin:.3f} seconds")
         # Revert changes
         bpy.context.scene.frame_end += 1
     else:
