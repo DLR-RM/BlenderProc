@@ -711,36 +711,6 @@ class NumpyEncoder(json.JSONEncoder):
             return o.tolist()
         return json.JSONEncoder.default(self, o)
 
-class BlockStdOut:
-    """
-    A content manager for setting the frame correctly.
-    """    
-
-    def __init__(self, enable: bool = True):
-        """ Sets the frame number for its complete block.
-
-        :param frame: The frame number to set. If None is given, nothing is changed.
-        """
-        self._enable = enable
-
-    def __enter__(self):
-        if self._enable:
-            logfile = 'blender_render.log'
-            open(logfile, 'a').close()
-            old = os.dup(1)
-            sys.stdout.flush()
-            os.close(1)
-            os.open(logfile, os.O_WRONLY)
-
-    def __exit__(self, exc_type: Optional[Type[BaseException]],
-                 exc_value: Optional[BaseException],
-                 traceback: Optional[TracebackType]):
-         if self._enable:
-            os.close(1)
-            os.dup(old)
-            os.close(old)
-            sys.stdout.write('\r')
-
 def fileno(file_or_fd: Union[int, IO]) -> int:
     """ Returns the file descriptor of the given file. 
 
