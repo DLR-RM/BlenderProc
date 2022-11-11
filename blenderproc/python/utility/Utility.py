@@ -718,7 +718,10 @@ def get_file_descriptor(file_or_fd: Union[int, IO]) -> int:
     :param file_or_fd: Either a file or a file descriptor. If a file descriptor is given, it is returned directly.
     :return: The file descriptor of the given file.
     """
-    fd = getattr(file_or_fd, 'fileno', lambda: file_or_fd)()
+    if hasattr(file_or_fd, 'fileno'):
+        fd = file_or_fd.fileno()
+    else:
+        fd = file_or_fd
     if not isinstance(fd, int):
         raise AttributeError("Expected a file (`.fileno()`) or a file descriptor")
     return fd
