@@ -46,4 +46,4 @@ class DefaultConfig:
     default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18",
                             "scikit-image==0.19.2", "pypng==0.0.20", "scipy==1.7.3", "matplotlib==3.5.1",
                             "pytz==2021.1", "h5py==3.6.0", "Pillow==8.3.2", "opencv-contrib-python==4.5.5.64",
-                            "scikit-learn==1.0.2", "python-dateutil==2.8.2"]
+                            "scikit-learn==1.0.2", "python-dateutil==2.8.2", "rich==12.6.0"]

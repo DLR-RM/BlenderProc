@@ -728,20 +728,21 @@ def get_file_descriptor(file_or_fd: Union[int, IO]) -> int:
 
 
 @contextmanager
-def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True):
+def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True) -> IO:
     """ Redirects all stdout to the given file.
 
     From https://stackoverflow.com/a/22434262.
 
     :param to: The file which should be the new target for stdout. Can be a path, file or file descriptor.
     :param enabled: If False, then this context manager does nothing.
+    :return: The old stdout output.
     """        
     if enabled:
         stdout = sys.stdout
         stdout_fd = get_file_descriptor(stdout)
         # copy stdout_fd before it is overwritten
         # NOTE: `copied` is inheritable on Windows when duplicating a standard stream
-        with os.fdopen(os.dup(stdout_fd), 'wb') as copied: 
+        with os.fdopen(os.dup(stdout_fd), 'w') as copied: 
             stdout.flush()  # flush library buffers that dup2 knows nothing about
             try:
                 os.dup2(get_file_descriptor(to), stdout_fd)  # $ exec >&to
@@ -749,11 +750,12 @@ def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True
                 with open(to, 'wb') as to_file:
                     os.dup2(to_file.fileno(), stdout_fd)  # $ exec > to
             try:
-                yield
+                yield copied
             finally:
                 # restore stdout to its previous value
                 # NOTE: dup2 makes stdout_fd inheritable unconditionally
                 stdout.flush()
                 os.dup2(copied.fileno(), stdout_fd)  # $ exec >&copied
     else:
-        yield
+        yield sys.stdout
+
