@@ -35,7 +35,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
     :param output_dir: Output directory to write the coco annotations
     :param instance_segmaps: List of instance segmentation maps
     :param instance_attribute_maps: per-frame mappings with idx, class and optionally supercategory/bop_dataset_name
-    :param colors: List of color images
+    :param colors: List of color images. Does not support stereo images, enter left and right inputs subsequently.
     :param color_file_format: Format to save color images in
     :param mask_encoding_format: Encoding format of the binary masks. Default: 'rle'. Available: 'rle', 'polygon'.
     :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset set
@@ -56,12 +56,14 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                           the category id itself is used.
     :param file_prefix: Optional prefix for image file names
     """
-    if instance_segmaps is None:
-        instance_segmaps = []
+    instance_segmaps = [] if instance_segmaps is None else list(instance_segmaps)
+    colors = [] if colors is None else list(colors)
     if instance_attribute_maps is None:
         instance_attribute_maps = []
-    if colors is None:
-        colors = []
+
+    if len(colors[0].shape) == 4:
+        raise ValueError(f"BlenderProc currently does not support writing coco annotations for stereo images. "
+                         f"However, you can enter left and right images / segmaps separately.")
 
     # Create output directory
     os.makedirs(os.path.join(output_dir, 'images'), exist_ok=True)
