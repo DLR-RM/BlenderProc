@@ -198,15 +198,18 @@ def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap
                                                     f"_{key}.png")
                     else:
                         save_to_file = None
+
                     # Check if it is a stereo image
                     if len(value.shape) >= 3 and value.shape[0] == 2:
                         # Visualize both eyes separately
                         for i, img in enumerate(value):
-                            used_save_to_file = str(Path(save_to_file).with_suffix("")) + (
-                                "_left" if i == 0 else "_right") + Path(save_to_file).suffix
+                            print(img.shape)
+                            if save_to_file:
+                                save_to_file = str(Path(save_to_file).with_suffix("")) + (
+                                    "_left" if i == 0 else "_right") + Path(save_to_file).suffix
                             vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"),
                                      rgb_keys, flow_keys, segmap_keys, segcolormap_keys, depth_keys, depth_max,
-                                     used_save_to_file)
+                                     save_to_file)
                     else:
                         vis_data(key, value, data, os.path.basename(path), rgb_keys, flow_keys, segmap_keys,
                                  segcolormap_keys, depth_keys, depth_max, save_to_file)
