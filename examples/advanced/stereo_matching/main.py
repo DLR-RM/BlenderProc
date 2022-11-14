@@ -42,6 +42,7 @@ bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 bproc.renderer.toggle_stereo(True)
 bproc.renderer.set_max_amount_of_samples(50)
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name"])
 
 # render the whole pipeline
 data = bproc.renderer.render()
