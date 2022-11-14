@@ -266,7 +266,7 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
     to ensure that all channels are really equal.
 
     :param image: Input image or list of images
-    :return: The trimmed image data in the same format as input
+    :return: The trimmed image data with preserved input type
     """
 
     if isinstance(image, list):
