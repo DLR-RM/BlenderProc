@@ -203,7 +203,6 @@ def vis_file(path, keys_to_visualize=None, rgb_keys=None, flow_keys=None, segmap
                     if len(value.shape) >= 3 and value.shape[0] == 2:
                         # Visualize both eyes separately
                         for i, img in enumerate(value):
-                            print(img.shape)
                             if save_to_file:
                                 save_to_file = str(Path(save_to_file).with_suffix("")) + (
                                     "_left" if i == 0 else "_right") + Path(save_to_file).suffix
