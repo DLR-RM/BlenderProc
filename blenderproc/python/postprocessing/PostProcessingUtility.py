@@ -266,11 +266,14 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
     to ensure that all channels are really equal.
 
     :param image: Input image or list of images
-    :return: The trimmed image data.
+    :return: The trimmed image data in the same format as input
     """
 
-    if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
+    if isinstance(image, list):
         return [trim_redundant_channels(ele) for ele in image]
+    
+    if hasattr(image, "shape") and len(image.shape) > 3:
+        return np.array([trim_redundant_channels(ele) for ele in image])
 
     if hasattr(image, "shape") and len(image.shape) == 3 and image.shape[2] == 3:
         image = image[:, :, 0]  # All channels have the same value, so just extract any single channel
@@ -294,7 +297,6 @@ def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
 
     return_dict: Dict[str, Union[np.ndarray, List[np.ndarray], List[Dict[str, Any]]]] = {}
     is_stereo_case = bpy.context.scene.render.use_multiview
-
     # convert a single image to a list of stereo images
     if isinstance(image, list):
         if len(image) == 0:
@@ -411,7 +413,6 @@ def segmentation_mapping(image: Union[List[np.ndarray], np.ndarray],
                     elif "instance" not in map_by:
                         raise ValueError(f"The map_by key \"{map_by_attribute}\" requires that the instance map is "
                                          f"stored as well in the output. Change it to: {map_by + ['instance']}")
-
         # combine stereo image and add to output
         for key, list_of_stereo_images in mapped_results_stereo_dict.items():
             if len(list_of_stereo_images) == 1:
