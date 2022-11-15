@@ -4,5 +4,5 @@ os.environ.setdefault("OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN
 
 from blenderproc.command_line import cli
 
-# Run the actual CLI, this is just a fallback script
+# Run the actual CLI, this is just a fallback script test
 cli()
