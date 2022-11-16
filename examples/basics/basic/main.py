@@ -16,7 +16,7 @@ objs = bproc.loader.load_obj(args.scene)
 light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
-light.set_energy(1000)
+light.set_energy(10)
 
 # define the camera resolution
 bproc.camera.set_resolution(512, 512)
