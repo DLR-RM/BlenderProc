@@ -91,7 +91,7 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
 
             if mode_on_failure == 'initial_pose':
                 obj.set_location(initial_location)
-                obj.get_rotation_euler(initial_rotation)
+                obj.set_rotation_euler(initial_rotation)
 
         sample_results[obj] = (amount_of_tries_done, no_collision)
 
