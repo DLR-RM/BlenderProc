@@ -61,7 +61,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
     if instance_attribute_maps is None:
         instance_attribute_maps = []
 
-    if len(colors[0].shape) == 4:
+    if len(colors) > 0 and len(colors[0].shape) == 4:
         raise ValueError(f"BlenderProc currently does not support writing coco annotations for stereo images. "
                          f"However, you can enter left and right images / segmaps separately.")
 
