@@ -1,20 +1,26 @@
 """Provides functionality to render a color, normal, depth and distance image."""
 
+from contextlib import contextmanager
 import os
-from typing import Union, Dict, List, Set, Optional, Any
+import threading
+from typing import IO, Union, Dict, List, Set, Optional, Any
 import math
 import sys
 import platform
+import time
 
 import mathutils
 import bpy
 import numpy as np
+from rich.console import Console
+from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn 
+from io import StringIO
 
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, stdout_redirected
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 
@@ -523,9 +529,96 @@ def map_file_format_to_file_ending(file_format: str) -> str:
     raise RuntimeError(f"Unknown Image Type {file_format}")
 
 
+def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_samples: int):
+    """ The thread rendering the progress bar
+
+    :param pipe_out: The pipe output delivering blenders debug messages.
+    :param stdout: The stdout to which the progress bar should be written.
+    :param total_frames: The number of frames that should be rendered.
+    :param num_samples: The number of samples used to render each frame.
+    """
+    # Define columns for progress bar
+    columns = [
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TimeRemainingColumn(),
+        TextColumn("[progress.description]{task.fields[status]}"),
+    ]
+    # Initializes progress bar using given stdout
+    with Progress(*columns, console=Console(file=stdout), transient=True) as progress:
+        complete_task = progress.add_task("[green]Total", total=total_frames, status="")
+        frame_task = progress.add_task("[yellow]Current frame", total=num_samples, status="")
+
+        # Continuously read blenders debug messages
+        current_line = ""
+        while True:
+            # Read the next character
+            char = os.read(pipe_out, 1).decode()
+            
+            # If its the ending character, stop
+            if not char or "\b" == char:
+                break
+            # If the current line has ended
+            if char == "\n":                
+                # Check if its a line we can use (starts with "Fra:")
+                if current_line.startswith("Fra:"):
+                    # Extract current frame number and set to progress bar
+                    frame_number = int(current_line.split()[0][len("Fra:"):])
+                    progress.update(complete_task, completed=frame_number)
+                    progress.update(complete_task, status=f"Rendering frame {frame_number + 1} of {total_frames}")
+
+                    # Split line into columns
+                    status_columns = [col.strip() for col in current_line.split("|")]
+                    if "Scene, ViewLayer" in status_columns:
+                        # If we are currently at "Scene, ViewLayer", use everything afterwards
+                        status = " | ".join(status_columns[status_columns.index("Scene, ViewLayer") + 1:])
+                        # If we are currently rendering, update the progress 
+                        if status.startswith("Sample"):
+                            progress.update(frame_task, completed=int(status[len("Sample"):].split("/")[0]))
+                    elif "Compositing" in status_columns:
+                        # If we are at "Compositing", use everything afterwards including "Compositing"
+                        status = " | ".join(status_columns[status_columns.index("Compositing"):])
+                        # Set render progress to complete
+                        progress.update(frame_task, completed=num_samples)
+                    else:
+                        # In every other case, use last column
+                        status = status_columns[-1]
+                    # Set status to progress bar
+                    progress.update(frame_task, status=status)
+                # Start with next line
+                current_line = ""
+            else:
+                # Append char to current line
+                current_line += char     
+
+@contextmanager
+def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: int, enabled: bool = True):
+    """ Shows a progress bar visualizing the render progress.
+
+    :param pipe_out: The pipe output delivering blenders debug messages.
+    :param pipe_in: The input of the pipe, necessary to send the end character.
+    :param stdout: The stdout to which the progress bar should be written.
+    :param total_frames: The number of frames that should be rendered.
+    :param enabled: If False, no progress bar is shown.
+    """
+    if enabled:
+        thread = threading.Thread(target=_progress_bar_thread, args=(pipe_out, stdout, total_frames, bpy.context.scene.cycles.samples))
+        thread.start()
+        try:
+            yield
+        finally:
+            # Send final character, so the thread knows to stop
+            w = os.fdopen(pipe_in, 'w')
+            w.write("\b")
+            w.close()
+            thread.join()
+    else:
+        yield
+        
+
 def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
            load_keys: Optional[Set[str]] = None, return_data: bool = True,
-           keys_with_alpha_channel: Optional[Set[str]] = None) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
+           keys_with_alpha_channel: Optional[Set[str]] = None, verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
 
     This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -537,6 +630,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param load_keys: Set of output keys to load when available
     :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
+    :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
     """
     if output_dir is None:
@@ -561,10 +655,24 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         if len(get_all_blender_mesh_objects()) == 0:
             raise Exception("There are no mesh-objects to render, "
                             "please load an object before invoking the renderer.")
+        # Print what is rendered
+        total_frames = bpy.context.scene.frame_end - bpy.context.scene.frame_start
+        if load_keys:
+            registered_output_keys = [output["key"] for output in Utility.get_registered_outputs()]
+            keys_to_render = sorted([key for key in load_keys if key in registered_output_keys])
+            print(f"Rendering {total_frames} frames of {', '.join(keys_to_render)}...")
+
         # As frame_end is pointing to the next free frame, decrease it by one, as
         # blender will render all frames in [frame_start, frame_ned]
-        bpy.context.scene.frame_end -= 1
-        bpy.ops.render.render(animation=True, write_still=True)
+        bpy.context.scene.frame_end -= 1    
+           
+        # Define pipe to communicate blenders debug messages to progress bar
+        pipe_out, pipe_in = os.pipe()
+        begin = time.time()   
+        with stdout_redirected(pipe_in, enabled=not verbose) as stdout:
+            with _render_progress_bar(pipe_out, pipe_in, stdout, total_frames, enabled=not verbose):
+                bpy.ops.render.render(animation=True, write_still=True)
+        print(f"Finished rendering after {time.time() - begin:.3f} seconds")
         # Revert changes
         bpy.context.scene.frame_end += 1
     else:
@@ -756,4 +864,6 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
                 break
 
         if not found:
-            raise RuntimeError(f"No GPU could be found with the specified device types: {desired_gpu_device_type}")
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
+            print("Using only the CPU for rendering")
