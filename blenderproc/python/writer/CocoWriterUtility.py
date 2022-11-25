@@ -24,7 +24,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                            append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
                            segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors",
                            jpg_quality: int = 95, label_mapping: Optional[LabelIdMapping] = None,
-                           file_prefix: str = ""):
+                           file_prefix: str = "", indent: int = None):
     """ Writes coco annotations in the following steps:
     1. Locate the seg images
     2. Locate the rgb maps
@@ -55,6 +55,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                           If None, is given then the `name` field in the csv files is used or - if not existing -
                           the category id itself is used.
     :param file_prefix: Optional prefix for image file names
+    :param indent: specifies how much indent to use when writing annotation output. Default is None. 
     """
     instance_segmaps = [] if instance_segmaps is None else list(instance_segmaps)
     colors = [] if colors is None else list(colors)
@@ -164,7 +165,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
 
     print("Writing coco annotations to " + coco_annotations_path)
     with open(coco_annotations_path, 'w', encoding="utf-8") as fp:
-        json.dump(coco_output, fp)
+        json.dump(coco_output, fp, indent=indent)
 
 
 def binary_mask_to_rle(binary_mask: np.ndarray) -> Dict[str, List[int]]:
