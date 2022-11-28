@@ -177,7 +177,8 @@ class _BopWriterUtility:
         :param camera_path: Path to camera.json
         :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.
         """
-
+        # Use second frame for reading intrinsics (due to backwards compatibility)
+        bpy.context.scene.frame_set(1)
         cam_K = _WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam_K')
         camera = {'cx': cam_K[0][2],
                   'cy': cam_K[1][2],
