@@ -24,7 +24,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                            append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
                            segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors",
                            jpg_quality: int = 95, label_mapping: Optional[LabelIdMapping] = None,
-                           file_prefix: str = "", indent: int = None):
+                           file_prefix: str = "", indent: Optional[Union[int, str]] = None):
     """ Writes coco annotations in the following steps:
     1. Locate the seg images
     2. Locate the rgb maps
@@ -55,7 +55,11 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                           If None, is given then the `name` field in the csv files is used or - if not existing -
                           the category id itself is used.
     :param file_prefix: Optional prefix for image file names
-    :param indent: specifies how much indent to use when writing annotation output. Default is None. 
+    :param indent: If indent is a non-negative integer or string, then the annotation output
+                   will be pretty-printed with that indent level. An indent level of 0, negative, or "" will
+                   only insert newlines. None (the default) selects the most compact representation.
+                   Using a positive integer indent indents that many spaces per level.
+                   If indent is a string (such as "\t"), that string is used to indent each level.
     """
     instance_segmaps = [] if instance_segmaps is None else list(instance_segmaps)
     colors = [] if colors is None else list(colors)
