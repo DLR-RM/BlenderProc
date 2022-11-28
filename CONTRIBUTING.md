@@ -107,7 +107,7 @@ New module allows loading .obj files and setting custom properties like `physics
 closes #123
 ```
 
-For branch names please stick to the ussie number pattern of:
+For branch names please stick to the issue number pattern of:
 
 ```
 iss_300_some_short_name
