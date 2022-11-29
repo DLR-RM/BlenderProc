@@ -14,7 +14,7 @@ class UnitTestCheckLoader(unittest.TestCase):
     def test_object_loader(self):
         """ Tests if the object loader is loading all objects from a given .obj file.
         """
-        bproc.init()
+        bproc.clean_up(True)
         resource_folder = os.path.join(os.path.dirname(__file__), "..", "examples", "resources")
         objs = bproc.loader.load_obj(os.path.join(resource_folder, "scene.obj"))
 
@@ -31,12 +31,12 @@ class UnitTestCheckLoader(unittest.TestCase):
     def test_cc_material_loader(self):
         """ Tests if the default cc materials are loaded.
         """
-        bproc.init()
+        bproc.clean_up(True)
         cc_texture_folder = test_path_manager.cc_materials
         materials = bproc.loader.load_ccmaterials(folder_path=cc_texture_folder,
                                                   used_assets=["metal", "wood", "fabric"])
 
-        list_of_some_textures = ["Metal001", "Fabric006", "Wood050"]
+        list_of_some_textures = ["Metal001", "Fabric006", "Wood039"]
 
         for material in materials:
             if material.get_name() in list_of_some_textures:

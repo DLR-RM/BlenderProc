@@ -13,7 +13,7 @@ class UnitTestCheckUtility(unittest.TestCase):
     def test_convert_to_entity_subclass(self):
         """ Test if the blender_data objects are still valid after an undo execution is done.
         """
-        bproc.init()
+        bproc.clean_up(True)
         cube = convert_to_entity_subclass(bproc.object.create_primitive("CUBE").blender_obj)
         empty = convert_to_entity_subclass(bproc.object.create_empty("empty_test").blender_obj)
         light = convert_to_entity_subclass(bproc.types.Light().blender_obj)
@@ -23,7 +23,7 @@ class UnitTestCheckUtility(unittest.TestCase):
         self.assertEqual(type(light), Light)
 
     def test_scene_graph_hierarchy_changes(self):
-        bproc.init()
+        bproc.clean_up(True)
 
         root = bproc.object.create_primitive("CUBE")
         root.set_location([1, 0, 0])
