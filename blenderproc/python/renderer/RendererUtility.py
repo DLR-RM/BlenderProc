@@ -13,8 +13,7 @@ import mathutils
 import bpy
 import numpy as np
 from rich.console import Console
-from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn 
-from io import StringIO
+from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
@@ -554,12 +553,12 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
         while True:
             # Read the next character
             char = os.read(pipe_out, 1).decode()
-            
+
             # If its the ending character, stop
             if not char or "\b" == char:
                 break
             # If the current line has ended
-            if char == "\n":                
+            if char == "\n":
                 # Check if its a line we can use (starts with "Fra:")
                 if current_line.startswith("Fra:"):
                     # Extract current frame number and set to progress bar
@@ -572,9 +571,9 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
                     if "Scene, ViewLayer" in status_columns:
                         # If we are currently at "Scene, ViewLayer", use everything afterwards
                         status = " | ".join(status_columns[status_columns.index("Scene, ViewLayer") + 1:])
-                        # If we are currently rendering, update the progress 
+                        # If we are currently rendering, update the progress
                         if status.startswith("Sample"):
-                            progress.update(frame_task, completed=int(status[len("Sample"):].split("/")[0]))
+                            progress.update(frame_task, completed=int(status[len("Sample"):].split("/", maxsplit=1)[0]))
                     elif "Compositing" in status_columns:
                         # If we are at "Compositing", use everything afterwards including "Compositing"
                         status = " | ".join(status_columns[status_columns.index("Compositing"):])
@@ -589,7 +588,8 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
                 current_line = ""
             else:
                 # Append char to current line
-                current_line += char     
+                current_line += char
+
 
 @contextmanager
 def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: int, enabled: bool = True):
@@ -602,7 +602,8 @@ def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: 
     :param enabled: If False, no progress bar is shown.
     """
     if enabled:
-        thread = threading.Thread(target=_progress_bar_thread, args=(pipe_out, stdout, total_frames, bpy.context.scene.cycles.samples))
+        thread = threading.Thread(target=_progress_bar_thread,
+                                  args=(pipe_out, stdout, total_frames, bpy.context.scene.cycles.samples))
         thread.start()
         try:
             yield
@@ -614,11 +615,12 @@ def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: 
             thread.join()
     else:
         yield
-        
+
 
 def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
            load_keys: Optional[Set[str]] = None, return_data: bool = True,
-           keys_with_alpha_channel: Optional[Set[str]] = None, verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
+           keys_with_alpha_channel: Optional[Set[str]] = None,
+           verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
 
     This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -664,11 +666,11 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
 
         # As frame_end is pointing to the next free frame, decrease it by one, as
         # blender will render all frames in [frame_start, frame_ned]
-        bpy.context.scene.frame_end -= 1    
-           
+        bpy.context.scene.frame_end -= 1
+
         # Define pipe to communicate blenders debug messages to progress bar
         pipe_out, pipe_in = os.pipe()
-        begin = time.time()   
+        begin = time.time()
         with stdout_redirected(pipe_in, enabled=not verbose) as stdout:
             with _render_progress_bar(pipe_out, pipe_in, stdout, total_frames, enabled=not verbose):
                 bpy.ops.render.render(animation=True, write_still=True)

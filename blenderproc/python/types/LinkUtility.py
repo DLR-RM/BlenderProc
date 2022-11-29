@@ -360,8 +360,7 @@ class Link(Entity):
             link2base_mats = [bone_mat @ (self.link2bone_mat.inverted() @ visual_local2link_mat) for
                               visual_local2link_mat in self.visual_local2link_mats]
             return [parent2world_matrix @ mat for mat in link2base_mats]
-        else:
-            return None
+        return None
 
     def get_collision_local2world_mats(self, parent2world_matrix: Matrix) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the collision parts.
@@ -377,8 +376,7 @@ class Link(Entity):
             link2base_mats = [bone_mat @ (self.link2bone_mat.inverted() @ collision_local2link_mat) for
                               collision_local2link_mat in self.collision_local2link_mats]
             return [parent2world_matrix @ mat for mat in link2base_mats]
-        else:
-            return None
+        return None
 
     def get_inertial_local2world_mat(self, parent2world_matrix: Matrix) -> Optional[Matrix]:
         """Returns the transformation matrix from world to the inertial part.
@@ -393,8 +391,7 @@ class Link(Entity):
         if self.inertial is not None:
             link2base_mat = bone_mat @ (self.link2bone_mat.inverted() @ self.inertial_local2link_mat)
             return parent2world_matrix @ link2base_mat
-        else:
-            return None
+        return None
 
     def get_all_objs(self):
         """ Returns all meshes of this link.

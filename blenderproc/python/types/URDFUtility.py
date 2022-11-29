@@ -181,7 +181,9 @@ class URDFObject(Entity):
 
         :return: Numpy array of shape (num_bones, 4, 4).
         """
-        return np.stack([link.get_collision_local2world_mats(Matrix(self.get_local2world_mat())) for link in self.links])
+        return np.stack([
+            link.get_collision_local2world_mats(Matrix(self.get_local2world_mat())) for link in self.links
+        ])
 
     def get_all_inertial_local2world_mats(self) -> np.array:
         """ Returns all transformations from the world frame to the inertial objects.
