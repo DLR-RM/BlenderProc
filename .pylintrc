@@ -1,6 +1,6 @@
 [FORMAT]
 max-line-length=120
-disable=C0103,E0401,R0915,R0913,R0914,R1702,R0912,R0915,R0911,R0903,R0904,R0201
+disable=C0103,E0401,R0915,R0913,R0914,R1702,R0912,R0915,R0911,R0903,R0904
 ignored-modules=urllib,cv2
 # we do not increase the code quality on the old modules anymore:
 ignore-paths=blenderproc/python/modules/.*$,blenderproc/api/.*$
