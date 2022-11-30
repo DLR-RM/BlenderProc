@@ -89,9 +89,9 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-3.3.0
+            # right new only support blender-3.3.1
             major_version = "3.3"
-            minor_version = "0"
+            minor_version = "1"
             blender_version = f"blender-{major_version}.{minor_version}"
             if platform in ["linux", "linux2"]:
                 blender_version += "-linux-x64"
@@ -204,7 +204,7 @@ class InstallUtility:
                 # rename the blender folder to better fit our existing scheme
                 for folder in os.listdir(blender_install_path):
                     if os.path.isdir(os.path.join(blender_install_path, folder)) and \
-                            folder.startswith("blender-" + major_version):
+                            folder.startswith(f"blender-{major_version}.{minor_version}"):
                         os.rename(os.path.join(blender_install_path, folder),
                                   os.path.join(blender_install_path, blender_version))
         else:
