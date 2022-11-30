@@ -15,7 +15,7 @@ class UnitTestCheckUtility(unittest.TestCase):
         """ Test if the blender_data objects are still valid after an undo execution is done. 
         """
         with SilentMode():
-            bproc.init()
+            bproc.clean_up(True)
             objs = bproc.loader.load_obj(os.path.join(test_path_manager.example_resources, "scene.obj"))
 
             for obj in objs:

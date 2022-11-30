@@ -26,6 +26,8 @@ from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
 from blenderproc.version import __version__
+
+
 # pylint: enable=wrong-import-position
 
 
@@ -659,6 +661,7 @@ class _KeyFrameState(threading.local):
     """
     This class is only used in the KeyFrame class
     """
+
     def __init__(self):
         super().__init__()
         self.depth = 0
@@ -713,7 +716,7 @@ class NumpyEncoder(json.JSONEncoder):
 
 
 def get_file_descriptor(file_or_fd: Union[int, IO]) -> int:
-    """ Returns the file descriptor of the given file. 
+    """ Returns the file descriptor of the given file.
 
     :param file_or_fd: Either a file or a file descriptor. If a file descriptor is given, it is returned directly.
     :return: The file descriptor of the given file.
@@ -736,13 +739,13 @@ def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True
     :param to: The file which should be the new target for stdout. Can be a path, file or file descriptor.
     :param enabled: If False, then this context manager does nothing.
     :return: The old stdout output.
-    """        
+    """
     if enabled:
         stdout = sys.stdout
         stdout_fd = get_file_descriptor(stdout)
         # copy stdout_fd before it is overwritten
         # NOTE: `copied` is inheritable on Windows when duplicating a standard stream
-        with os.fdopen(os.dup(stdout_fd), 'w') as copied: 
+        with os.fdopen(os.dup(stdout_fd), 'w') as copied:
             stdout.flush()  # flush library buffers that dup2 knows nothing about
             try:
                 os.dup2(get_file_descriptor(to), stdout_fd)  # $ exec >&to
@@ -758,4 +761,3 @@ def stdout_redirected(to: Union[int, IO, str] = os.devnull, enabled: bool = True
                 os.dup2(copied.fileno(), stdout_fd)  # $ exec >&copied
     else:
         yield sys.stdout
-

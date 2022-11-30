@@ -208,7 +208,9 @@ class _AMASSLoader:
         if not os.path.exists(bm_path) or not os.path.exists(dmpl_path):
             raise FileNotFoundError("Parametric Body model doesn't exist, please follow download "
                                     "instructions section in AMASS Example")
+        # pylint: disable=no-member
         comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #pylint: enable=no-member
         body_model = BodyModel(bm_path=bm_path, num_betas=num_betas, num_dmpls=num_dmpls,
                                path_dmpl=dmpl_path).to(comp_device)
         faces = body_model.f.detach().cpu().numpy()

@@ -11,7 +11,7 @@ class UnitTestCheckCamera(unittest.TestCase):
     def test_camera_add_camera_pose(self):
         """ Tests if the camera to world matrix is set right.
         """
-        bproc.init()
+        bproc.clean_up(True)
 
         poi = np.array([0, 0, 0])
         #location = np.array([1, 2, 3])

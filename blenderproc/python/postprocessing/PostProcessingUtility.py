@@ -271,7 +271,7 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
 
     if isinstance(image, list):
         return [trim_redundant_channels(ele) for ele in image]
-    
+
     if hasattr(image, "shape") and len(image.shape) > 3:
         return np.array([trim_redundant_channels(ele) for ele in image])
 
