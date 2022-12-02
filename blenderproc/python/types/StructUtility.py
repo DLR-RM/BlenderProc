@@ -101,7 +101,8 @@ class Struct:
 
         :return: A list of key value pairs
         """
-        return self.blender_obj.items()
+        cps = dict([pair for pair in self.blender_obj.items()])
+        return cps
 
     def clear_all_cps(self):
         """ Removes all existing custom properties the struct has. """

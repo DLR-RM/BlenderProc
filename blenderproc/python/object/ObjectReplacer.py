@@ -63,7 +63,7 @@ def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace
 
                 # Copy properties to the newly duplicated object
                 if copy_properties:
-                    for key, value in current_object_to_be_replaced.get_all_cps():
+                    for key, value in current_object_to_be_replaced.get_all_cps().items():
                         duplicate_new_object.set_cp(key, value)
 
                 duplicate_new_object.hide(False)
