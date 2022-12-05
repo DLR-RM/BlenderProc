@@ -96,13 +96,12 @@ class Struct:
         """
         return key in self.blender_obj
 
-    def get_all_cps(self) -> list:
+    def get_all_cps(self) -> dict[str, Any]:
         """ Returns all custom properties as key, value pairs.
 
-        :return: A list of key value pairs
+        :return: A dictionary of custom properties as key, value pairs 
         """
-        cps = dict([pair for pair in self.blender_obj.items()])
-        return cps
+        return dict([pair for pair in self.blender_obj.items()])
 
     def clear_all_cps(self):
         """ Removes all existing custom properties the struct has. """
