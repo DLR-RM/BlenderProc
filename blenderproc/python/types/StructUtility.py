@@ -1,6 +1,6 @@
 """ The base class of all things in BlenderProc. """
 
-from typing import Any
+from typing import Any, Dict
 import weakref
 
 import bpy
@@ -96,12 +96,12 @@ class Struct:
         """
         return key in self.blender_obj
 
-    def get_all_cps(self) -> list:
+    def get_all_cps(self) -> Dict[str, Any]:
         """ Returns all custom properties as key, value pairs.
 
-        :return: A list of key value pairs
+        :return: A dictionary of custom properties as key, value pairs
         """
-        return self.blender_obj.items()
+        return dict(self.blender_obj.items())
 
     def clear_all_cps(self):
         """ Removes all existing custom properties the struct has. """
