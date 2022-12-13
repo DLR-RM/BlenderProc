@@ -24,15 +24,16 @@ class UnitTestCheckHavenLoader(unittest.TestCase):
         texture_names = os.listdir(haven_textures_folder)
         texture_names.sort()
 
+        total = 0
         successes = 0
         for texture_name in texture_names:
             if texture_name in textures_to_ignore:
                 continue
+            total += 1
             bproc.api.loader.load_haven_mat(haven_textures_folder, [texture_name])
             if texture_name in bpy.data.materials:
                 successes += 1
 
-        total = len(texture_names) - len(textures_to_ignore)
 
         assert_message = f"Loaded {successes}/{total} Haven textures succesfully."
         self.assertEqual(successes, total, assert_message)
