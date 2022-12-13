@@ -75,12 +75,13 @@ semantic segm. & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign
 depth rendering & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 optical flow & \noSign & \yesSign & \yesSign & \noSign & \yesSign & \yesSign \\
 surface normals & \noSign & \yesSign & \yesSign & \yesSign & \noSign &\yesSign \\
-object pose & \yesSign & ( \yesSign ) & \yesSign & \yesSign & \noSign & \yesSign \\
-bounding box & \yesSign & ( \yesSign ) & \yesSign & \noSign & \noSign & \yesSign \\
+object pose & \yesSign & \yesSign & \yesSign & \yesSign & \noSign & \yesSign \\
+bounding box & \yesSign & \yesSign & \yesSign & \noSign & \noSign & \yesSign \\
 \hline
 physics module & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 camera sampling & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 \hline
+GUI-based debugging viewer & \yesSign & \noSign & \noSign & \noSign & \noSign & \yesSign \\
 uses an open-source renderer & \yesSign & \noSign & \noSign & \yesSign & \yesSign & \yesSign \\
 real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign  & \noSign \\
 \end{tabular}
