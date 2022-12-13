@@ -45,5 +45,5 @@ class UnitTestCheckCamera(unittest.TestCase):
         calc_rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=rotation)
 
         for x, y in zip(np.reshape(correct_roation_matrix, -1).tolist(), np.reshape(calc_rotation_matrix, -1).tolist()):
-            self.assertAlmostEqual(x, y)
+            self.assertAlmostEqual(x, y, places=6)
 
