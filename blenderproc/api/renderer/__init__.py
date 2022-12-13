@@ -5,3 +5,5 @@ from blenderproc.python.renderer.RendererUtility import set_denoiser, set_light_
     map_file_format_to_file_ending, render, set_output_format, enable_motion_blur
 from blenderproc.python.renderer.SegMapRendererUtility import render_segmap
 from blenderproc.python.renderer.FlowRendererUtility import render_optical_flow
+from blenderproc.python.renderer.NOCSRendererUtility import render_nocs
+
