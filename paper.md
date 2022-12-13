@@ -73,13 +73,13 @@ In contrast to the first version of BlenderProc, BlenderProc2 relies on an easy-
 \hline
 semantic segm. & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 depth rendering & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
-optical flow & \noSign & \noSign & \yesSign & \noSign & \yesSign & \yesSign \\
-surface normals & \noSign & \noSign & \yesSign & \yesSign & \noSign &\yesSign \\
-object pose & \yesSign & \noSign & \yesSign & \yesSign & \noSign & \yesSign \\
-bounding box & \yesSign & \noSign & \yesSign & \noSign & \noSign & \yesSign \\
+optical flow & \noSign & \yesSign & \yesSign & \noSign & \yesSign & \yesSign \\
+surface normals & \noSign & \yesSign & \yesSign & \yesSign & \noSign &\yesSign \\
+object pose & \yesSign & ( \yesSign ) & \yesSign & \yesSign & \noSign & \yesSign \\
+bounding box & \yesSign & ( \yesSign ) & \yesSign & \noSign & \noSign & \yesSign \\
 \hline
-physics module & \yesSign & \noSign & \yesSign & \yesSign & \yesSign & \yesSign \\
-camera sampling & \yesSign & \noSign & \yesSign & \yesSign & \yesSign & \yesSign \\
+physics module & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
+camera sampling & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 \hline
 uses an open-source renderer & \yesSign & \noSign & \noSign & \yesSign & \yesSign & \yesSign \\
 real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign  & \noSign \\
