@@ -1,5 +1,6 @@
 """ Provides functions to install BlenderProc. """
 
+import getpass
 import os
 import tarfile
 from os.path import join
@@ -53,7 +54,7 @@ class InstallUtility:
 
             # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
             if blender_install_path is None:
-                user_name = os.getenv("USERNAME") if platform == "win32" else os.getenv("USER")
+                user_name = getpass.getuser()
                 blender_install_path = os.path.join("/home_local", user_name, "blender")
         return custom_blender_path, blender_install_path
 
@@ -76,7 +77,7 @@ class InstallUtility:
             if blender_install_path is not None:
                 blender_install_path = os.path.expanduser(blender_install_path)
                 if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
-                    user_name = os.getenv("USERNAME") if platform == "win32" else os.getenv("USER")
+                    user_name = getpass.getuser()
                     home_path = os.getenv("USERPROFILE") if platform == "win32" else os.getenv("HOME")
                     print(f"Warning: Changed install path from {join('/home_local', user_name)}... to {home_path}..., "
                           f"there is no /home_local/ on this machine.")
