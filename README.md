@@ -32,9 +32,9 @@ The simplest way to install blenderproc is via pip:
 pip install blenderproc
 ```
 
-### Git clone
+### Via git
 
-If you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:
+Alternatively, if you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:
 
 ```bash
 git clone https://github.com/DLR-RM/BlenderProc
