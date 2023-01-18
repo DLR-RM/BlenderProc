@@ -9,11 +9,12 @@ import bpy
 from blenderproc.python.utility.Utility import Utility
 
 
-def set_world_background_hdr_img(path_to_hdr_file):
+def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0):
     """
     Sets the world background to the given hdr_file.
 
     :param path_to_hdr_file: Path to the .hdr file
+    :param strength: The brightness of the background.
     """
 
     if not os.path.exists(path_to_hdr_file):
@@ -28,10 +29,13 @@ def set_world_background_hdr_img(path_to_hdr_file):
     texture_node.image = bpy.data.images.load(path_to_hdr_file, check_existing=True)
 
     # get the one output node of the world shader
-    output_node = Utility.get_the_one_node_with_type(nodes, "Output")
+    background_node = Utility.get_the_one_node_with_type(nodes, "Background")
 
     # link the new texture node to the output
-    links.new(texture_node.outputs["Color"], output_node.inputs["Surface"])
+    links.new(texture_node.outputs["Color"], background_node.inputs["Color"])
+
+    # Set the brightness of the background
+    background_node.inputs["Strength"].default_value = strength
 
 
 def get_random_world_background_hdr_img_path_from_haven(data_path: str) -> str:
