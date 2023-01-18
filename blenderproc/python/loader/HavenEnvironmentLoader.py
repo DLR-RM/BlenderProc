@@ -28,10 +28,10 @@ def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0):
     texture_node = nodes.new(type="ShaderNodeTexEnvironment")
     texture_node.image = bpy.data.images.load(path_to_hdr_file, check_existing=True)
 
-    # get the one output node of the world shader
+    # get the one background node of the world shader
     background_node = Utility.get_the_one_node_with_type(nodes, "Background")
 
-    # link the new texture node to the output
+    # link the new texture node to the background
     links.new(texture_node.outputs["Color"], background_node.inputs["Color"])
 
     # Set the brightness of the background
