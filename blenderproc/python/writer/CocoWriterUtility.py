@@ -156,11 +156,11 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
 
         new_coco_image_paths.append(target_base_path)
 
-    instance_attibute_maps = segcolormaps if segcolormaps else instance_attribute_maps
+    instance_attribute_maps = segcolormaps if segcolormaps else instance_attribute_maps
     instance_segmaps = inst_segmaps if inst_segmaps else instance_segmaps
 
     coco_output = _CocoWriterUtility.generate_coco_annotations(instance_segmaps,
-                                                               instance_attibute_maps,
+                                                               instance_attribute_maps,
                                                                new_coco_image_paths,
                                                                supercategory,
                                                                mask_encoding_format,
