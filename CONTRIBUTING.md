@@ -100,7 +100,7 @@ Following is a simple pattern for Git Commit messages:
 that may look like this:
 
 ```
-feat(loader): add wavefront object loader, all lower case
+feat(loader): add wavefront object loader
 
 New module allows loading .obj files and setting custom properties like `physics` to the loaded objects.
 
