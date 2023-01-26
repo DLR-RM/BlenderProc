@@ -3,33 +3,26 @@
 import os
 from random import choice
 from typing import List, Optional, Tuple
+
 import bpy
 import numpy as np
 from mathutils import Matrix, Vector
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
-from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import (
-    change_source_coordinate_frame_of_transformation_matrix,
-)
+from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
 from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.loader.ObjectLoader import load_obj
 
 
-def load_bop_objs(
-    bop_dataset_path: str,
-    model_type: str = "",
-    obj_ids: Optional[List[int]] = None,
-    sample_objects: bool = False,
-    num_of_objs_to_sample: Optional[int] = None,
-    obj_instances_limit: int = -1,
-    mm2m: bool = False,
-    move_origin_to_x_y_plane: bool = False,
-    temp_dir: Optional[str] = None,
-) -> List[MeshObject]:
-    """Loads all or a subset of 3D models of any BOP dataset
+
+def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
+                  sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
+                  obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False,
+                  temp_dir: Optional[str] = None) -> List[MeshObject]:
+    """ Loads all or a subset of 3D models of any BOP dataset
 
     :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
     :param model_type: Optionally, specify type of BOP model. Available: [reconst, cad or eval].
@@ -51,12 +44,9 @@ def load_bop_objs(
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
-
     # pylint: enable=import-outside-toplevel
 
-    model_p = dataset_params.get_model_params(
-        bop_path, bop_dataset_name, model_type=model_type if model_type else None
-    )
+    model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
 
     if temp_dir is None:
         temp_dir = Utility.get_temporary_directory()
@@ -67,56 +57,35 @@ def load_bop_objs(
         obj_ids = []
     allow_duplication = obj_ids or sample_objects
 
-    obj_ids = obj_ids if obj_ids else model_p["obj_ids"]
+    obj_ids = obj_ids if obj_ids else model_p['obj_ids']
 
     loaded_objects = []
     # if sampling is enabled
     if sample_objects:
         loaded_ids = {}
         loaded_amount = 0
-        if (
-            obj_instances_limit != -1
-            and len(obj_ids) * obj_instances_limit < num_of_objs_to_sample
-        ):
-            raise RuntimeError(
-                f"{bop_dataset_path}'s contains {len(obj_ids)} objects, {num_of_objs_to_sample} object "
-                f"where requested to sample with an instances limit of {obj_instances_limit}. Raise "
-                f"the limit amount or decrease the requested amount of objects."
-            )
+        if obj_instances_limit != -1 and len(obj_ids) * obj_instances_limit < num_of_objs_to_sample:
+            raise RuntimeError(f"{bop_dataset_path}'s contains {len(obj_ids)} objects, {num_of_objs_to_sample} object "
+                               f"where requested to sample with an instances limit of {obj_instances_limit}. Raise "
+                               f"the limit amount or decrease the requested amount of objects.")
         while loaded_amount != num_of_objs_to_sample:
             random_id = choice(obj_ids)
             if random_id not in loaded_ids:
                 loaded_ids.update({random_id: 0})
             # if there is no limit or if there is one, but it is not reached for this particular object
             if obj_instances_limit == -1 or loaded_ids[random_id] < obj_instances_limit:
-                cur_obj = _BopLoader.load_mesh(
-                    random_id,
-                    model_p,
-                    bop_dataset_name,
-                    has_external_texture,
-                    temp_dir,
-                    allow_duplication,
-                    scale,
-                )
+                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, has_external_texture,
+                                               temp_dir, allow_duplication, scale)
                 loaded_ids[random_id] += 1
                 loaded_amount += 1
                 loaded_objects.append(cur_obj)
             else:
-                print(
-                    f"ID {random_id} was loaded {loaded_ids[random_id]} times with limit of {obj_instances_limit}. "
-                    f"Total loaded amount {loaded_amount} while {num_of_objs_to_sample} are being requested"
-                )
+                print(f"ID {random_id} was loaded {loaded_ids[random_id]} times with limit of {obj_instances_limit}. "
+                      f"Total loaded amount {loaded_amount} while {num_of_objs_to_sample} are being requested")
     else:
         for obj_id in obj_ids:
-            cur_obj = _BopLoader.load_mesh(
-                obj_id,
-                model_p,
-                bop_dataset_name,
-                has_external_texture,
-                temp_dir,
-                allow_duplication,
-                scale,
-            )
+            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, has_external_texture,
+                                           temp_dir, allow_duplication, scale)
             loaded_objects.append(cur_obj)
     # move the origin of the object to the world origin and on top of the X-Y plane
     # makes it easier to place them later on, this does not change the `.location`
@@ -124,20 +93,14 @@ def load_bop_objs(
     if move_origin_to_x_y_plane:
         for obj in loaded_objects:
             obj.move_origin_to_bottom_mean_point()
+
     return loaded_objects
 
 
-def load_bop_scene(
-    bop_dataset_path: str,
-    scene_id: int,
-    model_type: str = "",
-    cam_type: str = "",
-    split: str = "test",
-    source_frame: Optional[List[str]] = None,
-    mm2m: bool = False,
-    temp_dir: str = None,
-) -> List[MeshObject]:
-    """Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and
+def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", cam_type: str = "",
+                   split: str = "test", source_frame: Optional[List[str]] = None,
+                   mm2m: bool = False, temp_dir: str = None) -> List[MeshObject]:
+    """ Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and
         extrinsics
 
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -164,32 +127,19 @@ def load_bop_scene(
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params, inout
-
     # pylint: enable=import-outside-toplevel
 
     if source_frame is None:
         source_frame = ["X", "-Y", "-Z"]
 
-    model_p = dataset_params.get_model_params(
-        bop_path, bop_dataset_name, model_type=model_type if model_type else None
-    )
+    model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
     try:
-        split_p = dataset_params.get_split_params(
-            bop_path,
-            bop_dataset_name,
-            split=split,
-            split_type=cam_type if cam_type else None,
-        )
+        split_p = dataset_params.get_split_params(bop_path, bop_dataset_name, split=split,
+                                                  split_type=cam_type if cam_type else None)
     except ValueError as e:
-        raise RuntimeError(
-            f"Wrong path or {split} split does not exist in {bop_dataset_path}."
-        ) from e
-    sc_gt = inout.load_scene_gt(
-        split_p["scene_gt_tpath"].format(**{"scene_id": scene_id})
-    )
-    sc_camera = inout.load_json(
-        split_p["scene_camera_tpath"].format(**{"scene_id": scene_id})
-    )
+        raise RuntimeError(f"Wrong path or {split} split does not exist in {bop_dataset_path}.") from e
+    sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': scene_id}))
+    sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': scene_id}))
 
     if temp_dir is None:
         temp_dir = Utility.get_temporary_directory()
@@ -198,9 +148,7 @@ def load_bop_scene(
     has_external_texture = bop_dataset_name in ["ycbv", "ruapc"]
 
     for i, (cam_id, insts) in enumerate(sc_gt.items()):
-        cam_K, cam_H_m2c_ref = _BopLoader.get_ref_cam_extrinsics_intrinsics(
-            sc_camera, cam_id, insts, scale
-        )
+        cam_K, cam_H_m2c_ref = _BopLoader.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, scale)
 
         if i == 0:
             # define world = first camera
@@ -209,34 +157,21 @@ def load_bop_scene(
             cur_objs = []
             # load scene objects and set their poses
             for inst in insts:
-                cur_objs.append(
-                    _BopLoader.load_mesh(
-                        inst["obj_id"],
-                        model_p,
-                        bop_dataset_name,
-                        has_external_texture,
-                        temp_dir,
-                        False,
-                        scale,
-                    )
-                )
+                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name,
+                                                     has_external_texture, temp_dir, False, scale))
                 _BopLoader.set_object_pose(cur_objs[-1], inst, scale)
 
-        cam_H_c2w = _BopLoader.compute_camera_to_world_trafo(
-            cam_H_m2w_ref, cam_H_m2c_ref, source_frame
-        )
+        cam_H_c2w = _BopLoader.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref, source_frame)
         # set camera intrinsics
-        CameraUtility.set_intrinsics_from_K_matrix(
-            cam_K, split_p["im_size"][0], split_p["im_size"][1]
-        )
+        CameraUtility.set_intrinsics_from_K_matrix(cam_K, split_p['im_size'][0], split_p['im_size'][1])
 
         # set camera extrinsics as next frame
         frame_id = CameraUtility.add_camera_pose(cam_H_c2w)
 
         # Add key frame for camera shift, as it changes from frame to frame in the tless replication
         cam = bpy.context.scene.camera.data
-        cam.keyframe_insert(data_path="shift_x", frame=frame_id)
-        cam.keyframe_insert(data_path="shift_y", frame=frame_id)
+        cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+        cam.keyframe_insert(data_path='shift_y', frame=frame_id)
 
         # Copy object poses to key frame (to be sure)
         for cur_obj in cur_objs:
@@ -245,9 +180,7 @@ def load_bop_scene(
     return cur_objs
 
 
-def load_bop_intrinsics(
-    bop_dataset_path: str, split: str = "test", cam_type: str = ""
-) -> Tuple[np.ndarray, int, int]:
+def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: str = "") -> Tuple[np.ndarray, int, int]:
     """
     Load and set the camera matrix and image resolution of a specified BOP dataset
 
@@ -262,39 +195,29 @@ def load_bop_intrinsics(
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
-
     # pylint: enable=import-outside-toplevel
 
-    cam_p = dataset_params.get_camera_params(
-        bop_path, bop_dataset_name, cam_type=cam_type if cam_type else None
-    )
+    cam_p = dataset_params.get_camera_params(bop_path, bop_dataset_name, cam_type=cam_type if cam_type else None)
 
     try:
-        split_p = dataset_params.get_split_params(
-            bop_path,
-            bop_dataset_name,
-            split=split,
-            split_type=cam_type if cam_type else None,
-        )
+        split_p = dataset_params.get_split_params(bop_path, bop_dataset_name, split=split,
+                                                  split_type=cam_type if cam_type else None)
     except ValueError as e:
-        raise RuntimeError(
-            f"Wrong path or {split} split does not exist in {bop_dataset_path}."
-        ) from e
+        raise RuntimeError(f"Wrong path or {split} split does not exist in {bop_dataset_path}.") from e
 
     # TLESS exception because images are cropped
-    if bop_dataset_name in ["tless"]:
-        cam_p["K"][0, 2] = split_p["im_size"][0] / 2
-        cam_p["K"][1, 2] = split_p["im_size"][1] / 2
+    if bop_dataset_name in ['tless']:
+        cam_p['K'][0, 2] = split_p['im_size'][0] / 2
+        cam_p['K'][1, 2] = split_p['im_size'][1] / 2
 
     # set camera intrinsics
-    CameraUtility.set_intrinsics_from_K_matrix(
-        cam_p["K"], split_p["im_size"][0], split_p["im_size"][1]
-    )
+    CameraUtility.set_intrinsics_from_K_matrix(cam_p['K'], split_p['im_size'][0], split_p['im_size'][1])
 
-    return cam_p["K"], split_p["im_size"][0], split_p["im_size"][1]
+    return cam_p['K'], split_p['im_size'][0], split_p['im_size'][1]
 
 
 class _BopLoader:
+
     @staticmethod
     def setup_bop_toolkit(bop_dataset_path: str) -> Tuple[str, str]:
         """
@@ -311,9 +234,7 @@ class _BopLoader:
         print(f"dataset: {bop_dataset_name}")
 
         if not os.path.exists(bop_path):
-            raise FileNotFoundError(
-                f"It seems the BOP dataset does not exist under the given path {bop_dataset_path}"
-            )
+            raise FileNotFoundError(f"It seems the BOP dataset does not exist under the given path {bop_dataset_path}")
 
         # Install bop_toolkit_lib
         SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit"])
@@ -322,10 +243,9 @@ class _BopLoader:
         return bop_path, bop_dataset_name
 
     @staticmethod
-    def compute_camera_to_world_trafo(
-        cam_H_m2w_ref: np.array, cam_H_m2c_ref: np.array, source_frame: List[str]
-    ) -> np.ndarray:
-        """Returns camera to world transformation in blender coords.
+    def compute_camera_to_world_trafo(cam_H_m2w_ref: np.array, cam_H_m2c_ref: np.array,
+                                      source_frame: List[str]) -> np.ndarray:
+        """ Returns camera to world transformation in blender coords.
 
         :param cam_H_m2c_ref: (4x4) Homog trafo from object to camera coords.
         :param cam_H_m2w_ref: (4x4) Homog trafo from object to world coords.
@@ -336,20 +256,18 @@ class _BopLoader:
 
         cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
-        print("-----------------------------")
+        print('-----------------------------')
         print(f"Cam: {cam_H_c2w}")
-        print("-----------------------------")
+        print('-----------------------------')
 
         # transform from OpenCV to blender coords
-        cam_H_c2w = change_source_coordinate_frame_of_transformation_matrix(
-            cam_H_c2w, source_frame
-        )
+        cam_H_c2w = change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
 
         return cam_H_c2w
 
     @staticmethod
     def set_object_pose(cur_obj: bpy.types.Object, inst: dict, scale: float):
-        """Set object pose for current obj
+        """ Set object pose for current obj
 
         :param cur_obj: Current object.
         :param inst: instance from BOP scene_gt file.
@@ -357,22 +275,22 @@ class _BopLoader:
         """
 
         cam_H_m2c = np.eye(4)
-        cam_H_m2c[:3, :3] = np.array(inst["cam_R_m2c"]).reshape(3, 3)
-        cam_H_m2c[:3, 3] = np.array(inst["cam_t_m2c"]).reshape(3) * scale
+        cam_H_m2c[:3, :3] = np.array(inst['cam_R_m2c']).reshape(3, 3)
+        cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * scale
 
         # world = camera @ i=0
         cam_H_m2w = cam_H_m2c
 
-        print("-----------------------------")
+        print('-----------------------------')
         print(f"Cam: {cam_H_m2w}")
-        print("-----------------------------")
+        print('-----------------------------')
 
         cur_obj.set_local2world_mat(Matrix(cam_H_m2w))
         cur_obj.set_scale(Vector((scale, scale, scale)))
 
     @staticmethod
     def insert_key_frames(obj: bpy.types.Object, frame_id: int):
-        """Insert key frames for given object pose.
+        """ Insert key frames for given object pose.
 
         :param obj: Loaded object.
         :param frame_id: The frame number where key frames should be inserted.
@@ -382,10 +300,9 @@ class _BopLoader:
         obj.set_rotation_euler(obj.get_rotation_euler(), frame_id)
 
     @staticmethod
-    def get_ref_cam_extrinsics_intrinsics(
-        sc_camera: dict, cam_id: int, insts: dict, scale: float
-    ) -> Tuple[np.ndarray, np.ndarray]:
-        """Get camK and transformation from object instance 0 to camera cam_id as reference.
+    def get_ref_cam_extrinsics_intrinsics(sc_camera: dict, cam_id: int, insts: dict,
+                                          scale: float) -> Tuple[np.ndarray, np.ndarray]:
+        """ Get camK and transformation from object instance 0 to camera cam_id as reference.
 
         :param sc_camera: BOP scene_camera file.
         :param cam_id: BOP camera id.
@@ -394,36 +311,29 @@ class _BopLoader:
         :return (camK, cam_H_m2c_ref): loaded camera matrix. Loaded object to camera transformation.
         """
 
-        cam_K = np.array(sc_camera[str(cam_id)]["cam_K"]).reshape(3, 3)
+        cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3, 3)
         cam_H_m2c_ref = np.eye(4)
-        cam_H_m2c_ref[:3, :3] = np.array(insts[0]["cam_R_m2c"]).reshape(3, 3)
-        cam_H_m2c_ref[:3, 3] = np.array(insts[0]["cam_t_m2c"]).reshape(3) * scale
+        cam_H_m2c_ref[:3, :3] = np.array(insts[0]['cam_R_m2c']).reshape(3, 3)
+        cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * scale
 
         return cam_K, cam_H_m2c_ref
 
     @staticmethod
     def get_loaded_obj(model_path: str) -> Optional[bpy.types.Object]:
-        """Returns the object if it has already been loaded.
+        """ Returns the object if it has already been loaded.
 
         :param model_path: Model path of the new object.
         :return: Object if found, else return None.
         """
         for loaded_obj in bpy.context.scene.objects:
-            if "model_path" in loaded_obj and loaded_obj["model_path"] == model_path:
+            if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
                 return loaded_obj
         return None
 
     @staticmethod
-    def load_mesh(
-        obj_id: int,
-        model_p: dict,
-        bop_dataset_name: str,
-        has_external_texture: bool,
-        temp_dir: str,
-        allow_duplication: bool,
-        scale: float = 1,
-    ) -> MeshObject:
-        """Loads BOP mesh and sets category_id.
+    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, has_external_texture: bool, temp_dir: str,
+        allow_duplication: bool, scale: float = 1) -> MeshObject:
+        """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object.
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit.
@@ -460,7 +370,7 @@ class _BopLoader:
 
     @staticmethod
     def load_materials(cur_obj: bpy.types.Object, bop_dataset_name: str) -> Material:
-        """Loads / defines materials, e.g. vertex colors.
+        """ Loads / defines materials, e.g. vertex colors.
 
         :param cur_obj: The object to use.
         :param bop_dataset_name: The name of the used bop dataset.
@@ -471,9 +381,7 @@ class _BopLoader:
 
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(
-                name="bop_" + bop_dataset_name + "_vertex_col_material"
-            )
+            mat = bpy.data.materials.new(name="bop_" + bop_dataset_name + "_vertex_col_material")
 
         mat.use_nodes = True
 
@@ -487,9 +395,7 @@ class _BopLoader:
         return Material(mat)
 
     @staticmethod
-    def load_texture(
-        cur_obj: bpy.types.Object, texture_file_path: str, bop_dataset_name: str
-    ):
+    def load_texture(cur_obj: bpy.types.Object, texture_file_path: str, bop_dataset_name: str):
         """
         Load the textures for the ycbv objects, only those contain texture information
 
@@ -497,21 +403,17 @@ class _BopLoader:
         :param texture_file_path: path to the texture file (most likely ".png")
         :param bop_dataset_name: The name of the used bop dataset.
         """
-        mat = bpy.data.materials.new(
-            name="bop_" + bop_dataset_name + "_texture_material"
-        )
+        mat = bpy.data.materials.new(name="bop_" + bop_dataset_name + "_texture_material")
 
         mat.use_nodes = True
 
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
 
-        color_image = nodes.new("ShaderNodeTexImage")
+        color_image = nodes.new('ShaderNodeTexImage')
         if not os.path.exists(texture_file_path):
-            raise FileNotFoundError(
-                f"The texture path for the ycbv object could not be loaded "
-                f"from the file: {texture_file_path}"
-            )
+            raise FileNotFoundError(f"The texture path for the ycbv object could not be loaded "
+                                    f"from the file: {texture_file_path}")
         color_image.image = bpy.data.images.load(texture_file_path, check_existing=True)
 
         principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")

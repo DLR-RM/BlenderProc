@@ -9,18 +9,12 @@ import bpy
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.material.MaterialLoaderUtility import (
-    create_material_from_texture,
-)
+from blenderproc.python.material.MaterialLoaderUtility import create_material_from_texture
 
 
-def load_obj(
-    filepath: str,
-    cached_objects: Optional[Dict[str, List[MeshObject]]] = None,
-    use_legacy_obj_import: bool = False,
-    **kwargs,
-) -> List[MeshObject]:
-    """Import all objects for the given file and returns the loaded objects
+def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]] = None,
+             use_legacy_obj_import: bool = False, **kwargs) -> List[MeshObject]:
+    """ Import all objects for the given file and returns the loaded objects
 
     In .obj files a list of objects can be saved in.
     In .ply files only one object can be saved so the list has always at most one element
@@ -65,26 +59,18 @@ def load_obj(
         # Check if texture file is given
         if PLY_TEXTURE_FILE_COMMENT in ply_file_content:
             # Find name of texture file
-            texture_file_name = re.search(
-                f"{PLY_TEXTURE_FILE_COMMENT}(.*)\n", ply_file_content
-            ).group(1)
+            texture_file_name = re.search(f"{PLY_TEXTURE_FILE_COMMENT}(.*)\n", ply_file_content).group(1)
 
             # Determine full texture file path
-            texture_file_path = os.path.join(
-                os.path.dirname(filepath), texture_file_name
-            )
+            texture_file_path = os.path.join(os.path.dirname(filepath), texture_file_name)
             material = create_material_from_texture(
                 texture_file_path, material_name=f"ply_{model_name}_texture_model"
             ).blender_obj
 
             # Change content of ply file to work with blender ply importer
             new_ply_file_content = ply_file_content
-            new_ply_file_content = new_ply_file_content.replace(
-                "property float texture_u", "property float s"
-            )
-            new_ply_file_content = new_ply_file_content.replace(
-                "property float texture_v", "property float t"
-            )
+            new_ply_file_content = new_ply_file_content.replace("property float texture_u", "property float s")
+            new_ply_file_content = new_ply_file_content.replace("property float texture_v", "property float t")
 
             # Create temporary .ply file
             tmp_ply_file = os.path.join(Utility.get_temporary_directory(), model_name)
@@ -103,32 +89,20 @@ def load_obj(
             material = Material(material)
             material.map_vertex_color()
             material = material.blender_obj
-        selected_objects = [
-            obj
-            for obj in bpy.context.selected_objects
-            if obj not in previously_selected_objects
-        ]
+        selected_objects = [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects]
         for obj in selected_objects:
             obj.data.materials.append(material)
-    elif filepath.endswith(".dae"):
+    elif filepath.endswith('.dae'):
         bpy.ops.wm.collada_import(filepath=filepath)
-    elif filepath.lower().endswith(".stl"):
+    elif filepath.lower().endswith('.stl'):
         # load a .stl file
         bpy.ops.import_mesh.stl(filepath=filepath, **kwargs)
         # add a default material to stl file
         mat = bpy.data.materials.new(name="stl_material")
         mat.use_nodes = True
-        selected_objects = [
-            obj
-            for obj in bpy.context.selected_objects
-            if obj not in previously_selected_objects
-        ]
+        selected_objects = [obj for obj in bpy.context.selected_objects if
+                                obj not in previously_selected_objects]
         for obj in selected_objects:
             obj.data.materials.append(mat)
-    return convert_to_meshes(
-        [
-            obj
-            for obj in bpy.context.selected_objects
-            if obj not in previously_selected_objects
-        ]
-    )
+    return convert_to_meshes([obj for obj in bpy.context.selected_objects
+                                  if obj not in previously_selected_objects])
