@@ -104,7 +104,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     if calc_mask_info_coco:
         # Set up the bop toolkit
-        _BopLoader.setup_bop_toolkit(dataset_dir)
+        SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
+                                "PyOpenGL==3.1.0"])
 
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
