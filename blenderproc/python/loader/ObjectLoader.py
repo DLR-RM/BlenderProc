@@ -10,6 +10,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_me
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.material.MaterialLoaderUtility import create_material_from_texture
+from blenderproc.python.material.MaterialLoaderUtility import create as create_material
 
 
 def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]] = None,
@@ -65,7 +66,7 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             texture_file_path = os.path.join(os.path.dirname(filepath), texture_file_name)
             material = create_material_from_texture(
                 texture_file_path, material_name=f"ply_{model_name}_texture_model"
-            ).blender_obj
+            )
 
             # Change content of ply file to work with blender ply importer
             new_ply_file_content = ply_file_content
@@ -84,14 +85,11 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             # load a .ply mesh
             bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
             # Create default material
-            material = bpy.data.materials.new(name="ply_material")
-            material.use_nodes = True
-            material = Material(material)
+            material = create_material('ply_material')
             material.map_vertex_color()
-            material = material.blender_obj
         selected_objects = [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects]
         for obj in selected_objects:
-            obj.data.materials.append(material)
+            obj.data.materials.append(material.blender_obj)
     elif filepath.endswith('.dae'):
         bpy.ops.wm.collada_import(filepath=filepath)
     elif filepath.lower().endswith('.stl'):
