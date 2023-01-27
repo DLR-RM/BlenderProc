@@ -6,6 +6,7 @@ import glob
 from typing import List, Optional
 import shutil
 import warnings
+import datetime
 
 import numpy as np
 import png
@@ -18,13 +19,15 @@ from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
+from blenderproc.python.loader.BopLoader import _BopLoader
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
               depths: Optional[List[np.ndarray]] = None, colors: Optional[List[np.ndarray]] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
-              ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000):
+              ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000,
+              calc_mask_info_coco: bool = False, delta: int = 15):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
@@ -46,6 +49,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
                  is needed if BopLoader option mm2m is used.
     :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
+    :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.
+    :param delta: Tolerance used for estimation of the visibility masks.
     """
     if depths is None:
         depths = []
@@ -82,12 +87,54 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                            f"Either remove the dataset parameter or assign custom property 'bop_dataset_name'"
                            f" to selected objects")
 
+    if calc_mask_info_coco:
+        # It might be that a chunk dir already exists where the writer appends frames.
+        # If one (or multiple) more chunk dirs are created to save the rendered frames to,
+        # mask/info/coco annotations need to be calculated for all of them
+        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+        starting_chunk_dir = sorted(chunk_dirs)[-1] if chunk_dirs else None
+
     # Save the data.
     _BopWriterUtility.write_camera(camera_path, depth_scale=depth_scale)
     _BopWriterUtility.write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
                                    color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
                                    m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam,
                                    depth_scale=depth_scale, jpg_quality=jpg_quality)
+
+    if calc_mask_info_coco:
+        # Set up the bop toolkit
+        _BopLoader.setup_bop_toolkit(dataset_dir)
+
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        # pylint: disable=import-outside-toplevel
+        from bop_toolkit_lib import misc, renderer
+        # pylint: enable=import-outside-toplevel
+
+        # Initialize a renderer.
+        # We do this here since the renderer is a singleton, and thus cannot create two instances in `calc_gt_masks`
+        # and `calc_gt_info`.
+        misc.log('Initializing renderer...')
+        width, height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+        ren = renderer.create_renderer(width, height, renderer_type='vispy', mode='depth')
+
+        # add objects
+        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
+        np.float = float
+        # Add object models.
+        for obj in target_objects:
+            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
+
+        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir, ren=ren,
+                                        delta=delta)
+        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir, ren=ren,
+                                       delta=delta)
+        _BopWriterUtility.calc_gt_coco(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
+                                       dataset_objects=dataset_objects)
+
+        # remove objects not to have duplicates
+        for obj in target_objects:
+            ren.remove_object(obj_id=obj.get_cp('category_id'))
 
 
 class _BopWriterUtility:
@@ -425,3 +472,302 @@ class _BopWriterUtility:
                 curr_frame_id = 0
             else:
                 curr_frame_id += 1
+
+    @staticmethod
+    def calc_gt_masks(chunks_dir: str, starting_chunk_dir: Optional[str], ren: "renderer_vispy.RendererVispy",
+                      delta: int = 15):
+        """ Calculates the ground truth masks.
+        From the BOP toolkit (https://github.com/thodan/bop_toolkit).
+
+        :param chunks_dir: Path to the output directory of the current chunk.
+        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
+        :param ren: BOP toolkit vispy renderer instance.
+        :param delta: Tolerance used for estimation of the visibility masks.
+        """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        # pylint: disable=import-outside-toplevel
+        from bop_toolkit_lib import inout, misc, visibility
+        # pylint: enable=import-outside-toplevel
+
+        # here we need to set the width and height of the renderer since `write_bop` might have been called multiple
+        # times
+        ren.width = bpy.context.scene.render.resolution_x
+        ren.height = bpy.context.scene.render.resolution_y
+
+        # Load scene info and ground-truth poses.
+        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+        if starting_chunk_dir:
+            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+
+        for chunk_dir in chunk_dirs:
+            last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
+            last_chunk_camera_fpath = os.path.join(chunk_dir, 'scene_camera.json')
+            scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
+            scene_camera = _BopWriterUtility.load_json(last_chunk_camera_fpath, keys_to_int=True)
+
+            # Create folders for the output masks (if they do not exist yet).
+            mask_dir_path = os.path.dirname(os.path.join(chunk_dir, 'mask', '000000_000000.png'))
+            misc.ensure_dir(mask_dir_path)
+
+            mask_visib_dir_path = os.path.dirname(os.path.join(chunk_dir, 'mask_visib', '000000_000000.png'))
+            misc.ensure_dir(mask_visib_dir_path)
+
+            im_ids = sorted(scene_gt.keys())
+            for im_counter, im_id in enumerate(im_ids):
+                if im_counter % 100 == 0:
+                    misc.log(f'Calculating GT masks - {chunk_dir}, {im_counter}')
+
+                K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
+                fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
+
+                # Load depth image.
+                depth_path = os.path.join(
+                    chunk_dir, 'depth', '{im_id:06d}.png').format(im_id=im_id)
+                depth_im = inout.load_depth(depth_path)
+                depth_im *= scene_camera[im_id]['depth_scale']  # to [mm]
+                dist_im = misc.depth_im_to_dist_im_fast(depth_im, K)
+
+                for gt_id, gt in enumerate(scene_gt[im_id]):
+                    # Render the depth image.
+                    depth_gt = ren.render_object(gt['obj_id'], np.array(gt['cam_R_m2c']).reshape(3, 3),
+                                                 np.array(gt['cam_t_m2c']), fx, fy, cx, cy)['depth']
+
+                    # Convert depth image to distance image.
+                    dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
+
+                    # Mask of the full object silhouette.
+                    mask = dist_gt > 0
+
+                    # Mask of the visible part of the object silhouette.
+                    mask_visib = visibility.estimate_visib_mask_gt(
+                        dist_im, dist_gt, delta, visib_mode='bop19')
+
+                    # Save the calculated masks.
+                    mask_path = os.path.join(
+                        chunk_dir, 'mask', '{im_id:06d}_{gt_id:06d}.png').format(im_id=im_id, gt_id=gt_id)
+                    inout.save_im(mask_path, 255 * mask.astype(np.uint8))
+
+                    mask_visib_path = os.path.join(
+                        chunk_dir, 'mask_visib',
+                        '{im_id:06d}_{gt_id:06d}.png').format(im_id=im_id, gt_id=gt_id)
+                    inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
+
+    @staticmethod
+    def calc_gt_info(chunks_dir: str, starting_chunk_dir: Optional[str], ren: "renderer_vispy.RendererVispy",
+                     delta: int = 15):
+        """ Calculates the ground truth masks.
+        From the BOP toolkit (https://github.com/thodan/bop_toolkit).
+
+        :param chunks_dir: Path to the output directory of the current chunk.
+        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
+        :param ren: BOP toolkit vispy renderer instance.
+        :param delta: Tolerance used for estimation of the visibility masks.
+        """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        # pylint: disable=import-outside-toplevel
+        from bop_toolkit_lib import inout, misc, visibility
+        # pylint: enable=import-outside-toplevel
+
+        # Load scene info and ground-truth poses.
+        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+        if starting_chunk_dir:
+            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+
+        for chunk_dir in chunk_dirs:
+            last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
+            last_chunk_camera_fpath = os.path.join(chunk_dir, 'scene_camera.json')
+            scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
+            scene_camera = _BopWriterUtility.load_json(last_chunk_camera_fpath, keys_to_int=True)
+
+            # Since the renderer is a singleton, we only change width and height
+            im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+            ren_width, ren_height = 3 * im_width, 3 * im_height
+            ren_cx_offset, ren_cy_offset = im_width, im_height
+            ren.width = ren_width
+            ren.height = ren_height
+
+            scene_gt_info = {}
+            im_ids = sorted(scene_gt.keys())
+            for im_counter, im_id in enumerate(im_ids):
+                if im_counter % 100 == 0:
+                    misc.log(f'Calculating GT info - {chunk_dir}, {im_counter}')
+
+                # Load depth image.
+                depth_fpath = os.path.join(chunk_dir, 'depth', '{im_id:06d}.png').format(im_id=im_id)
+                assert os.path.isfile(depth_fpath)
+                depth = inout.load_depth(depth_fpath)
+                depth *= scene_camera[im_id]['depth_scale']  # Convert to [mm].
+
+                K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
+                fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
+                im_size = (depth.shape[1], depth.shape[0])
+
+                scene_gt_info[im_id] = []
+                for gt in scene_gt[im_id]:
+                    print(im_id, gt['obj_id'])
+
+                    # Render depth image of the object model in the ground-truth pose.
+                    depth_gt_large = ren.render_object(
+                        gt['obj_id'], np.array(gt['cam_R_m2c']).reshape(3, 3), np.array(gt['cam_t_m2c']),
+                        fx, fy, cx + ren_cx_offset, cy + ren_cy_offset)['depth']
+                    depth_gt = depth_gt_large[
+                               ren_cy_offset:(ren_cy_offset + im_height),
+                               ren_cx_offset:(ren_cx_offset + im_width)]
+
+                    # Convert depth images to distance images.
+                    dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
+                    dist_im = misc.depth_im_to_dist_im_fast(depth, K)
+
+                    # Estimation of the visibility mask.
+                    visib_gt = visibility.estimate_visib_mask_gt(
+                        dist_im, dist_gt, delta, visib_mode='bop19')
+
+                    # Mask of the object in the GT pose.
+                    obj_mask_gt_large = depth_gt_large > 0
+                    obj_mask_gt = dist_gt > 0
+
+                    # Number of pixels in the whole object silhouette
+                    # (even in the truncated part).
+                    px_count_all = np.sum(obj_mask_gt_large)
+
+                    # Number of pixels in the object silhouette with a valid depth measurement
+                    # (i.e. with a non-zero value in the depth image).
+                    px_count_valid = np.sum(dist_im[obj_mask_gt] > 0)
+
+                    # Number of pixels in the visible part of the object silhouette.
+                    px_count_visib = visib_gt.sum()
+
+                    # Visible surface fraction.
+                    if px_count_all > 0:
+                        visib_fract = px_count_visib / float(px_count_all)
+                    else:
+                        visib_fract = 0.0
+
+                    # Bounding box of the whole object silhouette
+                    # (including the truncated part).
+                    bbox = [-1, -1, -1, -1]
+                    if px_count_visib > 0:
+                        ys, xs = obj_mask_gt_large.nonzero()
+                        ys -= ren_cy_offset
+                        xs -= ren_cx_offset
+                        print(ys, xs)
+                        bbox = misc.calc_2d_bbox(xs, ys, im_size)
+
+                    # Bounding box of the visible surface part.
+                    bbox_visib = [-1, -1, -1, -1]
+                    if px_count_visib > 0:
+                        ys, xs = visib_gt.nonzero()
+                        bbox_visib = misc.calc_2d_bbox(xs, ys, im_size)
+
+                    # Store the calculated info.
+                    scene_gt_info[im_id].append({
+                        'px_count_all': int(px_count_all),
+                        'px_count_valid': int(px_count_valid),
+                        'px_count_visib': int(px_count_visib),
+                        'visib_fract': float(visib_fract),
+                        'bbox_obj': [int(e) for e in bbox],
+                        'bbox_visib': [int(e) for e in bbox_visib]
+                    })
+
+            # Save the info for the current scene.
+            scene_gt_info_path = os.path.join(chunk_dir, 'scene_gt_info.json')
+            misc.ensure_dir(os.path.dirname(scene_gt_info_path))
+            inout.save_json(scene_gt_info_path, scene_gt_info)
+
+    @staticmethod
+    def calc_gt_coco(chunks_dir: str, starting_chunk_dir: str, dataset_objects: List[MeshObject]):
+        """ Calculates the COCO annotations.
+        From the BOP toolkit (https://github.com/thodan/bop_toolkit).
+
+        :param chunks_dir: Path to the output directory of the current chunk.
+        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
+        :param dataset_objects: Objects for which to save annotations in COCO format.
+        """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        # pylint: disable=import-outside-toplevel
+        from bop_toolkit_lib import inout, misc, pycoco_utils
+        # pylint: enable=import-outside-toplevel
+
+        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+        if starting_chunk_dir:
+            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+
+        for chunk_dir in chunk_dirs:
+            dataset_name = chunk_dir.split('/')[-3]
+
+            CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
+                dataset_name} for obj in dataset_objects]
+            INFO = {
+                "description": dataset_name + '_train',
+                "url": "https://github.com/thodan/bop_toolkit",
+                "version": "0.1.0",
+                "year": datetime.date.today().year,
+                "contributor": "",
+                "date_created": datetime.datetime.utcnow().isoformat(' ')
+            }
+
+            segmentation_id = 1
+
+            coco_scene_output = {
+                "info": INFO,
+                "licenses": [],
+                "categories": CATEGORIES,
+                "images": [],
+                "annotations": []
+            }
+
+            # Load info about the GT poses (e.g. visibility) for the current scene.
+            last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
+            scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
+            last_chunk_gt_info_fpath = os.path.join(chunk_dir, 'scene_gt_info.json')
+            scene_gt_info = inout.load_json(last_chunk_gt_info_fpath, keys_to_int=True)
+            # Output coco path
+            coco_gt_path = os.path.join(chunk_dir, 'scene_gt_coco.json')
+            misc.log(f'Calculating COCO annotations - {chunk_dir}')
+
+            # Go through each view in scene_gt
+            for scene_view, inst_list in scene_gt.items():
+                im_id = int(scene_view)
+                img_path = os.path.join(chunk_dir, 'rgb', '{im_id:06d}.jpg').format(im_id=im_id)
+                relative_img_path = os.path.relpath(img_path, os.path.dirname(coco_gt_path))
+                im_size = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y)
+                image_info = pycoco_utils.create_image_info(im_id, relative_img_path, im_size)
+                coco_scene_output["images"].append(image_info)
+                gt_info = scene_gt_info[scene_view]
+
+                # Go through each instance in view
+                for idx, inst in enumerate(inst_list):
+                    category_info = inst['obj_id']
+                    visibility = gt_info[idx]['visib_fract']
+                    # Add ignore flag for objects smaller than 10% visible
+                    ignore_gt = visibility < 0.1
+                    mask_visib_p = os.path.join(
+                        chunk_dir, 'mask_visib',
+                        '{im_id:06d}_{gt_id:06d}.png').format(im_id=im_id, gt_id=idx)
+                    mask_full_p = os.path.join(
+                        chunk_dir, 'mask', '{im_id:06d}_{gt_id:06d}.png').format(im_id=im_id, gt_id=idx)
+
+                    binary_inst_mask_visib = inout.load_depth(mask_visib_p).astype(bool)
+                    if binary_inst_mask_visib.sum() < 1:
+                        continue
+
+                    # use `amodal` bbox type per default
+                    binary_inst_mask_full = inout.load_depth(mask_full_p).astype(bool)
+                    if binary_inst_mask_full.sum() < 1:
+                        continue
+                    bounding_box = pycoco_utils.bbox_from_binary_mask(binary_inst_mask_full)
+
+                    annotation_info = pycoco_utils.create_annotation_info(
+                        segmentation_id, im_id, category_info, binary_inst_mask_visib, bounding_box, tolerance=2,
+                        ignore=ignore_gt)
+
+                    if annotation_info is not None:
+                        coco_scene_output["annotations"].append(annotation_info)
+
+                    segmentation_id = segmentation_id + 1
+
+            with open(coco_gt_path, 'w', encoding='utf-8') as output_json_file:
+                json.dump(coco_scene_output, output_json_file)
