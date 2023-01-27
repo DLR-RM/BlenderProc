@@ -42,8 +42,8 @@ bproc.renderer.enable_depth_output(activate_antialiasing=False)
 bproc.renderer.set_max_amount_of_samples(50)
 
 # add segmentation masks (per class and per instance)
-bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name", "cp_bop_dataset_name"],
-                                          default_values={"category_id": 0, "cp_bop_dataset_name": None})
+bproc.renderer.enable_segmentation_output(map_by=["category_id", "instance", "name", "bop_dataset_name"],
+                                          default_values={"category_id": 0, "bop_dataset_name": None})
 
 # Render five different scenes
 for _ in range(5):
