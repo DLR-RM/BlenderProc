@@ -34,8 +34,6 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             loaded_objects = load_obj(filepath, cached_objects=None, **kwargs)
             cached_objects[filepath] = loaded_objects
             return loaded_objects
-        # save all selected objects
-        previously_selected_objects = bpy.context.selected_objects
         if filepath.endswith('.obj'):
             # load an .obj file:
             if use_legacy_obj_import:
@@ -48,8 +46,7 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             # add a default material to ply file
             mat = bpy.data.materials.new(name="ply_material")
             mat.use_nodes = True
-            selected_objects = [obj for obj in bpy.context.selected_objects
-                                if obj not in previously_selected_objects]
+            selected_objects = [obj for obj in bpy.context.selected_objects]
             for obj in selected_objects:
                 obj.data.materials.append(mat)
         elif filepath.endswith('.dae'):
@@ -60,10 +57,8 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
             # add a default material to stl file
             mat = bpy.data.materials.new(name="stl_material")
             mat.use_nodes = True
-            selected_objects = [obj for obj in bpy.context.selected_objects if
-                                obj not in previously_selected_objects]
+            selected_objects = [obj for obj in bpy.context.selected_objects if]
             for obj in selected_objects:
                 obj.data.materials.append(mat)
-        return convert_to_meshes([obj for obj in bpy.context.selected_objects
-                                  if obj not in previously_selected_objects])
+        return convert_to_meshes([obj for obj in bpy.context.selected_objects])
     raise FileNotFoundError(f"The given filepath does not exist: {filepath}")
