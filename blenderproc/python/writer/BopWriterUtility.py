@@ -606,8 +606,6 @@ class _BopWriterUtility:
 
                 scene_gt_info[im_id] = []
                 for gt in scene_gt[im_id]:
-                    print(im_id, gt['obj_id'])
-
                     # Render depth image of the object model in the ground-truth pose.
                     depth_gt_large = ren.render_object(
                         gt['obj_id'], np.array(gt['cam_R_m2c']).reshape(3, 3), np.array(gt['cam_t_m2c']),
@@ -652,7 +650,6 @@ class _BopWriterUtility:
                         ys, xs = obj_mask_gt_large.nonzero()
                         ys -= ren_cy_offset
                         xs -= ren_cx_offset
-                        print(ys, xs)
                         bbox = misc.calc_2d_bbox(xs, ys, im_size)
 
                     # Bounding box of the visible surface part.
