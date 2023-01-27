@@ -80,8 +80,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                       f"Total loaded amount {loaded_amount} while {num_of_objs_to_sample} are being requested")
     else:
         for obj_id in obj_ids:
-            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, has_external_texture,
-                                           temp_dir, allow_duplication, scale)
+            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, allow_duplication, scale)
             loaded_objects.append(cur_obj)
     # move the origin of the object to the world origin and on top of the X-Y plane
     # makes it easier to place them later on, this does not change the `.location`
@@ -345,7 +344,7 @@ class _BopLoader:
                 len(objs) == 1
             ), f"Loading object from '{model_path}' returned more then one mesh"
             cur_obj = objs[0]
-        elif allow_duplication:
+        elif False:
             bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
             cur_obj = MeshObject(bpy.context.selected_objects[-1])
         # Change Material name to be backward compatible
