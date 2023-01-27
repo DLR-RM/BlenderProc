@@ -331,15 +331,13 @@ class _BopLoader:
         return None
 
     @staticmethod
-    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, has_external_texture: bool, temp_dir: str,
+    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str,
         allow_duplication: bool, scale: float = 1) -> MeshObject:
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object.
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit.
         :param bop_dataset_name: The name of the used bop dataset.
-        :param has_external_texture: Set to True, if the object has an external texture. Depreciated.
-        :param temp_dir: A temp directory which is used for writing the temporary .ply file. Depreciated.
         :param allow_duplication: If True, the object is duplicated if it already exists.
         :param scale: factor to transform set pose in mm or meters.
         :return: Loaded mesh object.
