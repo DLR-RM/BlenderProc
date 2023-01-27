@@ -48,11 +48,8 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
 
     model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
 
-    if temp_dir is None:
-        temp_dir = Utility.get_temporary_directory()
-
     scale = 0.001 if mm2m else 1
-    has_external_texture = bop_dataset_name in ["ycbv", "ruapc", "hope"]
+    
     if obj_ids is None:
         obj_ids = []
     allow_duplication = obj_ids or sample_objects
@@ -74,8 +71,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                 loaded_ids.update({random_id: 0})
             # if there is no limit or if there is one, but it is not reached for this particular object
             if obj_instances_limit == -1 or loaded_ids[random_id] < obj_instances_limit:
-                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, has_external_texture,
-                                               temp_dir, allow_duplication, scale)
+                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, allow_duplication, scale)
                 loaded_ids[random_id] += 1
                 loaded_amount += 1
                 loaded_objects.append(cur_obj)
@@ -141,11 +137,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': scene_id}))
     sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': scene_id}))
 
-    if temp_dir is None:
-        temp_dir = Utility.get_temporary_directory()
-
     scale = 0.001 if mm2m else 1
-    has_external_texture = bop_dataset_name in ["ycbv", "ruapc"]
 
     for i, (cam_id, insts) in enumerate(sc_gt.items()):
         cam_K, cam_H_m2c_ref = _BopLoader.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, scale)
@@ -157,8 +149,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
             cur_objs = []
             # load scene objects and set their poses
             for inst in insts:
-                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name,
-                                                     has_external_texture, temp_dir, False, scale))
+                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name, False, scale))
                 _BopLoader.set_object_pose(cur_objs[-1], inst, scale)
 
         cam_H_c2w = _BopLoader.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref, source_frame)
