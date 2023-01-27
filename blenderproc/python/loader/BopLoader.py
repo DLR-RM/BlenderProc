@@ -348,7 +348,8 @@ class _BopLoader:
         elif allow_duplication:
             bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
             cur_obj = MeshObject(bpy.context.selected_objects[-1])
-
+        # Change Material name to be backward compatible
+        cur_obj.get_materials()[-1].set_name("bop_" + bop_dataset_name + "_vertex_col_material")
         cur_obj.set_scale(Vector((scale, scale, scale)))
         cur_obj.set_cp("category_id", obj_id)
         cur_obj.set_cp("model_path", model_path)
