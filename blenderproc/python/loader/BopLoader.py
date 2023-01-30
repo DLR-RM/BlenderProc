@@ -342,7 +342,7 @@ class _BopLoader:
             objs = load_obj(model_path)
             assert (
                 len(objs) == 1
-            ), f"Loading object from '{model_path}' returned more then one mesh"
+            ), f"Loading object from '{model_path}' returned more than one mesh"
             cur_obj = objs[0]
         elif False:
             bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
