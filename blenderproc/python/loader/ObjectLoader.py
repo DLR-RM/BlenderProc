@@ -7,7 +7,6 @@ from typing import List, Optional, Dict
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
-from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.material.MaterialLoaderUtility import create_material_from_texture
 from blenderproc.python.material.MaterialLoaderUtility import create as create_material

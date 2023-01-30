@@ -11,15 +11,12 @@ from mathutils import Matrix, Vector
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
-from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
                   sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
-                  obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False,
-                  temp_dir: Optional[str] = None) -> List[MeshObject]:
+                  obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False) -> List[MeshObject]:
     """ Loads all or a subset of 3D models of any BOP dataset
 
     :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
@@ -33,7 +30,6 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     :param move_origin_to_x_y_plane: Move center of the object to the lower side of the object, this will not work
                                      when used in combination with pose estimation tasks! This is designed for the
                                      use-case where BOP objects are used as filler objects in the background.
-    :param temp_dir: A temp directory which is used for writing the temporary .ply file.
     :return: The list of loaded mesh objects.
     """
 
@@ -92,7 +88,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
 
 def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", cam_type: str = "",
                    split: str = "test", source_frame: Optional[List[str]] = None,
-                   mm2m: bool = False, temp_dir: str = None) -> List[MeshObject]:
+                   mm2m: bool = False) -> List[MeshObject]:
     """ Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and
         extrinsics
 
@@ -111,7 +107,6 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
                          Point (1,2,3) will be transformed to (1, -3, 2). Default: ["X", "-Y", "-Z"],
                          Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
     :param mm2m: Specify whether to convert poses and models to meters.
-    :param temp_dir: A temp directory which is used for writing the temporary .ply file.
     :return: The list of loaded mesh objects.
     """
 
