@@ -44,7 +44,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
 
     scale = 0.001 if mm2m else 1
-    
+
     if obj_ids is None:
         obj_ids = []
 
@@ -142,7 +142,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
             cur_objs = []
             # load scene objects and set their poses
             for inst in insts:
-                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name, False, scale))
+                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name, scale))
                 _BopLoader.set_object_pose(cur_objs[-1], inst, scale)
 
         cam_H_c2w = _BopLoader.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref, source_frame)
@@ -335,13 +335,13 @@ class _BopLoader:
             len(objs) == 1
         ), f"Loading object from '{model_path}' returned more than one mesh"
         cur_obj = objs[0]
-        
+
         if duplicated:
             # See issue https://github.com/DLR-RM/BlenderProc/issues/590
             for i, material in enumerate(cur_obj.get_materials()):
                 material_dup = material.duplicate()
                 cur_obj.set_material(i, material_dup)
-        
+
         # Change Material name to be backward compatible
         cur_obj.get_materials()[-1].set_name("bop_" + bop_dataset_name + "_vertex_col_material")
         cur_obj.set_scale(Vector((scale, scale, scale)))
