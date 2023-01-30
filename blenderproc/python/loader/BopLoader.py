@@ -16,8 +16,6 @@ from blenderproc.python.utility.MathUtility import change_source_coordinate_fram
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.loader.ObjectLoader import load_obj
 
-
-
 def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
                   sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
                   obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False,
@@ -44,6 +42,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
+
     # pylint: enable=import-outside-toplevel
 
     model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
@@ -52,7 +51,6 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     
     if obj_ids is None:
         obj_ids = []
-    allow_duplication = obj_ids or sample_objects
 
     obj_ids = obj_ids if obj_ids else model_p['obj_ids']
 
@@ -71,7 +69,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                 loaded_ids.update({random_id: 0})
             # if there is no limit or if there is one, but it is not reached for this particular object
             if obj_instances_limit == -1 or loaded_ids[random_id] < obj_instances_limit:
-                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, allow_duplication, scale)
+                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, scale)
                 loaded_ids[random_id] += 1
                 loaded_amount += 1
                 loaded_objects.append(cur_obj)
@@ -80,7 +78,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                       f"Total loaded amount {loaded_amount} while {num_of_objs_to_sample} are being requested")
     else:
         for obj_id in obj_ids:
-            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, allow_duplication, scale)
+            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, scale)
             loaded_objects.append(cur_obj)
     # move the origin of the object to the world origin and on top of the X-Y plane
     # makes it easier to place them later on, this does not change the `.location`
@@ -122,6 +120,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params, inout
+
     # pylint: enable=import-outside-toplevel
 
     if source_frame is None:
@@ -185,6 +184,7 @@ def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: st
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
+
     # pylint: enable=import-outside-toplevel
 
     cam_p = dataset_params.get_camera_params(bop_path, bop_dataset_name, cam_type=cam_type if cam_type else None)
@@ -207,7 +207,7 @@ def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: st
 
 
 class _BopLoader:
-
+    CACHED_OBJECTS = {}
     @staticmethod
     def setup_bop_toolkit(bop_dataset_path: str) -> Tuple[str, str]:
         """
@@ -321,32 +321,32 @@ class _BopLoader:
         return None
 
     @staticmethod
-    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str,
-        allow_duplication: bool, scale: float = 1) -> MeshObject:
+    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, scale: float = 1) -> MeshObject:
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object.
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit.
         :param bop_dataset_name: The name of the used bop dataset.
-        :param allow_duplication: If True, the object is duplicated if it already exists.
         :param scale: factor to transform set pose in mm or meters.
         :return: Loaded mesh object.
         """
 
         model_path = model_p["model_tpath"].format(**{"obj_id": obj_id})
 
-        # Gets the objects if it is already loaded
-        cur_obj = _BopLoader.get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
-        if cur_obj is None:
-            objs = load_obj(model_path)
-            assert (
-                len(objs) == 1
-            ), f"Loading object from '{model_path}' returned more then one mesh"
-            cur_obj = objs[0]
-        elif False:
-            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
-            cur_obj = MeshObject(bpy.context.selected_objects[-1])
+        duplicated = model_path in _BopLoader.CACHED_OBJECTS.keys()
+        objs = load_obj(model_path, cached_objects=_BopLoader.CACHED_OBJECTS)
+        assert (
+            len(objs) == 1
+        ), f"Loading object from '{model_path}' returned more than one mesh"
+        cur_obj = objs[0]
+        
+        if duplicated:
+            # See issue https://github.com/DLR-RM/BlenderProc/issues/590
+            for i, material in enumerate(cur_obj.get_materials()):
+                material_dup = material.duplicate()
+                cur_obj.set_material(i, material_dup)
+        
         # Change Material name to be backward compatible
         cur_obj.get_materials()[-1].set_name("bop_" + bop_dataset_name + "_vertex_col_material")
         cur_obj.set_scale(Vector((scale, scale, scale)))
