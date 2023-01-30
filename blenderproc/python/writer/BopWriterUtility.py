@@ -27,7 +27,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000,
-              calc_mask_info_coco: bool = False, delta: int = 15):
+              calc_mask_info_coco: bool = True, delta: int = 15):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
