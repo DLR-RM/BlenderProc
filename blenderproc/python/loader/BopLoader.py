@@ -16,7 +16,8 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 
 def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
                   sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
-                  obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False) -> List[MeshObject]:
+                  obj_instances_limit: int = -1, mm2m: bool = False,
+                  move_origin_to_x_y_plane: bool = False) -> List[MeshObject]:
     """ Loads all or a subset of 3D models of any BOP dataset
 
     :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
