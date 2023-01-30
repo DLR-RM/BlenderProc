@@ -92,7 +92,6 @@ class BopLoaderModule(LoaderInterface):
               obj_instances_limit=obj_instances_limit,
               move_origin_to_x_y_plane=self.config.get_bool("move_origin_to_x_y_plane", False),
               mm2m=self.config.get_bool("mm2m", False),
-              temp_dir=self._temp_dir
           )
           load_bop_intrinsics(
             bop_dataset_path=self.config.get_string("bop_dataset_path"),
