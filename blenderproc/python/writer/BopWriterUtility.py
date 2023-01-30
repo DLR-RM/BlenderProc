@@ -107,31 +107,12 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
                                 "PyOpenGL==3.1.0"])
 
-        # Initialize a renderer.
-        # We do this here since the renderer is a singleton, and thus cannot create two instances in `calc_gt_masks`
-        # and `calc_gt_info`.
-        misc.log('Initializing renderer...')
-        width, height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
-        ren = renderer.create_renderer(width, height, renderer_type='vispy', mode='depth')
-
-        # add objects
-        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
-        np.float = float
-        # Add object models.
-        for obj in target_objects:
-            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
-
-        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir, ren=ren,
-                                        delta=delta)
-        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir, ren=ren,
-                                       delta=delta)
+        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
+                                        dataset_objects=dataset_objects, delta=delta)
+        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
+                                       dataset_objects=dataset_objects, delta=delta)
         _BopWriterUtility.calc_gt_coco(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
                                        dataset_objects=dataset_objects)
-
-        # remove objects not to have duplicates
-        for obj in target_objects:
-            ren.remove_object(obj_id=obj.get_cp('category_id'))
-
 
 class _BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -470,7 +451,7 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunks_dir: str, starting_chunk_dir: Optional[str], ren: "renderer_vispy.RendererVispy",
+    def calc_gt_masks(chunks_dir: str, starting_chunk_dir: Optional[str], dataset_objects: List[MeshObject],
                       delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
@@ -482,13 +463,23 @@ class _BopWriterUtility:
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
-        from bop_toolkit_lib import inout, misc, visibility
+        from bop_toolkit_lib import inout, misc, visibility, renderer
         # pylint: enable=import-outside-toplevel
 
-        # here we need to set the width and height of the renderer since `write_bop` might have been called multiple
-        # times
-        ren.width = bpy.context.scene.render.resolution_x
-        ren.height = bpy.context.scene.render.resolution_y
+        width = bpy.context.scene.render.resolution_x
+        height = bpy.context.scene.render.resolution_y
+        # the renderer instance is a singleton - if we call this function twice, we obtain the same instance again here
+        ren = renderer.create_renderer(width=width, height=height, renderer_type='vispy', mode='depth')
+        # hence, we need to call the `__init__` again to properly set up the rendering
+        # pylint: disable=unnecessary-dunder-call
+        ren.__init__(width=width, height=height)
+        # pylint: enable=unnecessary-dunder-call
+
+        # add objects
+        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
+        np.float = float
+        for obj in dataset_objects:
+            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
 
         # Load scene info and ground-truth poses.
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
@@ -550,7 +541,7 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunks_dir: str, starting_chunk_dir: Optional[str], ren: "renderer_vispy.RendererVispy",
+    def calc_gt_info(chunks_dir: str, starting_chunk_dir: Optional[str], dataset_objects: List[MeshObject],
                      delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
@@ -562,7 +553,7 @@ class _BopWriterUtility:
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
-        from bop_toolkit_lib import inout, misc, visibility
+        from bop_toolkit_lib import inout, misc, visibility, renderer
         # pylint: enable=import-outside-toplevel
 
         # Load scene info and ground-truth poses.
@@ -571,18 +562,27 @@ class _BopWriterUtility:
         if starting_chunk_dir:
             chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
 
+        im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+        ren_width, ren_height = 3 * im_width, 3 * im_height
+        ren_cx_offset, ren_cy_offset = im_width, im_height
+        # the renderer instance is a singleton - if we call this function twice, we obtain the same instance again here
+        ren = renderer.create_renderer(width=ren_width, height=ren_height, renderer_type='vispy', mode='depth')
+        # hence, we need to call the `__init__` again to properly set up the rendering
+        # pylint: disable=unnecessary-dunder-call
+        ren.__init__(width=ren_width, height=ren_height)
+        # pylint: enable=unnecessary-dunder-call
+
+        # add objects
+        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
+        np.float = float
+        for obj in dataset_objects:
+            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
+
         for chunk_dir in chunk_dirs:
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
             last_chunk_camera_fpath = os.path.join(chunk_dir, 'scene_camera.json')
             scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
             scene_camera = _BopWriterUtility.load_json(last_chunk_camera_fpath, keys_to_int=True)
-
-            # Since the renderer is a singleton, we only change width and height
-            im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
-            ren_width, ren_height = 3 * im_width, 3 * im_height
-            ren_cx_offset, ren_cy_offset = im_width, im_height
-            ren.width = ren_width
-            ren.height = ren_height
 
             scene_gt_info = {}
             im_ids = sorted(scene_gt.keys())
