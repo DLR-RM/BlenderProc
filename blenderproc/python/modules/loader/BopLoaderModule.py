@@ -107,7 +107,6 @@ class BopLoaderModule(LoaderInterface):
               split=self.config.get_string("split", "test"),
               source_frame=self.config.get_list("source_frame", ["X", "-Y", "-Z"]),
               mm2m=self.config.get_bool("mm2m", False),
-              temp_dir=self._temp_dir
           )
 
         self._set_properties(loaded_objects)
