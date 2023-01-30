@@ -330,7 +330,7 @@ class _BopLoader:
         model_path = model_p["model_tpath"].format(**{"obj_id": obj_id})
 
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
-        duplicated = model_path in _BopLoader.CACHED_OBJECTS.keys()
+        duplicated = model_path in _BopLoader.CACHED_OBJECTS
         objs = load_obj(model_path, cached_objects=_BopLoader.CACHED_OBJECTS)
         assert (
             len(objs) == 1
