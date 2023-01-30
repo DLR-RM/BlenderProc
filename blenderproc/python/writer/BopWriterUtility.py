@@ -19,7 +19,7 @@ from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
-from blenderproc.python.loader.BopLoader import _BopLoader
+from blenderproc.python.utility.SetupUtility import SetupUtility
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
