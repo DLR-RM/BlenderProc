@@ -334,7 +334,6 @@ class _BopLoader:
         model_path = model_p["model_tpath"].format(**{"obj_id": obj_id})
 
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
-<<<<<<< HEAD
         duplicated = model_path in _BopLoader.CACHED_OBJECTS.keys()
         objs = load_obj(model_path, cached_objects=_BopLoader.CACHED_OBJECTS)
         assert (
@@ -348,17 +347,6 @@ class _BopLoader:
                 material_dup = material.duplicate()
                 cur_obj.set_material(i, material_dup)
         
-=======
-        if cur_obj is None:
-            objs = load_obj(model_path)
-            assert (
-                len(objs) == 1
-            ), f"Loading object from '{model_path}' returned more than one mesh"
-            cur_obj = objs[0]
-        elif False:
-            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
-            cur_obj = MeshObject(bpy.context.selected_objects[-1])
->>>>>>> c2976a2c51047cbd6826ff91cf6b51d69ea8a724
         # Change Material name to be backward compatible
         cur_obj.get_materials()[-1].set_name("bop_" + bop_dataset_name + "_vertex_col_material")
         cur_obj.set_scale(Vector((scale, scale, scale)))
