@@ -1,1 +1,0 @@
-blenderproc run examples/datasets/bop_object_physics_positioning/config.yaml /volume/pekdat/datasets/public/bop/original ycbv /volume/reconstruction_data/jung_se/src/bop_toolkit /volume/pekdat/datasets/public/cctextures/ examples/datasets/bop_object_physics_positioning/output
