@@ -1,1 +1,0 @@
-blenderproc run examples/datasets/bop_object_physics_positioning/main.py /volume/pekdat/datasets/public/bop/original ycbv /volume/pekdat/datasets/public/cctextures/ examples/datasets/bop_object_physics_positioning/output
