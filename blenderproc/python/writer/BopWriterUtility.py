@@ -494,8 +494,19 @@ class _BopWriterUtility:
         # add objects
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
         np.float = float
+        dataset_objects = []
+        if dataset != "":
+            for obj in get_all_mesh_objects():
+                if "bop_dataset_name" in obj.blender_obj:
+                    # opposite to above, we write annotations also for hidden objects
+                    if obj.blender_obj["bop_dataset_name"] == dataset:
+                        dataset_objects.append(obj)
+        else:
+            # if no dataset is defined, write annotations for all objects
+            dataset_objects = get_all_mesh_objects()
+
         for obj in dataset_objects:
-            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
+            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
 
         # Load scene info and ground-truth poses.
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
@@ -598,8 +609,19 @@ class _BopWriterUtility:
         # add objects
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
         np.float = float
+        dataset_objects = []
+        if dataset != "":
+            for obj in get_all_mesh_objects():
+                if "bop_dataset_name" in obj.blender_obj:
+                    # opposite to above, we write annotations also for hidden objects
+                    if obj.blender_obj["bop_dataset_name"] == dataset:
+                        dataset_objects.append(obj)
+        else:
+            # if no dataset is defined, write annotations for all objects
+            dataset_objects = get_all_mesh_objects()
+
         for obj in dataset_objects:
-            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
+            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
