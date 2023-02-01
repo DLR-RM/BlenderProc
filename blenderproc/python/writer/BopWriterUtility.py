@@ -93,7 +93,21 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # mask/info/coco annotations need to be calculated for all of them
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
         chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        starting_chunk_dir = sorted(chunk_dirs)[-1] if chunk_dirs else None
+        last_chunk_dir = sorted(chunk_dirs)[-1] if chunk_dirs else None
+
+        starting_chunk_id = 0
+        starting_frame_id = 0
+        if last_chunk_dir:
+            last_chunk_gt_fpath = os.path.join(last_chunk_dir, 'scene_gt.json')
+            chunk_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
+
+            # Current chunk and frame ID's.
+            starting_chunk_id = int(os.path.basename(last_chunk_dir))
+            starting_frame_id = int(sorted(chunk_gt.keys())[-1]) + 1
+
+            if starting_frame_id % frames_per_chunk == 0:
+                starting_chunk_id += 1
+                starting_frame_id = 0
 
     # Save the data.
     _BopWriterUtility.write_camera(camera_path, depth_scale=depth_scale)
@@ -107,12 +121,12 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
                                 "PyOpenGL==3.1.0"])
 
-        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
-                                        dataset_objects=dataset_objects, delta=delta)
-        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
-                                       dataset_objects=dataset_objects, delta=delta)
-        _BopWriterUtility.calc_gt_coco(chunks_dir=chunks_dir, starting_chunk_dir=starting_chunk_dir,
-                                       dataset_objects=dataset_objects)
+        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_id=starting_chunk_id,
+                                        starting_frame_id=starting_frame_id, dataset=dataset, delta=delta)
+        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_id=starting_chunk_id,
+                                       starting_frame_id=starting_frame_id, dataset=dataset, delta=delta)
+        _BopWriterUtility.calc_gt_coco(chunks_dir=chunks_dir, dataset_objects=dataset_objects,
+                                       starting_chunk_id=starting_chunk_id, starting_frame_id=starting_frame_id)
 
 class _BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -451,14 +465,16 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunks_dir: str, starting_chunk_dir: Optional[str], dataset_objects: List[MeshObject],
-                      delta: int = 15):
+    def calc_gt_masks(chunks_dir: str, starting_chunk_id: Optional[str], starting_frame_id: Optional[int],
+                      dataset: str = "", delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param chunks_dir: Path to the output directory of the current chunk.
-        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
-        :param ren: BOP toolkit vispy renderer instance.
+        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
+        :param starting_frame_id: The first frame id the writer has written during this run.
+        :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if
+                        undefined.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -484,10 +500,10 @@ class _BopWriterUtility:
         # Load scene info and ground-truth poses.
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
         chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        if starting_chunk_dir:
-            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
+        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
-        for chunk_dir in chunk_dirs:
+        for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
             last_chunk_camera_fpath = os.path.join(chunk_dir, 'scene_camera.json')
             scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
@@ -501,6 +517,11 @@ class _BopWriterUtility:
             misc.ensure_dir(mask_visib_dir_path)
 
             im_ids = sorted(scene_gt.keys())
+
+            # append to existing output
+            if dir_counter == 0:
+                im_ids = im_ids[starting_frame_id:]
+
             for im_counter, im_id in enumerate(im_ids):
                 if im_counter % 100 == 0:
                     misc.log(f'Calculating GT masks - {chunk_dir}, {im_counter}')
@@ -541,14 +562,16 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunks_dir: str, starting_chunk_dir: Optional[str], dataset_objects: List[MeshObject],
+    def calc_gt_info(chunks_dir: str, starting_chunk_id: int = 0, starting_frame_id: int = 0, dataset: str = "",
                      delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param chunks_dir: Path to the output directory of the current chunk.
-        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
-        :param ren: BOP toolkit vispy renderer instance.
+        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
+        :param starting_frame_id: The first frame id the writer has written during this run.
+        :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if
+                        undefined.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -559,8 +582,8 @@ class _BopWriterUtility:
         # Load scene info and ground-truth poses.
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
         chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        if starting_chunk_dir:
-            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
+        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
         ren_width, ren_height = 3 * im_width, 3 * im_height
@@ -578,14 +601,26 @@ class _BopWriterUtility:
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('obj_path'))
 
-        for chunk_dir in chunk_dirs:
+        for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
             last_chunk_camera_fpath = os.path.join(chunk_dir, 'scene_camera.json')
             scene_gt = _BopWriterUtility.load_json(last_chunk_gt_fpath, keys_to_int=True)
             scene_camera = _BopWriterUtility.load_json(last_chunk_camera_fpath, keys_to_int=True)
 
-            scene_gt_info = {}
+            # load existing gt info
+            if dir_counter == 0 and starting_frame_id > 0:
+                misc.log(f"Loading gt info from existing chunk dir - {chunk_dir}")
+                scene_gt_info = _BopWriterUtility.load_json(os.path.join(chunk_dir, 'scene_gt_info.json'),
+                                                            keys_to_int=True)
+            else:
+                scene_gt_info = {}
+
             im_ids = sorted(scene_gt.keys())
+
+            # append to existing output
+            if dir_counter == 0:
+                im_ids = im_ids[starting_frame_id:]
+
             for im_counter, im_id in enumerate(im_ids):
                 if im_counter % 100 == 0:
                     misc.log(f'Calculating GT info - {chunk_dir}, {im_counter}')
@@ -670,13 +705,15 @@ class _BopWriterUtility:
             inout.save_json(scene_gt_info_path, scene_gt_info)
 
     @staticmethod
-    def calc_gt_coco(chunks_dir: str, starting_chunk_dir: str, dataset_objects: List[MeshObject]):
+    def calc_gt_coco(chunks_dir: str, dataset_objects: List[MeshObject], starting_chunk_id: int = 0,
+                     starting_frame_id: int = 0):
         """ Calculates the COCO annotations.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param chunks_dir: Path to the output directory of the current chunk.
-        :param starting_chunk_dir: Path to the first chunk_dir the writer has written to.
-        :param dataset_objects: Objects for which to save annotations in COCO format.
+        :param dataset_objects: Save annotations for these objects.
+        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
+        :param starting_frame_id: The first frame id the writer has written during this run.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
@@ -685,14 +722,14 @@ class _BopWriterUtility:
 
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
         chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        if starting_chunk_dir:
-            chunk_dirs = chunk_dirs[chunk_dirs.index(starting_chunk_dir):]
+        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
+        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
-        for chunk_dir in chunk_dirs:
+        for dir_counter, chunk_dir in enumerate(chunk_dirs):
             dataset_name = chunk_dir.split('/')[-3]
 
             CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
-                dataset_name} for obj in dataset_objects]
+                          dataset_name} for obj in dataset_objects]
             INFO = {
                 "description": dataset_name + '_train',
                 "url": "https://github.com/thodan/bop_toolkit",
@@ -704,13 +741,18 @@ class _BopWriterUtility:
 
             segmentation_id = 1
 
-            coco_scene_output = {
-                "info": INFO,
-                "licenses": [],
-                "categories": CATEGORIES,
-                "images": [],
-                "annotations": []
-            }
+            # load existing coco annotations
+            if dir_counter == 0 and starting_frame_id > 0:
+                misc.log(f"Loading coco annotations from existing chunk dir - {chunk_dir}")
+                coco_scene_output = _BopWriterUtility.load_json(os.path.join(chunk_dir, 'scene_gt_coco.json'))
+            else:
+                coco_scene_output = {
+                    "info": INFO,
+                    "licenses": [],
+                    "categories": CATEGORIES,
+                    "images": [],
+                    "annotations": []
+                }
 
             # Load info about the GT poses (e.g. visibility) for the current scene.
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
@@ -724,6 +766,11 @@ class _BopWriterUtility:
             # Go through each view in scene_gt
             for scene_view, inst_list in scene_gt.items():
                 im_id = int(scene_view)
+
+                # skip already existing annotations
+                if dir_counter == 0 and im_id < starting_frame_id:
+                    continue
+
                 img_path = os.path.join(chunk_dir, 'rgb', '{im_id:06d}.jpg').format(im_id=im_id)
                 relative_img_path = os.path.relpath(img_path, os.path.dirname(coco_gt_path))
                 im_size = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y)
