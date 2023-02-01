@@ -233,7 +233,7 @@ class _BopWriterUtility:
                         'category_id')
                 })
             else:
-                print('ignored obj, ', obj["category_id"], 'because either ')
+                print('ignored obj, ', obj.get_cp("category_id"), 'because either ')
                 print('(1) it is further away than parameter "ignore_dist_thres: ",', ignore_dist_thres)
                 print('(e.g. because it fell through a plane during physics sim)')
                 print('or')
