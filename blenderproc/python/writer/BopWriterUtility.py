@@ -124,16 +124,6 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # determine which objects to add to the vsipy renderer
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
         np.float = float
-        dataset_objects = []
-        if dataset != "":
-            for obj in get_all_mesh_objects():
-                if "bop_dataset_name" in obj.blender_obj:
-                    # opposite to above, we write annotations also for hidden objects
-                    if obj.blender_obj["bop_dataset_name"] == dataset:
-                        dataset_objects.append(obj)
-        else:
-            # if no dataset is defined, write annotations for all objects
-            dataset_objects = get_all_mesh_objects()
 
         # Determine for which directories mask_info_coco has to be calculated
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
