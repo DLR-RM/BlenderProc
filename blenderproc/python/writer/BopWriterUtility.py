@@ -121,12 +121,33 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
                                 "PyOpenGL==3.1.0"])
 
-        _BopWriterUtility.calc_gt_masks(chunks_dir=chunks_dir, starting_chunk_id=starting_chunk_id,
-                                        starting_frame_id=starting_frame_id, dataset=dataset, delta=delta)
-        _BopWriterUtility.calc_gt_info(chunks_dir=chunks_dir, starting_chunk_id=starting_chunk_id,
-                                       starting_frame_id=starting_frame_id, dataset=dataset, delta=delta)
-        _BopWriterUtility.calc_gt_coco(chunks_dir=chunks_dir, dataset_objects=dataset_objects,
-                                       starting_chunk_id=starting_chunk_id, starting_frame_id=starting_frame_id)
+        # determine which objects to add to the vsipy renderer
+        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
+        np.float = float
+        dataset_objects = []
+        if dataset != "":
+            for obj in get_all_mesh_objects():
+                if "bop_dataset_name" in obj.blender_obj:
+                    # opposite to above, we write annotations also for hidden objects
+                    if obj.blender_obj["bop_dataset_name"] == dataset:
+                        dataset_objects.append(obj)
+        else:
+            # if no dataset is defined, write annotations for all objects
+            dataset_objects = get_all_mesh_objects()
+
+        # Determine for which directories mask_info_coco has to be calculated
+        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
+        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
+
+        _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
+                                        dataset_objects=dataset_objects, delta=delta)
+        _BopWriterUtility.calc_gt_info(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
+                                       dataset_objects=dataset_objects, delta=delta)
+        _BopWriterUtility.calc_gt_coco(chunk_dirs=chunk_dirs, dataset_objects=dataset_objects,
+                                       starting_frame_id=starting_frame_id)
+
 
 class _BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -465,16 +486,14 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunks_dir: str, starting_chunk_id: Optional[str], starting_frame_id: Optional[int],
-                      dataset: str = "", delta: int = 15):
+    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: List[MeshObject], starting_frame_id: int = 0,
+                      delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
-        :param chunks_dir: Path to the output directory of the current chunk.
-        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
+        :param chunk_dirs: List of directories to calculate the gt masks for.
+        :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if
-                        undefined.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -491,28 +510,8 @@ class _BopWriterUtility:
         ren.__init__(width=width, height=height)
         # pylint: enable=unnecessary-dunder-call
 
-        # add objects
-        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
-        np.float = float
-        dataset_objects = []
-        if dataset != "":
-            for obj in get_all_mesh_objects():
-                if "bop_dataset_name" in obj.blender_obj:
-                    # opposite to above, we write annotations also for hidden objects
-                    if obj.blender_obj["bop_dataset_name"] == dataset:
-                        dataset_objects.append(obj)
-        else:
-            # if no dataset is defined, write annotations for all objects
-            dataset_objects = get_all_mesh_objects()
-
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
-
-        # Load scene info and ground-truth poses.
-        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
-        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
-        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
@@ -573,28 +572,20 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunks_dir: str, starting_chunk_id: int = 0, starting_frame_id: int = 0, dataset: str = "",
+    def calc_gt_info(chunk_dirs: List[str], dataset_objects: List[MeshObject], starting_frame_id: int = 0,
                      delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
-        :param chunks_dir: Path to the output directory of the current chunk.
-        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
+        :param chunk_dirs: List of directories to calculate the gt info for.
+        :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if
-                        undefined.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
         from bop_toolkit_lib import inout, misc, visibility, renderer
         # pylint: enable=import-outside-toplevel
-
-        # Load scene info and ground-truth poses.
-        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
-        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
-        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
         ren_width, ren_height = 3 * im_width, 3 * im_height
@@ -605,20 +596,6 @@ class _BopWriterUtility:
         # pylint: disable=unnecessary-dunder-call
         ren.__init__(width=ren_width, height=ren_height)
         # pylint: enable=unnecessary-dunder-call
-
-        # add objects
-        # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
-        np.float = float
-        dataset_objects = []
-        if dataset != "":
-            for obj in get_all_mesh_objects():
-                if "bop_dataset_name" in obj.blender_obj:
-                    # opposite to above, we write annotations also for hidden objects
-                    if obj.blender_obj["bop_dataset_name"] == dataset:
-                        dataset_objects.append(obj)
-        else:
-            # if no dataset is defined, write annotations for all objects
-            dataset_objects = get_all_mesh_objects()
 
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
@@ -727,25 +704,18 @@ class _BopWriterUtility:
             inout.save_json(scene_gt_info_path, scene_gt_info)
 
     @staticmethod
-    def calc_gt_coco(chunks_dir: str, dataset_objects: List[MeshObject], starting_chunk_id: int = 0,
-                     starting_frame_id: int = 0):
+    def calc_gt_coco(chunk_dirs: List[str], dataset_objects: List[MeshObject], starting_frame_id: int = 0):
         """ Calculates the COCO annotations.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
-        :param chunks_dir: Path to the output directory of the current chunk.
+        :param chunk_dirs: List of directories to calculate the gt coco annotations for.
         :param dataset_objects: Save annotations for these objects.
-        :param starting_chunk_id: The first chunk_dir the writer has written to during this run.
         :param starting_frame_id: The first frame id the writer has written during this run.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
         from bop_toolkit_lib import inout, misc, pycoco_utils
         # pylint: enable=import-outside-toplevel
-
-        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
-        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
-        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
             dataset_name = chunk_dir.split('/')[-3]
