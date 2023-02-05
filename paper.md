@@ -82,7 +82,7 @@ physics module & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign
 camera sampling & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign & \yesSign \\
 \hline
 GUI-based debugging viewer & \yesSign & \noSign & \noSign & \noSign & \noSign & \yesSign \\
-uses an open-source renderer & \yesSign & \noSign & \noSign & \yesSign & \yesSign & \yesSign \\
+uses an open-source renderer & \yesSign & \yesSign & \noSign & \yesSign & \yesSign & \yesSign \\
 real-time & \yesSign & \noSign & \yesSign & \yesSign & \noSign  & \noSign \\
 \end{tabular}
 \caption{Main features present or not present in different simulators}
