@@ -676,14 +676,14 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
                 bpy.ops.render.render(animation=True, write_still=True)
         
         # Close Pipes to prevent having unclosed file handles
-        #try:
-        #    os.close(pipe_out)
-        #except OSError:
-        #    pass
-        #try:
-        #    os.close(pipe_in)
-        #except OSError:
-        #    pass
+        try:
+            os.close(pipe_out)
+        except OSError:
+            pass
+        try:
+            os.close(pipe_in)
+        except OSError:
+            pass
         
         print(f"Finished rendering after {time.time() - begin:.3f} seconds")
         # Revert changes
