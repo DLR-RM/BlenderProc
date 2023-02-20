@@ -10,7 +10,8 @@
 
 A procedural Blender pipeline for photorealistic rendering.
 
-[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
+[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) | [JOSS article](https://joss.theoj.org/papers/10.21105/joss.04901)
+
 ## Features
 
 * Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
