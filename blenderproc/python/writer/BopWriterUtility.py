@@ -493,12 +493,7 @@ class _BopWriterUtility:
 
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
-        # the renderer instance is a singleton - if we call this function twice, we obtain the same instance again here
         ren = renderer.create_renderer(width=width, height=height, renderer_type='vispy', mode='depth')
-        # hence, we need to call the `__init__` again to properly set up the rendering
-        # pylint: disable=unnecessary-dunder-call
-        ren.__init__(width=width, height=height)
-        # pylint: enable=unnecessary-dunder-call
 
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
@@ -580,13 +575,8 @@ class _BopWriterUtility:
         im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
         ren_width, ren_height = 3 * im_width, 3 * im_height
         ren_cx_offset, ren_cy_offset = im_width, im_height
-        # the renderer instance is a singleton - if we call this function twice, we obtain the same instance again here
         ren = renderer.create_renderer(width=ren_width, height=ren_height, renderer_type='vispy', mode='depth')
-        # hence, we need to call the `__init__` again to properly set up the rendering
-        # pylint: disable=unnecessary-dunder-call
-        ren.__init__(width=ren_width, height=ren_height)
-        # pylint: enable=unnecessary-dunder-call
-
+        
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
 
