@@ -494,7 +494,7 @@ class _BopWriterUtility:
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
         ren = renderer.create_renderer(width=width, height=height, renderer_type='vispy', mode='depth')
-
+        ren.set_current()
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
 
@@ -576,6 +576,7 @@ class _BopWriterUtility:
         ren_width, ren_height = 3 * im_width, 3 * im_height
         ren_cx_offset, ren_cy_offset = im_width, im_height
         ren = renderer.create_renderer(width=ren_width, height=ren_height, renderer_type='vispy', mode='depth')
+        ren.set_current()
         
         for obj in dataset_objects:
             ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
