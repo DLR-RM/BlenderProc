@@ -93,7 +93,7 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
         bpy.ops.wm.collada_import(filepath=filepath)
     elif filepath.lower().endswith('.stl'):
         # load a .stl file
-        bpy.ops.import_mesh.stl(filepath=filepath, **kwargs)
+        bpy.ops.wm.stl_import(filepath=filepath, **kwargs)
         # add a default material to stl file
         mat = bpy.data.materials.new(name="stl_material")
         mat.use_nodes = True
