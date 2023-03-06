@@ -29,11 +29,11 @@ class PhysicsPositioningModule(Module):
           - Description
           - Type
         * - object_stopped_location_threshold
-          - The maximum difference per second and per coordinate in the location vector that is allowed, such that
+          - The maximum difference per second and per coordinate in the location vector that is allowed such that
             an object is still recognized as 'stopped moving'. Default: 0.01
           - float
         * - object_stopped_rotation_threshold
-          - The maximum difference per second and per coordinate in the rotation Euler vector that is allowed. such
+          - The maximum difference per second and per coordinate in the rotation Euler vector that is allowed such
             that an object is still recognized as 'stopped moving'. Default: 0.1
           - float
         * - min_simulation_time

@@ -27,8 +27,8 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     :param max_simulation_time: The maximum number of seconds to simulate.
     :param check_object_interval: The interval in seconds at which all objects should be checked if they are still
                                   moving. If all objects have stopped moving, then the simulation will be stopped.
-    :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the rotation
-                                              Euler vector that is allowed such that an object is still recognized
+    :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the location
+                                              vector that is allowed such that an object is still recognized
                                               as 'stopped moving'.
     :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation
                                               Euler vector that is allowed such that an object is still recognized
@@ -91,8 +91,8 @@ def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: floa
     :param max_simulation_time: The maximum number of seconds to simulate.
     :param check_object_interval: The interval in seconds at which all objects should be checked if they are still
                                   moving. If all objects have stopped moving, then the simulation will be stopped.
-    :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the rotation
-                                              Euler vector that is allowed such that an object is still recognized
+    :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the location
+                                              vector that is allowed such that an object is still recognized
                                               as 'stopped moving'.
     :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation
                                               Euler vector that is allowed such that an object is still recognized
@@ -158,8 +158,8 @@ class _PhysicsSimulation:
         :param max_simulation_time: The maximum number of seconds to simulate.
         :param check_object_interval: The interval in seconds at which all objects should be checked if they are still
                                       moving. If all objects have stopped moving, then the simulation will be stopped.
-        :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the rotation
-                                                  Euler vector that is allowed such that an object is still recognized
+        :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the location
+                                                  vector that is allowed such that an object is still recognized
                                                   as 'stopped moving'.
         :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation
                                                   Euler vector that is allowed such that an object is still recognized
@@ -231,8 +231,8 @@ class _PhysicsSimulation:
 
         :param last_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :param new_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
-        :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the rotation
-                                                  Euler vector that is allowed such that an object is still recognized
+        :param object_stopped_location_threshold: The maximum difference per second and per coordinate in the location
+                                                  vector that is allowed such that an object is still recognized
                                                   as 'stopped moving'.
         :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation
                                                   Euler vector that is allowed such that an object is still recognized
