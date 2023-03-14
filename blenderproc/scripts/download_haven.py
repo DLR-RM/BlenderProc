@@ -19,6 +19,7 @@ def cli():
     parser.add_argument('--format', help="Desired download format for the images.", default="jpg")
     parser.add_argument('--tags', nargs='+', help="Filter by asset tag.", default=None)
     parser.add_argument('--categories', nargs='+', help="Filter by asset category.", default=[])
+    parser.add_argument('--threads', nargs='?', type=int, help="How many threads to use for downloading", default=4)
     parser.add_argument('--types', nargs='+', help="Only download the given types",
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
@@ -66,7 +67,7 @@ def cli():
             print("Starting download of\t" + output_dir.name )
 
         # Start threadpool to download
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers= args.threads) as executor:
             # Create a list of futures
             futures = []
             for item_id in missing_item_ids:
