@@ -20,13 +20,13 @@ def cli():
     parser.add_argument('--format', help="Desired download format for the images.", default="jpg")
     parser.add_argument('--tags', nargs='+', help="Filter by asset tag.", default=None)
     parser.add_argument('--categories', nargs='+', help="Filter by asset category.", default=[])
-    parser.add_argument('--workers', nargs='?', type=int, help="How many threads to use for downloading", default=4)
+    parser.add_argument('--threads', nargs='?', type=int, help="How many threads to use for downloading", default=4)
     parser.add_argument('--types', nargs='+', help="Only download the given types",
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
     args_output_dir = Path(args.output_folder)
     
-    args_max_workers = min(args.workers, cpu_count())
+    args_max_workers = min(args.threads, cpu_count())
 
 
     def download_file(url: str, output_path: str):
