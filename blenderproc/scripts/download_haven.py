@@ -5,6 +5,7 @@ import argparse
 from typing import Callable
 from progressbar import ProgressBar, Percentage, Bar, ETA, AdaptiveETA
 import concurrent.futures
+from multiprocessing import cpu_count
 import requests
 
 
@@ -23,8 +24,10 @@ def cli():
     parser.add_argument('--types', nargs='+', help="Only download the given types",
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
-
     args_output_dir = Path(args.output_folder)
+    
+    args_max_workers = min(args.threads, cpu_count())
+
 
     def download_file(url: str, output_path: str):
         # Download
@@ -67,7 +70,7 @@ def cli():
             print("Starting download of\t" + output_dir.name )
 
         # Start threadpool to download
-        with concurrent.futures.ThreadPoolExecutor(max_workers= args.threads) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers= args_max_workers) as executor:
             # Create a list of futures
             futures = []
             for item_id in missing_item_ids:
