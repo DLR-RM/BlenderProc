@@ -346,13 +346,15 @@ class Link(Entity):
         for obj in self.get_all_objs():
             obj.hide(hide_object=hide_object)
 
-    def get_visual_local2world_mats(self, parent2world_matrix: Matrix) -> Optional[List[Matrix]]:
+    def get_visual_local2world_mats(self, parent2world_matrix: Optional[Matrix] = None) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the visual parts.
 
         :param parent2world_matrix: The transformation from the link's armature to the world frame.
         :return: List of transformation matrices.
         """
         bpy.context.view_layer.update()
+        if parent2world_matrix is None:
+            parent2world_matrix = Matrix(Entity(self.armature).get_local2world_mat())
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
@@ -362,13 +364,15 @@ class Link(Entity):
             return [parent2world_matrix @ mat for mat in link2base_mats]
         return None
 
-    def get_collision_local2world_mats(self, parent2world_matrix: Matrix) -> Optional[List[Matrix]]:
+    def get_collision_local2world_mats(self, parent2world_matrix: Optional[Matrix] = None) -> Optional[List[Matrix]]:
         """Returns the transformation matrices from world to the collision parts.
 
         :param parent2world_matrix: The transformation from the link's armature to the world frame.
         :return: List of transformation matrices.
         """
         bpy.context.view_layer.update()
+        if parent2world_matrix is None:
+            parent2world_matrix = Matrix(Entity(self.armature).get_local2world_mat())
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
@@ -378,13 +382,15 @@ class Link(Entity):
             return [parent2world_matrix @ mat for mat in link2base_mats]
         return None
 
-    def get_inertial_local2world_mat(self, parent2world_matrix: Matrix) -> Optional[Matrix]:
+    def get_inertial_local2world_mat(self, parent2world_matrix: Optional[Matrix] = None) -> Optional[Matrix]:
         """Returns the transformation matrix from world to the inertial part.
 
         :param parent2world_matrix: The transformation from the link's armature to the world frame.
         :return: The transformation matrix.
         """
         bpy.context.view_layer.update()
+        if parent2world_matrix is None:
+            parent2world_matrix = Matrix(Entity(self.armature).get_local2world_mat())
         bone_mat = Matrix.Identity(4)
         if self.bone is not None:
             bone_mat = self.bone.matrix
