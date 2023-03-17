@@ -159,7 +159,7 @@ class _StereoGlobalMatching:
             custom_kernel = FULL_KERNEL_5
 
         # Invert
-        valid_pixels = (depth_map > 0.1)
+        valid_pixels = depth_map > 0.1
         depth_map[valid_pixels] = max_depth - depth_map[valid_pixels]
 
         # Dilate
@@ -169,7 +169,7 @@ class _StereoGlobalMatching:
         depth_map = cv2.morphologyEx(depth_map, cv2.MORPH_CLOSE, FULL_KERNEL_5)
 
         # Fill empty spaces with dilated values
-        empty_pixels = (depth_map < 0.1)
+        empty_pixels = depth_map < 0.1
         dilated = cv2.dilate(depth_map, FULL_KERNEL_7)
         depth_map[empty_pixels] = dilated[empty_pixels]
 
@@ -196,12 +196,12 @@ class _StereoGlobalMatching:
             depth_map = cv2.bilateralFilter(depth_map, 5, 1.5, 2.0)
         elif blur_type == 'gaussian':
             # Gaussian blur
-            valid_pixels = (depth_map > 0.1)
+            valid_pixels = depth_map > 0.1
             blurred = cv2.GaussianBlur(depth_map, (5, 5), 0)
             depth_map[valid_pixels] = blurred[valid_pixels]
 
         # Invert
-        valid_pixels = (depth_map > 0.1)
+        valid_pixels = depth_map > 0.1
         depth_map[valid_pixels] = max_depth - depth_map[valid_pixels]
 
         return depth_map

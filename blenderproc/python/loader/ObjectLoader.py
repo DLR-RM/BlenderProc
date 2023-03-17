@@ -101,10 +101,10 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
                                 obj not in previously_selected_objects]
         for obj in selected_objects:
             obj.data.materials.append(mat)
-    
+
     mesh_objects = convert_to_meshes([obj for obj in bpy.context.selected_objects
                                   if obj not in previously_selected_objects])
     # Add model_path cp to all objects
     for obj in mesh_objects:
-        obj.set_cp("model_path", filepath)        
+        obj.set_cp("model_path", filepath)
     return mesh_objects
