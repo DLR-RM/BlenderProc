@@ -101,5 +101,8 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
                                 obj not in previously_selected_objects]
         for obj in selected_objects:
             obj.data.materials.append(mat)
+    elif filepath.lower().endswith('.fbx'):
+        bpy.ops.import_scene.fbx(filepath=filepath)
+
     return convert_to_meshes([obj for obj in bpy.context.selected_objects
                                   if obj not in previously_selected_objects])
