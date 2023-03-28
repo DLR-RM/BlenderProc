@@ -14,7 +14,7 @@ A procedural Blender pipeline for photorealistic rendering.
 
 ## Features
 
-* Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
+* Loading: `*.obj`, `*.ply`, `*.blend`, `*.fbx`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
 * Objects: Set or sample object poses, apply physics and collision checking.
 * Materials: Set or sample physically-based materials and textures
 * Lighting: Set or sample lights, automatic lighting of 3D-FRONT scenes.
