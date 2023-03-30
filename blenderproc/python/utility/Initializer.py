@@ -77,6 +77,7 @@ def clean_up(clean_up_camera: bool = False):
     # Create new world
     new_world = bpy.data.worlds.new("World")
     bpy.context.scene.world = new_world
+    bpy.context.scene.world.use_nodes = True
     new_world["category_id"] = 0
 
     if clean_up_camera:
