@@ -133,7 +133,7 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
         if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
             return [oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
 
-        intensity_img = (np.sum(image, axis=2) / 3.0)
+        intensity_img = np.sum(image, axis=2) / 3.0
 
         neighbors = np.array(
             _PostProcessingUtility.get_pixel_neighbors_stacked(image, filter_size, return_list=True))
@@ -205,7 +205,7 @@ def add_kinect_azure_noise(depth: Union[list, np.ndarray], color: Optional[Union
     depth = add_gaussian_shifts(depth, 0.25)
 
     # 0.5mm base noise, 1mm std noise @ 1m, 3.6mm std noise @ 3m
-    depth = depth + (5/10000 + np.maximum((depth-0.5) * 1/1000, 0)) * np.random.normal(size=depth.shape)
+    depth += (5/10000 + np.maximum((depth-0.5) * 1/1000, 0)) * np.random.normal(size=depth.shape)
 
     # Creates the shape of the kernel
     shape = cv2.MORPH_RECT
@@ -507,7 +507,7 @@ class _PostProcessingUtility:
         """
         # The map was scaled to be ranging along the entire 16-bit color depth, and this is the scaling down operation
         # that should remove some noise or deviations
-        image = ((image * 37) / (65536))  # assuming 16 bit color depth
+        image = (image * 37) / (65536)  # assuming 16 bit color depth
         image = image.astype(np.int32)
         b, counts = np.unique(image.flatten(), return_counts=True)
 

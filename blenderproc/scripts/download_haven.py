@@ -3,10 +3,10 @@
 from pathlib import Path
 import argparse
 from typing import Callable
-from progressbar import ProgressBar, Percentage, Bar, ETA, AdaptiveETA
 import concurrent.futures
 from multiprocessing import cpu_count
 import requests
+from progressbar import ProgressBar, Percentage, Bar, ETA, AdaptiveETA
 
 
 def cli():
@@ -25,7 +25,7 @@ def cli():
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
     args_output_dir = Path(args.output_folder)
-    
+
     args_max_workers = min(args.threads, cpu_count())
 
 
@@ -66,8 +66,7 @@ def cli():
         if not missing_item_ids:
             print("Skipping download of\t" + output_dir.name + " All files exist")
             return
-        else:
-            print("Starting download of\t" + output_dir.name )
+        print("Starting download of\t" + output_dir.name )
 
         # Start threadpool to download
         with concurrent.futures.ThreadPoolExecutor(max_workers= args_max_workers) as executor:
@@ -77,11 +76,11 @@ def cli():
                 item_output: Path = output_dir / item_id
                 item_output.mkdir(exist_ok=True)
                 futures.append(executor.submit(item_download_func, item_id, item_output))
-            
+
             # Initialize progress bar
             widgets = [Percentage(),' ', Bar(), ' ', ETA(),' ', AdaptiveETA()]
             progress = ProgressBar(widgets= widgets, maxval= len(futures))
-            
+
             # Execute list of futures
             for future in progress(concurrent.futures.as_completed(futures)):
                 # Check for any exceptions in the threads

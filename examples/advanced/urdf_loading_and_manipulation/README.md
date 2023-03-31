@@ -114,12 +114,14 @@ meshes. Here we simply print them after the last motion.
 ```python
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        target_objects = robot.links,
-                       depths = list(stereo_depth),
+                       depths = data["depth"],
                        colors = data["colors"], 
-                       m2mm = False)
+                       m2mm = False,
+                       calc_mask_info_coco=False)
 ```
 
 The poses of the visual meshes of every robot link can be written using the BOPWriter.
+We disable writing object masks, as this would require setting for each object a `model_path` custom property, which is not yet supported by the URDF loader.
 
 ## Preparing URDF files
 
