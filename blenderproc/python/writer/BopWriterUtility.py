@@ -780,7 +780,7 @@ class _BopWriterUtility:
                     if annotation_info is not None:
                         coco_scene_output["annotations"].append(annotation_info)
 
-                    segmentation_id = segmentation_id + 1
+                    segmentation_id += 1
 
             with open(coco_gt_path, 'w', encoding='utf-8') as output_json_file:
                 json.dump(coco_scene_output, output_json_file)

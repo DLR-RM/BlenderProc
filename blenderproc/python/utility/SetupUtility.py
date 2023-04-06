@@ -238,7 +238,7 @@ class SetupUtility:
             if package_version is not None and already_installed:
                 # Check if the correct version is installed
                 # pylint: disable=unsubscriptable-object
-                already_installed = (package_version == SetupUtility.installed_packages[package_name])
+                already_installed = package_version == SetupUtility.installed_packages[package_name]
                 # pylint: enable=unsubscriptable-object
 
             # Only install if it's not already installed (pip would check this itself, but at first downloads the
