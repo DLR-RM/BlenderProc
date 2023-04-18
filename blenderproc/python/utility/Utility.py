@@ -11,7 +11,6 @@ import time
 import inspect
 import importlib
 import json
-from sys import platform
 from contextlib import contextmanager
 
 import bpy
