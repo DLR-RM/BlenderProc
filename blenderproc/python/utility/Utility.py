@@ -11,15 +11,10 @@ import time
 import inspect
 import importlib
 import json
-from sys import platform
 from contextlib import contextmanager
 
 import bpy
 import numpy as np
-
-if platform != "win32":
-    # importing git doesn't work under windows
-    import git
 
 # pylint: disable=wrong-import-position
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
@@ -177,17 +172,11 @@ class Utility:
 
     @staticmethod
     def get_current_version() -> Optional[str]:
-        """ Gets the git commit hash.
+        """ Gets the current blenderproc version.
 
-        :return: a string, the BlenderProc version, or None if unavailable
+        :return: a string, the BlenderProc version
         """
-        if platform == "win32":
-            return __version__
-        try:
-            repo = git.Repo(search_parent_directories=True)
-        except git.InvalidGitRepositoryError:
-            return __version__
-        return repo.head.object.hexsha
+        return __version__
 
     @staticmethod
     def get_temporary_directory() -> str:
