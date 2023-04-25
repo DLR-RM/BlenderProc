@@ -10,10 +10,11 @@
 
 A procedural Blender pipeline for photorealistic rendering.
 
-[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
+[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) | [JOSS article](https://joss.theoj.org/papers/10.21105/joss.04901)
+
 ## Features
 
-* Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
+* Loading: `*.obj`, `*.ply`, `*.blend`, `*.fbx`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
 * Objects: Set or sample object poses, apply physics and collision checking.
 * Materials: Set or sample physically-based materials and textures
 * Lighting: Set or sample lights, automatic lighting of 3D-FRONT scenes.
@@ -227,12 +228,18 @@ See our [change log](change_log.md).
 If you use BlenderProc in a research project, please cite as follows:
 
 ```
-@article{denninger2019blenderproc,
-  title={BlenderProc},
-  author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
-  journal={arXiv preprint arXiv:1911.01911},
-  year={2019}
-}
+@article{Denninger2023, 
+    doi = {10.21105/joss.04901},
+    url = {https://doi.org/10.21105/joss.04901},
+    year = {2023},
+    publisher = {The Open Journal}, 
+    volume = {8},
+    number = {82},
+    pages = {4901}, 
+    author = {Maximilian Denninger and Dominik Winkelbauer and Martin Sundermeyer and Wout Boerdijk and Markus Knauer and Klaus H. Strobl and Matthias Humt and Rudolph Triebel},
+    title = {BlenderProc2: A Procedural Pipeline for Photorealistic Rendering}, 
+    journal = {Journal of Open Source Software}
+} 
 ```
 
 ---

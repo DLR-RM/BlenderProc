@@ -11,15 +11,13 @@ from mathutils import Matrix, Vector
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
-from blenderproc.python.types.MaterialUtility import Material
-
+from blenderproc.python.loader.ObjectLoader import load_obj
 
 def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
                   sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
-                  obj_instances_limit: int = -1, mm2m: bool = False, move_origin_to_x_y_plane: bool = False,
-                  temp_dir: Optional[str] = None) -> List[MeshObject]:
+                  obj_instances_limit: int = -1, mm2m: bool = False,
+                  move_origin_to_x_y_plane: bool = False) -> List[MeshObject]:
     """ Loads all or a subset of 3D models of any BOP dataset
 
     :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
@@ -33,7 +31,6 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     :param move_origin_to_x_y_plane: Move center of the object to the lower side of the object, this will not work
                                      when used in combination with pose estimation tasks! This is designed for the
                                      use-case where BOP objects are used as filler objects in the background.
-    :param temp_dir: A temp directory which is used for writing the temporary .ply file.
     :return: The list of loaded mesh objects.
     """
 
@@ -42,18 +39,15 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
+
     # pylint: enable=import-outside-toplevel
 
     model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
 
-    if temp_dir is None:
-        temp_dir = Utility.get_temporary_directory()
-
     scale = 0.001 if mm2m else 1
-    has_external_texture = bop_dataset_name in ["ycbv", "ruapc", "hope"]
+
     if obj_ids is None:
         obj_ids = []
-    allow_duplication = obj_ids or sample_objects
 
     obj_ids = obj_ids if obj_ids else model_p['obj_ids']
 
@@ -72,8 +66,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                 loaded_ids.update({random_id: 0})
             # if there is no limit or if there is one, but it is not reached for this particular object
             if obj_instances_limit == -1 or loaded_ids[random_id] < obj_instances_limit:
-                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, has_external_texture,
-                                               temp_dir, allow_duplication, scale)
+                cur_obj = _BopLoader.load_mesh(random_id, model_p, bop_dataset_name, scale)
                 loaded_ids[random_id] += 1
                 loaded_amount += 1
                 loaded_objects.append(cur_obj)
@@ -82,8 +75,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                       f"Total loaded amount {loaded_amount} while {num_of_objs_to_sample} are being requested")
     else:
         for obj_id in obj_ids:
-            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, has_external_texture,
-                                           temp_dir, allow_duplication, scale)
+            cur_obj = _BopLoader.load_mesh(obj_id, model_p, bop_dataset_name, scale)
             loaded_objects.append(cur_obj)
     # move the origin of the object to the world origin and on top of the X-Y plane
     # makes it easier to place them later on, this does not change the `.location`
@@ -97,7 +89,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
 
 def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", cam_type: str = "",
                    split: str = "test", source_frame: Optional[List[str]] = None,
-                   mm2m: bool = False, temp_dir: str = None) -> List[MeshObject]:
+                   mm2m: bool = False) -> List[MeshObject]:
     """ Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and
         extrinsics
 
@@ -116,7 +108,6 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
                          Point (1,2,3) will be transformed to (1, -3, 2). Default: ["X", "-Y", "-Z"],
                          Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
     :param mm2m: Specify whether to convert poses and models to meters.
-    :param temp_dir: A temp directory which is used for writing the temporary .ply file.
     :return: The list of loaded mesh objects.
     """
 
@@ -125,6 +116,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params, inout
+
     # pylint: enable=import-outside-toplevel
 
     if source_frame is None:
@@ -139,11 +131,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': scene_id}))
     sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': scene_id}))
 
-    if temp_dir is None:
-        temp_dir = Utility.get_temporary_directory()
-
     scale = 0.001 if mm2m else 1
-    has_external_texture = bop_dataset_name in ["ycbv", "ruapc"]
 
     for i, (cam_id, insts) in enumerate(sc_gt.items()):
         cam_K, cam_H_m2c_ref = _BopLoader.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, scale)
@@ -155,8 +143,7 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
             cur_objs = []
             # load scene objects and set their poses
             for inst in insts:
-                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name,
-                                                     has_external_texture, temp_dir, False, scale))
+                cur_objs.append(_BopLoader.load_mesh(inst['obj_id'], model_p, bop_dataset_name, scale))
                 _BopLoader.set_object_pose(cur_objs[-1], inst, scale)
 
         cam_H_c2w = _BopLoader.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref, source_frame)
@@ -193,6 +180,7 @@ def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: st
     # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
     # pylint: disable=import-outside-toplevel
     from bop_toolkit_lib import dataset_params
+
     # pylint: enable=import-outside-toplevel
 
     cam_p = dataset_params.get_camera_params(bop_path, bop_dataset_name, cam_type=cam_type if cam_type else None)
@@ -215,7 +203,7 @@ def load_bop_intrinsics(bop_dataset_path: str, split: str = "test", cam_type: st
 
 
 class _BopLoader:
-
+    CACHED_OBJECTS = {}
     @staticmethod
     def setup_bop_toolkit(bop_dataset_path: str) -> Tuple[str, str]:
         """
@@ -329,122 +317,38 @@ class _BopLoader:
         return None
 
     @staticmethod
-    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, has_external_texture: bool, temp_dir: str,
-                  allow_duplication: bool, scale: float = 1) -> MeshObject:
+    def load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, scale: float = 1) -> MeshObject:
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object.
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit.
         :param bop_dataset_name: The name of the used bop dataset.
-        :param has_external_texture: Set to True, if the object has an external texture.
-        :param temp_dir: A temp directory which is used for writing the temporary .ply file.
-        :param allow_duplication: If True, the object is duplicated if it already exists.
         :param scale: factor to transform set pose in mm or meters.
         :return: Loaded mesh object.
         """
 
-        model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
+        model_path = model_p["model_tpath"].format(**{"obj_id": obj_id})
 
-        texture_file_path = ""  # only needed for ycbv objects
-
-        # Gets the objects if it is already loaded
-        cur_obj = _BopLoader.get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
-        if cur_obj is None:
-            if has_external_texture:
-                if os.path.exists(model_path):
-                    new_file_ply_content = ""
-                    with open(model_path, "r", encoding="utf-8") as file:
-                        new_file_ply_content = file.read()
-                        texture_pos = new_file_ply_content.find("comment TextureFile ") + len("comment TextureFile ")
-                        texture_file_name = new_file_ply_content[texture_pos:
-                                                                 new_file_ply_content.find("\n", texture_pos)]
-                        texture_file_path = os.path.join(os.path.dirname(model_path), texture_file_name)
-                        new_file_ply_content = new_file_ply_content.replace("property float texture_u",
-                                                                            "property float s")
-                        new_file_ply_content = new_file_ply_content.replace("property float texture_v",
-                                                                            "property float t")
-                    model_name = os.path.basename(model_path)
-                    tmp_ply_file = os.path.join(temp_dir, model_name)
-                    with open(tmp_ply_file, "w", encoding="utf-8") as file:
-                        file.write(new_file_ply_content)
-                    bpy.ops.import_mesh.ply(filepath=tmp_ply_file)
-                    cur_obj = bpy.context.selected_objects[-1]
-            else:
-                bpy.ops.import_mesh.ply(filepath=model_path)
-                cur_obj = bpy.context.selected_objects[-1]
-        elif allow_duplication:
-            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
-            cur_obj = bpy.context.selected_objects[-1]
+        duplicated = model_path in _BopLoader.CACHED_OBJECTS
+        objs = load_obj(model_path, cached_objects=_BopLoader.CACHED_OBJECTS)
+        assert (
+            len(objs) == 1
+        ), f"Loading object from '{model_path}' returned more than one mesh"
+        cur_obj = objs[0]
 
-        cur_obj.scale = Vector((scale, scale, scale))
-        cur_obj['category_id'] = obj_id
-        cur_obj['model_path'] = model_path
-        cur_obj["is_bop_object"] = True
-        cur_obj["bop_dataset_name"] = bop_dataset_name
+        if duplicated:
+            # See issue https://github.com/DLR-RM/BlenderProc/issues/590
+            for i, material in enumerate(cur_obj.get_materials()):
+                material_dup = material.duplicate()
+                cur_obj.set_material(i, material_dup)
 
-        if not has_external_texture:
-            mat = _BopLoader.load_materials(cur_obj, bop_dataset_name)
-            mat.map_vertex_color()
-        elif texture_file_path != "":
-            # ycbv objects contain normal image textures, which should be used instead of the vertex colors
-            _BopLoader.load_texture(cur_obj, texture_file_path, bop_dataset_name)
-        return MeshObject(cur_obj)
+        # Change Material name to be backward compatible
+        cur_obj.get_materials()[-1].set_name("bop_" + bop_dataset_name + "_vertex_col_material")
+        cur_obj.set_scale(Vector((scale, scale, scale)))
+        cur_obj.set_cp("category_id", obj_id)
+        cur_obj.set_cp("model_path", model_path)
+        cur_obj.set_cp("is_bop_object", True)
+        cur_obj.set_cp("bop_dataset_name", bop_dataset_name)
 
-    @staticmethod
-    def load_materials(cur_obj: bpy.types.Object, bop_dataset_name: str) -> Material:
-        """ Loads / defines materials, e.g. vertex colors.
-
-        :param cur_obj: The object to use.
-        :param bop_dataset_name: The name of the used bop dataset.
-        :return: Material with vertex color.
-        """
-
-        mat = cur_obj.data.materials.get("Material")
-
-        if mat is None:
-            # create material
-            mat = bpy.data.materials.new(name="bop_" + bop_dataset_name + "_vertex_col_material")
-
-        mat.use_nodes = True
-
-        if cur_obj.data.materials:
-            # assign to 1st material slot
-            cur_obj.data.materials[0] = mat
-        else:
-            # no slots
-            cur_obj.data.materials.append(mat)
-
-        return Material(mat)
-
-    @staticmethod
-    def load_texture(cur_obj: bpy.types.Object, texture_file_path: str, bop_dataset_name: str):
-        """
-        Load the textures for the ycbv objects, only those contain texture information
-
-        :param cur_obj: The object to use.
-        :param texture_file_path: path to the texture file (most likely ".png")
-        :param bop_dataset_name: The name of the used bop dataset.
-        """
-        mat = bpy.data.materials.new(name="bop_" + bop_dataset_name + "_texture_material")
-
-        mat.use_nodes = True
-
-        nodes = mat.node_tree.nodes
-        links = mat.node_tree.links
-
-        color_image = nodes.new('ShaderNodeTexImage')
-        if not os.path.exists(texture_file_path):
-            raise FileNotFoundError(f"The texture path for the ycbv object could not be loaded "
-                                    f"from the file: {texture_file_path}")
-        color_image.image = bpy.data.images.load(texture_file_path, check_existing=True)
-
-        principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-        links.new(color_image.outputs["Color"], principled.inputs["Base Color"])
-
-        if cur_obj.data.materials:
-            # assign to 1st material slot
-            cur_obj.data.materials[0] = mat
-        else:
-            # no slots
-            cur_obj.data.materials.append(mat)
+        return cur_obj

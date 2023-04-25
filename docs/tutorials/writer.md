@@ -9,7 +9,7 @@ This has the advantage that all data is compressed and the data of different fra
 
 To visualize a given hdf5 file, you can use BlenderProcs CLI:
 ```bash
-blenderproc vis_hdf5 <path_to_file>
+blenderproc vis hdf5 <path_to_file>
 ```
 
 If you want to read `.hdf5` files in your data processing code, you can make use of the `h5py` python package:
@@ -34,7 +34,7 @@ Read more about the specifications of this format [here](https://cocodataset.org
 
 To visualize a frame written in the COCO format, you can use BlenderProcs CLI:
 ```bash
-blenderproc vis_coco <path_to_file>
+blenderproc vis coco <path_to_file>
 ```
 
 ## BOP Writer

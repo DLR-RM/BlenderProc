@@ -3,8 +3,10 @@
 from pathlib import Path
 import argparse
 from typing import Callable
-
+import concurrent.futures
+from multiprocessing import cpu_count
 import requests
+from progressbar import ProgressBar, Percentage, Bar, ETA, AdaptiveETA
 
 
 def cli():
@@ -18,11 +20,14 @@ def cli():
     parser.add_argument('--format', help="Desired download format for the images.", default="jpg")
     parser.add_argument('--tags', nargs='+', help="Filter by asset tag.", default=None)
     parser.add_argument('--categories', nargs='+', help="Filter by asset category.", default=[])
+    parser.add_argument('--threads', nargs='?', type=int, help="How many threads to use for downloading", default=4)
     parser.add_argument('--types', nargs='+', help="Only download the given types",
                         default=None, choices=["textures", "hdris", "models"])
     args = parser.parse_args()
-
     args_output_dir = Path(args.output_folder)
+
+    args_max_workers = min(args.threads, cpu_count())
+
 
     def download_file(url: str, output_path: str):
         # Download
@@ -36,7 +41,7 @@ def cli():
         if args.types and item_type not in args.types:
             return
 
-        print("Downloading " + output_dir.name + "...")
+        print("Preparing download of\t" + output_dir.name )
         output_dir.mkdir(parents=True, exist_ok=True)
 
         # Download listing
@@ -49,16 +54,42 @@ def cli():
             data = {key: value for key, value in data.items() if
                     any(tag_list in args.tags for tag_list in value.get("tags"))}
 
-        for i, item_id in enumerate(data.keys()):
-            # Get item_id and download the item
-            item_output = output_dir / item_id
-            # Skip if it already exists
-            if not item_output.exists() or not any(item_output.iterdir()):
+        # Helper function for filter
+        def item_file_exists(item_id):
+            item_output: Path = output_dir / item_id
+            return not item_output.exists() or not any(item_output.iterdir())
+
+        # Filter to only fetch files not in directory
+        missing_item_ids = list(filter(item_file_exists, map(lambda item_id: item_id, data.keys())))
+
+        # Skip download if no items are missing
+        if not missing_item_ids:
+            print("Skipping download of\t" + output_dir.name + " All files exist")
+            return
+        print("Starting download of\t" + output_dir.name )
+
+        # Start threadpool to download
+        with concurrent.futures.ThreadPoolExecutor(max_workers= args_max_workers) as executor:
+            # Create a list of futures
+            futures = []
+            for item_id in missing_item_ids:
+                item_output: Path = output_dir / item_id
                 item_output.mkdir(exist_ok=True)
-                print(f"({i}/{len(data)}) {item_id}")
-                item_download_func(item_id, item_output)
-            else:
-                print(f"({i}/{len(data)}) Skipping {item_id} as it already exists")
+                futures.append(executor.submit(item_download_func, item_id, item_output))
+
+            # Initialize progress bar
+            widgets = [Percentage(),' ', Bar(), ' ', ETA(),' ', AdaptiveETA()]
+            progress = ProgressBar(widgets= widgets, maxval= len(futures))
+
+            # Execute list of futures
+            for future in progress(concurrent.futures.as_completed(futures)):
+                # Check for any exceptions in the threads
+                try:
+                    future.result()
+                except Exception as exc:
+                    print(f"Thread generated an exception: {exc}")
+
+
 
     def download_texture(item_id: str, output_dir: Path):
         request = requests.get(f"https://api.polyhaven.com/files/{item_id}", timeout=30)

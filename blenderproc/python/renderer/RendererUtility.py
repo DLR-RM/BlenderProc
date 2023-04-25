@@ -674,6 +674,17 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         with stdout_redirected(pipe_in, enabled=not verbose) as stdout:
             with _render_progress_bar(pipe_out, pipe_in, stdout, total_frames, enabled=not verbose):
                 bpy.ops.render.render(animation=True, write_still=True)
+
+        # Close Pipes to prevent having unclosed file handles
+        try:
+            os.close(pipe_out)
+        except OSError:
+            pass
+        try:
+            os.close(pipe_in)
+        except OSError:
+            pass
+
         print(f"Finished rendering after {time.time() - begin:.3f} seconds")
         # Revert changes
         bpy.context.scene.frame_end += 1

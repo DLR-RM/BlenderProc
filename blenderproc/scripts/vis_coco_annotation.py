@@ -49,7 +49,7 @@ def cli():
         :param rle: Mask in RLE format
         :return: a 2D binary numpy array where '1's represent the object
         """
-        binary_array = np.zeros(np.prod(rle.get('size')), dtype=np.bool)
+        binary_array = np.zeros(np.prod(rle.get('size')), dtype=bool)
         counts = rle.get('counts')
 
         start = 0
