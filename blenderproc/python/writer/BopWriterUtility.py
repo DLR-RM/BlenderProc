@@ -712,12 +712,13 @@ class _BopWriterUtility:
                 "date_created": datetime.datetime.utcnow().isoformat(' ')
             }
 
-            segmentation_id = 1
+            
 
             # load existing coco annotations
             if dir_counter == 0 and starting_frame_id > 0:
                 misc.log(f"Loading coco annotations from existing chunk dir - {chunk_dir}")
                 coco_scene_output = _BopWriterUtility.load_json(os.path.join(chunk_dir, 'scene_gt_coco.json'))
+                segmentation_id = coco_scene_output["annotations"][-1]['id'] + 1
             else:
                 coco_scene_output = {
                     "info": INFO,
@@ -726,6 +727,7 @@ class _BopWriterUtility:
                     "images": [],
                     "annotations": []
                 }
+                segmentation_id = 1
 
             # Load info about the GT poses (e.g. visibility) for the current scene.
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
