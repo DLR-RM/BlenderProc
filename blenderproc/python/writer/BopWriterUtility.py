@@ -13,6 +13,7 @@ import png
 import cv2
 import bpy
 from mathutils import Matrix
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
 import pyrender
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
