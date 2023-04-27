@@ -162,7 +162,7 @@ def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.
     bop_pose[:3, :3] = cam_R_m2c
     bop_pose[:3, 3] = cam_t_m2c
 
-    # rotate 180° around the x-axis
+    # flip z-axis
     rot = np.eye(4)
     rot[1, 1], rot[2, 2] = -1, -1
     return rot.dot(bop_pose)
