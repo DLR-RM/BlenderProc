@@ -765,8 +765,6 @@ class _BopWriterUtility:
                 "date_created": datetime.datetime.utcnow().isoformat(' ')
             }
 
-            
-
             # load existing coco annotations
             if dir_counter == 0 and starting_frame_id > 0:
                 misc.log(f"Loading coco annotations from existing chunk dir - {chunk_dir}")
