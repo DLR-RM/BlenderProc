@@ -120,8 +120,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     if calc_mask_info_coco:
         # Set up the bop toolkit
-        SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
-                                "PyOpenGL==3.1.0"])
+        SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "PyOpenGL==3.1.0"])
 
         # determine which objects to add to the vsipy renderer
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
