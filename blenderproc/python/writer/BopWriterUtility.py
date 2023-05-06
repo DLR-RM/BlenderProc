@@ -153,7 +153,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
 
 def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.ndarray) -> np.ndarray:
-    """ Converts an object pose in bop format to pyrender coordinate system
+    """ Converts an object pose in bop format to pyrender camera coordinate system
         (https://pyrender.readthedocs.io/en/latest/examples/cameras.html).
 
     :param cam_R_m2c: 3x3 Rotation matrix.
