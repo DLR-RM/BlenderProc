@@ -136,6 +136,11 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # convert all objects to trimesh objects
         trimesh_objects = {}
         for obj in dataset_objects:
+            if isinstance(obj, Link):
+                if not obj.visuals:
+                    continue
+                if len(obj.visuals) > 1:
+                    warnings.warn('BOP Writer only supports saving annotations of one visual mesh per Link')
             trimesh_obj = obj.mesh_as_trimesh()
             # we need to create a double-sided material to be able to render non-watertight meshes
             # the other parameters are defaults, see
