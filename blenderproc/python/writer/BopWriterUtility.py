@@ -22,6 +22,7 @@ from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.MathUtility import change_target_coordinate_frame_of_transformation_matrix
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
@@ -161,10 +162,7 @@ def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.
     bop_pose[:3, :3] = cam_R_m2c
     bop_pose[:3, 3] = cam_t_m2c
 
-    # flip z-axis
-    rot = np.eye(4)
-    rot[1, 1], rot[2, 2] = -1, -1
-    return rot.dot(bop_pose)
+    return change_target_coordinate_frame_of_transformation_matrix(bop_pose, ["X", "-Y", "-Z"])
 
 
 class _BopWriterUtility:
