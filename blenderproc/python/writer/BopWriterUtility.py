@@ -703,6 +703,10 @@ class _BopWriterUtility:
 
             CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
                           dataset_name} for obj in dataset_objects]
+            
+            # Remove all duplicate dicts from list. Ref: https://stackoverflow.com/questions/9427163/remove-duplicate-dict-in-list-in-python
+            CATEGORIES = list({frozenset(item.items()):item for item in CATEGORIES}.values())
+            
             INFO = {
                 "description": dataset_name + '_train',
                 "url": "https://github.com/thodan/bop_toolkit",
