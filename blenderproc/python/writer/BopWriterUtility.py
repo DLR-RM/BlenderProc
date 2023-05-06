@@ -137,9 +137,12 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         trimesh_objects = {}
         for obj in dataset_objects:
             trimesh_obj = obj.mesh_as_trimesh()
-            if m2mm:
-                trimesh_obj.apply_scale(scaling=0.001)
-            trimesh_objects[obj.get_cp('category_id')] = pyrender.Mesh.from_trimesh(mesh=trimesh_obj)
+            # we need to create a double-sided material to be able to render non-watertight meshes
+            # the other parameters are defaults, see
+            # https://github.com/mmatl/pyrender/blob/master/pyrender/mesh.py#L216-L223
+            material = pyrender.MetallicRoughnessMaterial(alphaMode='BLEND', baseColorFactor=[0.3, 0.3, 0.3, 1.0],
+                                                          metallicFactor=0.2, roughnessFactor=0.8, doubleSided=True)
+            trimesh_objects[obj.get_cp('category_id')] = pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material)
 
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
                                         dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
