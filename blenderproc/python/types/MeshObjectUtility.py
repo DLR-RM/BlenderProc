@@ -524,7 +524,10 @@ class MeshObject(Entity):
             setattr(modifier, key, value)
 
     def mesh_as_trimesh(self) -> Trimesh:
-        """ Returns a trimesh.Trimesh instance of the MeshObject. """
+        """ Returns a trimesh.Trimesh instance of the MeshObject.
+
+        :return: The object as trimesh.Trimesh.
+        """
         # get mesh data
         mesh = self.get_mesh()
 
