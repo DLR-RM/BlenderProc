@@ -514,8 +514,8 @@ class _BopWriterUtility:
         :param chunk_dirs: List of directories to calculate the gt masks for.
         :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, we convert them back to meters
-                     for rendering with pyrender.
+        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
+                     will also be in mm.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -553,7 +553,7 @@ class _BopWriterUtility:
 
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
                 fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
-                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx, cy=cy)
+                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx, cy=cy, znear=0.1, zfar=100000)
 
                 # Load depth image.
                 depth_path = os.path.join(
@@ -569,15 +569,16 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
-                    if m2mm:  # convert back to meters in case they have been saved in mm
-                        t /= 1000.
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
                     scene.add(dataset_objects[gt['obj_id']], pose=pose)
 
                     # Render the depth image.
                     _, depth_gt = renderer.render(scene=scene)
-                    depth_gt *= 1000.  # convert to mm
+
+                    # convert depth to mm in case object scale / translation are in m
+                    if not m2mm:
+                        depth_gt *= 1000.
 
                     # Convert depth image to distance image.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -609,8 +610,8 @@ class _BopWriterUtility:
         :param chunk_dirs: List of directories to calculate the gt info for.
         :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, we convert them back to meters
-                     for rendering with pyrender.
+        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
+                     will also be in mm.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -656,7 +657,8 @@ class _BopWriterUtility:
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
                 fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
                 im_size = (depth.shape[1], depth.shape[0])
-                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx+ren_cx_offset, cy=cy+ren_cy_offset)
+                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx+ren_cx_offset, cy=cy+ren_cy_offset, znear=0.1,
+                                                   zfar=100000)
 
                 scene_gt_info[im_id] = []
                 for gt in scene_gt[im_id]:
@@ -666,8 +668,6 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
-                    if m2mm:  # convert back to meters in case they have been saved in mm
-                        t /= 1000.
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
                     scene.add(dataset_objects[gt['obj_id']], pose=pose)
@@ -677,7 +677,10 @@ class _BopWriterUtility:
                     depth_gt = depth_gt_large[
                                ren_cy_offset:(ren_cy_offset + im_height),
                                ren_cx_offset:(ren_cx_offset + im_width)]
-                    depth_gt *= 1000.  # convert to mm
+
+                    # convert depth to mm in case object scale / translation are in m
+                    if not m2mm:
+                        depth_gt *= 1000.
 
                     # Convert depth images to distance images.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
