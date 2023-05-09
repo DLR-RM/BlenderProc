@@ -136,6 +136,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # convert all objects to trimesh objects
         trimesh_objects = {}
         for obj in dataset_objects:
+            if obj.get_cp('category_id') in trimesh_objects:
+                continue
             if isinstance(obj, Link):
                 if not obj.visuals:
                     continue
