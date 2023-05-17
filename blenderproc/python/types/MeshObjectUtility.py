@@ -9,6 +9,7 @@ import numpy as np
 import bmesh
 import mathutils
 from mathutils import Vector, Matrix
+from trimesh import Trimesh
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path
@@ -521,6 +522,20 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
             setattr(modifier, key, value)
+
+    def mesh_as_trimesh(self) -> Trimesh:
+        """ Returns a trimesh.Trimesh instance of the MeshObject.
+
+        :return: The object as trimesh.Trimesh.
+        """
+        # get mesh data
+        mesh = self.get_mesh()
+
+        # get vertices and faces
+        verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
+        faces = np.array([[f.vertices[0], f.vertices[1], f.vertices[2]] for f in mesh.polygons])
+
+        return Trimesh(vertices=verts, faces=faces)
 
 
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":

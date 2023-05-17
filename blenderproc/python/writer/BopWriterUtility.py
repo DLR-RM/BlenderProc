@@ -3,7 +3,7 @@
 import json
 import os
 import glob
-from typing import List, Optional
+from typing import List, Optional, Dict
 import shutil
 import warnings
 import datetime
@@ -20,6 +20,12 @@ from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.MathUtility import change_target_coordinate_frame_of_transformation_matrix
+
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
+# pylint: disable=wrong-import-position
+import pyrender
+# pylint: enable=wrong-import-position
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
@@ -118,8 +124,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     if calc_mask_info_coco:
         # Set up the bop toolkit
-        SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "vispy>=0.6.5",
-                                "PyOpenGL==3.1.0"])
+        SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "PyOpenGL==3.1.0"])
 
         # determine which objects to add to the vsipy renderer
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
@@ -131,12 +136,46 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
         chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
+        # convert all objects to trimesh objects
+        trimesh_objects = {}
+        for obj in dataset_objects:
+            if obj.get_cp('category_id') in trimesh_objects:
+                continue
+            if isinstance(obj, Link):
+                if not obj.visuals:
+                    continue
+                if len(obj.visuals) > 1:
+                    warnings.warn('BOP Writer only supports saving annotations of one visual mesh per Link')
+            trimesh_obj = obj.mesh_as_trimesh()
+            # we need to create a double-sided material to be able to render non-watertight meshes
+            # the other parameters are defaults, see
+            # https://github.com/mmatl/pyrender/blob/master/pyrender/mesh.py#L216-L223
+            material = pyrender.MetallicRoughnessMaterial(alphaMode='BLEND', baseColorFactor=[0.3, 0.3, 0.3, 1.0],
+                                                          metallicFactor=0.2, roughnessFactor=0.8, doubleSided=True)
+            trimesh_objects[obj.get_cp('category_id')] = pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material)
+
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
-                                        dataset_objects=dataset_objects, delta=delta)
+                                        dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
         _BopWriterUtility.calc_gt_info(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
-                                       dataset_objects=dataset_objects, delta=delta)
+                                       dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
         _BopWriterUtility.calc_gt_coco(chunk_dirs=chunk_dirs, dataset_objects=dataset_objects,
                                        starting_frame_id=starting_frame_id)
+
+
+def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.ndarray) -> np.ndarray:
+    """ Converts an object pose in bop format to pyrender camera coordinate system
+        (https://pyrender.readthedocs.io/en/latest/examples/cameras.html).
+
+    :param cam_R_m2c: 3x3 Rotation matrix.
+    :param cam_t_m2c: Translation vector.
+    :return: Pose in pyrender coordinate system.
+    """
+    # create homogeneous transformation matrix
+    bop_pose = np.eye(4)
+    bop_pose[:3, :3] = cam_R_m2c
+    bop_pose[:3, 3] = cam_t_m2c
+
+    return change_target_coordinate_frame_of_transformation_matrix(bop_pose, ["X", "-Y", "-Z"])
 
 
 class _BopWriterUtility:
@@ -476,27 +515,28 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: List[MeshObject], starting_frame_id: int = 0,
-                      delta: int = 15):
+    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
+                      m2mm: bool = False, delta: int = 15):
         """ Calculates the ground truth masks.
-        From the BOP toolkit (https://github.com/thodan/bop_toolkit).
+        From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
+        rendering.
 
         :param chunk_dirs: List of directories to calculate the gt masks for.
         :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
+        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
+                     will also be in mm.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
-        from bop_toolkit_lib import inout, misc, visibility, renderer
+        from bop_toolkit_lib import inout, misc, visibility
         # pylint: enable=import-outside-toplevel
 
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
-        ren = renderer.create_renderer(width=width, height=height, renderer_type='vispy', mode='depth')
-        ren.set_current()
-        for obj in dataset_objects:
-            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
+
+        renderer = pyrender.OffscreenRenderer(viewport_width=width, viewport_height=height)
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
@@ -523,6 +563,7 @@ class _BopWriterUtility:
 
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
                 fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
+                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx, cy=cy, znear=0.1, zfar=100000)
 
                 # Load depth image.
                 depth_path = os.path.join(
@@ -532,9 +573,22 @@ class _BopWriterUtility:
                 dist_im = misc.depth_im_to_dist_im_fast(depth_im, K)
 
                 for gt_id, gt in enumerate(scene_gt[im_id]):
+                    # create a new scene
+                    scene = pyrender.Scene()
+
+                    # add camera and current object
+                    scene.add(camera)
+                    t = np.array(gt['cam_t_m2c'])
+                    pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
+                                                                  cam_t_m2c=t)
+                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
+
                     # Render the depth image.
-                    depth_gt = ren.render_object(gt['obj_id'], np.array(gt['cam_R_m2c']).reshape(3, 3),
-                                                 np.array(gt['cam_t_m2c']), fx, fy, cx, cy)['depth']
+                    _, depth_gt = renderer.render(scene=scene)
+
+                    # convert depth to mm in case object scale / translation are in m
+                    if not m2mm:
+                        depth_gt *= 1000.
 
                     # Convert depth image to distance image.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -557,29 +611,28 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunk_dirs: List[str], dataset_objects: List[MeshObject], starting_frame_id: int = 0,
-                     delta: int = 15):
+    def calc_gt_info(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
+                     m2mm: bool = False, delta: int = 15):
         """ Calculates the ground truth masks.
-        From the BOP toolkit (https://github.com/thodan/bop_toolkit).
+        From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
+        rendering.
 
         :param chunk_dirs: List of directories to calculate the gt info for.
         :param dataset_objects: Save annotations for these objects.
         :param starting_frame_id: The first frame id the writer has written during this run.
+        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
+                     will also be in mm.
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         # pylint: disable=import-outside-toplevel
-        from bop_toolkit_lib import inout, misc, visibility, renderer
+        from bop_toolkit_lib import inout, misc, visibility
         # pylint: enable=import-outside-toplevel
 
         im_width, im_height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
         ren_width, ren_height = 3 * im_width, 3 * im_height
         ren_cx_offset, ren_cy_offset = im_width, im_height
-        ren = renderer.create_renderer(width=ren_width, height=ren_height, renderer_type='vispy', mode='depth')
-        ren.set_current()
-
-        for obj in dataset_objects:
-            ren.add_object(obj_id=obj.get_cp('category_id'), model_path=obj.get_cp('model_path'))
+        renderer = pyrender.OffscreenRenderer(viewport_width=ren_width, viewport_height=ren_height)
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
             last_chunk_gt_fpath = os.path.join(chunk_dir, 'scene_gt.json')
@@ -614,16 +667,30 @@ class _BopWriterUtility:
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
                 fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
                 im_size = (depth.shape[1], depth.shape[0])
+                camera = pyrender.IntrinsicsCamera(fx=fx, fy=fy, cx=cx+ren_cx_offset, cy=cy+ren_cy_offset, znear=0.1,
+                                                   zfar=100000)
 
                 scene_gt_info[im_id] = []
                 for gt in scene_gt[im_id]:
-                    # Render depth image of the object model in the ground-truth pose.
-                    depth_gt_large = ren.render_object(
-                        gt['obj_id'], np.array(gt['cam_R_m2c']).reshape(3, 3), np.array(gt['cam_t_m2c']),
-                        fx, fy, cx + ren_cx_offset, cy + ren_cy_offset)['depth']
+                    # create a new scene
+                    scene = pyrender.Scene()
+
+                    # add camera and current object
+                    scene.add(camera)
+                    t = np.array(gt['cam_t_m2c'])
+                    pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
+                                                                  cam_t_m2c=t)
+                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
+
+                    # render the depth image
+                    _, depth_gt_large = renderer.render(scene=scene)
                     depth_gt = depth_gt_large[
                                ren_cy_offset:(ren_cy_offset + im_height),
                                ren_cx_offset:(ren_cx_offset + im_width)]
+
+                    # convert depth to mm in case object scale / translation are in m
+                    if not m2mm:
+                        depth_gt *= 1000.
 
                     # Convert depth images to distance images.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -715,8 +782,6 @@ class _BopWriterUtility:
                 "contributor": "",
                 "date_created": datetime.datetime.utcnow().isoformat(' ')
             }
-
-            
 
             # load existing coco annotations
             if dir_counter == 0 and starting_frame_id > 0:
