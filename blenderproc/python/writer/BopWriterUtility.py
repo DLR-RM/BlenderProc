@@ -13,8 +13,6 @@ import png
 import cv2
 import bpy
 from mathutils import Matrix
-os.environ['PYOPENGL_PLATFORM'] = 'egl'
-import pyrender
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 from blenderproc.python.utility.Utility import Utility, resolve_path
@@ -23,6 +21,11 @@ from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.MathUtility import change_target_coordinate_frame_of_transformation_matrix
+
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
+# pylint: disable=wrong-import-position
+import pyrender
+# pylint: enable=wrong-import-position
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
