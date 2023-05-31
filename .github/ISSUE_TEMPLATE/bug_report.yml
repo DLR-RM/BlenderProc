@@ -11,7 +11,7 @@ labels: question
 - type: textarea
   attributes:
     label: Minimal code example
-    description: A *minimal* code example which reproduces this issue (See https://stackoverflow.com/help/minimal-reproducible-example). The more reduced the code is, the easier we can understand/reproduce your issue and the faster you will get an answer.
+    description: A *minimal* code example which reproduces this issue, see this [guide](https://stackoverflow.com/help/minimal-reproducible-example). The more reduced the code is, the easier we can understand/reproduce your issue and the faster you will get an answer.
     placeholder: 
     render: python
   validations:
