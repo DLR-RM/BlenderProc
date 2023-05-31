@@ -15,7 +15,7 @@ body:
   - type: textarea
     attributes:
       label: Describe a possible solution
-      description: If possible, describe a possible way of how to implement the feature:
+      description: If possible, describe a possible way of how to implement the feature
       placeholder: 
     validations:
       required: false
