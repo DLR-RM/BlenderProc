@@ -787,7 +787,10 @@ class _BopWriterUtility:
             if dir_counter == 0 and starting_frame_id > 0:
                 misc.log(f"Loading coco annotations from existing chunk dir - {chunk_dir}")
                 coco_scene_output = _BopWriterUtility.load_json(os.path.join(chunk_dir, 'scene_gt_coco.json'))
-                segmentation_id = coco_scene_output["annotations"][-1]['id'] + 1
+                if coco_scene_output["annotations"]:
+                    segmentation_id = coco_scene_output["annotations"][-1]['id'] + 1
+                else:
+                    segmentation_id = 1
             else:
                 coco_scene_output = {
                     "info": INFO,
