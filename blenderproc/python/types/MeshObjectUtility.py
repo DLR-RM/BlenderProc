@@ -543,8 +543,6 @@ class MeshObject(Entity):
         return Trimesh(vertices=verts, faces=faces)
 
     
-
-
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
 
