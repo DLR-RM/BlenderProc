@@ -531,11 +531,18 @@ class MeshObject(Entity):
         # get mesh data
         mesh = self.get_mesh()
 
-        # get vertices and faces
+        # get vertices 
         verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
-        faces = np.array([[f.vertices[0], f.vertices[1], f.vertices[2]] for f in mesh.polygons])
+        
+        # get faces
+        if len(mesh.polygons[0].vertices[:]) == 4:
+            faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) == 4])
+        else:
+            faces = np.array([[f.vertices[0], f.vertices[1], f.vertices[2]] for f in mesh.polygons])
 
         return Trimesh(vertices=verts, faces=faces)
+
+    
 
 
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
