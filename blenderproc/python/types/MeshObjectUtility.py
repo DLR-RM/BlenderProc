@@ -541,7 +541,6 @@ class MeshObject(Entity):
             faces = np.array([[f.vertices[0], f.vertices[1], f.vertices[2]] for f in mesh.polygons])
 
         return Trimesh(vertices=verts, faces=faces)
-
     
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
