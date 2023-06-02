@@ -534,11 +534,12 @@ class MeshObject(Entity):
         # get vertices 
         verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
         
-        # get faces
-        if len(mesh.polygons[0].vertices[:]) == 4:
-            faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) == 4])
-        else:
-            faces = np.array([[f.vertices[0], f.vertices[1], f.vertices[2]] for f in mesh.polygons])
+        # check if faces are pure tris or quads
+        if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
+             raise Exception("The mesh {} must have pure triangular or pure quad faces".format(self.get_name()))
+        
+        # get faces   
+        faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
 
         return Trimesh(vertices=verts, faces=faces)
     
