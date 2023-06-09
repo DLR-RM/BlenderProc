@@ -3,7 +3,7 @@
 import json
 import os
 import glob
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 import shutil
 import warnings
 import datetime
@@ -152,7 +152,12 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
             # https://github.com/mmatl/pyrender/blob/master/pyrender/mesh.py#L216-L223
             material = pyrender.MetallicRoughnessMaterial(alphaMode='BLEND', baseColorFactor=[0.3, 0.3, 0.3, 1.0],
                                                           metallicFactor=0.2, roughnessFactor=0.8, doubleSided=True)
-            trimesh_objects[obj.get_cp('category_id')] = pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material)
+            # here we also add the scale factor of the objects. the position of the pyrender camera will change based
+            # on the initial scale factor of the objects and the saved annotation format
+            trimesh_objects[obj.get_cp('category_id')] = {
+                'trimesh': pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material),
+                'scale_factor': obj.get_cp('scale_factor') if obj.has_cp('scale_factor') else 1.
+            }
 
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
                                         dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
@@ -515,14 +520,14 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
-                      m2mm: bool = False, delta: int = 15):
+    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: Dict[int, Dict[str, Union[pyrender.Mesh, float]]],
+                      starting_frame_id: int = 0, m2mm: bool = False, delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
         rendering.
 
         :param chunk_dirs: List of directories to calculate the gt masks for.
-        :param dataset_objects: Save annotations for these objects.
+        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
         :param starting_frame_id: The first frame id the writer has written during this run.
         :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
                      will also be in mm.
@@ -579,16 +584,15 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
+                    # rescale translation depending on initial model scale and saving format
+                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale_factor']
+
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
-                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
+                    scene.add(dataset_objects[gt['obj_id']]['trimesh'], pose=pose)
 
                     # Render the depth image.
                     _, depth_gt = renderer.render(scene=scene)
-
-                    # convert depth to mm in case object scale / translation are in m
-                    if not m2mm:
-                        depth_gt *= 1000.
 
                     # Convert depth image to distance image.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -611,14 +615,14 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
-                     m2mm: bool = False, delta: int = 15):
+    def calc_gt_info(chunk_dirs: List[str], dataset_objects: Dict[int, Dict[str, Union[pyrender.Mesh, float]]],
+                     starting_frame_id: int = 0, m2mm: bool = False, delta: int = 15):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
         rendering.
 
         :param chunk_dirs: List of directories to calculate the gt info for.
-        :param dataset_objects: Save annotations for these objects.
+        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
         :param starting_frame_id: The first frame id the writer has written during this run.
         :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
                      will also be in mm.
@@ -678,19 +682,17 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
+                    # rescale translation depending on initial model scale and saving format
+                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale_factor']
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
-                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
+                    scene.add(dataset_objects[gt['obj_id']]['trimesh'], pose=pose)
 
                     # render the depth image
                     _, depth_gt_large = renderer.render(scene=scene)
                     depth_gt = depth_gt_large[
                                ren_cy_offset:(ren_cy_offset + im_height),
                                ren_cx_offset:(ren_cx_offset + im_width)]
-
-                    # convert depth to mm in case object scale / translation are in m
-                    if not m2mm:
-                        depth_gt *= 1000.
 
                     # Convert depth images to distance images.
                     dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -757,7 +759,7 @@ class _BopWriterUtility:
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param chunk_dirs: List of directories to calculate the gt coco annotations for.
-        :param dataset_objects: Save annotations for these objects.
+        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
         :param starting_frame_id: The first frame id the writer has written during this run.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
