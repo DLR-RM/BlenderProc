@@ -22,7 +22,8 @@
       "config": {
         "path": "<args:0>", 
         "add_properties": {
-          "cp_category_id": "1"
+          "cp_category_id": "1",
+          "cp_scale_factor": 0.001,
         }, 
       },
     },
