@@ -61,6 +61,8 @@ class Entity(Struct):
                       frame number is used.
         """
         self.blender_obj.scale = scale
+        self.set_cp("scale_factor", scale * self.get_cp("scale_factor")) if self.has_cp("scale_factor") else \
+            self.set_cp("scale_factor", scale)
         Utility.insert_keyframe(self.blender_obj, "scale", frame)
 
     def get_location(self, frame: Optional[int] = None) -> np.ndarray:

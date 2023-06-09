@@ -350,6 +350,5 @@ class _BopLoader:
         cur_obj.set_cp("model_path", model_path)
         cur_obj.set_cp("is_bop_object", True)
         cur_obj.set_cp("bop_dataset_name", bop_dataset_name)
-        cur_obj.set_cp("scale_factor", scale)
 
         return cur_obj
