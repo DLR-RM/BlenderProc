@@ -112,6 +112,7 @@ To do so, simply call your script with the `debug` instead of `run` subcommand:
 ```bash
 blenderproc debug quickstart.py
 ```
+*Make sure that `quickstart.py` actually exists in your working directory.*
 
 Now the Blender UI opens up, the scripting tab is selected and the correct script is loaded.
 To start the BlenderProc pipeline, one now just has to press `Run BlenderProc` (see red circle in image).
