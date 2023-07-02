@@ -510,7 +510,7 @@ def enable_diffuse_color_output(output_dir: Optional[str] = None, file_format: s
     Utility.add_output_entry({
         "key": output_key,
         "path": os.path.join(output_dir, file_prefix) + "%04d" +
-                bproc.renderer.map_file_format_to_file_ending(file_format),
+                map_file_format_to_file_ending(file_format),
         "version": "2.0.0"
     })
 
