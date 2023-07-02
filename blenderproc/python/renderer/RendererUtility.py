@@ -478,13 +478,14 @@ def enable_segmentation_output(map_by: Union[str, List[str]] = "category_id",
     bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = pass_alpha_threshold
 
 
-def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: str = "diffuse_",
-                                output_key: str = "diffuse"):
+def enable_diffuse_color_output(output_dir: Optional[str] = None, file_format: str = "PNG",
+                                file_prefix: str = "diffuse_", output_key: str = "diffuse"):
     """ Enables writing diffuse color (albedo) images.
 
     Diffuse color images will be written in the form of .png files during the next rendering.
 
     :param output_dir: The directory to write files to, if this is None the temporary directory is used.
+    :param file_format: The file format to use, e.q. "PNG", "JPEG" or "OPEN_EXR".
     :param file_prefix: The prefix to use for writing the files.
     :param output_key: The key to use for registering the diffuse color output.
     """
@@ -502,13 +503,14 @@ def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: s
 
     output_file = tree.nodes.new('CompositorNodeOutputFile')
     output_file.base_path = output_dir
-    output_file.format.file_format = "PNG"
+    output_file.format.file_format = file_format
     output_file.file_slots.values()[0].path = file_prefix
     links.new(final_output, output_file.inputs['Image'])
 
     Utility.add_output_entry({
         "key": output_key,
-        "path": os.path.join(output_dir, file_prefix) + "%04d" + ".png",
+        "path": os.path.join(output_dir, file_prefix) + "%04d" +
+                bproc.renderer.map_file_format_to_file_ending(file_format),
         "version": "2.0.0"
     })
 
