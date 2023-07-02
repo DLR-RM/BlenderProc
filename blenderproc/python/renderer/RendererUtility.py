@@ -515,6 +515,41 @@ def enable_diffuse_color_output(output_dir: Optional[str] = None, file_format: s
     })
 
 
+def enable_uv_output(output_dir: Optional[str] = None, file_prefix: str = "uv_", output_key: str = "uv"):
+    """ Enables writing UV.
+
+    UV will be written in the form of .exr files during the next rendering.
+
+    :param output_dir: The directory to write files to, if this is None the temporary directory is used.
+    :param file_prefix: The prefix to use for writing the files.
+    :param output_key: The key to use for registering the uv output.
+    """
+
+    if output_dir is None:
+        output_dir = Utility.get_temporary_directory()
+
+    bpy.context.scene.render.use_compositing = True
+    bpy.context.scene.use_nodes = True
+    tree = bpy.context.scene.node_tree
+    links = tree.links
+
+    bpy.context.view_layer.use_pass_uv = True
+    render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
+    final_output = render_layer_node.outputs["UV"]
+
+    output_file = tree.nodes.new('CompositorNodeOutputFile')
+    output_file.base_path = output_dir
+    output_file.format.file_format = "OPEN_EXR"
+    output_file.file_slots.values()[0].path = file_prefix
+    links.new(final_output, output_file.inputs['Image'])
+
+    Utility.add_output_entry({
+        "key": output_key,
+        "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
+        "version": "2.0.0"
+    })
+
+
 def map_file_format_to_file_ending(file_format: str) -> str:
     """ Returns the files endings for a given blender output format.
 
