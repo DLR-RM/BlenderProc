@@ -552,8 +552,10 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
         current_line = ""
         while True:
             # Read the next character
-            char = os.read(pipe_out, 1).decode()
-
+            char = os.read(pipe_out, 1)
+            if not char:
+                break
+            char = chr(char[0])
             # If its the ending character, stop
             if not char or "\b" == char:
                 break
