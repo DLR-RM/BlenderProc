@@ -3,7 +3,9 @@
 import glob
 import os
 import random
+import numpy as np
 from mathutils import Euler
+from typing import Union
 
 import bpy
 
@@ -17,6 +19,7 @@ def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0,
 
     :param path_to_hdr_file: Path to the .hdr file
     :param strength: The brightness of the background.
+    :param rotation_euler: The euler angles of the background.
     """
 
     if not os.path.exists(path_to_hdr_file):
