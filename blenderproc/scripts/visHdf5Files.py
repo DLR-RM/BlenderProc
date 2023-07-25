@@ -10,7 +10,7 @@ import h5py
 import numpy as np
 from matplotlib import pyplot as plt
 
-default_rgb_keys = ["colors", "normals", "diffuse", "nocs"]
+default_rgb_keys = ["colors", "normals", "diffuse", "nocs", "specular"]
 default_flow_keys = ["forward_flow", "backward_flow"]
 default_segmap_keys = ["segmap", ".*_segmaps"]
 default_segcolormap_keys = ["segcolormap"]
