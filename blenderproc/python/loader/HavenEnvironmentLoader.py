@@ -3,18 +3,23 @@
 import glob
 import os
 import random
+import numpy as np
+from mathutils import Euler
+from typing import Union
 
 import bpy
 
 from blenderproc.python.utility.Utility import Utility
 
 
-def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0):
+def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0, 
+                                 rotation_euler: Union[list, Euler, np.ndarray] = [0.0, 0.0, 0.0]):
     """
     Sets the world background to the given hdr_file.
 
     :param path_to_hdr_file: Path to the .hdr file
     :param strength: The brightness of the background.
+    :param rotation_euler: The euler angles of the background.
     """
 
     if not os.path.exists(path_to_hdr_file):
@@ -36,7 +41,18 @@ def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0):
 
     # Set the brightness of the background
     background_node.inputs["Strength"].default_value = strength
+    
+    # add a mapping node and a texture coordinate node
+    mapping_node = nodes.new("ShaderNodeMapping") 
+    tex_coords_node = nodes.new("ShaderNodeTexCoord")
+    
+    #link the texture coordinate node to mapping node
+    links.new(tex_coords_node.outputs["Generated"], mapping_node.inputs["Vector"])
 
+    #link the mapping node to the texture node
+    links.new(mapping_node.outputs["Vector"], texture_node.inputs["Vector"])
+     
+    mapping_node.inputs["Rotation"].default_value = rotation_euler
 
 def get_random_world_background_hdr_img_path_from_haven(data_path: str) -> str:
     """ Sets the world background to a random .hdr file from the given directory.
