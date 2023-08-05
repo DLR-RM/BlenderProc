@@ -154,9 +154,12 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                                                           metallicFactor=0.2, roughnessFactor=0.8, doubleSided=True)
             # here we also add the scale factor of the objects. the position of the pyrender camera will change based
             # on the initial scale factor of the objects and the saved annotation format
+            if not np.all(np.isclose(np.array(obj.blender_obj.scale), obj.blender_obj.scale[0])):
+                print("WARNING: the scale is not the same across all dimensions, writing bop_toolkit annotations with "
+                      "the bop writer will fail!")
             trimesh_objects[obj.get_cp('category_id')] = {
                 'trimesh': pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material),
-                'scale_factor': obj.get_cp('scale_factor') if obj.has_cp('scale_factor') else 1.
+                'scale': obj.blender_obj.scale[0]
             }
 
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
@@ -585,7 +588,7 @@ class _BopWriterUtility:
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
                     # rescale translation depending on initial model scale and saving format
-                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale_factor']
+                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale']
 
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
@@ -683,7 +686,7 @@ class _BopWriterUtility:
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
                     # rescale translation depending on initial model scale and saving format
-                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale_factor']
+                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale']
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
                     scene.add(dataset_objects[gt['obj_id']]['trimesh'], pose=pose)

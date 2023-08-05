@@ -61,12 +61,6 @@ class Entity(Struct):
                       frame number is used.
         """
         self.blender_obj.scale = scale
-        # set the scale factor
-        if not np.all(np.isclose(np.array(scale), scale[0])):
-            print("WARNING: the scale is not the same across all dimensions, writing bop_toolkit annotations with the "
-                  "bop writer will fail!")
-        self.set_cp("scale_factor", scale[0] * self.get_cp("scale_factor")) if self.has_cp("scale_factor") else \
-            self.set_cp("scale_factor", scale[0])
         Utility.insert_keyframe(self.blender_obj, "scale", frame)
 
     def get_location(self, frame: Optional[int] = None) -> np.ndarray:
