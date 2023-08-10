@@ -3,7 +3,7 @@
 import json
 import os
 import glob
-from typing import List, Optional, Dict, Union
+from typing import List, Optional, Dict
 import shutil
 import warnings
 import datetime
@@ -32,8 +32,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
               depths: Optional[List[np.ndarray]] = None, colors: Optional[List[np.ndarray]] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
-              ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000,
-              calc_mask_info_coco: bool = True, delta: int = 15):
+              ignore_dist_thres: float = 100., annotation_unit: str = 'mm', frames_per_chunk: int = 1000,
+              calc_mask_info_coco: bool = True, delta: float = 0.015):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
@@ -52,11 +52,10 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                            in scene_camera.json
     :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to
                               failed physics.
-    :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
-                 is needed if BopLoader option mm2m is used.
+    :param annotation_unit: The unit in which the annotations are saved. Available: 'm', 'dm', 'cm', 'mm'.
     :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
     :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.
-    :param delta: Tolerance used for estimation of the visibility masks.
+    :param delta: Tolerance used for estimation of the visibility masks (in [m]).
     """
     if depths is None:
         depths = []
@@ -117,10 +116,13 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
     # Save the data.
     _BopWriterUtility.write_camera(camera_path, depth_scale=depth_scale)
+    assert annotation_unit in ['m', 'dm', 'cm', 'mm'], (f"Invalid annotation unit: `{annotation_unit}`. Supported "
+                                                        f"are 'm', 'dm', 'cm', 'mm'")
+    annotation_scale = {'m': 1., 'dm': 10., 'cm': 100., 'mm': 1000.}[annotation_unit]
     _BopWriterUtility.write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
                                    color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
-                                   m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam,
-                                   depth_scale=depth_scale, jpg_quality=jpg_quality)
+                                   annotation_scale=annotation_scale, ignore_dist_thres=ignore_dist_thres,
+                                   save_world2cam=save_world2cam, depth_scale=depth_scale, jpg_quality=jpg_quality)
 
     if calc_mask_info_coco:
         # Set up the bop toolkit
@@ -157,15 +159,14 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
             if not np.all(np.isclose(np.array(obj.blender_obj.scale), obj.blender_obj.scale[0])):
                 print("WARNING: the scale is not the same across all dimensions, writing bop_toolkit annotations with "
                       "the bop writer will fail!")
-            trimesh_objects[obj.get_cp('category_id')] = {
-                'trimesh': pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material),
-                'scale': obj.blender_obj.scale[0]
-            }
+            trimesh_objects[obj.get_cp('category_id')] = pyrender.Mesh.from_trimesh(mesh=trimesh_obj, material=material)
 
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
-                                        dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
+                                        dataset_objects=trimesh_objects, annotation_scale=annotation_scale,
+                                        delta=delta)
         _BopWriterUtility.calc_gt_info(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
-                                       dataset_objects=trimesh_objects, m2mm=m2mm, delta=delta)
+                                       dataset_objects=trimesh_objects, annotation_scale=annotation_scale,
+                                       delta=delta)
         _BopWriterUtility.calc_gt_coco(chunk_dirs=chunk_dirs, dataset_objects=dataset_objects,
                                        starting_frame_id=starting_frame_id)
 
@@ -374,7 +375,7 @@ class _BopWriterUtility:
     @staticmethod
     def write_frames(chunks_dir: str, dataset_objects: list, depths: Optional[List[np.ndarray]] = None,
                      colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG",
-                     depth_scale: float = 1.0, frames_per_chunk: int = 1000, m2mm: bool = True,
+                     depth_scale: float = 1.0, frames_per_chunk: int = 1000, annotation_scale: float = 1000.,
                      ignore_dist_thres: float = 100., save_world2cam: bool = True, jpg_quality: int = 95):
         """Write each frame's ground truth into chunk directory in BOP format
 
@@ -389,8 +390,8 @@ class _BopWriterUtility:
                             65.54m maximum depth and 1mm accuracy.
         :param ignore_dist_thres: Distance between camera and object after which object is ignored.
                                   Mostly due to failed physics.
-        :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations
-                     to mm here. This is needed if BopLoader option mm2m is used.
+        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the
+                                 specified format (see `annotation_format` in `write_bop` for further details).
         :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
         """
         if depths is None:
@@ -461,12 +462,10 @@ class _BopWriterUtility:
                     depth_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
 
             # Get GT annotations and camera info for the current frame.
-
-            # Output translation gt in m or mm
-            unit_scaling = 1000. if m2mm else 1.
-
-            chunk_gt[curr_frame_id] = _BopWriterUtility.get_frame_gt(dataset_objects, unit_scaling, ignore_dist_thres)
-            chunk_camera[curr_frame_id] = _BopWriterUtility.get_frame_camera(save_world2cam, depth_scale, unit_scaling)
+            chunk_gt[curr_frame_id] = _BopWriterUtility.get_frame_gt(dataset_objects, annotation_scale,
+                                                                     ignore_dist_thres)
+            chunk_camera[curr_frame_id] = _BopWriterUtility.get_frame_camera(save_world2cam, depth_scale,
+                                                                             annotation_scale)
 
             if colors:
                 color_rgb = colors[frame_id]
@@ -523,17 +522,17 @@ class _BopWriterUtility:
                 curr_frame_id += 1
 
     @staticmethod
-    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: Dict[int, Dict[str, Union[pyrender.Mesh, float]]],
-                      starting_frame_id: int = 0, m2mm: bool = False, delta: int = 15):
+    def calc_gt_masks(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
+                      annotation_scale: float = 1000., delta: float = 0.015):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
         rendering.
 
         :param chunk_dirs: List of directories to calculate the gt masks for.
-        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
+        :param dataset_objects: Dict containing all objects to save the annotations for.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
-                     will also be in mm.
+        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the
+                                 specified format (see `annotation_format` in `write_bop` for further details).
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -578,6 +577,7 @@ class _BopWriterUtility:
                     chunk_dir, 'depth', '{im_id:06d}.png').format(im_id=im_id)
                 depth_im = inout.load_depth(depth_path)
                 depth_im *= scene_camera[im_id]['depth_scale']  # to [mm]
+                depth_im /= 1000.  # to [m]
                 dist_im = misc.depth_im_to_dist_im_fast(depth_im, K)
 
                 for gt_id, gt in enumerate(scene_gt[im_id]):
@@ -587,12 +587,12 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
-                    # rescale translation depending on initial model scale and saving format
-                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale']
+                    # rescale translation depending on initial saving format
+                    t /= annotation_scale
 
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
-                    scene.add(dataset_objects[gt['obj_id']]['trimesh'], pose=pose)
+                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
 
                     # Render the depth image.
                     _, depth_gt = renderer.render(scene=scene)
@@ -618,17 +618,17 @@ class _BopWriterUtility:
                     inout.save_im(mask_visib_path, 255 * mask_visib.astype(np.uint8))
 
     @staticmethod
-    def calc_gt_info(chunk_dirs: List[str], dataset_objects: Dict[int, Dict[str, Union[pyrender.Mesh, float]]],
-                     starting_frame_id: int = 0, m2mm: bool = False, delta: int = 15):
+    def calc_gt_info(chunk_dirs: List[str], dataset_objects: Dict[int, pyrender.Mesh], starting_frame_id: int = 0,
+                     annotation_scale: float = 1000., delta: float = 0.015):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
         rendering.
 
         :param chunk_dirs: List of directories to calculate the gt info for.
-        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
+        :param dataset_objects: Dict containing all objects to save the annotations for.
         :param starting_frame_id: The first frame id the writer has written during this run.
-        :param m2mm: Whether the BOP annotations are saved in mm or m. If saved in mm, the rendered depth from pyrender
-                     will also be in mm.
+        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the
+                                 specified format (see `annotation_format` in `write_bop` for further details).
         :param delta: Tolerance used for estimation of the visibility masks.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -670,6 +670,7 @@ class _BopWriterUtility:
                 assert os.path.isfile(depth_fpath)
                 depth = inout.load_depth(depth_fpath)
                 depth *= scene_camera[im_id]['depth_scale']  # Convert to [mm].
+                depth /= 1000.  # to [m]
 
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
                 fx, fy, cx, cy = K[0, 0], K[1, 1], K[0, 2], K[1, 2]
@@ -685,11 +686,11 @@ class _BopWriterUtility:
                     # add camera and current object
                     scene.add(camera)
                     t = np.array(gt['cam_t_m2c'])
-                    # rescale translation depending on initial model scale and saving format
-                    t *= (0.001 if m2mm else 1.) / dataset_objects[gt['obj_id']]['scale']
+                    # rescale translation depending on initial saving format
+                    t /= annotation_scale
                     pose = bop_pose_to_pyrender_coordinate_system(cam_R_m2c=np.array(gt['cam_R_m2c']).reshape(3, 3),
                                                                   cam_t_m2c=t)
-                    scene.add(dataset_objects[gt['obj_id']]['trimesh'], pose=pose)
+                    scene.add(dataset_objects[gt['obj_id']], pose=pose)
 
                     # render the depth image
                     _, depth_gt_large = renderer.render(scene=scene)
@@ -762,7 +763,7 @@ class _BopWriterUtility:
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param chunk_dirs: List of directories to calculate the gt coco annotations for.
-        :param dataset_objects: Nested dict containing all objects to save the annotations for, and their scale factor.
+        :param dataset_objects: List containing all objects to save the annotations for.
         :param starting_frame_id: The first frame id the writer has written during this run.
         """
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
@@ -775,10 +776,11 @@ class _BopWriterUtility:
 
             CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
                           dataset_name} for obj in dataset_objects]
-            
-            # Remove all duplicate dicts from list. Ref: https://stackoverflow.com/questions/9427163/remove-duplicate-dict-in-list-in-python
+
+            # Remove all duplicate dicts from list.
+            # Ref: https://stackoverflow.com/questions/9427163/remove-duplicate-dict-in-list-in-python
             CATEGORIES = list({frozenset(item.items()):item for item in CATEGORIES}.values())
-            
+
             INFO = {
                 "description": dataset_name + '_train',
                 "url": "https://github.com/thodan/bop_toolkit",
