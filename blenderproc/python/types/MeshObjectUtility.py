@@ -531,18 +531,21 @@ class MeshObject(Entity):
         # get mesh data
         mesh = self.get_mesh()
 
-        # get vertices 
+        # get vertices
         verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
-        
+
         # check if faces are pure tris or quads
         if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
-             raise Exception("The mesh {} must have pure triangular or pure quad faces".format(self.get_name()))
-        
-        # get faces   
+            raise Exception(f"The mesh {self.get_name()} must have pure triangular or pure quad faces")
+
+        # re-scale the vertices since scale operations doesn't apply to the mesh data
+        verts *= self.blender_obj.scale
+
+        # get faces
         faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
 
         return Trimesh(vertices=verts, faces=faces)
-    
+
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
 
