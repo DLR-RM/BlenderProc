@@ -117,7 +117,7 @@ bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        depths = data["depth"],
                        colors = data["colors"], 
                        m2mm = False,
-                       calc_mask_info_coco=False)
+                       calc_mask_info_coco=True)
 ```
 
 The poses of the visual meshes of every robot link can be written using the BOPWriter.
