@@ -32,8 +32,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
               depths: Optional[List[np.ndarray]] = None, colors: Optional[List[np.ndarray]] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
-              ignore_dist_thres: float = 100., annotation_unit: str = 'mm', frames_per_chunk: int = 1000,
-              calc_mask_info_coco: bool = True, delta: float = 0.015):
+              ignore_dist_thres: float = 100., m2mm: Optional[bool] = None, annotation_unit: str = 'mm',
+              frames_per_chunk: int = 1000, calc_mask_info_coco: bool = True, delta: float = 0.015):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
@@ -52,6 +52,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                            in scene_camera.json
     :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to
                               failed physics.
+    :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
+                 is needed if BopLoader option mm2m is used (deprecated).
     :param annotation_unit: The unit in which the annotations are saved. Available: 'm', 'dm', 'cm', 'mm'.
     :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
     :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.
@@ -119,6 +121,9 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     assert annotation_unit in ['m', 'dm', 'cm', 'mm'], (f"Invalid annotation unit: `{annotation_unit}`. Supported "
                                                         f"are 'm', 'dm', 'cm', 'mm'")
     annotation_scale = {'m': 1., 'dm': 10., 'cm': 100., 'mm': 1000.}[annotation_unit]
+    if m2mm is not None:
+        warnings.warn("WARNING: `m2mm` is deprecated, please use `annotation_scale='mm'` instead!")
+        annotation_scale = 1000.
     _BopWriterUtility.write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
                                    color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
                                    annotation_scale=annotation_scale, ignore_dist_thres=ignore_dist_thres,
