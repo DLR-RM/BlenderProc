@@ -7,6 +7,33 @@
 
 # Version History
 
+## Version 2.6.0 17th August 2023
+
+- BOP toolkit is now tightly integrated into the the BOP writer:
+  - Ground truth masks and coco annotations are now directly calculated when calling the BOP writer
+  - Instead of using vispy for renderings the masks, we switched to pyrender which speeds up the process a lot
+- rendering/physics log is now hidded per default and instead a pretty progress bar is shown
+- upgrades to blender 3.3.1
+- its now possible to render segmentation images in stereo mode
+- adds method to MeshObject to convert to trimesh
+- fixes rendering on cpu-only (thanks @muedavid)
+- adds support for loading .glb/.gltf meshes (thanks @woodbridge)
+- adds support for loading .fbx meshes (thanks @HectorAnadon)
+- allows setting rotation for hdri backgrounds (thanks @saprrow)
+- incorporate location changes to urdf local2world matrix calculations
+- allows setting brightness for hdri backgrounds 
+- `bproc.object.sample_poses_on_surface()` now hides objects which could not be placed instead of deleting them
+- removes duplicate categories and fixes segmentation id when writing scene_gt.json annotations in BOP writer (thanks @hansaskov)
+- `get_all_cps()` now returns a proper dictionary (thanks @andrewyguo)
+- replaces deprecated `np.bool` with bool (thanks @NnamdiN)
+- refactoring of haven download script to support multithreading (thanks @hansaskov)
+- fixes loading stl files in urdf files
+- loading a .ply objects automatically sets the materials to its vertex color if no texture file was found.
+- username is now retrieved in a more platform independent way (thanks @YouJiacheng)
+- coco annotations are now nicely formatted (thanks @andrewyguo)
+- object pose sampler now correctly sets rotation if mode on failer was set to `initial_pose`
+
+
 ## Version 2.5.0 20th September 2022
 - segmentations are now done in the same call as any other render call, avoiding the loading of the objects for each pose
 - added the kinect azure noise model, allowing for the creation of more realistic depth images
@@ -24,7 +51,6 @@
 - the duplicate and delete fcts now support duplicating all children as well, we added a `get_children` fct as well
 - renaming `get_rotation` to `get_rotation_euler` and adding functions for setting the rotation matrix
 - fix a bug in the move_origin_to_bottom_mean fct.
-
 
 ## Version 2.4.1 22th July 2022
 - allow writing poses for robot links in the BopWriter
