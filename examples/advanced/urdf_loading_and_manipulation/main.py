@@ -91,6 +91,5 @@ bproc.writer.write_hdf5(args.output_dir, data)
 bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        target_objects = robot.links,
                        depths = data["depth"],
-                       colors = data["colors"], 
-                       m2mm = False,
-                       calc_mask_info_coco=False)
+                       colors = data["colors"],
+                       calc_mask_info_coco=True)

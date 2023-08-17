@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an idea for this project
+labels: enhancement
+body:
+  - type: textarea
+    attributes:
+      label: Describe your feature request
+      description: A clear and concise description of how the feature should look like.
+      placeholder: 
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe a possible solution
+      description: If possible, describe a possible way of how to implement the feature
+      placeholder: 
+    validations:
+      required: false
+

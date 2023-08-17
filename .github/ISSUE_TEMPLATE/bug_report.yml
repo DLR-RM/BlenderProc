@@ -1,0 +1,41 @@
+name: Bug or Question
+description: Something does not seem to work as intended
+labels: question
+body:
+  - type: textarea
+    attributes:
+      label: Describe the issue
+      description: A clear and concise description of what the issue is. Put links/references to the code in here.
+      placeholder: 
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Minimal code example
+      description: A *minimal* code example which reproduces this issue, see this [guide](https://stackoverflow.com/help/minimal-reproducible-example). The more reduced the code is, the easier we can understand/reproduce your issue and the faster you will get an answer.
+      placeholder: Only put python code in here
+      render: python
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Files required to run the code
+      description: Any files / arguments that are required to run the code above
+      placeholder: 
+      render: 
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen vs. what actually happens.
+      placeholder: Use screenshots, if possible.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: BlenderProc version
+      description: Which BlenderProc version do you use? 
+      placeholder: e.g. v2.5.0 or GitHub main branch...
+    validations:
+      required: true

@@ -20,7 +20,8 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
     and possible non-alignment of the sampling surface (i.e. on the X-Y hyperplane, can be somewhat mitigated with
     precise "up_direction" value), which leads to the objects hovering slightly above the surface. So it is
     recommended to use the PhysicsPositioning module afterwards for realistically looking placements of objects on
-    the sampling surface.
+    the sampling surface. If placing fails due to collisions, the object will be moved back to the intial pose
+    and hidden from rendering.
 
     :param objects_to_sample: A list of objects that should be sampled above the surface.
     :param surface: Object to place objects_to_sample on.
@@ -47,7 +48,7 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
     placed_objects: List[MeshObject] = []
     for obj in objects_to_sample:
         print(f"Trying to put {obj.get_name()}")
-
+        initial_pose = obj.get_local2world_mat()
         placed_successfully = False
 
         for i in range(max_tries):
@@ -88,8 +89,9 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
             break
 
         if not placed_successfully:
-            print(f"Giving up on {obj.get_name()}, deleting...")
-            obj.delete()
+            print(f"Giving up on {obj.get_name()}, hiding...")
+            obj.hide(True)
+            obj.set_local2world_mat(initial_pose)
 
     return placed_objects
 

@@ -5,6 +5,7 @@ from typing import Union, List, Optional, Tuple
 import bpy
 import numpy as np
 from mathutils import Vector, Euler, Matrix
+from trimesh import Trimesh
 
 from blenderproc.python.utility.Utility import KeyFrame
 from blenderproc.python.types.EntityUtility import Entity
@@ -616,5 +617,16 @@ class Link(Entity):
         visual_matrix = M1 @ M_parent_data @ M2 @ M_pose
 
         return visual_matrix.to_quaternion().angle
+
+    def mesh_as_trimesh(self) -> Optional[Trimesh]:
+        """ Returns a trimesh.Trimesh instance of the link's first visual object, if it exists.
+
+        :return: The link's first visual object as trimesh.Trimesh if the link has one or more visuals, else None.
+        """
+        # get mesh data
+        if self.visuals:
+            return self.visuals[0].mesh_as_trimesh()
+
+        return None
 
 # pylint: enable=no-member
