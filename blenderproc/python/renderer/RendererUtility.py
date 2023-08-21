@@ -632,7 +632,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param file_prefix: The prefix to use for writing the images.
     :param output_key: The key to use for registering the output.
     :param load_keys: Set of output keys to load when available
-    :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param return_data: Whether to load and return generated data.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
     :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'

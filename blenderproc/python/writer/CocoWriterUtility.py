@@ -21,8 +21,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                            instance_attribute_maps: Optional[List[dict]] = None,
                            colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG",
                            mask_encoding_format: str = "rle", supercategory: str = "coco_annotations",
-                           append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
-                           segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors",
+                           append_to_existing_output: bool = True,
                            jpg_quality: int = 95, label_mapping: Optional[LabelIdMapping] = None,
                            file_prefix: str = "", indent: Optional[Union[int, str]] = None):
     """ Writes coco annotations in the following steps:
@@ -43,13 +42,6 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
     :param append_to_existing_output: If true and if there is already a coco_annotations.json file in the output
                                       directory, the new coco annotations will be appended to the existing file.
                                       Also, the rgb images will be named such that there are no collisions.
-    :param segmap_output_key: The output key with which the segmentation images were registered. Should be the same
-                              as the output_key of the SegMapRenderer module. Default: segmap.
-    :param segcolormap_output_key: The output key with which the csv file for object name/class correspondences
-                                   was registered. Should be the same as the colormap_output_key of the
-                                   SegMapRenderer module. Default: segcolormap.
-    :param rgb_output_key: The output key with which the rgb images were registered. Should be the same as
-                           the output_key of the RgbRenderer module. Default: colors.
     :param jpg_quality: The desired quality level of the jpg encoding
     :param label_mapping: The label mapping which should be used to label the categories based on their ids.
                           If None, is given then the `name` field in the csv files is used or - if not existing -
@@ -72,27 +64,6 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
 
     # Create output directory
     os.makedirs(os.path.join(output_dir, 'images'), exist_ok=True)
-
-    if not instance_segmaps:
-        # Find path pattern of segmentation images
-        segmentation_map_output = Utility.find_registered_output_by_key(segmap_output_key)
-        if segmentation_map_output is None:
-            raise RuntimeError(f"There is no output registered with key {segmap_output_key}. Are you sure you "
-                               f"ran the SegMapRenderer module before?")
-
-    if not colors:
-        # Find path pattern of rgb images
-        rgb_output = Utility.find_registered_output_by_key(rgb_output_key)
-        if rgb_output is None:
-            raise RuntimeError(f"There is no output registered with key {rgb_output_key}. Are you sure you "
-                               f"ran the RgbRenderer module before?")
-
-    if not instance_attribute_maps:
-        # Find path of name class mapping csv file
-        segcolormap_output = Utility.find_registered_output_by_key(segcolormap_output_key)
-        if segcolormap_output is None:
-            raise RuntimeError(f"There is no output registered with key {segcolormap_output_key}. Are you sure you "
-                               f"ran the SegMapRenderer module with 'map_by' set to 'instance' before?")
 
     coco_annotations_path = os.path.join(output_dir, "coco_annotations.json")
     # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists

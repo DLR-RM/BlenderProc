@@ -472,34 +472,17 @@ class _BopWriterUtility:
             chunk_camera[curr_frame_id] = _BopWriterUtility.get_frame_camera(save_world2cam, depth_scale,
                                                                              annotation_scale)
 
-            if colors:
-                color_rgb = colors[frame_id]
-                color_bgr = color_rgb.copy()
-                color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
-                if color_file_format == 'PNG':
-                    rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.png')
-                    cv2.imwrite(rgb_fpath, color_bgr)
-                elif color_file_format == 'JPEG':
-                    rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.jpg')
-                    cv2.imwrite(rgb_fpath, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
-            else:
-                rgb_output = Utility.find_registered_output_by_key("colors")
-                if rgb_output is None:
-                    raise Exception("RGB image has not been rendered.")
-                color_ext = '.png' if rgb_output['path'].endswith('png') else '.jpg'
-                # Copy the resulting RGB image.
-                rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type=color_ext)
-                shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
+            color_rgb = colors[frame_id]
+            color_bgr = color_rgb.copy()
+            color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
+            if color_file_format == 'PNG':
+                rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.png')
+                cv2.imwrite(rgb_fpath, color_bgr)
+            elif color_file_format == 'JPEG':
+                rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.jpg')
+                cv2.imwrite(rgb_fpath, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
 
-            if depths:
-                depth = depths[frame_id]
-            else:
-                # Load the resulting dist image.
-                dist_output = Utility.find_registered_output_by_key("distance")
-                if dist_output is None:
-                    raise Exception("Distance image has not been rendered.")
-                distance = _WriterUtility.load_output_file(resolve_path(dist_output['path'] % frame_id), remove=False)
-                depth = dist2depth(distance)
+            depth = depths[frame_id]
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).
