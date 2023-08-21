@@ -19,7 +19,6 @@ else:
     import contextlib
 
 # pylint: disable=wrong-import-position
-from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 # pylint: enable=wrong-import-position
 
@@ -30,32 +29,23 @@ class InstallUtility:
     """
 
     @staticmethod
-    def determine_blender_install_path(is_config: bool, used_args: "argparse.NameSpace",
+    def determine_blender_install_path(used_args: "argparse.NameSpace",
                                        user_args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
-        :param is_config: Whether a yaml config file was given instead of a python script.
         :param used_args: The given command line arguments.
         :param user_args: The arguments that will be forwarded to the users script.
         :return:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.
         """
-        if is_config:
-            config_parser = ConfigParser()
-            # Don't parse placeholder args in batch mode.
-            config = config_parser.parse(used_args.file, user_args, False)
-            setup_config = config["setup"]
-            custom_blender_path = setup_config.get("custom_blender_path", used_args.custom_blender_path)
-            blender_install_path = setup_config.get("blender_install_path", used_args.blender_install_path)
-        else:
-            custom_blender_path = used_args.custom_blender_path
-            blender_install_path = used_args.blender_install_path
+        custom_blender_path = used_args.custom_blender_path
+        blender_install_path = used_args.blender_install_path
 
-            # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
-            if blender_install_path is None:
-                user_name = getpass.getuser()
-                blender_install_path = os.path.join("/home_local", user_name, "blender")
+        # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
+        if blender_install_path is None:
+            user_name = getpass.getuser()
+            blender_install_path = os.path.join("/home_local", user_name, "blender")
         return custom_blender_path, blender_install_path
 
     @staticmethod
