@@ -6,7 +6,7 @@ import random
 from numpy import random as np_random
 import bpy
 
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig

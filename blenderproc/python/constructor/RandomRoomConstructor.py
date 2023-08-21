@@ -13,7 +13,7 @@ import bmesh
 import mathutils
 import numpy as np
 
-from blenderproc.python.modules.provider.getter.Material import Material
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.EntityUtility import delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
