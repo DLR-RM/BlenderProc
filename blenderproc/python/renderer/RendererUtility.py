@@ -16,7 +16,7 @@ from rich.console import Console
 from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 
 from blenderproc.python.camera import CameraUtility
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility, stdout_redirected
@@ -632,7 +632,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param file_prefix: The prefix to use for writing the images.
     :param output_key: The key to use for registering the output.
     :param load_keys: Set of output keys to load when available
-    :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param return_data: Whether to load and return generated data.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
     :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'

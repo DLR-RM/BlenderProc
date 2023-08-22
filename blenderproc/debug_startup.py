@@ -1,7 +1,6 @@
 """ This script allows the use of the debug mode in BlenderProc. """
 
 import sys
-from pathlib import Path
 import os
 
 import bpy
@@ -14,25 +13,8 @@ argv = sys.argv[sys.argv.index("--") + 1:]
 bpy.context.window.workspace = bpy.data.workspaces["Scripting"]
 bpy.context.view_layer.update()
 
-# Load text to put into scripting tool
-is_config = not argv[0].endswith(".py")
-if is_config:
-    # Create a new temporary script based on debug.py
-    text = bpy.data.texts.new("debug")
-    with Path(__file__).with_name("debug.py").open("r", encoding="utf-8") as file:
-        script_text = file.read()
-        # Replace placeholders
-        script_text = script_text.replace("###CONFIG_PATH###", argv[0])
-        script_text = script_text.replace("[\"###CONFIG_ARGS###\"]", str(argv[2:]))
-        # Put into blender text object
-        text.from_string(script_text)
-    # Set cursor to the beginning
-    text.cursor_set(0)
-    # Set filepath such that it can be used inside debug.py, while not overwriting it
-    text.filepath = str(Path(__file__).with_name("debug_temp.py").absolute())
-else:
-    # Just load python script into blender text object
-    text = bpy.data.texts.load(os.path.abspath(argv[0]))
+# Just load python script into blender text object
+text = bpy.data.texts.load(os.path.abspath(argv[0]))
 
 
 # Declare operator that runs the blender proc script

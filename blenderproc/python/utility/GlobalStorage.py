@@ -1,7 +1,9 @@
+""" This module provides functions to store global data. """
+
 from typing import Any, Dict, Optional
 
 
-class GlobalStorage(object):
+class GlobalStorage:
     """
     The GlobalStorage has two functions:
         1. It can store data over the boundaries of modules with the add(), set() and get() functions
@@ -10,7 +12,8 @@ class GlobalStorage(object):
 
     To 1. you can save your own keys in the GlobalStorage to access them in a later module.
         For example you have a personal renderer or loader, which has attributes, which are independent of the scene and
-        the objects so custom properties for those are not the way to go. In these instances you can use these functions.
+        the objects so custom properties for those are not the way to go. In these instances you can use these 
+        functions.
 
     Here is a list of all used global_storage_keys to avoid that your key is clashing with existing keys:
 
@@ -60,8 +63,8 @@ class GlobalStorage(object):
             if not GlobalStorage._global_config.has_param(key):
                 GlobalStorage._global_config.data[key] = value
             else:
-                raise RuntimeError("This key was already found in the global config: {} it is also used internally, "
-                                   "please use another key!".format(key))
+                raise RuntimeError(f"This key was already found in the global config: {key} it is "
+                                   "also used internally, please use another key!")
 
     @staticmethod
     def add_to_config_before_init(key: str, value: Any):
@@ -76,8 +79,8 @@ class GlobalStorage(object):
             if key not in GlobalStorage._add_to_global_config_at_init:
                 GlobalStorage._add_to_global_config_at_init[key] = value
             else:
-                raise RuntimeError("This key: {} was added before to the list of "
-                                   "add_to_global_config_at_init!".format(key))
+                raise RuntimeError(f"This key: {key} was added before to the list of "
+                                   "add_to_global_config_at_init!")
         else:
             raise RuntimeError("This fct. should only be called before the GlobalStorage was inited!")
 
@@ -95,11 +98,11 @@ class GlobalStorage(object):
         :param key: which is added to the GlobalStorage
         :param value: which can be accessed by this key over the get() fct.
         """
-        if key not in GlobalStorage._storage_dict.keys():
+        if key not in GlobalStorage._storage_dict:
             GlobalStorage._storage_dict[key] = value
         else:
-            raise RuntimeError("The key: {} was already set before with this value: {}".format(key,
-                                                                                               GlobalStorage._storage_dict[key]))
+            raise RuntimeError(f"The key: {key} was already set before with "
+                               f"this value: {GlobalStorage._storage_dict[key]}")
 
     @staticmethod
     def set(key: str, value: Any):
@@ -127,8 +130,7 @@ class GlobalStorage(object):
         """
         if key in GlobalStorage._storage_dict:
             return GlobalStorage._storage_dict[key]
-        else:
-            raise RuntimeError("The key: {} is not in the global storage!".format(key))
+        raise RuntimeError(f"The key: {key} is not in the global storage!")
 
     @staticmethod
     def is_in_storage(key: str) -> bool:
@@ -150,8 +152,7 @@ class GlobalStorage(object):
         """
         if GlobalStorage._global_config is not None:
             return GlobalStorage._global_config.has_param(key)
-        else:
-            return False
+        return False
 
     @staticmethod
     def get_global_config() -> "Config":
@@ -165,5 +166,4 @@ class GlobalStorage(object):
         """
         if GlobalStorage._global_config is not None:
             return GlobalStorage._global_config
-        else:
-            raise RuntimeError("The global config was not initialized!")
+        raise RuntimeError("The global config was not initialized!")

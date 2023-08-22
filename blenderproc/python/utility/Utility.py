@@ -9,7 +9,6 @@ from typing import IO, List, Dict, Any, Tuple, Optional, Union, Type
 from pathlib import Path
 import time
 import inspect
-import importlib
 import json
 from contextlib import contextmanager
 
@@ -17,8 +16,7 @@ import bpy
 import numpy as np
 
 # pylint: disable=wrong-import-position
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
-from blenderproc.python.modules.utility.Config import Config
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.types.StructUtilityFunctions import get_instances
 from blenderproc.version import __version__
 
@@ -87,88 +85,6 @@ class Utility:
     blenderproc_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
     temp_dir = ""
     used_temp_id = None
-
-    @staticmethod
-    def initialize_modules(module_configs: List[Union[Dict[str, Any], str]]) -> List["Module"]:
-        """ Initializes the modules described in the given configuration.
-
-        Example for module_configs:
-
-
-        .. code-block:: yaml
-
-            [{
-              "module": "base.ModuleA",
-              "config": {...}
-            }, ...]
-
-        If you want to execute a certain module several times, add the `amount_of_repetions` on the same level as the
-        module name:
-
-        .. code-block:: yaml
-
-            [{
-              "module": "base.ModuleA",
-              "config": {...},
-              "amount_of_repetitions": 3
-            }, ...]
-
-        Here the name contains the path to the module class, starting from inside the src directory.
-
-        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
-        they are not copied into the new config.
-
-        :param module_configs: A list of dicts, each one describing one module.
-        :return: a list of initialized modules
-        """
-        modules = []
-
-        for module_config in module_configs:
-            # If only the module name is given (short notation)
-            if isinstance(module_config, str):
-                module_config = {"module": module_config}
-
-            # Initialize config with empty config
-            config = {}
-            # Check if there is a module specific config
-            if "config" in module_config:
-                # Overwrite with module specific config
-                Utility.merge_dicts(module_config["config"], config)
-
-            # Check if the module has a repetition counter
-            amount_of_repetitions = 1
-            if "amount_of_repetitions" in module_config:
-                amount_of_repetitions = Config(module_config).get_int("amount_of_repetitions")
-
-            with BlockStopWatch("Initializing module " + module_config["module"]):
-                for _ in range(amount_of_repetitions):
-                    module_class = None
-                    # For backwards compatibility we allow to specify a modules also without "Module" suffix.
-                    for suffix in ["Module", ""]:
-                        try:
-                            # Try to load the module using the current suffix
-                            module = importlib.import_module("blenderproc.python.modules." +
-                                                             module_config["module"] + suffix)
-                        except ModuleNotFoundError:
-                            # Try next suffix
-                            continue
-
-                        # Check if the loaded module has a class with the same name
-                        class_name = module_config["module"].split(".")[-1] + suffix
-                        if hasattr(module, class_name):
-                            # Import file and extract class
-                            module_class = getattr(module, class_name)
-                            break
-
-                    # Throw an error if no module/class with the specified name + any suffix has been found
-                    if module_class is None:
-                        raise RuntimeError(f"The module blenderproc.python.modules.{module_config['module']} "
-                                           f"was not found!")
-
-                    # Create module
-                    modules.append(module_class(Config(config)))
-
-        return modules
 
     @staticmethod
     def get_current_version() -> Optional[str]:
@@ -356,67 +272,6 @@ class Utility:
                     windows.append(row["model_id"])
 
         return lights, windows
-
-    @staticmethod
-    def build_provider(name: str, parameters: Dict[str, Any]) -> "Provider":
-        """ Builds up providers like sampler or getter.
-
-        It first builds the config and then constructs the required provider.
-
-        :param name: The name of the provider class.
-        :param parameters: A dict containing the parameters that should be used.
-        :return: The constructed provider.
-        """
-        module_class = None
-        for suffix in ["Module", ""]:
-            try:
-                # Import class from blenderproc.python.modules
-                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix),
-                                       name.split(".")[-1] + suffix)
-                break
-            except ModuleNotFoundError:
-                # Try next suffix
-                continue
-
-        # Throw an error if no module/class with the specified name + any suffix has been found
-        if module_class is None:
-            raise Exception("The module blenderproc.python.modules.provider." + name + " was not found!")
-
-        # Build configuration
-        config = Config(parameters)
-        # Construct provider
-        return module_class(config)
-
-    @staticmethod
-    def build_provider_based_on_config(config: Config) -> "Provider":
-        """ Builds up the provider using the parameters described in the given config.
-
-        The given config should follow the following scheme:
-
-        .. code-block:: yaml
-
-            {
-              "provider": "<name of provider class>"
-              "parameters": {
-                <provider parameters>
-              }
-            }
-
-        :param config: A Configuration object or a dict containing the configuration data.
-        :return: The constructed provider.
-        """
-        if isinstance(config, dict):
-            config = Config(config)
-
-        parameters = {}
-        for key in config.data.keys():
-            if key != 'provider':
-                parameters[key] = config.data[key]
-
-        if not config.has_param('provider'):
-            raise RuntimeError(f"Each provider needs a provider label, this one does not contain one: {config.data}")
-
-        return Utility.build_provider(config.get_string("provider"), parameters)
 
     @staticmethod
     def generate_equidistant_values(num: int, space_size_per_dimension: int) -> Tuple[List[List[int]], int]:
