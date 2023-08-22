@@ -1,7 +1,6 @@
 """ This script allows the use of the debug mode in BlenderProc. """
 
 import sys
-from pathlib import Path
 import os
 
 import bpy

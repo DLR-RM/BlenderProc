@@ -84,10 +84,12 @@ def cli():
             # Execute list of futures
             for future in progress(concurrent.futures.as_completed(futures)):
                 # Check for any exceptions in the threads
+                # pylint: disable=broad-exception-caught
                 try:
                     future.result()
                 except Exception as exc:
                     print(f"Thread generated an exception: {exc}")
+                # pylint: enable=broad-exception-caught
 
 
 

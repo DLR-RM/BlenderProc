@@ -4,22 +4,19 @@ import datetime
 from itertools import groupby
 import json
 import os
-import shutil
 from typing import Optional, Dict, Union, Tuple, List
-import csv
 
 import numpy as np
 from skimage import measure
 import cv2
 import bpy
 
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 
-def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.ndarray]] = None,
-                           instance_attribute_maps: Optional[List[dict]] = None,
-                           colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG",
+def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray],
+                           instance_attribute_maps: List[dict],
+                           colors: List[np.ndarray], color_file_format: str = "PNG",
                            mask_encoding_format: str = "rle", supercategory: str = "coco_annotations",
                            append_to_existing_output: bool = True,
                            jpg_quality: int = 95, label_mapping: Optional[LabelIdMapping] = None,
@@ -53,10 +50,6 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
                    Using a positive integer indent indents that many spaces per level.
                    If indent is a string (such as "\t"), that string is used to indent each level.
     """
-    instance_segmaps = [] if instance_segmaps is None else list(instance_segmaps)
-    colors = [] if colors is None else list(colors)
-    if instance_attribute_maps is None:
-        instance_attribute_maps = []
 
     if len(colors) > 0 and len(colors[0].shape) == 4:
         raise ValueError("BlenderProc currently does not support writing coco annotations for stereo images. "
@@ -77,58 +70,28 @@ def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.n
 
     # collect all RGB paths
     new_coco_image_paths = []
-    # collect all mappings from csv (backwards compat)
-    segcolormaps = []
-    # collect all instance segmaps (backwards compat)
-    inst_segmaps = []
 
     # for each rendered frame
     for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+        color_rgb = colors[frame - bpy.context.scene.frame_start]
 
-        if not instance_attribute_maps:
-            # read colormappings, which include object name/class to integer mapping
-            segcolormap = []
-            with open(segcolormap_output["path"] % frame, 'r', encoding="utf-8") as csvfile:
-                reader = csv.DictReader(csvfile)
-                for mapping in reader:
-                    segcolormap.append(mapping)
-            segcolormaps.append(segcolormap)
+        # Reverse channel order for opencv
+        color_bgr = color_rgb.copy()
+        color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
 
-        if not instance_segmaps:
-            # Load segmaps (backwards compat)
-            segmap = np.load(segmentation_map_output["path"] % frame)
-            inst_channel = int(segcolormap[0]['channel_instance'])
-            inst_segmaps.append(segmap[:, :, inst_channel])
-
-        if colors:
-            color_rgb = colors[frame - bpy.context.scene.frame_start]
-
-            # Reverse channel order for opencv
-            color_bgr = color_rgb.copy()
-            color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
-
-            if color_file_format == 'PNG':
-                target_base_path = f'images/{file_prefix}{frame + image_offset:06d}.png'
-                target_path = os.path.join(output_dir, target_base_path)
-                cv2.imwrite(target_path, color_bgr)
-            elif color_file_format == 'JPEG':
-                target_base_path = f'images/{file_prefix}{frame + image_offset:06d}.jpg'
-                target_path = os.path.join(output_dir, target_base_path)
-                cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
-            else:
-                raise RuntimeError(f'Unknown color_file_format={color_file_format}. Try "PNG" or "JPEG"')
-
-        else:
-            source_path = rgb_output["path"] % frame
-            target_base_path = os.path.join('images',
-                                            file_prefix + os.path.basename(rgb_output["path"] % (frame + image_offset)))
+        if color_file_format == 'PNG':
+            target_base_path = f'images/{file_prefix}{frame + image_offset:06d}.png'
             target_path = os.path.join(output_dir, target_base_path)
-            shutil.copyfile(source_path, target_path)
+            cv2.imwrite(target_path, color_bgr)
+        elif color_file_format == 'JPEG':
+            target_base_path = f'images/{file_prefix}{frame + image_offset:06d}.jpg'
+            target_path = os.path.join(output_dir, target_base_path)
+            cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
+        else:
+            raise RuntimeError(f'Unknown color_file_format={color_file_format}. Try "PNG" or "JPEG"')
+
 
         new_coco_image_paths.append(target_base_path)
-
-    instance_attribute_maps = segcolormaps if segcolormaps else instance_attribute_maps
-    instance_segmaps = inst_segmaps if inst_segmaps else instance_segmaps
 
     coco_output = _CocoWriterUtility.generate_coco_annotations(instance_segmaps,
                                                                instance_attribute_maps,

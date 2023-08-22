@@ -4,7 +4,6 @@ import json
 import os
 import glob
 from typing import List, Optional, Dict
-import shutil
 import warnings
 import datetime
 
@@ -15,8 +14,6 @@ import bpy
 from mathutils import Matrix
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
-from blenderproc.python.utility.Utility import Utility, resolve_path
-from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.utility.SetupUtility import SetupUtility
@@ -29,7 +26,7 @@ import pyrender
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
-              depths: Optional[List[np.ndarray]] = None, colors: Optional[List[np.ndarray]] = None,
+              depths: List[np.ndarray] = None, colors: List[np.ndarray] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: Optional[bool] = None, annotation_unit: str = 'mm',
@@ -59,10 +56,6 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.
     :param delta: Tolerance used for estimation of the visibility masks (in [m]).
     """
-    if depths is None:
-        depths = []
-    if colors is None:
-        colors = []
 
     # Output paths.
     dataset_dir = os.path.join(output_dir, dataset)
@@ -378,8 +371,8 @@ class _BopWriterUtility:
         return frame_camera_dict
 
     @staticmethod
-    def write_frames(chunks_dir: str, dataset_objects: list, depths: Optional[List[np.ndarray]] = None,
-                     colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG",
+    def write_frames(chunks_dir: str, dataset_objects: list, depths: List[np.ndarray],
+                     colors: List[np.ndarray], color_file_format: str = "PNG",
                      depth_scale: float = 1.0, frames_per_chunk: int = 1000, annotation_scale: float = 1000.,
                      ignore_dist_thres: float = 100., save_world2cam: bool = True, jpg_quality: int = 95):
         """Write each frame's ground truth into chunk directory in BOP format
@@ -399,10 +392,6 @@ class _BopWriterUtility:
                                  specified format (see `annotation_format` in `write_bop` for further details).
         :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
         """
-        if depths is None:
-            depths = []
-        if colors is None:
-            colors = []
 
         # Format of the depth images.
         depth_ext = '.png'
