@@ -131,7 +131,7 @@ def cli():
     elif args.mode in ["run", "debug", "quickstart"]:
 
         # Install blender, if not already done
-        determine_result = InstallUtility.determine_blender_install_path(args, unknown_args)
+        determine_result = InstallUtility.determine_blender_install_path(args)
         custom_blender_path, blender_install_path = determine_result
         blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
                                                                                         blender_install_path,
@@ -233,8 +233,7 @@ def cli():
         current_cli()
     elif args.mode == "pip":
         # Install blender, if not already done
-        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args,
-                                                                                                  unknown_args)
+        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
         blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
                                                                                    blender_install_path)
         blender_path = os.path.dirname(blender_bin)

@@ -9,7 +9,7 @@ import shutil
 from sys import platform, version_info
 import ssl
 from platform import machine
-from typing import List, Union, Tuple
+from typing import Union, Tuple
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -29,12 +29,10 @@ class InstallUtility:
     """
 
     @staticmethod
-    def determine_blender_install_path(used_args: "argparse.NameSpace",
-                                       user_args: List[str]) -> Union[str, str]:
+    def determine_blender_install_path(used_args: "argparse.NameSpace") -> Union[str, str]:
         """ Determines the path of the blender installation
 
         :param used_args: The given command line arguments.
-        :param user_args: The arguments that will be forwarded to the users script.
         :return:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.

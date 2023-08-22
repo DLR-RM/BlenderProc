@@ -4,7 +4,6 @@ import json
 import os
 import glob
 from typing import List, Optional, Dict
-import shutil
 import warnings
 import datetime
 
@@ -15,8 +14,6 @@ import bpy
 from mathutils import Matrix
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
-from blenderproc.python.utility.Utility import Utility, resolve_path
-from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
 from blenderproc.python.utility.SetupUtility import SetupUtility

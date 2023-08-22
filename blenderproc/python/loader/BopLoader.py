@@ -51,7 +51,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
                                                           f"Supported are 'm', 'dm', 'cm', 'mm'")
     scale = {'m': 1., 'dm': 0.1, 'cm': 0.01, 'mm': 0.001}[object_model_unit]
     if mm2m is not None:
-        warnings.warn(f"WARNING: `mm2m` is deprecated, please use `object_model_unit='mm'` instead!")
+        warnings.warn("WARNING: `mm2m` is deprecated, please use `object_model_unit='mm'` instead!")
         scale = 0.001
 
     if obj_ids is None:
