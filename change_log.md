@@ -7,6 +7,10 @@
 
 # Version History
 
+## Version 2.6.1 26th August 2023
+
+- Fixes pyrender usage on windows, EGL / headless rendering is now only used on linux
+
 ## Version 2.6.0 17th August 2023
 
 - BOP toolkit is now tightly integrated into the the BOP writer:
