@@ -97,7 +97,8 @@ class InstallUtility:
             elif platform == "win32":
                 blender_version += "-windows-x64"
                 blender_install_path = os.path.join(blender_install_path, blender_version)
-                blender_path = blender_install_path
+                # After unpacking there is another subfolder named blender_version
+                blender_path = os.path.join(blender_install_path, blender_version)
             else:
                 raise RuntimeError(f"This system is not supported yet: {platform}")
 
@@ -218,7 +219,7 @@ class InstallUtility:
         elif platform == "darwin":
             blender_run_path = os.path.join(blender_path, "Contents", "MacOS", "Blender")
         elif platform == "win32":
-            blender_run_path = os.path.join(blender_install_path, blender_version, "blender")
+            blender_run_path = os.path.join(blender_path, "blender")
         else:
             raise RuntimeError(f"This system is not supported yet: {platform}")
 
