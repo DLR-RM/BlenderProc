@@ -1,5 +1,5 @@
 """Camera utility, collection of useful camera functions."""
-from typing import Union, Tuple, Optional, List
+from typing import Union, Tuple, Optional, List, Iterable
 from itertools import product
 
 import bpy
@@ -144,13 +144,13 @@ def set_resolution(image_width: int = None, image_height: int = None):
     set_intrinsics_from_blender_params(None, image_width, image_height)
 
 
-def set_intrinsics_from_blender_params(lens: float = None, image_width: int = None, image_height: int = None,
+def set_intrinsics_from_blender_params(lens: Union[float, Tuple[float, float]] = None, image_width: int = None, image_height: int = None,
                                        clip_start: float = None, clip_end: float = None,
                                        pixel_aspect_x: float = None, pixel_aspect_y: float = None, shift_x: int = None,
                                        shift_y: int = None, lens_unit: str = None):
     """ Sets the camera intrinsics using blenders represenation.
 
-    :param lens: Either the focal length in millimeters or the FOV in radians, depending on the given lens_unit.
+    :param lens: Either the focal length in millimeters or the FOV (diagonal or both FOV_X and FOV_Y) in radians, depending on the given lens_unit.
     :param image_width: The image width in pixels.
     :param image_height: The image height in pixels.
     :param clip_start: Clipping start.
@@ -172,11 +172,17 @@ def set_intrinsics_from_blender_params(lens: float = None, image_width: int = No
     if lens is not None:
         # Set focal length
         if cam.lens_unit == 'MILLIMETERS':
+            if isinstance(lens, Iterable):
+                raise Exception("Only a single value is expected for the focal length: " + str(lens))
             if lens < 1:
                 raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
             cam.lens = lens
         elif cam.lens_unit == "FOV":
-            cam.angle = lens
+            if isinstance(lens, Iterable):
+                cam.angle_x = lens[0]
+                cam.angle_y = lens[1]
+            else:
+                cam.angle = lens
         else:
             raise Exception("No such lens unit: " + lens_unit)
 
