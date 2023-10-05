@@ -136,7 +136,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # Determine for which directories mask_info_coco has to be calculated
         chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
         chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
+        chunk_dir_ids = [d.split(os.sep)[-1] for d in chunk_dirs]
         chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         # convert all objects to trimesh objects
@@ -752,7 +752,7 @@ class _BopWriterUtility:
         # pylint: enable=import-outside-toplevel
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
-            dataset_name = chunk_dir.split('/')[-3]
+            dataset_name = chunk_dir.split(os.sep)[-3]
 
             CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
                           dataset_name} for obj in dataset_objects]
