@@ -80,7 +80,7 @@ class InstallUtility:
             # Determine configured version
             # right new only support blender-3.5.1
             major_version = "3.6"
-            minor_version = "2"
+            minor_version = "4"
             blender_version = f"blender-{major_version}.{minor_version}"
             if platform in ["linux", "linux2"]:
                 blender_version += "-linux-x64"
