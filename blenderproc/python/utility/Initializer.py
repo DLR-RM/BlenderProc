@@ -118,6 +118,8 @@ class _Initializer:
         # cpu thread means GPU-only rendering)
         RendererUtility.set_cpu_threads(0)
         RendererUtility.set_denoiser(DefaultConfig.denoiser)
+        # For now disable the light tree per default, as it seems to increase render time for most of our tests
+        RendererUtility.toggle_light_tree(False)
 
         RendererUtility.set_simplify_subdivision_render(DefaultConfig.simplify_subdivision_render)
 

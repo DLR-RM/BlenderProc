@@ -123,6 +123,16 @@ def toggle_stereo(enable: bool):
     if enable:
         bpy.context.scene.render.views_format = "STEREO_3D"
 
+def toggle_light_tree(enable: bool):
+    """ Enables/Disables blender's light tree for rendering.
+
+    Enabling the light tree reduces the noise in scenes with many point lights,
+    however it increases the render time per sample.
+    See https://wiki.blender.org/wiki/Reference/Release_Notes/3.5/Cycles
+
+    :param enable: True, if light tree should be enabled.
+    """
+    bpy.context.scene.cycles.use_light_tree = enable
 
 def set_simplify_subdivision_render(simplify_subdivision_render: int):
     """ Sets global maximum subdivision level during rendering to speedup rendering.
