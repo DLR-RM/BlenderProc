@@ -121,6 +121,7 @@ class Light(Entity):
         node_ox = nodes.get('Emission')
 
         image_data = bpy.data.images.new('pattern', width=pattern.shape[1], height=pattern.shape[0], alpha=True)
+        pattern = pattern / 255.0    # manual cast to range [0,1] to avoid integer casting issues below
         image_data.pixels = pattern.ravel()
 
         # Set Up Nodes
