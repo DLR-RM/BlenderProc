@@ -579,7 +579,7 @@ class _BopWriterUtility:
         scene.add(dataset_objects[gt['obj_id']], pose=pose)
 
         # Render the depth image.
-        depth_gt = renderer.render(scene=scene, flags=pyrender.constants.RenderFlags.DEPTH_ONLY)
+        _, depth_gt = renderer.render(scene=scene)
 
         # Convert depth image to distance image.
         dist_gt = misc.depth_im_to_dist_im_fast(depth_gt, K)
@@ -707,7 +707,7 @@ class _BopWriterUtility:
         scene.add(dataset_objects[gt['obj_id']], pose=pose)
 
         # render the depth image
-        depth_gt_large = renderer_large.render(scene=scene, flags=pyrender.constants.RenderFlags.DEPTH_ONLY)
+        _, depth_gt_large = renderer_large.render(scene=scene)
 
         depth_gt = depth_gt_large[
                     ren_cy_offset:(ren_cy_offset + im_height),
