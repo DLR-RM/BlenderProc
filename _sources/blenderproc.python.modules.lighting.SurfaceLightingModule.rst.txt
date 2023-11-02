@@ -2,6 +2,7 @@ blenderproc.python.modules.lighting.SurfaceLightingModule module
 ================================================================
 
 .. automodule:: blenderproc.python.modules.lighting.SurfaceLightingModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

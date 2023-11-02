@@ -100,14 +100,14 @@ Following is a simple pattern for Git Commit messages:
 that may look like this:
 
 ```
-feat(loader): add wavefront object loader, all lower case
+feat(loader): add wavefront object loader
 
 New module allows loading .obj files and setting custom properties like `physics` to the loaded objects.
 
 closes #123
 ```
 
-For branch names please stick to the ussie number pattern of:
+For branch names please stick to the issue number pattern of:
 
 ```
 iss_300_some_short_name

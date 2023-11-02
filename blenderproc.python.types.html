@@ -1,106 +1,70 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>blenderproc.python.types package &mdash; BlenderProc 2.4.0 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blenderproc.python.types package &mdash; BlenderProc 2.6.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> BlenderProc
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            BlenderProc
           </a>
-
-          
-            
-            
-          
-
-          
+              <div class="version">
+                2.6.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
-<ul class="compound-middle">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
 </ul>
-<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
-<ul class="compound-middle">
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
@@ -113,16 +77,18 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_random_trajectories/README.html">camera_random_trajectories</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/kinect_azure_noise/README.html">kinect_azure_noise</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,13 +100,14 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
@@ -154,6 +121,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
@@ -169,8 +137,20 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Api</span></p>
+<p class="caption" role="heading"><span class="caption-text">Entities (bproc.types)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Api</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
@@ -187,125 +167,86 @@
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Internal</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
-</ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">Internal</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk._Disk">_Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3._UniformSO3">_UniformSO3</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility._KeyFrameState">_KeyFrameState</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter._Filter">_Filter</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting._SuncgLighting">_SuncgLighting</a></li>
 </ul>
-<ul class="compound-last">
-<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader._AMASSLoader">_AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader._BlendLoader">_BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader._BopLoader">_BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader._CCMaterialLoader">_CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader._Front3DLoader">_Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader._IKEALoader">_IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader._Pix3DLoader">_Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader._SceneNetLoader">_SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
@@ -324,27 +265,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
@@ -352,17 +281,11 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
@@ -380,24 +303,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
@@ -409,134 +323,370 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer._ObjectReplacer">_ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler._OnSurfaceSampler">_OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation._PhysicsSimulation">_PhysicsSimulation</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility">_PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching._StereoGlobalMatching">_StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility._FlowRendererUtility">_FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility._NOCSRendererUtility">_NOCSRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility">_BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility._CocoWriterUtility">_CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility._GifWriterUtility">_GifWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility._WriterUtility">_WriterUtility</a></li>
+</ul>
+</li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">BlenderProc</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>blenderproc.python.types package</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">blenderproc.python.types package</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/blenderproc.python.types.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="blenderproc-python-types-package">
-<h1>blenderproc.python.types package<a class="headerlink" href="#blenderproc-python-types-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="blenderproc-python-types-package">
+<h1>blenderproc.python.types package<a class="headerlink" href="#blenderproc-python-types-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html">blenderproc.python.types.ArmatureUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html">blenderproc.python.types.BoneUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html">blenderproc.python.types.EntityUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html">blenderproc.python.types.InertialUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.LightUtility.html">blenderproc.python.types.LightUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html">blenderproc.python.types.LinkUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html">blenderproc.python.types.MaterialUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html">blenderproc.python.types.MeshObjectUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.StructUtility.html">blenderproc.python.types.StructUtility module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.StructUtilityFunctions.html">blenderproc.python.types.StructUtilityFunctions module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html">blenderproc.python.types.URDFUtility module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html">blenderproc.python.types.ArmatureUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature"><code class="docutils literal notranslate"><span class="pre">Armature</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature._clip_value_from_constraint"><code class="docutils literal notranslate"><span class="pre">Armature._clip_value_from_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature._determine_rotation_axis"><code class="docutils literal notranslate"><span class="pre">Armature._determine_rotation_axis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.add_constraint_if_not_existing"><code class="docutils literal notranslate"><span class="pre">Armature.add_constraint_if_not_existing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.get_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.get_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.get_location_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.get_location_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.get_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.get_rotation_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.hide"><code class="docutils literal notranslate"><span class="pre">Armature.hide()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.remove_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.remove_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.remove_constraints"><code class="docutils literal notranslate"><span class="pre">Armature.remove_constraints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.set_location_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.set_location_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.set_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">Armature.set_rotation_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature.set_rotation_euler"><code class="docutils literal notranslate"><span class="pre">Armature.set_rotation_euler()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html">blenderproc.python.types.BoneUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.add_constraint_if_not_existing"><code class="docutils literal notranslate"><span class="pre">add_constraint_if_not_existing()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.copy_constraints"><code class="docutils literal notranslate"><span class="pre">copy_constraints()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.get_armature_from_bone"><code class="docutils literal notranslate"><span class="pre">get_armature_from_bone()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.get_constraint"><code class="docutils literal notranslate"><span class="pre">get_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.get_location_constraint"><code class="docutils literal notranslate"><span class="pre">get_location_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.get_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">get_rotation_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.remove_constraint"><code class="docutils literal notranslate"><span class="pre">remove_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.remove_constraints"><code class="docutils literal notranslate"><span class="pre">remove_constraints()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_copy_location_constraint"><code class="docutils literal notranslate"><span class="pre">set_copy_location_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_copy_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">set_copy_rotation_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_ik_constraint"><code class="docutils literal notranslate"><span class="pre">set_ik_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_ik_limits_from_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">set_ik_limits_from_rotation_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_location_constraint"><code class="docutils literal notranslate"><span class="pre">set_location_constraint()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.BoneUtility.html#blenderproc.python.types.BoneUtility.set_rotation_constraint"><code class="docutils literal notranslate"><span class="pre">set_rotation_constraint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html">blenderproc.python.types.EntityUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.apply_T"><code class="docutils literal notranslate"><span class="pre">Entity.apply_T()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.clear_parent"><code class="docutils literal notranslate"><span class="pre">Entity.clear_parent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.delete"><code class="docutils literal notranslate"><span class="pre">Entity.delete()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.deselect"><code class="docutils literal notranslate"><span class="pre">Entity.deselect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_children"><code class="docutils literal notranslate"><span class="pre">Entity.get_children()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_local2world_mat"><code class="docutils literal notranslate"><span class="pre">Entity.get_local2world_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_location"><code class="docutils literal notranslate"><span class="pre">Entity.get_location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_parent"><code class="docutils literal notranslate"><span class="pre">Entity.get_parent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_rotation"><code class="docutils literal notranslate"><span class="pre">Entity.get_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_rotation_euler"><code class="docutils literal notranslate"><span class="pre">Entity.get_rotation_euler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_rotation_mat"><code class="docutils literal notranslate"><span class="pre">Entity.get_rotation_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.get_scale"><code class="docutils literal notranslate"><span class="pre">Entity.get_scale()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.is_empty"><code class="docutils literal notranslate"><span class="pre">Entity.is_empty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.select"><code class="docutils literal notranslate"><span class="pre">Entity.select()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_local2world_mat"><code class="docutils literal notranslate"><span class="pre">Entity.set_local2world_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_location"><code class="docutils literal notranslate"><span class="pre">Entity.set_location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_parent"><code class="docutils literal notranslate"><span class="pre">Entity.set_parent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_rotation_euler"><code class="docutils literal notranslate"><span class="pre">Entity.set_rotation_euler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_rotation_mat"><code class="docutils literal notranslate"><span class="pre">Entity.set_rotation_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.set_scale"><code class="docutils literal notranslate"><span class="pre">Entity.set_scale()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity.update_blender_ref"><code class="docutils literal notranslate"><span class="pre">Entity.update_blender_ref()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.convert_to_entities"><code class="docutils literal notranslate"><span class="pre">convert_to_entities()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.convert_to_entity_subclass"><code class="docutils literal notranslate"><span class="pre">convert_to_entity_subclass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.create_empty"><code class="docutils literal notranslate"><span class="pre">create_empty()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.delete_multiple"><code class="docutils literal notranslate"><span class="pre">delete_multiple()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html">blenderproc.python.types.InertialUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial"><code class="docutils literal notranslate"><span class="pre">Inertial</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.get_inertia"><code class="docutils literal notranslate"><span class="pre">Inertial.get_inertia()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.get_mass"><code class="docutils literal notranslate"><span class="pre">Inertial.get_mass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.get_origin"><code class="docutils literal notranslate"><span class="pre">Inertial.get_origin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.hide"><code class="docutils literal notranslate"><span class="pre">Inertial.hide()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.set_inertia"><code class="docutils literal notranslate"><span class="pre">Inertial.set_inertia()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.set_mass"><code class="docutils literal notranslate"><span class="pre">Inertial.set_mass()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial.set_origin"><code class="docutils literal notranslate"><span class="pre">Inertial.set_origin()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.LightUtility.html">blenderproc.python.types.LightUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light"><code class="docutils literal notranslate"><span class="pre">Light</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.get_color"><code class="docutils literal notranslate"><span class="pre">Light.get_color()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.get_distance"><code class="docutils literal notranslate"><span class="pre">Light.get_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.get_energy"><code class="docutils literal notranslate"><span class="pre">Light.get_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.get_type"><code class="docutils literal notranslate"><span class="pre">Light.get_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.set_color"><code class="docutils literal notranslate"><span class="pre">Light.set_color()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.set_distance"><code class="docutils literal notranslate"><span class="pre">Light.set_distance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.set_energy"><code class="docutils literal notranslate"><span class="pre">Light.set_energy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.set_type"><code class="docutils literal notranslate"><span class="pre">Light.set_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light.setup_as_projector"><code class="docutils literal notranslate"><span class="pre">Light.setup_as_projector()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html">blenderproc.python.types.LinkUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link"><code class="docutils literal notranslate"><span class="pre">Link</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link._clip_value_from_constraint"><code class="docutils literal notranslate"><span class="pre">Link._clip_value_from_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link._determine_rotation_axis"><code class="docutils literal notranslate"><span class="pre">Link._determine_rotation_axis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link._set_fk_ik_mode"><code class="docutils literal notranslate"><span class="pre">Link._set_fk_ik_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link._set_rotation_euler"><code class="docutils literal notranslate"><span class="pre">Link._set_rotation_euler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.create_ik_bone_controller"><code class="docutils literal notranslate"><span class="pre">Link.create_ik_bone_controller()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_all_objs"><code class="docutils literal notranslate"><span class="pre">Link.get_all_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_collision_local2world_mats"><code class="docutils literal notranslate"><span class="pre">Link.get_collision_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_collisions"><code class="docutils literal notranslate"><span class="pre">Link.get_collisions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_fk_ik_mode"><code class="docutils literal notranslate"><span class="pre">Link.get_fk_ik_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_inertial"><code class="docutils literal notranslate"><span class="pre">Link.get_inertial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_inertial_local2world_mat"><code class="docutils literal notranslate"><span class="pre">Link.get_inertial_local2world_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_joint_rotation"><code class="docutils literal notranslate"><span class="pre">Link.get_joint_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_joint_type"><code class="docutils literal notranslate"><span class="pre">Link.get_joint_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_link_child"><code class="docutils literal notranslate"><span class="pre">Link.get_link_child()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_link_parent"><code class="docutils literal notranslate"><span class="pre">Link.get_link_parent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_visual_local2world_mats"><code class="docutils literal notranslate"><span class="pre">Link.get_visual_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.get_visuals"><code class="docutils literal notranslate"><span class="pre">Link.get_visuals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.hide"><code class="docutils literal notranslate"><span class="pre">Link.hide()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.mesh_as_trimesh"><code class="docutils literal notranslate"><span class="pre">Link.mesh_as_trimesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.parent_with_bone"><code class="docutils literal notranslate"><span class="pre">Link.parent_with_bone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_armature"><code class="docutils literal notranslate"><span class="pre">Link.set_armature()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_bone"><code class="docutils literal notranslate"><span class="pre">Link.set_bone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_collision_local2link_mats"><code class="docutils literal notranslate"><span class="pre">Link.set_collision_local2link_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_collisions"><code class="docutils literal notranslate"><span class="pre">Link.set_collisions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_fk_bone"><code class="docutils literal notranslate"><span class="pre">Link.set_fk_bone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_ik_bone"><code class="docutils literal notranslate"><span class="pre">Link.set_ik_bone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_ik_bone_constraint"><code class="docutils literal notranslate"><span class="pre">Link.set_ik_bone_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_ik_bone_controller"><code class="docutils literal notranslate"><span class="pre">Link.set_ik_bone_controller()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_inertial"><code class="docutils literal notranslate"><span class="pre">Link.set_inertial()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_inertial_local2link_mat"><code class="docutils literal notranslate"><span class="pre">Link.set_inertial_local2link_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_joint_type"><code class="docutils literal notranslate"><span class="pre">Link.set_joint_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_link2bone_mat"><code class="docutils literal notranslate"><span class="pre">Link.set_link2bone_mat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_link_child"><code class="docutils literal notranslate"><span class="pre">Link.set_link_child()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_link_parent"><code class="docutils literal notranslate"><span class="pre">Link.set_link_parent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_location"><code class="docutils literal notranslate"><span class="pre">Link.set_location()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_location_ik"><code class="docutils literal notranslate"><span class="pre">Link.set_location_ik()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_rotation_euler"><code class="docutils literal notranslate"><span class="pre">Link.set_rotation_euler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_rotation_euler_fk"><code class="docutils literal notranslate"><span class="pre">Link.set_rotation_euler_fk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_rotation_euler_ik"><code class="docutils literal notranslate"><span class="pre">Link.set_rotation_euler_ik()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_visual_local2link_mats"><code class="docutils literal notranslate"><span class="pre">Link.set_visual_local2link_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.set_visuals"><code class="docutils literal notranslate"><span class="pre">Link.set_visuals()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link.switch_fk_ik_mode"><code class="docutils literal notranslate"><span class="pre">Link.switch_fk_ik_mode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html">blenderproc.python.types.MaterialUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material"><code class="docutils literal notranslate"><span class="pre">Material</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.duplicate"><code class="docutils literal notranslate"><span class="pre">Material.duplicate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_node_connected_to_the_output_and_unlink_it"><code class="docutils literal notranslate"><span class="pre">Material.get_node_connected_to_the_output_and_unlink_it()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_created_in_func"><code class="docutils literal notranslate"><span class="pre">Material.get_nodes_created_in_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_nodes_with_type"><code class="docutils literal notranslate"><span class="pre">Material.get_nodes_with_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_principled_shader_value"><code class="docutils literal notranslate"><span class="pre">Material.get_principled_shader_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_the_one_node_with_type"><code class="docutils literal notranslate"><span class="pre">Material.get_the_one_node_with_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.get_users"><code class="docutils literal notranslate"><span class="pre">Material.get_users()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.infuse_material"><code class="docutils literal notranslate"><span class="pre">Material.infuse_material()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.infuse_texture"><code class="docutils literal notranslate"><span class="pre">Material.infuse_texture()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.insert_node_instead_existing_link"><code class="docutils literal notranslate"><span class="pre">Material.insert_node_instead_existing_link()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.link"><code class="docutils literal notranslate"><span class="pre">Material.link()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.make_emissive"><code class="docutils literal notranslate"><span class="pre">Material.make_emissive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.map_vertex_color"><code class="docutils literal notranslate"><span class="pre">Material.map_vertex_color()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.new_node"><code class="docutils literal notranslate"><span class="pre">Material.new_node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_emissive"><code class="docutils literal notranslate"><span class="pre">Material.remove_emissive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.remove_node"><code class="docutils literal notranslate"><span class="pre">Material.remove_node()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.set_displacement_from_principled_shader_value"><code class="docutils literal notranslate"><span class="pre">Material.set_displacement_from_principled_shader_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.set_principled_shader_value"><code class="docutils literal notranslate"><span class="pre">Material.set_principled_shader_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.unlink"><code class="docutils literal notranslate"><span class="pre">Material.unlink()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material.update_blender_ref"><code class="docutils literal notranslate"><span class="pre">Material.update_blender_ref()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html">blenderproc.python.types.MeshObjectUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="docutils literal notranslate"><span class="pre">MeshObject</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.add_displace_modifier"><code class="docutils literal notranslate"><span class="pre">MeshObject.add_displace_modifier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.add_material"><code class="docutils literal notranslate"><span class="pre">MeshObject.add_material()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.add_modifier"><code class="docutils literal notranslate"><span class="pre">MeshObject.add_modifier()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.add_uv_mapping"><code class="docutils literal notranslate"><span class="pre">MeshObject.add_uv_mapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.build_convex_decomposition_collision_shape"><code class="docutils literal notranslate"><span class="pre">MeshObject.build_convex_decomposition_collision_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.clear_materials"><code class="docutils literal notranslate"><span class="pre">MeshObject.clear_materials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.create_bvh_tree"><code class="docutils literal notranslate"><span class="pre">MeshObject.create_bvh_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.disable_rigidbody"><code class="docutils literal notranslate"><span class="pre">MeshObject.disable_rigidbody()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.duplicate"><code class="docutils literal notranslate"><span class="pre">MeshObject.duplicate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.edit_mode"><code class="docutils literal notranslate"><span class="pre">MeshObject.edit_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.enable_rigidbody"><code class="docutils literal notranslate"><span class="pre">MeshObject.enable_rigidbody()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_bound_box"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_bound_box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_bound_box_volume"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_bound_box_volume()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_materials"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_materials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_mesh"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_mesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_origin"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_origin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.get_rigidbody"><code class="docutils literal notranslate"><span class="pre">MeshObject.get_rigidbody()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.has_materials"><code class="docutils literal notranslate"><span class="pre">MeshObject.has_materials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.has_rigidbody_enabled"><code class="docutils literal notranslate"><span class="pre">MeshObject.has_rigidbody_enabled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.has_uv_mapping"><code class="docutils literal notranslate"><span class="pre">MeshObject.has_uv_mapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.hide"><code class="docutils literal notranslate"><span class="pre">MeshObject.hide()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.join_with_other_objects"><code class="docutils literal notranslate"><span class="pre">MeshObject.join_with_other_objects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.mesh_as_bmesh"><code class="docutils literal notranslate"><span class="pre">MeshObject.mesh_as_bmesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.mesh_as_trimesh"><code class="docutils literal notranslate"><span class="pre">MeshObject.mesh_as_trimesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.move_origin_to_bottom_mean_point"><code class="docutils literal notranslate"><span class="pre">MeshObject.move_origin_to_bottom_mean_point()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.new_material"><code class="docutils literal notranslate"><span class="pre">MeshObject.new_material()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.object_mode"><code class="docutils literal notranslate"><span class="pre">MeshObject.object_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.persist_transformation_into_mesh"><code class="docutils literal notranslate"><span class="pre">MeshObject.persist_transformation_into_mesh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.position_is_above_object"><code class="docutils literal notranslate"><span class="pre">MeshObject.position_is_above_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.ray_cast"><code class="docutils literal notranslate"><span class="pre">MeshObject.ray_cast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.replace_materials"><code class="docutils literal notranslate"><span class="pre">MeshObject.replace_materials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.scale_uv_coordinates"><code class="docutils literal notranslate"><span class="pre">MeshObject.scale_uv_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.set_material"><code class="docutils literal notranslate"><span class="pre">MeshObject.set_material()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.set_origin"><code class="docutils literal notranslate"><span class="pre">MeshObject.set_origin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.set_shading_mode"><code class="docutils literal notranslate"><span class="pre">MeshObject.set_shading_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject.update_from_bmesh"><code class="docutils literal notranslate"><span class="pre">MeshObject.update_from_bmesh()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.compute_poi"><code class="docutils literal notranslate"><span class="pre">compute_poi()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.convert_to_meshes"><code class="docutils literal notranslate"><span class="pre">convert_to_meshes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.create_bvh_tree_multi_objects"><code class="docutils literal notranslate"><span class="pre">create_bvh_tree_multi_objects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.create_from_blender_mesh"><code class="docutils literal notranslate"><span class="pre">create_from_blender_mesh()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.create_primitive"><code class="docutils literal notranslate"><span class="pre">create_primitive()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.create_with_empty_mesh"><code class="docutils literal notranslate"><span class="pre">create_with_empty_mesh()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.disable_all_rigid_bodies"><code class="docutils literal notranslate"><span class="pre">disable_all_rigid_bodies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.get_all_mesh_objects"><code class="docutils literal notranslate"><span class="pre">get_all_mesh_objects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.scene_ray_cast"><code class="docutils literal notranslate"><span class="pre">scene_ray_cast()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.StructUtility.html">blenderproc.python.types.StructUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct"><code class="docutils literal notranslate"><span class="pre">Struct</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.clear_all_cps"><code class="docutils literal notranslate"><span class="pre">Struct.clear_all_cps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.del_cp"><code class="docutils literal notranslate"><span class="pre">Struct.del_cp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.get_all_cps"><code class="docutils literal notranslate"><span class="pre">Struct.get_all_cps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.get_attr"><code class="docutils literal notranslate"><span class="pre">Struct.get_attr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.get_cp"><code class="docutils literal notranslate"><span class="pre">Struct.get_cp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.get_name"><code class="docutils literal notranslate"><span class="pre">Struct.get_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.has_cp"><code class="docutils literal notranslate"><span class="pre">Struct.has_cp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.is_valid"><code class="docutils literal notranslate"><span class="pre">Struct.is_valid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.set_cp"><code class="docutils literal notranslate"><span class="pre">Struct.set_cp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct.set_name"><code class="docutils literal notranslate"><span class="pre">Struct.set_name()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.StructUtilityFunctions.html">blenderproc.python.types.StructUtilityFunctions module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.StructUtilityFunctions.html#blenderproc.python.types.StructUtilityFunctions.get_instances"><code class="docutils literal notranslate"><span class="pre">get_instances()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html">blenderproc.python.types.URDFUtility module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject"><code class="docutils literal notranslate"><span class="pre">URDFObject</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_fk_ik_mode"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_fk_ik_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_ik_bone_constraint"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_ik_bone_constraint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_ik_bone_controller"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_ik_bone_controller()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_ik_bone_offset"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_ik_bone_offset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_ik_link"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_ik_link()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._set_keyframe"><code class="docutils literal notranslate"><span class="pre">URDFObject._set_keyframe()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject._switch_fk_ik_mode"><code class="docutils literal notranslate"><span class="pre">URDFObject._switch_fk_ik_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.create_ik_bone_controller"><code class="docutils literal notranslate"><span class="pre">URDFObject.create_ik_bone_controller()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_collision_local2world_mats"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_collision_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_collision_objs"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_collision_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_inertial_local2world_mats"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_inertial_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_inertial_objs"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_inertial_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_local2world_mats"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_urdf_objs"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_urdf_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_visual_local2world_mats"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_visual_local2world_mats()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_all_visual_objs"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_all_visual_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.get_links_with_revolute_joints"><code class="docutils literal notranslate"><span class="pre">URDFObject.get_links_with_revolute_joints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.has_reached_ik_pose"><code class="docutils literal notranslate"><span class="pre">URDFObject.has_reached_ik_pose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.hide"><code class="docutils literal notranslate"><span class="pre">URDFObject.hide()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.hide_links_and_collision_inertial_objs"><code class="docutils literal notranslate"><span class="pre">URDFObject.hide_links_and_collision_inertial_objs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.remove_link_by_index"><code class="docutils literal notranslate"><span class="pre">URDFObject.remove_link_by_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.set_ascending_category_ids"><code class="docutils literal notranslate"><span class="pre">URDFObject.set_ascending_category_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.set_location_ik"><code class="docutils literal notranslate"><span class="pre">URDFObject.set_location_ik()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.set_rotation_euler_fk"><code class="docutils literal notranslate"><span class="pre">URDFObject.set_rotation_euler_fk()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject.set_rotation_euler_ik"><code class="docutils literal notranslate"><span class="pre">URDFObject.set_rotation_euler_ik()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-blenderproc.python.types">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.python.types" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-blenderproc.python.types">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.python.types" title="Link to this heading"></a></h2>
+</section>
+</section>
 
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2021, DLR RMC
-
-    </p>
+    <p>&#169; Copyright 2023, DLR RMC.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

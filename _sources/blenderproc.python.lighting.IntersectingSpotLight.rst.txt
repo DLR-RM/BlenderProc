@@ -1,0 +1,8 @@
+blenderproc.python.lighting.IntersectingSpotLight module
+========================================================
+
+.. automodule:: blenderproc.python.lighting.IntersectingSpotLight
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

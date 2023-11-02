@@ -5,7 +5,9 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
+   blenderproc.python.lighting.IntersectingSpotLight
    blenderproc.python.lighting.SuncgLighting
    blenderproc.python.lighting.SurfaceLighting
 
@@ -13,6 +15,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.lighting
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

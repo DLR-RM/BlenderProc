@@ -1,106 +1,70 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>blenderproc.renderer package &mdash; BlenderProc 2.4.0 documentation</title>
-  
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blenderproc.renderer package &mdash; BlenderProc 2.6.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="index.html" class="icon icon-home"> BlenderProc
           
-
-          
+          <a href="index.html" class="icon icon-home">
+            BlenderProc
           </a>
-
-          
-            
-            
-          
-
-          
+              <div class="version">
+                2.6.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
-<ul class="compound-middle">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
 </ul>
-<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
-<ul class="compound-middle">
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
@@ -113,16 +77,18 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_random_trajectories/README.html">camera_random_trajectories</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/kinect_azure_noise/README.html">kinect_azure_noise</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,13 +100,14 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
@@ -154,6 +121,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
@@ -169,8 +137,20 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Api</span></p>
+<p class="caption" role="heading"><span class="caption-text">Entities (bproc.types)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Api</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
@@ -187,125 +167,86 @@
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Internal</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
-</ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">Internal</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk._Disk">_Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3._UniformSO3">_UniformSO3</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility._KeyFrameState">_KeyFrameState</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter._Filter">_Filter</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting._SuncgLighting">_SuncgLighting</a></li>
 </ul>
-<ul class="compound-last">
-<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader._AMASSLoader">_AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader._BlendLoader">_BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader._BopLoader">_BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader._CCMaterialLoader">_CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader._Front3DLoader">_Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader._IKEALoader">_IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader._Pix3DLoader">_Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader._SceneNetLoader">_SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
@@ -324,27 +265,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
@@ -352,17 +281,11 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
@@ -380,24 +303,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
@@ -409,515 +323,486 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer._ObjectReplacer">_ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler._OnSurfaceSampler">_OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation._PhysicsSimulation">_PhysicsSimulation</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility">_PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching._StereoGlobalMatching">_StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility._FlowRendererUtility">_FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility._NOCSRendererUtility">_NOCSRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility">_BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility._CocoWriterUtility">_CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility._GifWriterUtility">_GifWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility._WriterUtility">_WriterUtility</a></li>
+</ul>
+</li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">BlenderProc</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html">Docs</a> &raquo;</li>
-        
-      <li>blenderproc.renderer package</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">blenderproc.renderer package</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="_sources/blenderproc.api.renderer.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="blenderproc-renderer-package">
-<h1>blenderproc.renderer package<a class="headerlink" href="#blenderproc-renderer-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-blenderproc.renderer">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.renderer" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="blenderproc.renderer.enable_depth_output">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">enable_depth_output</code><span class="sig-paren">(</span><em>activate_antialiasing</em>, <em>output_dir=None</em>, <em>file_prefix='depth_'</em>, <em>output_key='depth'</em>, <em>antialiasing_distance_max=None</em>, <em>convert_to_distance=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_depth_output" title="Permalink to this definition">¶</a></dt>
+             
+  <section id="blenderproc-renderer-package">
+<h1>blenderproc.renderer package<a class="headerlink" href="#blenderproc-renderer-package" title="Link to this heading"></a></h1>
+<section id="module-blenderproc.renderer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-blenderproc.renderer" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_depth_output">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_depth_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activate_antialiasing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'depth_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'depth'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antialiasing_distance_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_to_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_depth_output" title="Link to this definition"></a></dt>
 <dd><p>Enables writing depth images.</p>
 <p>Depth images will be written in the form of .exr files during the next rendering.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>activate_antialiasing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True the final image will be antialiased</li>
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the depth output.</li>
-<li><strong>antialiasing_distance_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Max distance in which the distance is measured.                                       Only if activate_antialiasing is True.</li>
-<li><strong>convert_to_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is true, while loading a postprocessing step is executed to convert this depth                                 image to a distance image</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>activate_antialiasing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If this is True the final image will be antialiased</p></li>
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write files to, if this is None the temporary directory is used.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the files.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the depth output.</p></li>
+<li><p><strong>antialiasing_distance_max</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Max distance in which the distance is measured.                                       Only if activate_antialiasing is True.</p></li>
+<li><p><strong>convert_to_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If this is true, while loading a postprocessing step is executed to convert this depth                                 image to a distance image</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.enable_diffuse_color_output">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">enable_diffuse_color_output</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>file_prefix='diffuse_'</em>, <em>output_key='diffuse'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_diffuse_color_output" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_diffuse_color_output">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_diffuse_color_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'diffuse_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'diffuse'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_diffuse_color_output" title="Link to this definition"></a></dt>
 <dd><p>Enables writing diffuse color (albedo) images.</p>
 <p>Diffuse color images will be written in the form of .png files during the next rendering.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the diffuse color output.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write files to, if this is None the temporary directory is used.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the files.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the diffuse color output.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.enable_distance_output">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">enable_distance_output</code><span class="sig-paren">(</span><em>activate_antialiasing</em>, <em>output_dir=None</em>, <em>file_prefix='distance_'</em>, <em>output_key='distance'</em>, <em>antialiasing_distance_max=None</em>, <em>convert_to_depth=False</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_distance_output" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_distance_output">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_distance_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activate_antialiasing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antialiasing_distance_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_to_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_distance_output" title="Link to this definition"></a></dt>
 <dd><p>Enables writing distance images.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>activate_antialiasing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is True the final image will be antialiased</li>
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the distance output.</li>
-<li><strong>antialiasing_distance_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – Max distance in which the distance is measured. Resolution decreases antiproportionally.                             Only if activate_antialiasing is True.</li>
-<li><strong>convert_to_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If this is true, while loading a postprocessing step is executed to convert this distance                             image to a depth image</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>activate_antialiasing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If this is True the final image will be anti-aliased</p></li>
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write files to, if this is None the temporary directory is used.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the files.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the distance output.</p></li>
+<li><p><strong>antialiasing_distance_max</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – Max distance in which the distance is measured. Resolution decreases
+antiproportionally. Only if activate_antialiasing is True.</p></li>
+<li><p><strong>convert_to_depth</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If this is true, while loading a postprocessing step is executed to convert this distance
+image to a depth image</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.enable_motion_blur">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">enable_motion_blur</code><span class="sig-paren">(</span><em>motion_blur_length=0.5</em>, <em>rolling_shutter_type='NONE'</em>, <em>rolling_shutter_length=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_motion_blur" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_experimental_features">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_experimental_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_experimental_features" title="Link to this definition"></a></dt>
+<dd><p>Enables experimental cycles features.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_motion_blur">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_motion_blur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motion_blur_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolling_shutter_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NONE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolling_shutter_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_motion_blur" title="Link to this definition"></a></dt>
 <dd><p>Enables motion blur and sets rolling shutter.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>motion_blur_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Time taken in frames between shutter open and close.</li>
-<li><strong>rolling_shutter_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Type of rolling shutter effect. If “NONE”, rolling shutter is disabled.</li>
-<li><strong>rolling_shutter_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Scanline “exposure” time for the rolling shutter effect.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>motion_blur_length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Time taken in frames between shutter open and close.</p></li>
+<li><p><strong>rolling_shutter_type</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Type of rolling shutter effect. If “NONE”, rolling shutter is disabled.</p></li>
+<li><p><strong>rolling_shutter_length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Scanline “exposure” time for the rolling shutter effect.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.enable_normals_output">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">enable_normals_output</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>file_prefix='normals_'</em>, <em>output_key='normals'</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_normals_output" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_normals_output">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_normals_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normals_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normals'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_normals_output" title="Link to this definition"></a></dt>
 <dd><p>Enables writing normal images.</p>
 <p>Normal images will be written in the form of .exr files during the next rendering.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the files.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the normal output.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write files to, if this is None the temporary directory is used.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the files.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the normal output.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.map_file_format_to_file_ending">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">map_file_format_to_file_ending</code><span class="sig-paren">(</span><em>file_format</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.map_file_format_to_file_ending" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.enable_segmentation_output">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">enable_segmentation_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">map_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'category_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_alpha_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmap_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmap'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.enable_segmentation_output" title="Link to this definition"></a></dt>
+<dd><p>Enables segmentation output by certain keys.</p>
+<p>The key instances is used, if a mapping of every object in the scene to an integer is requested. These integers
+are assigned randomly and do not follow any system. They are consisted for one rendering call.</p>
+<p>By default, the custom property <cite>category_id</cite> is used. It has to be set for every visible object in the scene,
+including the background (world). One can provide a <cite>default_value</cite> for it to avoid errors: <cite>{“category_id”: 0}</cite>.</p>
+<p>Map by keys can be all custom properties or the attributes of an object such as <cite>location</cite> or <cite>name</cite>. If the value
+can not be stored in the image itself an instance image has to be generated. The output then will contain a
+dictionary mapping the instance ids to the attributes of the objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>map_by</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – Map by keys, either a single str or a list of str.</p></li>
+<li><p><strong>default_values</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]) – A dictionary offering a default value for objects which do not provide a value
+for a certain key</p></li>
+<li><p><strong>pass_alpha_threshold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – This alpha threshold is used to decide which object to use a low value means that an
+object has to be nearly completely transparent to be considered transparent, while
+materials such as frosted class with an alpha value of 0.5 would be considered opaque</p></li>
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The temporary output dir in which the resulting .exr images are saved</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the files.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the segmentation output.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.map_file_format_to_file_ending">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">map_file_format_to_file_ending</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.map_file_format_to_file_ending" title="Link to this definition"></a></dt>
 <dd><p>Returns the files endings for a given blender output format.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The blender file format.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The file ending.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_format</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The blender file format.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The file ending.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.render">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">render</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>file_prefix='rgb_'</em>, <em>output_key='colors'</em>, <em>load_keys=None</em>, <em>return_data=True</em>, <em>keys_with_alpha_channel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.render">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rgb_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'colors'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_with_alpha_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render" title="Link to this definition"></a></dt>
 <dd><p>Render all frames.</p>
 <p>This will go through all frames from scene.frame_start to scene.frame_end and render each of them.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write files to, if this is None the temporary directory is used.                        The temporary directory is usually in the shared memory (only true for linux).</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the images.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The key to use for registering the output.</li>
-<li><strong>load_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Set of output keys to load when available</li>
-<li><strong>return_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to load and return generated data. Backwards compatibility to config-based pipeline.</li>
-<li><strong>keys_with_alpha_channel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Set" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – A set containing all keys whose alpha channels should be loaded.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write files to, if this is None the temporary directory is used.                        The temporary directory is usually in the shared memory (only true for linux).</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the images.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The key to use for registering the output.</p></li>
+<li><p><strong>load_keys</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – Set of output keys to load when available</p></li>
+<li><p><strong>return_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to load and return generated data. Backwards compatibility to config-based pipeline.</p></li>
+<li><p><strong>keys_with_alpha_channel</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Set</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – A set containing all keys whose alpha channels should be loaded.</p></li>
+<li><p><strong>verbose</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, more details about the rendering process are printed.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict of lists of raw renderer output. Keys can be ‘distance’, ‘colors’, ‘normals’</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of lists of raw renderer output. Keys can be ‘distance’, ‘colors’, ‘normals’</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.render_nocs">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">render_nocs</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>file_prefix='nocs_'</em>, <em>output_key='nocs'</em>, <em>return_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_nocs" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.render_nocs">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">render_nocs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nocs_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nocs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_nocs" title="Link to this definition"></a></dt>
 <dd><p>Renders the Normalized Object Coordinate Space (NOCS).</p>
 <p>Colors each object based on its local coordinates.
 The coordinates [-1, 1] are mapped into the [0, 1] colorspace.
 It is therefore, recommended that all local vertex coordinates are in range [-1, 1].
 The world background is rendered transparent.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write images to. If None is given, the temp dir is used.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the images.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the output.</li>
-<li><strong>return_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to load and return generated data.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write images to. If None is given, the temp dir is used.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the images.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the output.</p></li>
+<li><p><strong>return_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to load and return generated data.</p></li>
+<li><p><strong>verbose</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, more details about the rendering process are printed.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict containing one entry “nocs” which points to the list of rendered frames.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dict containing one entry “nocs” which points to the list of rendered frames.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.render_optical_flow">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">render_optical_flow</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>temp_dir=None</em>, <em>get_forward_flow=True</em>, <em>get_backward_flow=True</em>, <em>blender_image_coordinate_style=False</em>, <em>forward_flow_output_file_prefix='forward_flow_'</em>, <em>forward_flow_output_key='forward_flow'</em>, <em>backward_flow_output_file_prefix='backward_flow_'</em>, <em>backward_flow_output_key='backward_flow'</em>, <em>return_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_optical_flow" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.render_optical_flow">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">render_optical_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_forward_flow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_backward_flow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blender_image_coordinate_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward_flow_output_file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward_flow_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward_flow_output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward_flow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backward_flow_output_file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'backward_flow_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backward_flow_output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'backward_flow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_optical_flow" title="Link to this definition"></a></dt>
 <dd><p>Renders the optical flow (forward and backward) for all frames.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write images to.</li>
-<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write intermediate data to.</li>
-<li><strong>get_forward_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to render forward optical flow.</li>
-<li><strong>get_backward_flow</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to render backward optical flow.</li>
-<li><strong>blender_image_coordinate_style</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to specify the image coordinate system at the bottom left (blender default; True) or top left (standard convention; False).</li>
-<li><strong>forward_flow_output_file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The file prefix that should be used when writing forward flow to a file.</li>
-<li><strong>forward_flow_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key which should be used for storing forward optical flow values.</li>
-<li><strong>backward_flow_output_file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The file prefix that should be used when writing backward flow to a file.</li>
-<li><strong>backward_flow_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key which should be used for storing backward optical flow values.</li>
-<li><strong>return_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether to load and return generated data. Backwards compatibility to config-based pipeline.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write images to.</p></li>
+<li><p><strong>temp_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write intermediate data to.</p></li>
+<li><p><strong>get_forward_flow</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to render forward optical flow.</p></li>
+<li><p><strong>get_backward_flow</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to render backward optical flow.</p></li>
+<li><p><strong>blender_image_coordinate_style</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to specify the image coordinate system at the bottom left
+(blender default; True) or top left (standard convention; False).</p></li>
+<li><p><strong>forward_flow_output_file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file prefix that should be used when writing forward flow to a file.</p></li>
+<li><p><strong>forward_flow_output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key which should be used for storing forward optical flow values.</p></li>
+<li><p><strong>backward_flow_output_file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The file prefix that should be used when writing backward flow to a file.</p></li>
+<li><p><strong>backward_flow_output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key which should be used for storing backward optical flow values.</p></li>
+<li><p><strong>return_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to load and return generated data. Backwards compatibility to config-based pipeline.</p></li>
+<li><p><strong>verbose</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, more details about the rendering process are printed.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict of lists of raw renderer outputs. Keys can be ‘forward_flow’, ‘backward_flow’</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of lists of raw renderer outputs. Keys can be ‘forward_flow’, ‘backward_flow’</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.render_segmap">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">render_segmap</code><span class="sig-paren">(</span><em>output_dir=None</em>, <em>temp_dir=None</em>, <em>map_by='class'</em>, <em>default_values=None</em>, <em>file_prefix='segmap_'</em>, <em>output_key='segmap'</em>, <em>segcolormap_output_file_prefix='instance_attribute_map_'</em>, <em>segcolormap_output_key='segcolormap'</em>, <em>use_alpha_channel=False</em>, <em>render_colorspace_size_per_dimension=2048</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_segmap" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.render_segmap">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">render_segmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">map_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'class'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmap_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segcolormap_output_file_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'instance_attribute_map_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segcolormap_output_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segcolormap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_alpha_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_colorspace_size_per_dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2048</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.render_segmap" title="Link to this definition"></a></dt>
 <dd><p>Renders segmentation maps for all frames</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write images to.</li>
-<li><strong>temp_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The directory to write intermediate data to.</li>
-<li><strong>map_by</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – The attributes to be used for color mapping.</li>
-<li><strong>default_values</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]) – The default values used for the keys used in attributes, if None is {“class”: 0}.</li>
-<li><strong>file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the images.</li>
-<li><strong>output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the output.</li>
-<li><strong>segcolormap_output_file_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The prefix to use for writing the segmentation-color map csv.</li>
-<li><strong>segcolormap_output_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The key to use for registering the segmentation-color map output.</li>
-<li><strong>use_alpha_channel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If true, the alpha channel stored in .png textures is used.</li>
-<li><strong>render_colorspace_size_per_dimension</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – As we use float16 for storing the rendering, the interval of                                                  integers which can be precisely stored is [-2048, 2048]. As                                                  blender does not allow negative values for colors, we use                                                  [0, 2048] ** 3 as our color space which allows ~8 billion                                                  different colors/objects. This should be enough.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write images to.</p></li>
+<li><p><strong>temp_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The directory to write intermediate data to.</p></li>
+<li><p><strong>map_by</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – The attributes to be used for color mapping.</p></li>
+<li><p><strong>default_values</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]) – The default values used for the keys used in attributes, if None is {“class”: 0}.</p></li>
+<li><p><strong>file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the images.</p></li>
+<li><p><strong>output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the output.</p></li>
+<li><p><strong>segcolormap_output_file_prefix</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The prefix to use for writing the segmentation-color map csv.</p></li>
+<li><p><strong>segcolormap_output_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The key to use for registering the segmentation-color map output.</p></li>
+<li><p><strong>use_alpha_channel</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true, the alpha channel stored in .png textures is used.</p></li>
+<li><p><strong>render_colorspace_size_per_dimension</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – As we use float16 for storing the rendering, the interval of                                                  integers which can be precisely stored is [-2048, 2048]. As                                                  blender does not allow negative values for colors, we use                                                  [0, 2048] ** 3 as our color space which allows ~8 billion                                                  different colors/objects. This should be enough.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict of lists of segmaps and (for instance segmentation) segcolormaps</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of lists of segmaps and (for instance segmentation) segcolormaps</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_cpu_threads">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_cpu_threads</code><span class="sig-paren">(</span><em>num_threads</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_cpu_threads" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_cpu_threads">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_cpu_threads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_threads</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_cpu_threads" title="Link to this definition"></a></dt>
 <dd><p>Sets the number of CPU cores to use simultaneously while rendering.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_threads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of threads to use. If 0 is given the number is automatically detected based on the cpu cores.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>num_threads</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of threads to use. If 0 is given the number is automatically detected based
+on the cpu cores.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_denoiser">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_denoiser</code><span class="sig-paren">(</span><em>denoiser</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_denoiser" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_denoiser">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_denoiser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">denoiser</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_denoiser" title="Link to this definition"></a></dt>
 <dd><p>Enables the specified denoiser.</p>
 <p>Automatically disables all previously activated denoiser.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>denoiser</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “OPTIX” and None.                      If None is given, then no denoiser will be active.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>denoiser</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The name of the denoiser which should be enabled. Options are “INTEL”, “OPTIX” and None.                      If None is given, then no denoiser will be active.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_light_bounces">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_light_bounces</code><span class="sig-paren">(</span><em>diffuse_bounces=None</em>, <em>glossy_bounces=None</em>, <em>ao_bounces_render=None</em>, <em>max_bounces=None</em>, <em>transmission_bounces=None</em>, <em>transparent_max_bounces=None</em>, <em>volume_bounces=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_light_bounces" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_light_bounces">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_light_bounces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diffuse_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glossy_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ao_bounces_render</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transmission_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparent_max_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_bounces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_light_bounces" title="Link to this definition"></a></dt>
 <dd><p>Sets the number of light bounces that should be used by the raytracing renderer.
 Default values are defined in DefaultConfig.py</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>diffuse_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Maximum number of diffuse reflection bounces, bounded by total maximum.</li>
-<li><strong>glossy_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Maximum number of glossy reflection bounces, bounded by total maximum.</li>
-<li><strong>ao_bounces_render</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Approximate indirect light with background tinted ambient occlusion at the                               specified bounce, 0 disables this feature.</li>
-<li><strong>max_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Total maximum number of bounces.</li>
-<li><strong>transmission_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Maximum number of transmission bounces, bounded by total maximum.</li>
-<li><strong>transparent_max_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Maximum number of transparent bounces.</li>
-<li><strong>volume_bounces</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – Maximum number of volumetric scattering events.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>diffuse_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Maximum number of diffuse reflection bounces, bounded by total maximum.</p></li>
+<li><p><strong>glossy_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Maximum number of glossy reflection bounces, bounded by total maximum.</p></li>
+<li><p><strong>ao_bounces_render</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Approximate indirect light with background tinted ambient occlusion at the                               specified bounce, 0 disables this feature.</p></li>
+<li><p><strong>max_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Total maximum number of bounces.</p></li>
+<li><p><strong>transmission_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Maximum number of transmission bounces, bounded by total maximum.</p></li>
+<li><p><strong>transparent_max_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Maximum number of transparent bounces.</p></li>
+<li><p><strong>volume_bounces</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Maximum number of volumetric scattering events.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_max_amount_of_samples">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_max_amount_of_samples</code><span class="sig-paren">(</span><em>samples</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_max_amount_of_samples" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_max_amount_of_samples">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_max_amount_of_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_max_amount_of_samples" title="Link to this definition"></a></dt>
 <dd><p>Sets the maximum number of samples to render for each pixel.
 This maximum amount is usually not reached if the noise threshold is low enough.
 If the noise threshold was set to 0, then only the maximum number of samples is used (We do not recommend this).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum number of samples per pixel</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>samples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The maximum number of samples per pixel</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_noise_threshold">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_noise_threshold</code><span class="sig-paren">(</span><em>noise_threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_noise_threshold" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_noise_threshold">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_noise_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_threshold</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_noise_threshold" title="Link to this definition"></a></dt>
 <dd><p>Configures the adaptive sampling, the noise threshold is typically between 0.1 and 0.001.
 Adaptive sampling automatically decreases the number of samples per pixel based on estimated level of noise.</p>
 <p>We do not recommend setting the noise threshold value to zero and therefore turning off the adaptive sampling.</p>
 <p>For more information see the official documentation:
 <a class="reference external" href="https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling">https://docs.blender.org/manual/en/latest/render/cycles/render_settings/sampling.html#adaptive-sampling</a></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>noise_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled and only the
-max amount of samples is used.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>noise_threshold</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Noise level to stop sampling at. If 0 is given, adaptive sampling is disabled and only the
+max amount of samples is used.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_output_format">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_output_format</code><span class="sig-paren">(</span><em>file_format=None</em>, <em>color_depth=None</em>, <em>enable_transparency=None</em>, <em>jpg_quality=None</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_output_format" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_output_format">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_output_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_transparency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jpg_quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_output_format" title="Link to this definition"></a></dt>
 <dd><p>Sets the output format to use for rendering. Default values defined in DefaultConfig.py.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>file_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The file format to use, e.q. “PNG”, “JPEG” or “OPEN_EXR”.</li>
-<li><strong>color_depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The color depth.</li>
-<li><strong>enable_transparency</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]) – If true, the output will contain a alpha channel and the background will be set transparent.</li>
-<li><strong>jpg_quality</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The quality to use, if file format is set to “JPEG”.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_format</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The file format to use, e.q. “PNG”, “JPEG” or “OPEN_EXR”.</p></li>
+<li><p><strong>color_depth</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – The color depth.</p></li>
+<li><p><strong>enable_transparency</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]) – If true, the output will contain a alpha channel and the background will be
+set transparent.</p></li>
+<li><p><strong>jpg_quality</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – The quality to use, if file format is set to “JPEG”.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_simplify_subdivision_render">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_simplify_subdivision_render</code><span class="sig-paren">(</span><em>simplify_subdivision_render</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_simplify_subdivision_render" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_render_devices">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_render_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_only_cpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_gpu_device_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_gpu_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_render_devices" title="Link to this definition"></a></dt>
+<dd><p>Configures the devices to use for rendering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>use_only_cpu</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, only the cpu is used for rendering.</p></li>
+<li><p><strong>desired_gpu_device_type</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – One or multiple GPU device types to consider. If multiple are given,
+the first available is used. Possible choices are [“OPTIX”, “CUDA”,
+“METAL”, “HIP”]. Default is [“OPTIX”, “CUDA”, “HIP”] on linux/windows and
+[“METAL”] on supported Mac devices.</p></li>
+<li><p><strong>desired_gpu_ids</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – One or multiple GPU ids to specifically use. If none is given, all suitable GPUs are used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_simplify_subdivision_render">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_simplify_subdivision_render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simplify_subdivision_render</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_simplify_subdivision_render" title="Link to this definition"></a></dt>
 <dd><p>Sets global maximum subdivision level during rendering to speedup rendering.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>simplify_subdivision_render</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The maximum subdivision level. If 0 is given, simplification of scene is disabled.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>simplify_subdivision_render</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The maximum subdivision level. If 0 is given, simplification of scene
+is disabled.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.set_world_background">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">set_world_background</code><span class="sig-paren">(</span><em>color</em>, <em>strength=1</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_world_background" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.set_world_background">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">set_world_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.set_world_background" title="Link to this definition"></a></dt>
 <dd><p>Sets the color of blenders world background</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – A three dimensional list specifying the new color in floats.</li>
-<li><strong>strength</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The strength of the emitted background light.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – A three-dimensional list specifying the new color in floats.</p></li>
+<li><p><strong>strength</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The strength of the emitted background light.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="blenderproc.renderer.toggle_stereo">
-<code class="descclassname">blenderproc.renderer.</code><code class="descname">toggle_stereo</code><span class="sig-paren">(</span><em>enable</em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.toggle_stereo" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.renderer.toggle_stereo">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.renderer.</span></span><span class="sig-name descname"><span class="pre">toggle_stereo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#blenderproc.renderer.toggle_stereo" title="Link to this definition"></a></dt>
 <dd><p>Enables/Disables stereoscopy.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>enable</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – True, if stereoscopy should be enabled.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>enable</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – True, if stereoscopy should be enabled.</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2021, DLR RMC
-
-    </p>
+    <p>&#169; Copyright 2023, DLR RMC.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

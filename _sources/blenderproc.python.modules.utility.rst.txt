@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.utility.Config
    blenderproc.python.modules.utility.ConfigParser
@@ -15,6 +16,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.utility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

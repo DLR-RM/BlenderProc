@@ -2,6 +2,7 @@ blenderproc.python.loader.ShapeNetLoader module
 ===============================================
 
 .. automodule:: blenderproc.python.loader.ShapeNetLoader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

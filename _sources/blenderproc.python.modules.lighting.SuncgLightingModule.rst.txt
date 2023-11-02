@@ -2,6 +2,7 @@ blenderproc.python.modules.lighting.SuncgLightingModule module
 ==============================================================
 
 .. automodule:: blenderproc.python.modules.lighting.SuncgLightingModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

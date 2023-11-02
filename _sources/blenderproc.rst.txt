@@ -5,16 +5,17 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    blenderproc.api
-    blenderproc.python
+   blenderproc.api
+   blenderproc.python
 
 Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
-   blenderproc.__main__
    blenderproc.command_line
    blenderproc.version
 
@@ -22,6 +23,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

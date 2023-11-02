@@ -5,10 +5,12 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.sampler.Disk
    blenderproc.python.sampler.Front3DPointInRoomSampler
    blenderproc.python.sampler.PartSphere
+   blenderproc.python.sampler.RandomWalk
    blenderproc.python.sampler.ReplicaPointInRoomSampler
    blenderproc.python.sampler.Shell
    blenderproc.python.sampler.Sphere
@@ -20,6 +22,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.sampler
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.constructor.BasicEmptyInitializer
    blenderproc.python.modules.constructor.BasicMeshInitializer
@@ -15,6 +16,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.constructor
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

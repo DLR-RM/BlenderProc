@@ -2,6 +2,7 @@ blenderproc.python.types.MaterialUtility module
 ===============================================
 
 .. automodule:: blenderproc.python.types.MaterialUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

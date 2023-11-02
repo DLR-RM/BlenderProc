@@ -2,6 +2,7 @@ blenderproc.python.modules.loader.HavenMaterialLoaderModule module
 ==================================================================
 
 .. automodule:: blenderproc.python.modules.loader.HavenMaterialLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -2,6 +2,7 @@ blenderproc.python.loader.ObjectLoader module
 =============================================
 
 .. automodule:: blenderproc.python.loader.ObjectLoader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

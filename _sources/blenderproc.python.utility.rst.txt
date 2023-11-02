@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.utility.BlenderUtility
    blenderproc.python.utility.CollisionUtility
@@ -21,6 +22,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.utility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

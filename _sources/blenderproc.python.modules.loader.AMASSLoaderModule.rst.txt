@@ -2,6 +2,7 @@ blenderproc.python.modules.loader.AMASSLoaderModule module
 ==========================================================
 
 .. automodule:: blenderproc.python.modules.loader.AMASSLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

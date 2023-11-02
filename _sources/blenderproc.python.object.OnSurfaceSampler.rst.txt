@@ -2,6 +2,7 @@ blenderproc.python.object.OnSurfaceSampler module
 =================================================
 
 .. automodule:: blenderproc.python.object.OnSurfaceSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

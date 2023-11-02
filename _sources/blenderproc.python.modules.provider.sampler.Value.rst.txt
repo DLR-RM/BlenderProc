@@ -2,6 +2,7 @@ blenderproc.python.modules.provider.sampler.Value module
 ========================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.Value
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

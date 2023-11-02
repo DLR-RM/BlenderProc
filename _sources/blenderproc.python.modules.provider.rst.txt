@@ -5,14 +5,16 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    blenderproc.python.modules.provider.getter
-    blenderproc.python.modules.provider.sampler
+   blenderproc.python.modules.provider.getter
+   blenderproc.python.modules.provider.sampler
 
 Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.provider
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

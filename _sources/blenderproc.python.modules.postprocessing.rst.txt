@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.postprocessing.Dist2Depth
    blenderproc.python.modules.postprocessing.LensDistortion
@@ -16,6 +17,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.postprocessing
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

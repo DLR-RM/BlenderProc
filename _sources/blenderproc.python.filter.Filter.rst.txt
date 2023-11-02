@@ -2,6 +2,7 @@ blenderproc.python.filter.Filter module
 =======================================
 
 .. automodule:: blenderproc.python.filter.Filter
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

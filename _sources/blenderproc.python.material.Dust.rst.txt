@@ -2,6 +2,7 @@ blenderproc.python.material.Dust module
 =======================================
 
 .. automodule:: blenderproc.python.material.Dust
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

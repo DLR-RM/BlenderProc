@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.camera.CameraUtility
    blenderproc.python.camera.CameraValidation
@@ -14,6 +15,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.camera
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

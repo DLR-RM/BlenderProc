@@ -2,6 +2,7 @@ blenderproc.python.utility.CollisionUtility module
 ==================================================
 
 .. automodule:: blenderproc.python.utility.CollisionUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

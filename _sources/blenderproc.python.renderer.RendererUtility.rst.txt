@@ -2,6 +2,7 @@ blenderproc.python.renderer.RendererUtility module
 ==================================================
 
 .. automodule:: blenderproc.python.renderer.RendererUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

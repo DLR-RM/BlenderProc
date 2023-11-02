@@ -2,6 +2,7 @@ blenderproc.python.camera.CameraValidation module
 =================================================
 
 .. automodule:: blenderproc.python.camera.CameraValidation
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.camera.CameraInterface
    blenderproc.python.modules.camera.CameraLoader
@@ -17,6 +18,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.camera
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

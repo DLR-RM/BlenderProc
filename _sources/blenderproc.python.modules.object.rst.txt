@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.object.CalibrationboardSampler
    blenderproc.python.modules.object.FloorExtractorModule
@@ -18,6 +19,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.object
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

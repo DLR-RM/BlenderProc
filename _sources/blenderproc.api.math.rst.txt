@@ -5,7 +5,8 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.math
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :imported-members:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :imported-members:
+   :private-members:

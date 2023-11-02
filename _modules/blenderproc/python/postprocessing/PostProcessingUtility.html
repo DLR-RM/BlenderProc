@@ -1,106 +1,69 @@
-
-
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>blenderproc.python.postprocessing.PostProcessingUtility &mdash; BlenderProc 2.6.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>blenderproc.python.postprocessing.PostProcessingUtility &mdash; BlenderProc 2.4.0 documentation</title>
-  
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
           
-
-          
+          <a href="../../../../index.html" class="icon icon-home">
+            BlenderProc
           </a>
-
-          
-            
-            
-          
-
-          
+              <div class="version">
+                2.6.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <div class="toctree-wrapper compound">
-<p class="compound-first caption"><span class="compound-first caption-text">Tutorials</span></p>
-<ul class="compound-middle">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/loader.html">Loading and manipulating objects</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/camera.html">Configuring the camera</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/renderer.html">Rendering the scene</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/writer.html">Writing the results to file</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/key_frames.html">How key frames work</a></li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="docs/tutorials/physics.html">Positioning objects via the physics simulator</a></li>
 </ul>
-<p class="compound-middle caption"><span class="compound-middle caption-text">Examples</span></p>
-<ul class="compound-middle">
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
@@ -113,16 +76,18 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_random_trajectories/README.html">camera_random_trajectories</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/gif_animation/README.html">gif_animation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/kinect_azure_noise/README.html">kinect_azure_noise</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/lens_distortion/README.html">lens_distortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
@@ -134,13 +99,14 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching_with_projector/README.html">stereo_matching_with_projector</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/urdf_loading_and_manipulation/README.html">urdf_loading_and_manipulation</a></li>
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
+<ul>
 <li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
@@ -154,6 +120,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
@@ -169,8 +136,20 @@
 </ul>
 </li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Api</span></p>
+<p class="caption" role="heading"><span class="caption-text">Entities (bproc.types)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Api</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
@@ -187,125 +166,86 @@
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
 </ul>
-<ul class="compound-middle">
-<p class="caption"><span class="caption-text">Internal</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
-<li class="toctree-l2 current"><a class="reference external" href="#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility.NOCSRendererUtility">NOCSRendererUtility</a></li>
-</ul>
-</li>
+<p class="caption" role="heading"><span class="caption-text">Internal</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk._Disk">_Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3._UniformSO3">_UniformSO3</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.ArmatureUtility.html#blenderproc.python.types.ArmatureUtility.Armature">Armature</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.URDFUtility.html#blenderproc.python.types.URDFUtility.URDFObject">URDFObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.InertialUtility.html#blenderproc.python.types.InertialUtility.Inertial">Inertial</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LinkUtility.html#blenderproc.python.types.LinkUtility.Link">Link</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility._KeyFrameState">_KeyFrameState</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility.GifWriterUtility">GifWriterUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter._Filter">_Filter</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting._SuncgLighting">_SuncgLighting</a></li>
 </ul>
-<ul class="compound-last">
-<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader._AMASSLoader">_AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader._BlendLoader">_BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader._BopLoader">_BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader._CCMaterialLoader">_CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader._Front3DLoader">_Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader._IKEALoader">_IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader._Pix3DLoader">_Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader._SceneNetLoader">_SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
@@ -324,27 +264,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
@@ -352,17 +280,11 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
@@ -380,24 +302,15 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
@@ -409,79 +322,81 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FaceSlicer.html#blenderproc.python.object.FaceSlicer.FaceSlicer">FaceSlicer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer._ObjectReplacer">_ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler._OnSurfaceSampler">_OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation._PhysicsSimulation">_PhysicsSimulation</a></li>
 </ul>
-</div>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2 current"><a class="reference external" href="#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility">_PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching._StereoGlobalMatching">_StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility._FlowRendererUtility">_FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.NOCSRendererUtility.html#blenderproc.python.renderer.NOCSRendererUtility._NOCSRendererUtility">_NOCSRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility">_BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility._CocoWriterUtility">_CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.GifWriterUtility.html#blenderproc.python.writer.GifWriterUtility._GifWriterUtility">_GifWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility._WriterUtility">_WriterUtility</a></li>
+</ul>
+</li>
+</ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">BlenderProc</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="../../../index.html">Module code</a> &raquo;</li>
-        
-      <li>blenderproc.python.postprocessing.PostProcessingUtility</li>
-    
-    
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">blenderproc.python.postprocessing.PostProcessingUtility</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for blenderproc.python.postprocessing.PostProcessingUtility</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span></span><span class="sd">&quot;&quot;&quot;A set of function to post process the produced images.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 
-<span class="kn">import</span> <span class="nn">blenderproc.python.camera.CameraUtility</span> <span class="k">as</span> <span class="nn">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.camera</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_blender_mesh_objects</span>
 
 
-<div class="viewcode-block" id="dist2depth"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.dist2depth">[docs]</a><span class="k">def</span> <span class="nf">dist2depth</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="dist2depth">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.dist2depth">[docs]</a>
+<span class="k">def</span> <span class="nf">dist2depth</span><span class="p">(</span><span class="n">dist</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Maps a distance image to depth image, also works with a list of images.</span>
+
 <span class="sd">    :param dist: The distance data.</span>
 <span class="sd">    :return: The depth data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -490,10 +405,10 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">dist2depth</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">dist</span><span class="p">]</span>
-    
+
     <span class="n">K</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">()</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-    
+    <span class="n">f</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
     <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dist</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
     <span class="c1"># coordinate distances to principal point</span>
@@ -507,8 +422,13 @@
     <span class="k">return</span> <span class="n">depth</span></div>
 
 
-<div class="viewcode-block" id="depth2dist"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.depth2dist">[docs]</a><span class="k">def</span> <span class="nf">depth2dist</span><span class="p">(</span><span class="n">depth</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="depth2dist">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.depth2dist">[docs]</a>
+<span class="k">def</span> <span class="nf">depth2dist</span><span class="p">(</span><span class="n">depth</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Maps a depth image to distance image, also works with a list of images.</span>
+
 <span class="sd">    :param depth: The depth data.</span>
 <span class="sd">    :return: The distance data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -519,7 +439,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">depth2dist</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">depth</span><span class="p">]</span>
 
     <span class="n">K</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">()</span>
-    <span class="n">f</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
     <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
@@ -534,8 +454,11 @@
     <span class="k">return</span> <span class="n">dist</span></div>
 
 
-<div class="viewcode-block" id="remove_segmap_noise"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.remove_segmap_noise">[docs]</a><span class="k">def</span> <span class="nf">remove_segmap_noise</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="remove_segmap_noise">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.remove_segmap_noise">[docs]</a>
+<span class="k">def</span> <span class="nf">remove_segmap_noise</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function that takes an image and a few 2D indices, where these indices correspond to pixel values in</span>
 <span class="sd">    segmentation maps, where these values are not real labels, but some deviations from the real labels, that were</span>
 <span class="sd">    generated as a result of Blender doing some interpolation, smoothing, or other numerical operations.</span>
@@ -549,27 +472,27 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">remove_segmap_noise</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
 
-    <span class="n">noise_indices</span> <span class="o">=</span> <span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_determine_noisy_pixels</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">noise_indices</span> <span class="o">=</span> <span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">determine_noisy_pixels</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">noise_indices</span><span class="p">:</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_get_pixel_neighbors</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">get_pixel_neighbors</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span>
             <span class="mi">1</span><span class="p">])</span>  <span class="c1"># Extracting the indices surrounding 3x3 neighbors</span>
         <span class="n">curr_val</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Current value of the noisy pixel</span>
 
         <span class="n">neighbor_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span><span class="p">[</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span>
                          <span class="n">neighbors</span><span class="p">]</span>  <span class="c1"># Getting the values of the neighbors</span>
-        <span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">neighbor_vals</span><span class="p">]))</span>  <span class="c1"># Getting the unique values only</span>
+        <span class="c1"># Getting the unique values only</span>
+        <span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">neighbor_vals</span><span class="p">]))</span>
 
-        <span class="nb">min</span> <span class="o">=</span> <span class="mi">10000000000</span>
+        <span class="n">min_val</span> <span class="o">=</span> <span class="mi">10000000000</span>
         <span class="n">min_idx</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Here we iterate through the unique values of the neighbor and find the one closest to the current noisy value</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">neighbor_vals</span><span class="p">):</span>
             <span class="c1"># Is this closer than the current closest value?</span>
-            <span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="n">curr_val</span> <span class="o">&lt;=</span> <span class="nb">min</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">-</span> <span class="n">curr_val</span> <span class="o">&lt;=</span> <span class="n">min_val</span><span class="p">:</span>
                 <span class="c1"># If so, update</span>
-                <span class="nb">min</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">curr_val</span>
+                <span class="n">min_val</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">curr_val</span>
                 <span class="n">min_idx</span> <span class="o">=</span> <span class="n">idx</span>
 
         <span class="c1"># Now that we have found the closest value, assign it to the noisy value</span>
@@ -579,11 +502,14 @@
     <span class="k">return</span> <span class="n">image</span></div>
 
 
-<div class="viewcode-block" id="oil_paint_filter"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.oil_paint_filter">[docs]</a><span class="k">def</span> <span class="nf">oil_paint_filter</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">filter_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">edges_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+
+<div class="viewcode-block" id="oil_paint_filter">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.oil_paint_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">oil_paint_filter</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">filter_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">edges_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                      <span class="n">rgb</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot; Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a replica</span>
-<span class="sd">        of the other). This could be desired for corrupting rendered depth maps to appear more realistic. Also trims the</span>
-<span class="sd">        redundant channels if they exist.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a</span>
+<span class="sd">        replica of the other). This could be desired for corrupting rendered depth maps to appear more realistic.</span>
+<span class="sd">        Also trims the redundant channels if they exist.</span>
 
 <span class="sd">        :param image: Input image or list of images</span>
 <span class="sd">        :param filter_size: Filter size, should be an odd number.</span>
@@ -593,17 +519,15 @@
 <span class="sd">        :return: filtered image</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="kn">import</span> <span class="nn">cv2</span>
-    <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
     <span class="k">if</span> <span class="n">rgb</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">oil_paint_filter</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">,</span> <span class="n">edges_only</span><span class="p">,</span> <span class="n">rgb</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
 
-        <span class="n">intensity_img</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span>
+        <span class="n">intensity_img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span>
 
         <span class="n">neighbors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="n">neighbors_intensity</span> <span class="o">=</span> <span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">intensity_img</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">)</span>
+            <span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">,</span> <span class="n">return_list</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">neighbors_intensity</span> <span class="o">=</span> <span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">intensity_img</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">)</span>
 
         <span class="n">mode_intensity</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">neighbors_intensity</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
@@ -628,7 +552,7 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">filtered_img</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">filtered_img</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">filtered_img</span> <span class="o">=</span> <span class="n">filtered_img</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">filtered_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filtered_img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">edges_only</span><span class="p">:</span>
@@ -647,30 +571,283 @@
     <span class="k">return</span> <span class="n">filtered_img</span></div>
 
 
-<div class="viewcode-block" id="trim_redundant_channels"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.trim_redundant_channels">[docs]</a><span class="k">def</span> <span class="nf">trim_redundant_channels</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="add_kinect_azure_noise">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.add_kinect_azure_noise">[docs]</a>
+<span class="k">def</span> <span class="nf">add_kinect_azure_noise</span><span class="p">(</span><span class="n">depth</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">color</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="n">missing_depth_darkness_thres</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add noise, holes and smooth depth maps according to the noise characteristics of the Kinect Azure sensor.</span>
+<span class="sd">    https://www.mdpi.com/1424-8220/21/2/413</span>
+
+<span class="sd">    For further realism, consider to use the projection from depth to color image in the Azure Kinect SDK:</span>
+<span class="sd">    https://docs.microsoft.com/de-de/azure/kinect-dk/use-image-transformation</span>
+
+<span class="sd">    :param depth: Input depth image(s) in meters</span>
+<span class="sd">    :param color: Optional color image(s) to add missing depth at close to black surfaces</span>
+<span class="sd">    :param missing_depth_darkness_thres: uint8 gray value threshold at which depth becomes invalid, i.e. 0</span>
+<span class="sd">    :return: Noisy depth image(s)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">depth</span><span class="p">),</span> <span class="s2">&quot;Enter same number of depth and color images&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">add_kinect_azure_noise</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">missing_depth_darkness_thres</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">color</span><span class="p">)]</span>
+
+    <span class="c1"># smoothing at borders</span>
+    <span class="n">depth</span> <span class="o">=</span> <span class="n">add_gaussian_shifts</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+
+    <span class="c1"># 0.5mm base noise, 1mm std noise @ 1m, 3.6mm std noise @ 3m</span>
+    <span class="n">depth</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">10000</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">((</span><span class="n">depth</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="c1"># Creates the shape of the kernel</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_RECT</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getStructuringElement</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+    <span class="c1"># Applies the minimum filter with kernel NxN</span>
+    <span class="n">min_depth</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">erode</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+    <span class="n">max_depth</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>
+
+    <span class="c1"># missing depth at 0.8m min/max difference</span>
+    <span class="n">depth</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">min_depth</span><span class="o">-</span><span class="n">max_depth</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># create missing depth at dark surfaces</span>
+    <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2GRAY</span><span class="p">)</span>
+        <span class="n">depth</span><span class="p">[</span><span class="n">gray</span><span class="o">&lt;</span><span class="n">missing_depth_darkness_thres</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">depth</span></div>
+
+
+
+<div class="viewcode-block" id="add_gaussian_shifts">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.add_gaussian_shifts">[docs]</a>
+<span class="k">def</span> <span class="nf">add_gaussian_shifts</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Randomly shifts the pixels of the input depth image in x and y direction.</span>
+
+<span class="sd">    :param image: Input depth image(s)</span>
+<span class="sd">    :param std: Standard deviation of pixel shifts, defaults to 0.5</span>
+<span class="sd">    :return: Augmented images</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">add_gaussian_shifts</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">std</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
+
+    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">gaussian_shifts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">gaussian_shifts</span> <span class="o">=</span> <span class="n">gaussian_shifts</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># creating evenly spaced coordinates</span>
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="p">)</span>
+    <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">rows</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">rows</span><span class="p">)</span>
+
+    <span class="c1"># get xpixels and ypixels</span>
+    <span class="n">xp</span><span class="p">,</span> <span class="n">yp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">)</span>
+
+    <span class="n">xp</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">yp</span> <span class="o">=</span> <span class="n">yp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="n">xp_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">xp</span> <span class="o">+</span> <span class="n">gaussian_shifts</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">cols</span><span class="p">)</span>
+    <span class="n">yp_interp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">yp</span> <span class="o">+</span> <span class="n">gaussian_shifts</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">rows</span><span class="p">)</span>
+
+    <span class="n">depth_interp</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">remap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">xp_interp</span><span class="p">,</span> <span class="n">yp_interp</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">INTER_LINEAR</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">depth_interp</span></div>
+
+
+<div class="viewcode-block" id="trim_redundant_channels">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.trim_redundant_channels">[docs]</a>
+<span class="k">def</span> <span class="nf">trim_redundant_channels</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove redundant channels, this is useful to remove the two of the three channels created for a</span>
 <span class="sd">    depth or distance image. This also works on a list of images. Be aware that there is no check performed,</span>
 <span class="sd">    to ensure that all channels are really equal.</span>
 
 <span class="sd">    :param image: Input image or list of images</span>
-<span class="sd">    :return: The trimmed image data.</span>
+<span class="sd">    :return: The trimmed image data with preserved input type</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">trim_redundant_channels</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">image</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">trim_redundant_channels</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">image</span><span class="p">])</span>
+
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># All channles have the same value, so just extract any single channel</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># All channels have the same value, so just extract any single channel</span>
 
     <span class="k">return</span> <span class="n">image</span></div>
 
 
-<div class="viewcode-block" id="PostProcessingUtility"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">[docs]</a><span class="k">class</span> <span class="nc">PostProcessingUtility</span><span class="p">:</span>
 
-<div class="viewcode-block" id="PostProcessingUtility._get_pixel_neighbors"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility._get_pixel_neighbors">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_pixel_neighbors</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot; Returns the valid neighbor pixel indices of the given pixel.</span>
+<div class="viewcode-block" id="segmentation_mapping">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.segmentation_mapping">[docs]</a>
+<span class="k">def</span> <span class="nf">segmentation_mapping</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                         <span class="n">map_by</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+                         <span class="n">default_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> \
+        <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Maps an image or a list of images to the desired segmentation images plus segmentation dictionary for keys,</span>
+<span class="sd">    which can not be stored in an image (e.g. `name`).</span>
+
+<span class="sd">    :param image: A list or single image of a scene, must contain the pass indices defined in</span>
+<span class="sd">                 `enable_segmentation_output`.</span>
+<span class="sd">    :param map_by: The keys which will be extracted from the objects, either a single key or a list of keys.</span>
+<span class="sd">    :param default_values: If an object does not provide a key a default key must be provided.</span>
+<span class="sd">    :return: A dict mapping each key in map_by to an output list of images or a dictionary containing the information</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">return_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">is_stereo_case</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_multiview</span>
+    <span class="c1"># convert a single image to a list of stereo images</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The given image list is empty&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_stereo_case</span><span class="p">:</span>
+            <span class="c1"># convert list of images to np.ndarray</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># reshape for the stereo case</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_stereo_case</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>  <span class="c1"># reshape for stereo case</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># this is a single image in stereo mode -&gt; make a list out of it</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:]</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_stereo_case</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The amount of dimensions for an image must be higher than two in stereo mode!&quot;</span><span class="p">)</span>
+        <span class="c1"># add stereo case and make a list out of it</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+    <span class="c1"># convert to int, to avoid rounding errors</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="c1"># convert map by to a list</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">map_by</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">map_by</span> <span class="o">=</span> <span class="p">[</span><span class="n">map_by</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">frame_image</span> <span class="ow">in</span> <span class="n">image</span><span class="p">:</span>
+        <span class="n">non_image_attributes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">mapped_results_stereo_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">stereo_image</span> <span class="ow">in</span> <span class="n">frame_image</span><span class="p">:</span>
+
+            <span class="c1"># map object ids in the image to the used objects</span>
+            <span class="n">object_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">stereo_image</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">object_ids_to_object</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_blender_mesh_objects</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">pass_index</span> <span class="ow">in</span> <span class="n">object_ids</span><span class="p">:</span>
+                    <span class="n">object_ids_to_object</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">pass_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="n">object_ids_to_object</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span>
+
+            <span class="k">for</span> <span class="n">map_by_attribute</span> <span class="ow">in</span> <span class="n">map_by</span><span class="p">:</span>
+
+                <span class="c1"># create result map</span>
+                <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">stereo_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stereo_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+                <span class="c1"># save the type of the stored variable in the resulting map</span>
+                <span class="n">found_dtype</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="n">map_by_attribute</span> <span class="o">=</span> <span class="n">map_by_attribute</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="n">current_attribute</span> <span class="o">=</span> <span class="n">map_by_attribute</span>
+                <span class="k">if</span> <span class="n">map_by_attribute</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;category_id&quot;</span><span class="p">]:</span>
+                    <span class="c1"># class mode</span>
+                    <span class="n">current_attribute</span> <span class="o">=</span> <span class="s2">&quot;category_id&quot;</span>
+                <span class="k">if</span> <span class="n">map_by_attribute</span> <span class="o">==</span> <span class="s2">&quot;instance&quot;</span><span class="p">:</span>
+                    <span class="n">mapped_results_stereo_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">map_by_attribute</span><span class="si">}</span><span class="s2">_segmaps&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stereo_image</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># check if a default value was specified</span>
+                    <span class="n">default_value_set</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">default_value</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">default_values</span> <span class="ow">and</span> <span class="n">current_attribute</span> <span class="ow">in</span> <span class="n">default_values</span><span class="p">:</span>
+                        <span class="n">default_value_set</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">default_value</span> <span class="o">=</span> <span class="n">default_values</span><span class="p">[</span><span class="n">current_attribute</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">default_values</span> <span class="ow">and</span> <span class="n">current_attribute</span> <span class="ow">in</span> <span class="n">default_values</span><span class="p">:</span>
+                        <span class="n">default_value_set</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">default_value</span> <span class="o">=</span> <span class="n">default_values</span><span class="p">[</span><span class="n">current_attribute</span><span class="p">]</span>
+
+                    <span class="k">for</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">object_ids</span><span class="p">:</span>
+                        <span class="c1"># get current object</span>
+                        <span class="n">current_obj</span> <span class="o">=</span> <span class="n">object_ids_to_object</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span>
+
+                        <span class="c1"># if the current obj has an attribute with that name -&gt; get it</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">current_obj</span><span class="p">,</span> <span class="n">current_attribute</span><span class="p">):</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current_obj</span><span class="p">,</span> <span class="n">current_attribute</span><span class="p">)</span>
+                        <span class="c1"># if the current object has a custom property with that name -&gt; get it</span>
+                        <span class="k">elif</span> <span class="n">current_attribute</span> <span class="ow">in</span> <span class="n">current_obj</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="n">current_obj</span><span class="p">[</span><span class="n">current_attribute</span><span class="p">]</span>
+                        <span class="k">elif</span> <span class="n">current_attribute</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cf_&quot;</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">==</span> <span class="s2">&quot;cf_basename&quot;</span><span class="p">:</span>
+                                <span class="n">value</span> <span class="o">=</span> <span class="n">current_obj</span><span class="o">.</span><span class="n">name</span>
+                                <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                                    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="n">value</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The given attribute is a custom function: </span><span class="se">\&quot;</span><span class="s2">cf_</span><span class="se">\&quot;</span><span class="s2">, but it is not &quot;</span>
+                                                 <span class="sa">f</span><span class="s2">&quot;defined here: </span><span class="si">{</span><span class="n">current_attribute</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">default_value_set</span><span class="p">:</span>
+                            <span class="c1"># if none of the above applies use the default value</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="n">default_value</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># if the requested current_attribute is not a custom property or an attribute</span>
+                            <span class="c1"># or there is a default value stored</span>
+                            <span class="c1"># it throws an exception</span>
+                            <span class="n">d_error</span> <span class="o">=</span> <span class="p">{</span><span class="n">current_attribute</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The object </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">current_obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> does not have the &quot;</span>
+                                               <span class="sa">f</span><span class="s2">&quot;attribute: </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">current_attribute</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">. Either set the attribute for &quot;</span>
+                                               <span class="sa">f</span><span class="s2">&quot;every object or pass a default value to &quot;</span>
+                                               <span class="sa">f</span><span class="s2">&quot;bproc.renderer.enable_segmentation_output(default_values=</span><span class="si">{</span><span class="n">d_error</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
+
+                        <span class="c1"># save everything which is not instance also in the .csv</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)):</span>
+                            <span class="n">resulting_map</span><span class="p">[</span><span class="n">stereo_image</span> <span class="o">==</span> <span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                            <span class="n">found_dtype</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)):</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">non_image_attributes</span><span class="p">:</span>
+                            <span class="n">non_image_attributes</span><span class="p">[</span><span class="n">object_id</span><span class="p">][</span><span class="n">current_attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">non_image_attributes</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">current_attribute</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+
+                    <span class="c1"># if a value was found the resulting map should be stored</span>
+                    <span class="k">if</span> <span class="n">found_dtype</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">resulting_map</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">found_dtype</span><span class="p">)</span>
+                        <span class="n">mapped_results_stereo_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">map_by_attribute</span><span class="si">}</span><span class="s2">_segmaps&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resulting_map</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="s2">&quot;instance&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">map_by</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The map_by key </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">map_by_attribute</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> requires that the instance map is &quot;</span>
+                                         <span class="sa">f</span><span class="s2">&quot;stored as well in the output. Change it to: </span><span class="si">{</span><span class="n">map_by</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;instance&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># combine stereo image and add to output</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">list_of_stereo_images</span> <span class="ow">in</span> <span class="n">mapped_results_stereo_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_stereo_images</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">return_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">list_of_stereo_images</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stereo_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">list_of_stereo_images</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">return_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stereo_image</span><span class="p">)</span>
+
+        <span class="c1"># combine non image attributes</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">object_id</span><span class="p">,</span> <span class="n">attribute_dict</span> <span class="ow">in</span> <span class="n">non_image_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># converting to int to being able to save it to a hdf5 container</span>
+            <span class="n">mappings</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;idx&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">object_id</span><span class="p">),</span> <span class="o">**</span><span class="n">attribute_dict</span><span class="p">})</span>
+        <span class="n">return_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;instance_attribute_maps&quot;</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span>
+
+    <span class="c1"># check if only one image was provided as input</span>
+    <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># remove the list in the return dict, as there was only a single input image</span>
+        <span class="c1"># this still works with stereo image as they are fused together in here</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">return_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="n">return_dict</span></div>
+
+
+
+<div class="viewcode-block" id="_PostProcessingUtility">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility">[docs]</a>
+<span class="k">class</span> <span class="nc">_PostProcessingUtility</span><span class="p">:</span>
+
+<div class="viewcode-block" id="_PostProcessingUtility.get_pixel_neighbors">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility.get_pixel_neighbors">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_pixel_neighbors</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Returns the valid neighbor pixel indices of the given pixel.</span>
 
 <span class="sd">        :param data: The whole image data.</span>
 <span class="sd">        :param i: The row index of the pixel</span>
@@ -685,10 +862,13 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PostProcessingUtility._get_pixel_neighbors_stacked"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility._get_pixel_neighbors_stacked">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-                                     <span class="n">return_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_PostProcessingUtility.get_pixel_neighbors_stacked">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility.get_pixel_neighbors_stacked">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_pixel_neighbors_stacked</span><span class="p">(</span><span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">filter_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                                    <span class="n">return_list</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.</span>
 <span class="sd">        The neighbors are represented by shifting the input image in all directions required to simulate the filter.</span>
 
@@ -721,23 +901,29 @@
             <span class="k">return</span> <span class="n">channels</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="PostProcessingUtility._isin"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility._isin">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_isin</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">test_elements</span><span class="p">,</span> <span class="n">assume_unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; As np.isin is only available after v1.13 and blender is using 1.10.1 we have to implement it manually. &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_PostProcessingUtility.is_in">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility.is_in">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_in</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">test_elements</span><span class="p">,</span> <span class="n">assume_unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; As np.isin is only available after v1.13 and blender is using 1.10.1 we have to implement it manually. &quot;&quot;&quot;</span>
         <span class="n">element</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">test_elements</span><span class="p">,</span> <span class="n">assume_unique</span><span class="o">=</span><span class="n">assume_unique</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="n">invert</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PostProcessingUtility._determine_noisy_pixels"><a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility._determine_noisy_pixels">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_determine_noisy_pixels</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_PostProcessingUtility.determine_noisy_pixels">
+<a class="viewcode-back" href="../../../../blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility._PostProcessingUtility.determine_noisy_pixels">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">determine_noisy_pixels</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param image: The image data.</span>
-<span class="sd">        :return: a list of 2D indices that correspond to the noisy pixels. One criteria of finding \</span>
+<span class="sd">        :return: a list of 2D indices that correspond to the noisy pixels. One criterion of finding \</span>
 <span class="sd">                              these pixels is to use a histogram and find the pixels with frequencies lower than \</span>
 <span class="sd">                              a threshold, e.g. 100.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation</span>
+        <span class="c1"># The map was scaled to be ranging along the entire 16-bit color depth, and this is the scaling down operation</span>
         <span class="c1"># that should remove some noise or deviations</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="p">((</span><span class="n">image</span> <span class="o">*</span> <span class="mi">37</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">65536</span><span class="p">))</span>  <span class="c1"># assuming 16 bit color depth</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="p">(</span><span class="n">image</span> <span class="o">*</span> <span class="mi">37</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">65536</span><span class="p">)</span>  <span class="c1"># assuming 16 bit color depth</span>
         <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
         <span class="n">b</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -747,48 +933,38 @@
         <span class="n">hist</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">counts</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="c1"># Assuming the stray pixels wouldn&#39;t have a count of more than 100</span>
         <span class="n">noise_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hist</span> <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">]</span>
-        <span class="n">noise_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">PostProcessingUtility</span><span class="o">.</span><span class="n">_isin</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">noise_vals</span><span class="p">))</span>
+        <span class="n">noise_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">_PostProcessingUtility</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">noise_vals</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">noise_indices</span></div></div>
+        <span class="k">return</span> <span class="n">noise_indices</span></div>
+</div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2021, DLR RMC
-
-    </p>
+    <p>&#169; Copyright 2023, DLR RMC.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

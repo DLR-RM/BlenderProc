@@ -2,6 +2,7 @@ blenderproc.python.modules.manipulators.WorldManipulator module
 ===============================================================
 
 .. automodule:: blenderproc.python.modules.manipulators.WorldManipulator
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

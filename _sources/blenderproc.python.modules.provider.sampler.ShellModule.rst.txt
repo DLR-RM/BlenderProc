@@ -2,6 +2,7 @@ blenderproc.python.modules.provider.sampler.ShellModule module
 ==============================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.ShellModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

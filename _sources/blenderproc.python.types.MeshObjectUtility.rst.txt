@@ -2,6 +2,7 @@ blenderproc.python.types.MeshObjectUtility module
 =================================================
 
 .. automodule:: blenderproc.python.types.MeshObjectUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

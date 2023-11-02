@@ -2,6 +2,7 @@ blenderproc.python.modules.constructor.BasicEmptyInitializer module
 ===================================================================
 
 .. automodule:: blenderproc.python.modules.constructor.BasicEmptyInitializer
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

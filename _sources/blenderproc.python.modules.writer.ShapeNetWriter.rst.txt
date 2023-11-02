@@ -2,6 +2,7 @@ blenderproc.python.modules.writer.ShapeNetWriter module
 =======================================================
 
 .. automodule:: blenderproc.python.modules.writer.ShapeNetWriter
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

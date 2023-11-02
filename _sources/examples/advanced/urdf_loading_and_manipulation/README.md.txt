@@ -109,6 +109,20 @@ print("Current visual poses:", robot.get_all_visual_local2world_mats())
 The URDFObject interface allows easy access on the poses of the joints themselves, but also on e.g. the poses of the
 meshes. Here we simply print them after the last motion.
 
+### Write link poses in BOP format
+
+```python
+bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
+                       target_objects = robot.links,
+                       depths = data["depth"],
+                       colors = data["colors"], 
+                       m2mm = False,
+                       calc_mask_info_coco=True)
+```
+
+The poses of the visual meshes of every robot link can be written using the BOPWriter.
+We disable writing object masks, as this would require setting for each object a `model_path` custom property, which is not yet supported by the URDF loader.
+
 ## Preparing URDF files
 
 This example relies on [urdfpy](https://github.com/wboerdijk/urdfpy).

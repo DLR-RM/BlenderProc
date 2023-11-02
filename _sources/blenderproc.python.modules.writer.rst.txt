@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.writer.BopWriter
    blenderproc.python.modules.writer.CameraStateWriter
@@ -20,6 +21,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.writer
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

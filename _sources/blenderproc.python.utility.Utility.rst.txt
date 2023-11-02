@@ -2,6 +2,7 @@ blenderproc.python.utility.Utility module
 =========================================
 
 .. automodule:: blenderproc.python.utility.Utility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

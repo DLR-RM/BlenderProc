@@ -5,26 +5,29 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 4
 
-    blenderproc.python.camera
-    blenderproc.python.constructor
-    blenderproc.python.filter
-    blenderproc.python.lighting
-    blenderproc.python.loader
-    blenderproc.python.material
-    blenderproc.python.modules
-    blenderproc.python.object
-    blenderproc.python.postprocessing
-    blenderproc.python.renderer
-    blenderproc.python.sampler
-    blenderproc.python.types
-    blenderproc.python.utility
-    blenderproc.python.writer
+   blenderproc.python.camera
+   blenderproc.python.constructor
+   blenderproc.python.filter
+   blenderproc.python.lighting
+   blenderproc.python.loader
+   blenderproc.python.material
+   blenderproc.python.modules
+   blenderproc.python.object
+   blenderproc.python.postprocessing
+   blenderproc.python.renderer
+   blenderproc.python.sampler
+   blenderproc.python.tests
+   blenderproc.python.types
+   blenderproc.python.utility
+   blenderproc.python.writer
 
 Module contents
 ---------------
 
 .. automodule:: blenderproc.python
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

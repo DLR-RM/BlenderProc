@@ -2,6 +2,7 @@ blenderproc.python.types.LinkUtility module
 ===========================================
 
 .. automodule:: blenderproc.python.types.LinkUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

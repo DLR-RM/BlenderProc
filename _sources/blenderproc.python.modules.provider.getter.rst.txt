@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.provider.getter.Attribute
    blenderproc.python.modules.provider.getter.AttributeMerger
@@ -17,6 +18,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.provider.getter
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

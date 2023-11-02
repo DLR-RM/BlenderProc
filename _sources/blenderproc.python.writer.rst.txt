@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.writer.BopWriterUtility
    blenderproc.python.writer.CocoWriterUtility
@@ -15,6 +16,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.writer
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

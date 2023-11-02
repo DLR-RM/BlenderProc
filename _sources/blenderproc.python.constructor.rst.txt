@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.constructor.RandomRoomConstructor
 
@@ -12,6 +13,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.constructor
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

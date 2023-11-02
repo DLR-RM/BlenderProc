@@ -10,6 +10,7 @@ If don't have any data yet, BlenderProc offers download functionality for many d
 * `blenderproc download ikea <output_dir>`: Downloads the IKEA dataset. **(At the moment this dataset is not availabe!)**
 * `blenderproc download pix3d <output_dir>`: Downloads the Pix3D dataset.
 * `blenderproc download scenenet <output_dir>`: Downloads the scenenet dataset.
+* `blenderproc download matterport3d <output_dir>`: Downloads the Matterport3D dataset.
 
 ## Loading
 
@@ -38,6 +39,7 @@ objs = bproc.loader.load_obj("mymesh.obj")
 * `bproc.loader.load_scenenet`: Loads SceneNet scenes.
 * `bproc.loader.load_shapenet`: Loads objects from the ShapeNet dataset.
 * `bproc.loader.load_suncg`: Loads SUNCG scenes.
+* `bproc.loader.load_matterport3d`: Loads a Matterport3D scene.
 
 ## Manipulating objects
 

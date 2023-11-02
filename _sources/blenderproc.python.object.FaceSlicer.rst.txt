@@ -2,6 +2,7 @@ blenderproc.python.object.FaceSlicer module
 ===========================================
 
 .. automodule:: blenderproc.python.object.FaceSlicer
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

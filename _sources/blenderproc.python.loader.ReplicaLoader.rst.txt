@@ -2,6 +2,7 @@ blenderproc.python.loader.ReplicaLoader module
 ==============================================
 
 .. automodule:: blenderproc.python.loader.ReplicaLoader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -2,6 +2,7 @@ blenderproc.python.loader.IKEALoader module
 ===========================================
 
 .. automodule:: blenderproc.python.loader.IKEALoader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.material.Dust
    blenderproc.python.material.MaterialLoaderUtility
@@ -13,6 +14,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.material
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

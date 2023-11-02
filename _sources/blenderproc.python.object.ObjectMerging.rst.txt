@@ -2,6 +2,7 @@ blenderproc.python.object.ObjectMerging module
 ==============================================
 
 .. automodule:: blenderproc.python.object.ObjectMerging
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

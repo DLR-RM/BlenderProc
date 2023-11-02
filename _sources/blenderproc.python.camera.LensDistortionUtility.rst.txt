@@ -2,6 +2,7 @@ blenderproc.python.camera.LensDistortionUtility module
 ======================================================
 
 .. automodule:: blenderproc.python.camera.LensDistortionUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

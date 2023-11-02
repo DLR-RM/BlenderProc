@@ -5,15 +5,16 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.postprocessing.PostProcessingUtility
-   blenderproc.python.postprocessing.SGMUtility
    blenderproc.python.postprocessing.StereoGlobalMatching
 
 Module contents
 ---------------
 
 .. automodule:: blenderproc.python.postprocessing
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

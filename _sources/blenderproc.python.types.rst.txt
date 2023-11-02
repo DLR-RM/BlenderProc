@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.types.ArmatureUtility
    blenderproc.python.types.BoneUtility
@@ -22,6 +23,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.types
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

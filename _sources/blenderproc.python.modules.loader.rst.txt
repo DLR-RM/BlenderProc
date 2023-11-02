@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.loader.AMASSLoaderModule
    blenderproc.python.modules.loader.BlendLoaderModule
@@ -29,6 +30,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.loader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

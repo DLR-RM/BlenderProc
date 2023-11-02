@@ -2,6 +2,7 @@ blenderproc.python.sampler.PartSphere module
 ============================================
 
 .. automodule:: blenderproc.python.sampler.PartSphere
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

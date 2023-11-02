@@ -2,6 +2,7 @@ blenderproc.python.utility.InstallUtility module
 ================================================
 
 .. automodule:: blenderproc.python.utility.InstallUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

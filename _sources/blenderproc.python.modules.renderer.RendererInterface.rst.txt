@@ -2,6 +2,7 @@ blenderproc.python.modules.renderer.RendererInterface module
 ============================================================
 
 .. automodule:: blenderproc.python.modules.renderer.RendererInterface
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

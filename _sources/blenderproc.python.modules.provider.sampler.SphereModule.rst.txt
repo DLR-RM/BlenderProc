@@ -2,6 +2,7 @@ blenderproc.python.modules.provider.sampler.SphereModule module
 ===============================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.SphereModule
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

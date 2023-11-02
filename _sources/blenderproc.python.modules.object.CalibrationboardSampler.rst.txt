@@ -2,6 +2,7 @@ blenderproc.python.modules.object.CalibrationboardSampler module
 ================================================================
 
 .. automodule:: blenderproc.python.modules.object.CalibrationboardSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

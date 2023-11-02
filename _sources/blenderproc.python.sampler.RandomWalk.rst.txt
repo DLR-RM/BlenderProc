@@ -1,0 +1,8 @@
+blenderproc.python.sampler.RandomWalk module
+============================================
+
+.. automodule:: blenderproc.python.sampler.RandomWalk
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

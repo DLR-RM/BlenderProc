@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.materials.RockEssentialsTextureSampler
 
@@ -12,6 +13,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.materials
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

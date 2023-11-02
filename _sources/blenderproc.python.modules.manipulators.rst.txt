@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    blenderproc.python.modules.manipulators.EntityManipulator
    blenderproc.python.modules.manipulators.MaterialManipulator
@@ -14,6 +15,7 @@ Module contents
 ---------------
 
 .. automodule:: blenderproc.python.modules.manipulators
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

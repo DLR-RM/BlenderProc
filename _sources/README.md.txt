@@ -22,7 +22,9 @@ A procedural Blender pipeline for photorealistic rendering.
 
 
 
-[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
+[Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) | [JOSS article](https://joss.theoj.org/papers/10.21105/joss.04901)
+
+
 
 .. _features:
 
@@ -30,7 +32,7 @@ A procedural Blender pipeline for photorealistic rendering.
 
 
 
-* Loading: `*.obj`, `*.ply`, `*.blend`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
+* Loading: `*.obj`, `*.ply`, `*.blend`, `*.fbx`, BOP, ShapeNet, Haven, 3D-FRONT, etc.
 
 * Objects: Set or sample object poses, apply physics and collision checking.
 
@@ -72,13 +74,13 @@ pip install blenderproc
 
 
 
-.. _git_clone:
+.. _via_git:
 
-### Git clone
+### Via git
 
 
 
-If you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:
+Alternatively, if you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:
 
 
 
@@ -237,6 +239,8 @@ To do so, simply call your script with the `debug` instead of `run` subcommand:
 blenderproc debug quickstart.py
 
 ```
+
+*Make sure that `quickstart.py` actually exists in your working directory.*
 
 
 
@@ -488,17 +492,29 @@ If you use BlenderProc in a research project, please cite as follows:
 
 ```
 
-@article{denninger2019blenderproc,
+@article{Denninger2023, 
 
-  title={BlenderProc},
+    doi = {10.21105/joss.04901},
 
-  author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
+    url = {https://doi.org/10.21105/joss.04901},
 
-  journal={arXiv preprint arXiv:1911.01911},
+    year = {2023},
 
-  year={2019}
+    publisher = {The Open Journal}, 
 
-}
+    volume = {8},
+
+    number = {82},
+
+    pages = {4901}, 
+
+    author = {Maximilian Denninger and Dominik Winkelbauer and Martin Sundermeyer and Wout Boerdijk and Markus Knauer and Klaus H. Strobl and Matthias Humt and Rudolph Triebel},
+
+    title = {BlenderProc2: A Procedural Pipeline for Photorealistic Rendering}, 
+
+    journal = {Journal of Open Source Software}
+
+} 
 
 ```
 

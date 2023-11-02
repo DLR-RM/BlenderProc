@@ -2,6 +2,7 @@ blenderproc.python.sampler.Disk module
 ======================================
 
 .. automodule:: blenderproc.python.sampler.Disk
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

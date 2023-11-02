@@ -2,6 +2,7 @@ blenderproc.python.modules.camera.CameraLoader module
 =====================================================
 
 .. automodule:: blenderproc.python.modules.camera.CameraLoader
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

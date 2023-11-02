@@ -1,0 +1,8 @@
+blenderproc.python.loader.Matterport3DLoader module
+===================================================
+
+.. automodule:: blenderproc.python.loader.Matterport3DLoader
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

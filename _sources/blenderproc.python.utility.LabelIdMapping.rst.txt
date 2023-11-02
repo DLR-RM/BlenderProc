@@ -2,6 +2,7 @@ blenderproc.python.utility.LabelIdMapping module
 ================================================
 
 .. automodule:: blenderproc.python.utility.LabelIdMapping
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

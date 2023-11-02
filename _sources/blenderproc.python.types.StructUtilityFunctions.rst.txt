@@ -2,6 +2,7 @@ blenderproc.python.types.StructUtilityFunctions module
 ======================================================
 
 .. automodule:: blenderproc.python.types.StructUtilityFunctions
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

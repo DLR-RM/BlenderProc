@@ -2,6 +2,7 @@ blenderproc.python.modules.utility.Config module
 ================================================
 
 .. automodule:: blenderproc.python.modules.utility.Config
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

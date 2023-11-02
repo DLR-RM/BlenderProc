@@ -1,0 +1,19 @@
+blenderproc.python.tests package
+================================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   blenderproc.python.tests.SilentMode
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

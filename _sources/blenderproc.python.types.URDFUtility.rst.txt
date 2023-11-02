@@ -2,6 +2,7 @@ blenderproc.python.types.URDFUtility module
 ===========================================
 
 .. automodule:: blenderproc.python.types.URDFUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

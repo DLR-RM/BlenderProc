@@ -11,7 +11,7 @@ Furthermore, the added random pattern is projected through a SPOT light source i
 Execute in the BlenderProc main directory:
 
 ```
-blenderproc run examples/advanced/stereo_matching_with_projector/main.py <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output <number of points>
+blenderproc run examples/advanced/stereo_matching_with_projector/main.py <path to cam_pose file> <path to house.json> <number of points> examples/advanced/stereo_matching/output 
 ```
 
 * `examples/advanced/stereo_matching_with_projector/main.py`: path to the main python file to run.

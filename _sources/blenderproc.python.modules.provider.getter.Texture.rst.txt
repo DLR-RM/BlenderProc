@@ -2,6 +2,7 @@ blenderproc.python.modules.provider.getter.Texture module
 =========================================================
 
 .. automodule:: blenderproc.python.modules.provider.getter.Texture
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

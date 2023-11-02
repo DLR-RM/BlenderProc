@@ -2,6 +2,7 @@ blenderproc.python.modules.provider.sampler.UniformSO3Module module
 ===================================================================
 
 .. automodule:: blenderproc.python.modules.provider.sampler.UniformSO3Module
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:
