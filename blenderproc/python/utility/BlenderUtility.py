@@ -349,7 +349,7 @@ def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.Shad
 
     :param nodes: Nodes, which should be used
     :param group_name: Name of the group
-    :return bpy.types.ShaderNodeTree: the group which can be used inside of a bpy.types.ShaderNodeGroup
+    :return: bpy.types.ShaderNodeTree: the group which can be used inside of a bpy.types.ShaderNodeGroup
     """
     # create new node group
     group = bpy.data.node_groups.new(name=group_name, type="ShaderNodeTree")

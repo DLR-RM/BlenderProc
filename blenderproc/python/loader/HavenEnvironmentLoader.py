@@ -58,7 +58,7 @@ def get_random_world_background_hdr_img_path_from_haven(data_path: str) -> str:
     """ Sets the world background to a random .hdr file from the given directory.
 
     :param data_path: A path pointing to a directory containing .hdr files.
-    :return The path to a random selected path
+    :return: The path to a random selected path
     """
 
     if os.path.exists(data_path):

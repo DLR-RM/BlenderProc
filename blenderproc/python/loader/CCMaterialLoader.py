@@ -29,7 +29,7 @@ def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: lis
     :param add_custom_properties:  A dictionary of materials and the respective properties.
     :param use_all_materials: If this is false only a selection of probably useful textures is used. This excludes \
                               some see through texture and non tileable texture.
-    :return a list of all loaded materials, if preload is active these materials do not contain any textures yet
+    :return: a list of all loaded materials, if preload is active these materials do not contain any textures yet
             and have to be filled before rendering (by calling this function again, no need to save the prior
             returned list)
     """
