@@ -294,6 +294,7 @@ class _BopWriterUtility:
     def get_frame_gt(dataset_objects: List[bpy.types.Mesh], unit_scaling: float, ignore_dist_thres: float,
                      destination_frame: Optional[List[str]] = None):
         """ Returns GT pose annotations between active camera and objects.
+        
         :param dataset_objects: Save annotations for these objects.
         :param unit_scaling: 1000. for outputting poses in mm
         :param ignore_dist_thres: Distance between camera and object after which object is ignored.
@@ -345,6 +346,7 @@ class _BopWriterUtility:
     def get_frame_camera(save_world2cam: bool, depth_scale: float = 1.0, unit_scaling: float = 1000.,
                          destination_frame: Optional[List[str]] = None):
         """ Returns camera parameters for the active camera.
+
         :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved
                                in scene_camera.json
         :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.
