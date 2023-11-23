@@ -460,6 +460,7 @@ class MeshObject(Entity):
         """
         if not self.has_uv_mapping() or overwrite:
             self.edit_mode()
+            bpy.ops.mesh.select_all(action='SELECT')
             if projection == "cube":
                 bpy.ops.uv.cube_project()
             elif projection == "cylinder":
