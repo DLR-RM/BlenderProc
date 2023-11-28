@@ -12,10 +12,10 @@ from platform import machine
 from typing import List, Union, Tuple
 
 if version_info.major == 3:
-    from urllib.request import urlretrieve
+    from urllib.request import urlretrieve, build_opener, install_opener
     from urllib.error import URLError
 else:
-    from urllib import urlretrieve
+    from urllib import urlretrieve, build_opener, install_opener
     import contextlib
 
 # pylint: disable=wrong-import-position
@@ -137,6 +137,12 @@ class InstallUtility:
                     url = used_url + ".zip"
                 else:
                     raise RuntimeError(f"This system is not supported yet: {platform}")
+                
+                # setting the default header, else the server does not allow the download
+                opener = build_opener()
+                opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                install_opener(opener)
+
                 try:
                     try:
                         # pylint: disable=import-outside-toplevel
