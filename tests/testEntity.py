@@ -74,3 +74,45 @@ class UnitTestCheckUtility(unittest.TestCase):
         self.assertTrue((grandchild.get_local2world_mat()[:3, 3] == [4, 0, 0]).all())
         self.assertEqual(root.get_children(), [grandchild])
         self.assertEqual(child.get_children(), [])
+
+    def test_duplicate_linked(self):
+        bproc.clean_up(True)
+
+        cube = bproc.object.create_primitive("CUBE")
+        duplicate_cube = cube.duplicate(linked=True)
+        self.assertEqual(cube.blender_obj.data, duplicate_cube.blender_obj.data)
+
+        empty = bproc.object.create_empty("empty")
+        duplicate_empty = empty.duplicate(linked=True)
+        self.assertEqual(duplicate_empty.blender_obj.data, None)
+
+        light = Light()
+        duplicate_light = light.duplicate(linked=True)
+        self.assertEqual(light.blender_obj.data, duplicate_light.blender_obj.data)
+
+    def test_duplicate_hierarchy(self):
+        bproc.clean_up(True)
+
+        root = bproc.object.create_primitive("CUBE")
+        child = bproc.object.create_primitive("CUBE")
+        grandchild = bproc.object.create_primitive("CUBE")
+
+        grandchild.set_location([1, 1, 1])
+        grandchild.set_parent(child)
+
+        child.set_location([1, 1, 1])
+        child.set_parent(root)
+
+        duplicate_root = root.duplicate()
+        duplicate_child = duplicate_root.get_children()[0]
+        duplicate_grandchild = duplicate_child.get_children()[0]
+
+        # world location
+        self.assertTrue((duplicate_root.get_local2world_mat()[:3, 3] == [0, 0, 0]).all())
+        self.assertTrue((duplicate_child.get_local2world_mat()[:3, 3] == [1, 1, 1]).all())
+        self.assertTrue((duplicate_grandchild.get_local2world_mat()[:3, 3] == [2, 2, 2]).all())
+
+        # relative location
+        self.assertTrue((duplicate_root.get_location() == [0, 0, 0]).all())
+        self.assertTrue((duplicate_child.get_location() == [1, 1, 1]).all())
+        self.assertTrue((duplicate_grandchild.get_location() == [1, 1, 1]).all())
