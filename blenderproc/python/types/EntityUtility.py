@@ -219,6 +219,20 @@ class Entity(Struct):
         """
         return self.blender_obj.type == "EMPTY"
 
+    def hide(self, hide_object: bool = True):
+        """ Sets the visibility of the object.
+
+        :param hide_object: Determines whether the object should be hidden in rendering.
+        """
+        self.blender_obj.hide_render = hide_object
+
+    def is_hidden(self) -> bool:
+        """ Returns whether the object is hidden in rendering.
+
+        :return: True, if it is hidden.
+        """
+        return self.blender_obj.hide_render
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise RuntimeError("The entity class does not allow setting any attribute. Use the corresponding "

@@ -270,20 +270,6 @@ class MeshObject(Entity):
             part.enable_rigidbody(True, "CONVEX_HULL")
             part.hide()
 
-    def hide(self, hide_object: bool = True):
-        """ Sets the visibility of the object.
-
-        :param hide_object: Determines whether the object should be hidden in rendering.
-        """
-        self.blender_obj.hide_render = hide_object
-
-    def is_hidden(self) -> bool:
-        """ Returns whether the object is hidden in rendering.
-
-        :return: True, if it is hidden.
-        """
-        return self.blender_obj.hide_render
-
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
         if self.has_rigidbody_enabled():
