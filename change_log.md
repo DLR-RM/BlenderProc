@@ -7,6 +7,10 @@
 
 # Version History
 
+## Version 2.6.2 6th December 2023
+
+- Fixes blender download 
+
 ## Version 2.6.1 26th August 2023
 
 - Fixes pyrender usage on windows, EGL / headless rendering is now only used on linux
