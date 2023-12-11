@@ -275,7 +275,7 @@ class _CocoWriterUtility:
 
         # Concatenate annotations sections
         if len(existing_coco_annotations["annotations"]) > 0:
-            annotation_id_offset = max(annotation["id"] for annotation in existing_coco_annotations["annotations"]) + 1
+            annotation_id_offset = max(annotation["id"] for annotation in existing_coco_annotations["annotations"])
         else:
             annotation_id_offset = 0
         for annotation in new_coco_annotations["annotations"]:
