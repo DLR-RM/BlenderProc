@@ -36,7 +36,7 @@ class UnitTestCheckLoader(unittest.TestCase):
         materials = bproc.loader.load_ccmaterials(folder_path=cc_texture_folder,
                                                   used_assets=["metal", "wood", "fabric"])
 
-        list_of_some_textures = ["Metal001", "Fabric006", "Wood039"]
+        list_of_some_textures = ["Metal001", "Fabric004", "Wood039"]
 
         for material in materials:
             if material.get_name() in list_of_some_textures:
