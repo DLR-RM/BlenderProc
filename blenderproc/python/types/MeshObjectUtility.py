@@ -81,25 +81,6 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self, duplicate_children: bool = True) -> "MeshObject":
-        """ Duplicates the object.
-
-        :param duplicate_children: If True, also all children objects are recursively duplicated.
-        :return: A new mesh object, which is a duplicate of this object.
-        """
-        new_entity = self.blender_obj.copy()
-        new_entity.data = self.blender_obj.data.copy()
-        bpy.context.collection.objects.link(new_entity)
-
-        duplicate_obj = MeshObject(new_entity)
-
-        if duplicate_children:
-            for child in self.get_children():
-                duplicate_child = child.duplicate(duplicate_children=duplicate_children)
-                duplicate_child.set_parent(duplicate_obj)
-
-        return duplicate_obj
-
     def get_mesh(self) -> bpy.types.Mesh:
         """ Returns the blender mesh of the object.
 
