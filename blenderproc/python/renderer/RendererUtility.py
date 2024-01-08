@@ -560,6 +560,7 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
 
         # Continuously read blenders debug messages
         current_line = ""
+        starting_frame_number = bpy.context.scene.frame_start
         while True:
             # Read the next character
             char = os.read(pipe_out, 1)
@@ -573,10 +574,11 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
             if char == "\n":
                 # Check if its a line we can use (starts with "Fra:")
                 if current_line.startswith("Fra:"):
-                    # Extract current frame number and set to progress bar
+                    # Extract current frame number and use it to set the progress bar
                     frame_number = int(current_line.split()[0][len("Fra:"):])
-                    progress.update(complete_task, completed=frame_number)
-                    progress.update(complete_task, status=f"Rendering frame {frame_number + 1} of {total_frames}")
+                    frames_completed = frame_number - starting_frame_number
+                    progress.update(complete_task, completed=frames_completed)
+                    progress.update(complete_task, status=f"Rendering frame {frames_completed + 1} of {total_frames}")
 
                     # Split line into columns
                     status_columns = [col.strip() for col in current_line.split("|")]
