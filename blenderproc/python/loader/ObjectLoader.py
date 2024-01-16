@@ -105,6 +105,8 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
         bpy.ops.import_scene.fbx(filepath=filepath)
     elif filepath.lower().endswith('.glb') or filepath.lower().endswith('.gltf'):
         bpy.ops.import_scene.gltf(filepath=filepath)
+    elif filepath.lower().endswith('.usda') or filepath.lower().endswith('.usd') or filepath.lower().endswith('.usdc'):
+        bpy.ops.wm.usd_import(filepath=filepath)
 
     mesh_objects = convert_to_meshes([obj for obj in bpy.context.selected_objects
                                   if obj not in previously_selected_objects])
