@@ -614,13 +614,12 @@ def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.b
     bm = bmesh.new()
     # Go through all mesh objects
     for obj in mesh_objects:
-        # Add object mesh to bmesh (the newly added vertices will be automatically selected)
-        bm.from_mesh(obj.get_mesh())
-        # Apply world matrix to all selected vertices
-        bm.transform(Matrix(obj.get_local2world_mat()), filter={"SELECT"})
-        # Deselect all vertices
-        for v in bm.verts:
-            v.select = False
+        # Get a copy of the mesh
+        mesh = obj.get_mesh().copy()
+        # Apply world matrix 
+        mesh.transform(Matrix(obj.get_local2world_mat()))
+        # Add object mesh to bmesh
+        bm.from_mesh(mesh)
 
     # Create tree from bmesh
     bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
