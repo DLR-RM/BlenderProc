@@ -24,8 +24,8 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                         stored in a .blend file's folders, see Blender's documentation for bpy.types.ID
                         for more info) names.
     :param data_blocks: The data block or a list of data blocks which should be loaded from the given .blend file.
-                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights',
-                        'materials', 'meshes', 'objects', 'textures']
+                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'hair_curves', 'images',
+                        'lights', 'materials', 'meshes', 'objects', 'textures']
     :param link: whether to link instead of append data blocks from .blend file. Linked objects can not be modified.
     :return: The list of loaded mesh objects.
     """
@@ -101,8 +101,8 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
 class _BlendLoader:
     valid_data_blocks = [collection.lower() for collection in dir(bpy.data) if
                         isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
-    valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil',
-                          'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
+    valid_object_types = ['mesh', 'curve', 'curves', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume',
+                          'gpencil', 'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
 
     @staticmethod
     def validate_and_standardizes_configured_list(config_value: Union[list, str], allowed_elements: list,
