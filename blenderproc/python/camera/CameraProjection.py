@@ -11,11 +11,11 @@ from blenderproc.python.utility.Utility import KeyFrame
 from blenderproc.python.camera.CameraUtility import get_camera_pose, get_intrinsics_as_K_matrix
 
 
-def depth_via_raytracing(resolution_x: int, resolution_y: int, bvh_tree: BVHTree, frame: Optional[int] = None, return_dist: bool = False) -> np.ndarray:
-    """ Computes a depth images using raytracing
+def depth_via_raytracing(bvh_tree: BVHTree, frame: Optional[int] = None, return_dist: bool = False) -> np.ndarray:
+    """ Computes a depth images using raytracing.
 
-    :param resolution_x: The desired width of the depth image.
-    :param resolution_y: The desired height of the depth image.
+    All pixel that correspond to rays which do not hit any object are set to inf.
+
     :param bvh_tree: The BVH tree to use for raytracing.
     :param frame: The frame number whose assigned camera pose should be used. If None is given, the current frame
                   is used.
@@ -27,6 +27,8 @@ def depth_via_raytracing(resolution_x: int, resolution_y: int, bvh_tree: BVHTree
         cam = cam_ob.data
 
         cam2world_matrix = cam_ob.matrix_world
+        resolution_x = bpy.context.scene.render.resolution_x
+        resolution_y = bpy.context.scene.render.resolution_y
 
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
@@ -58,13 +60,14 @@ def depth_via_raytracing(resolution_x: int, resolution_y: int, bvh_tree: BVHTree
             depth = dist2depth(dists)
         return depth
 
-def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[int] = None) -> np.ndarray:
+def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[int] = None, depth_cut_off: float = 1e6) -> np.ndarray:
     """ Unproject 2D points into 3D
 
     :param points_2d: An array of N 2D points with shape [N, 2].
     :param depth: A list of depth values corresponding to each 2D point, shape [N].
     :param frame: The frame number whose assigned camera pose should be used. If None is given, the current frame
                   is used.
+    :param depth_cut_off: All points that correspond to depth values bigger than this threshold will be set to NaN.
     :return: The unprojected 3D points with shape [N, 3].
     """
     # Get extrinsics and intrinsics
@@ -84,6 +87,8 @@ def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[i
     points_cam[...,2] *= -1
     points_cam = np.concatenate((points_cam, np.ones_like(points[:, :1])), -1)
     points_world = (cam2world @ points_cam.T).T
+
+    points_world[depth > depth_cut_off, :] = np.nan
 
     return points_world[:, :3]
 
@@ -115,19 +120,20 @@ def project_points(points: np.ndarray, frame: Optional[int] = None) -> np.ndarra
     points_2d[..., 1] = (bpy.context.scene.render.resolution_y - 1) - points_2d[..., 1]
     return points_2d
 
-def pointcloud_from_depth(depth: np.ndarray, frame: Optional[int] = None) -> np.ndarray:
+def pointcloud_from_depth(depth: np.ndarray, frame: Optional[int] = None, depth_cut_off: float = 1e6) -> np.ndarray:
     """ Compute a point cloud from a given depth image.
 
     :param depth: The depth image with shape [H, W].
     :param frame: The frame number whose assigned camera pose should be used. If None is given, the current frame
                   is used.
+    :param depth_cut_off: All points that correspond to depth values bigger than this threshold will be set to NaN.
     :return: The point cloud with shape [H, W, 3]
-    """
+    """    
     # Generate 2D coordinates of all pixels in the given image.
     y = np.arange(depth.shape[0])   
     x = np.arange(depth.shape[1])
     points = np.stack(np.meshgrid(x, y), -1).astype(np.float32)
     # Unproject the 2D points
-    return unproject_points(points.reshape(-1, 2), depth.flatten(), frame).reshape(depth.shape[0], depth.shape[1], 3)
+    return unproject_points(points.reshape(-1, 2), depth.flatten(), frame, depth_cut_off).reshape(depth.shape[0], depth.shape[1], 3)
 
 

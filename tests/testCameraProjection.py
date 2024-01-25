@@ -21,7 +21,7 @@ class UnitTestCheckCameraProjection(unittest.TestCase):
 
         bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
 
-        depth = bproc.camera.depth_via_raytracing(640, 480, bvh_tree)
+        depth = bproc.camera.depth_via_raytracing(bvh_tree)
         pc = bproc.camera.pointcloud_from_depth(depth)
 
         pixels = bproc.camera.project_points(pc.reshape(-1, 3)).reshape(480, 640, 2)
@@ -40,6 +40,7 @@ class UnitTestCheckCameraProjection(unittest.TestCase):
         resource_folder = os.path.join("examples", "resources")
         objs = bproc.loader.load_obj(os.path.join(resource_folder, "scene.obj"))
 
+
         cam2world_matrix = np.array([
             [1.0, 0.0, 0.0, 0.0], 
             [0.0, 0.2674988806247711, -0.9635581970214844, -13.741],
@@ -51,17 +52,19 @@ class UnitTestCheckCameraProjection(unittest.TestCase):
 
         bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
 
-        depth = bproc.camera.depth_via_raytracing(640, 480, bvh_tree)
+        depth = bproc.camera.depth_via_raytracing(bvh_tree)
 
         bproc.renderer.enable_depth_output(activate_antialiasing=False)
         data = bproc.renderer.render()      
-        data["depth"][0][data["depth"][0] == 65504] = np.inf
-        print(depth[0, :10], data["depth"][0][0, :10])
-        print(depth[-1, :10], data["depth"][0][-1, :10])
+        data["depth"][0][data["depth"][0] >= 65504] = np.inf
 
-        np.testing.assert_almost_equal(depth, data["depth"][0], decimal=1)
+        diff = np.abs(depth[~np.isinf(depth)] - data["depth"][0][~np.isinf(depth)])
+        
+        self.assertTrue(np.median(diff) < 1e-4)
+        self.assertTrue((diff < 1e-4).mean() > 0.99)
 
 if __name__ == '__main__':
+    bproc.init()
     #test = UnitTestCheckCameraProjection()
     #test.test_depth_via_raytracing()
     unittest.main()
