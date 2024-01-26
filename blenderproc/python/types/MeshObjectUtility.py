@@ -498,6 +498,14 @@ class MeshObject(Entity):
         for key, value in kwargs.items():
             setattr(modifier, key, value)
 
+    def add_geometry_nodes(self):
+        """ Adds a new geometry nodes modifier to the object.
+        """
+        # Create the new modifier
+        bpy.ops.node.new_geometry_nodes_modifier({"object": self.blender_obj})
+        modifier = self.blender_obj.modifiers[-1]
+        return modifier.node_group
+
     def mesh_as_trimesh(self) -> Trimesh:
         """ Returns a trimesh.Trimesh instance of the MeshObject.
 
@@ -544,6 +552,57 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObje
     if mesh_name is None:
         mesh_name = object_name
     return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
+
+def create_from_point_cloud(points: np.ndarray, object_name: str, add_geometry_nodes_visualization: bool = False) -> "MeshObject":
+    """ Create a mesh from a point cloud.
+
+    The mesh's vertices are filled with the points from the given point cloud.
+
+    :param points: The points of the point cloud. Should be in shape [N, 3]
+    :param object_name: The name of the new object.
+    :param add_geometry_nodes_visualization: If yes, a geometry nodes modifier is added, 
+                                             which adds a sphere to every point. In this way, 
+                                             the point cloud will appear in renderings.
+    :return: The new Mesh object.
+    """    
+    point_cloud = create_with_empty_mesh(object_name)
+
+    # Go into mesh edit mode
+    point_cloud.edit_mode()
+    bm = point_cloud.mesh_as_bmesh()
+
+    # Add a vertex for each point
+    for p, point in enumerate(points):
+        if not np.isnan(point).any():
+            bm.verts.new(point)
+
+    # Persist the changes
+    point_cloud.update_from_bmesh(bm)
+    point_cloud.object_mode()
+
+    # If desired, add geometry nodes that add a icosphere instance to every point
+    if add_geometry_nodes_visualization:
+        geometry_nodes = point_cloud.add_geometry_nodes()
+        # Collect all nodes
+        input_node = Utility.get_the_one_node_with_type(geometry_nodes.nodes, "NodeGroupInput")
+        output_node = Utility.get_the_one_node_with_type(geometry_nodes.nodes, "NodeGroupOutput")
+        instances_node = geometry_nodes.nodes.new("GeometryNodeInstanceOnPoints")
+        sphere_node = geometry_nodes.nodes.new("GeometryNodeMeshIcoSphere")
+        material_node = geometry_nodes.nodes.new("GeometryNodeSetMaterial")
+
+        mat = point_cloud.new_material("point_cloud_mat")
+        mat.set_principled_shader_value("Base Color", [1, 0, 0, 1])
+
+        # Link them
+        sphere_node.inputs["Radius"].default_value = 0.015
+        material_node.inputs["Material"].default_value = mat.blender_obj
+        geometry_nodes.links.new(input_node.outputs["Geometry"], instances_node.inputs["Points"])
+        geometry_nodes.links.new(sphere_node.outputs["Mesh"], instances_node.inputs["Instance"])
+        geometry_nodes.links.new(instances_node.outputs["Instances"], material_node.inputs["Geometry"])
+        geometry_nodes.links.new(material_node.outputs["Geometry"], output_node.inputs["Geometry"])
+        
+
+    return point_cloud
 
 
 def create_primitive(shape: str, **kwargs) -> "MeshObject":
@@ -614,13 +673,12 @@ def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.b
     bm = bmesh.new()
     # Go through all mesh objects
     for obj in mesh_objects:
-        # Add object mesh to bmesh (the newly added vertices will be automatically selected)
-        bm.from_mesh(obj.get_mesh())
-        # Apply world matrix to all selected vertices
-        bm.transform(Matrix(obj.get_local2world_mat()), filter={"SELECT"})
-        # Deselect all vertices
-        for v in bm.verts:
-            v.select = False
+        # Get a copy of the mesh
+        mesh = obj.get_mesh().copy()
+        # Apply world matrix 
+        mesh.transform(Matrix(obj.get_local2world_mat()))
+        # Add object mesh to bmesh
+        bm.from_mesh(mesh)
 
     # Create tree from bmesh
     bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
