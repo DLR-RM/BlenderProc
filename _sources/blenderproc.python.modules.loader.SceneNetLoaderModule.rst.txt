@@ -1,8 +1,0 @@
-blenderproc.python.modules.loader.SceneNetLoaderModule module
-=============================================================
-
-.. automodule:: blenderproc.python.modules.loader.SceneNetLoaderModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

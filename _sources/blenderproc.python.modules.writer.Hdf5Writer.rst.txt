@@ -1,8 +1,0 @@
-blenderproc.python.modules.writer.Hdf5Writer module
-===================================================
-
-.. automodule:: blenderproc.python.modules.writer.Hdf5Writer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

@@ -1,8 +1,0 @@
-blenderproc.python.modules.loader.ReplicaLoaderModule module
-============================================================
-
-.. automodule:: blenderproc.python.modules.loader.ReplicaLoaderModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

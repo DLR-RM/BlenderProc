@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>blenderproc.python.types.BoneUtility module &mdash; BlenderProc 2.6.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+  <title>blenderproc.python.types.BoneUtility module &mdash; BlenderProc 2.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme_overrides.css?v=034b4ec4" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="_static/documentation_options.js?v=dfec817d"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -34,7 +36,7 @@
             BlenderProc
           </a>
               <div class="version">
-                2.6.1
+                2.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -98,6 +100,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/point_clouds/README.html">point_clouds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
@@ -124,7 +127,6 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
@@ -196,8 +198,10 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.GlobalStorage.html#blenderproc.python.utility.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MaterialGetter.html#blenderproc.python.utility.MaterialGetter.MaterialGetter">MaterialGetter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
@@ -228,99 +232,6 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
@@ -387,14 +298,14 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to add the constraint to.</p></li>
-<li><p><strong>constraint_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the desired constraint.</p></li>
-<li><p><strong>custom_constraint_name</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Custom name for the constraint. If not specified will use the default name.</p></li>
-<li><p><strong>add_to_existing</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true, will add a new constraint even if a constraint of the same type already exists.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to add the constraint to.</p></li>
+<li><p><strong>constraint_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the desired constraint.</p></li>
+<li><p><strong>custom_constraint_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Custom name for the constraint. If not specified will use the default name.</p></li>
+<li><p><strong>add_to_existing</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If true, will add a new constraint even if a constraint of the same type already exists.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The created constraint or None if it already exists and <cite>add_to_existing=False</cite>.</p>
@@ -409,9 +320,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>source_bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone holding the constraints to be copied.</p></li>
-<li><p><strong>target_bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone where the constraints should be copied to.</p></li>
-<li><p><strong>constraints_to_be_copied</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]) – A list of constraints to copy if not all constraints should be copied.</p></li>
+<li><p><strong>source_bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone holding the constraints to be copied.</p></li>
+<li><p><strong>target_bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone where the constraints should be copied to.</p></li>
+<li><p><strong>constraints_to_be_copied</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span>) – A list of constraints to copy if not all constraints should be copied.</p></li>
 </ul>
 </dd>
 </dl>
@@ -423,10 +334,10 @@
 <dd><p>Returns the armature that holds a specified bone.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bone_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the bone.</p>
+<dd class="field-odd"><p><strong>bone_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the bone.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The respective armature.</p>
@@ -441,12 +352,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>constraint_name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the constraint.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>constraint_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the constraint.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Constraint if it exists; else None.</p>
@@ -460,10 +371,10 @@
 <dd><p>Returns the location constraint if existing; otherwise None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p>
+<dd class="field-odd"><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Location constraint if it exists; else None.</p>
@@ -477,10 +388,10 @@
 <dd><p>Returns the rotation constraint if existing; otherwise None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p>
+<dd class="field-odd"><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Rotation constraint if it exists; else None.</p>
@@ -495,8 +406,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>constraint_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Key to be removed.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>constraint_key</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Key to be removed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -508,7 +419,7 @@
 <dd><p>Removes all constraints of the armature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p>
+<dd class="field-odd"><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -520,13 +431,13 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Armature</span></code>) – The armature holding the bone.</p></li>
-<li><p><strong>target_bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the target bone which locations shall influence this bone.</p></li>
-<li><p><strong>custom_constraint_name</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Custom name for the constraint. If not specified will use the default name.</p></li>
-<li><p><strong>influence</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Influence of the constraint.</p></li>
-<li><p><strong>target_space</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Target space of the constraint.</p></li>
-<li><p><strong>owner_space</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Owner space of the constraint.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>target</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Armature</span></code></span>) – The armature holding the bone.</p></li>
+<li><p><strong>target_bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the target bone which locations shall influence this bone.</p></li>
+<li><p><strong>custom_constraint_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Custom name for the constraint. If not specified will use the default name.</p></li>
+<li><p><strong>influence</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Influence of the constraint.</p></li>
+<li><p><strong>target_space</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Target space of the constraint.</p></li>
+<li><p><strong>owner_space</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Owner space of the constraint.</p></li>
 </ul>
 </dd>
 </dl>
@@ -539,11 +450,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The armature holding the bone.</p></li>
-<li><p><strong>target_bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the target bone which rotations shall influence this bone.</p></li>
-<li><p><strong>custom_constraint_name</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Custom name for the constraint. If not specified will use the default name.</p></li>
-<li><p><strong>influence</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Influence of the constraint.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>target</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The armature holding the bone.</p></li>
+<li><p><strong>target_bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the target bone which rotations shall influence this bone.</p></li>
+<li><p><strong>custom_constraint_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – Custom name for the constraint. If not specified will use the default name.</p></li>
+<li><p><strong>influence</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Influence of the constraint.</p></li>
 </ul>
 </dd>
 </dl>
@@ -556,12 +467,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>target</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Armature</span></code>) – The armature holding the bone.</p></li>
-<li><p><strong>target_bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Name of the target bone which movements shall influence this bone.</p></li>
-<li><p><strong>influence</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Influence of the constraint.</p></li>
-<li><p><strong>use_rotation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Whether to rotate the child links as well. Defaults to True.</p></li>
-<li><p><strong>chain_length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The number of parent links which are influenced by this ik bone. Defaults to 0 for all
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>target</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Armature</span></code></span>) – The armature holding the bone.</p></li>
+<li><p><strong>target_bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the target bone which movements shall influence this bone.</p></li>
+<li><p><strong>influence</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Influence of the constraint.</p></li>
+<li><p><strong>use_rotation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Whether to rotate the child links as well. Defaults to True.</p></li>
+<li><p><strong>chain_length</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – The number of parent links which are influenced by this ik bone. Defaults to 0 for all
 parents.</p></li>
 </ul>
 </dd>
@@ -575,8 +486,8 @@ parents.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the inverse kinematics limits to.</p></li>
-<li><p><strong>constraint</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]) – The rotation constraint. If None tries to determine it automatically from the bone.</p></li>
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the inverse kinematics limits to.</p></li>
+<li><p><strong>constraint</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Constraint</span></code>]</span>) – The rotation constraint. If None tries to determine it automatically from the bone.</p></li>
 </ul>
 </dd>
 </dl>
@@ -589,12 +500,12 @@ parents.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>x_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max values along the x-axis or None if no constraint
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>x_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max values along the x-axis or None if no constraint
 should be applied.</p></li>
-<li><p><strong>y_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max values along the y-axis or None if no constraint
+<li><p><strong>y_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max values along the y-axis or None if no constraint
 should be applied.</p></li>
-<li><p><strong>z_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max values along the z-axis or None if no constraint
+<li><p><strong>z_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max values along the z-axis or None if no constraint
 should be applied.</p></li>
 </ul>
 </dd>
@@ -608,14 +519,14 @@ should be applied.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bone</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code>) – The bone to set the constraint to.</p></li>
-<li><p><strong>x_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max radiant values along the x-axis or None if no
+<li><p><strong>bone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PoseBone</span></code></span>) – The bone to set the constraint to.</p></li>
+<li><p><strong>x_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max radiant values along the x-axis or None if no
 constraint should be applied.</p></li>
-<li><p><strong>y_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max radiant values along the y-axis or None if no
+<li><p><strong>y_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max radiant values along the y-axis or None if no
 constraint should be applied.</p></li>
-<li><p><strong>z_limits</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]) – A list of two float values specifying min/max radiant values along the z-axis or None if no
+<li><p><strong>z_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span>) – A list of two float values specifying min/max radiant values along the z-axis or None if no
 constraint should be applied.</p></li>
-<li><p><strong>set_ik_limits</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If true will set inverse kinematics constraints based on the allowed rotation axis.</p></li>
+<li><p><strong>set_ik_limits</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If true will set inverse kinematics constraints based on the allowed rotation axis.</p></li>
 </ul>
 </dd>
 </dl>

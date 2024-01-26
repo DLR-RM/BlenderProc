@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>blenderproc.python.writer.BopWriterUtility &mdash; BlenderProc 2.6.1 documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+  <title>blenderproc.python.writer.BopWriterUtility &mdash; BlenderProc 2.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme_overrides.css?v=034b4ec4" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="../../../../_static/documentation_options.js?v=dfec817d"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -33,7 +35,7 @@
             BlenderProc
           </a>
               <div class="version">
-                2.6.1
+                2.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -97,6 +99,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/point_clouds/README.html">point_clouds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
@@ -123,7 +126,6 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
@@ -195,8 +197,10 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.GlobalStorage.html#blenderproc.python.utility.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MaterialGetter.html#blenderproc.python.utility.MaterialGetter.MaterialGetter">MaterialGetter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
@@ -227,99 +231,6 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
@@ -379,11 +290,13 @@
   <h1>Source code for blenderproc.python.writer.BopWriterUtility</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Allows rendering the content of the scene in the bop file format.&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">trimesh</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -395,8 +308,6 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span><span class="p">,</span> <span class="n">get_all_mesh_objects</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span><span class="p">,</span> <span class="n">resolve_path</span>
-<span class="kn">from</span> <span class="nn">blenderproc.python.postprocessing.PostProcessingUtility</span> <span class="kn">import</span> <span class="n">dist2depth</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.writer.WriterUtility</span> <span class="kn">import</span> <span class="n">_WriterUtility</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.types.LinkUtility</span> <span class="kn">import</span> <span class="n">Link</span>
 <span class="kn">from</span> <span class="nn">blenderproc.python.utility.SetupUtility</span> <span class="kn">import</span> <span class="n">SetupUtility</span>
@@ -405,19 +316,17 @@
 <span class="c1"># EGL is not available under windows</span>
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;linux&quot;</span><span class="p">,</span> <span class="s2">&quot;linux2&quot;</span><span class="p">]:</span>
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYOPENGL_PLATFORM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;egl&#39;</span>
-<span class="c1"># pylint: disable=wrong-import-position</span>
-<span class="kn">import</span> <span class="nn">pyrender</span>
-<span class="c1"># pylint: enable=wrong-import-position</span>
 
 
 <div class="viewcode-block" id="write_bop">
 <a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.write_bop">[docs]</a>
 <span class="k">def</span> <span class="nf">write_bop</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_objects</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-              <span class="n">depths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">depths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
               <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">append_to_existing_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
               <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
               <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">m2mm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">annotation_unit</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span>
-              <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">calc_mask_info_coco</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">):</span>
+              <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">calc_mask_info_coco</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">,</span>
+              <span class="n">num_worker</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write the BOP data</span>
 
 <span class="sd">    :param output_dir: Path to the output directory.</span>
@@ -442,11 +351,8 @@
 <span class="sd">    :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)</span>
 <span class="sd">    :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.</span>
 <span class="sd">    :param delta: Tolerance used for estimation of the visibility masks (in [m]).</span>
+<span class="sd">    :param num_worker: The number of processes to use to calculate gt_masks and gt_info. If None is given, number of cores is used.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">depths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">depths</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Output paths.</span>
     <span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
@@ -463,14 +369,21 @@
     <span class="c1"># Select target objects or objects from the specified dataset or all objects</span>
     <span class="k">if</span> <span class="n">target_objects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dataset_objects</span> <span class="o">=</span> <span class="n">target_objects</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_mesh_objects</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_hidden</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: The given object </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span><span class="si">}</span><span class="s2"> is hidden. However, the bop writer will still add &quot;</span>
+                      <span class="s2">&quot;coco annotations for it. If this is not desired, don&#39;t pass the object to the bop writer.&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">dataset</span><span class="p">:</span>
         <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_mesh_objects</span><span class="p">():</span>
-            <span class="k">if</span> <span class="s2">&quot;bop_dataset_name&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">hide_render</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;bop_dataset_name&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_hidden</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="p">[</span><span class="s2">&quot;bop_dataset_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">:</span>
                     <span class="n">dataset_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="n">get_all_mesh_objects</span><span class="p">()</span>
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_mesh_objects</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">is_hidden</span><span class="p">():</span>
+                <span class="n">dataset_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
     <span class="c1"># Check if there is any object from the specified dataset.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset_objects</span><span class="p">:</span>
@@ -538,24 +451,24 @@
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">visuals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;BOP Writer only supports saving annotations of one visual mesh per Link&#39;</span><span class="p">)</span>
             <span class="n">trimesh_obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">mesh_as_trimesh</span><span class="p">()</span>
-            <span class="c1"># we need to create a double-sided material to be able to render non-watertight meshes</span>
-            <span class="c1"># the other parameters are defaults, see</span>
-            <span class="c1"># https://github.com/mmatl/pyrender/blob/master/pyrender/mesh.py#L216-L223</span>
-            <span class="n">material</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">MetallicRoughnessMaterial</span><span class="p">(</span><span class="n">alphaMode</span><span class="o">=</span><span class="s1">&#39;BLEND&#39;</span><span class="p">,</span> <span class="n">baseColorFactor</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
-                                                          <span class="n">metallicFactor</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">roughnessFactor</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">doubleSided</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># here we also add the scale factor of the objects. the position of the pyrender camera will change based</span>
             <span class="c1"># on the initial scale factor of the objects and the saved annotation format</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">scale</span><span class="p">),</span> <span class="n">obj</span><span class="o">.</span><span class="n">blender_obj</span><span class="o">.</span><span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: the scale is not the same across all dimensions, writing bop_toolkit annotations with &quot;</span>
                       <span class="s2">&quot;the bop writer will fail!&quot;</span><span class="p">)</span>
-            <span class="n">trimesh_objects</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s1">&#39;category_id&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Mesh</span><span class="o">.</span><span class="n">from_trimesh</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">trimesh_obj</span><span class="p">,</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span>
+            <span class="n">trimesh_objects</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s1">&#39;category_id&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">trimesh_obj</span>
+
+        <span class="c1"># Create pool and init each worker</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span>
+        <span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="n">num_worker</span><span class="p">,</span> <span class="n">initializer</span><span class="o">=</span><span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">_pyrender_init</span><span class="p">,</span> <span class="n">initargs</span><span class="o">=</span><span class="p">[</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">trimesh_objects</span><span class="p">])</span>
 
         <span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">calc_gt_masks</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="o">=</span><span class="n">chunk_dirs</span><span class="p">,</span> <span class="n">starting_frame_id</span><span class="o">=</span><span class="n">starting_frame_id</span><span class="p">,</span>
-                                        <span class="n">dataset_objects</span><span class="o">=</span><span class="n">trimesh_objects</span><span class="p">,</span> <span class="n">annotation_scale</span><span class="o">=</span><span class="n">annotation_scale</span><span class="p">,</span>
-                                        <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+                                        <span class="n">annotation_scale</span><span class="o">=</span><span class="n">annotation_scale</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+         
         <span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">calc_gt_info</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="o">=</span><span class="n">chunk_dirs</span><span class="p">,</span> <span class="n">starting_frame_id</span><span class="o">=</span><span class="n">starting_frame_id</span><span class="p">,</span>
-                                       <span class="n">dataset_objects</span><span class="o">=</span><span class="n">trimesh_objects</span><span class="p">,</span> <span class="n">annotation_scale</span><span class="o">=</span><span class="n">annotation_scale</span><span class="p">,</span>
-                                       <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">)</span>
+                                       <span class="n">annotation_scale</span><span class="o">=</span><span class="n">annotation_scale</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">)</span>
+
         <span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">calc_gt_coco</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="o">=</span><span class="n">chunk_dirs</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="o">=</span><span class="n">dataset_objects</span><span class="p">,</span>
                                        <span class="n">starting_frame_id</span><span class="o">=</span><span class="n">starting_frame_id</span><span class="p">)</span></div>
 
@@ -790,8 +703,8 @@
 <div class="viewcode-block" id="_BopWriterUtility.write_frames">
 <a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility.write_frames">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">write_frames</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                     <span class="n">colors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">write_frames</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                     <span class="n">colors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span>
                      <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">annotation_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1000.</span><span class="p">,</span>
                      <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write each frame&#39;s ground truth into chunk directory in BOP format</span>
@@ -811,10 +724,6 @@
 <span class="sd">                                 specified format (see `annotation_format` in `write_bop` for further details).</span>
 <span class="sd">        :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">depths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">depths</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Format of the depth images.</span>
         <span class="n">depth_ext</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span>
@@ -884,34 +793,17 @@
             <span class="n">chunk_camera</span><span class="p">[</span><span class="n">curr_frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">get_frame_camera</span><span class="p">(</span><span class="n">save_world2cam</span><span class="p">,</span> <span class="n">depth_scale</span><span class="p">,</span>
                                                                              <span class="n">annotation_scale</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">colors</span><span class="p">:</span>
-                <span class="n">color_rgb</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
-                <span class="n">color_bgr</span> <span class="o">=</span> <span class="n">color_rgb</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="n">color_bgr</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">color_bgr</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;PNG&#39;</span><span class="p">:</span>
-                    <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
-                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;JPEG&#39;</span><span class="p">:</span>
-                    <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.jpg&#39;</span><span class="p">)</span>
-                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">,</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">IMWRITE_JPEG_QUALITY</span><span class="p">),</span> <span class="n">jpg_quality</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">rgb_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">rgb_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;RGB image has not been rendered.&quot;</span><span class="p">)</span>
-                <span class="n">color_ext</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span> <span class="k">if</span> <span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;.jpg&#39;</span>
-                <span class="c1"># Copy the resulting RGB image.</span>
-                <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="n">color_ext</span><span class="p">)</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">,</span> <span class="n">rgb_fpath</span><span class="p">)</span>
+            <span class="n">color_rgb</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+            <span class="n">color_bgr</span> <span class="o">=</span> <span class="n">color_rgb</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">color_bgr</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">color_bgr</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">][</span><span class="o">...</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;PNG&#39;</span><span class="p">:</span>
+                <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;JPEG&#39;</span><span class="p">:</span>
+                <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.jpg&#39;</span><span class="p">)</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">,</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">IMWRITE_JPEG_QUALITY</span><span class="p">),</span> <span class="n">jpg_quality</span><span class="p">])</span>
 
-            <span class="k">if</span> <span class="n">depths</span><span class="p">:</span>
-                <span class="n">depth</span> <span class="o">=</span> <span class="n">depths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Load the resulting dist image.</span>
-                <span class="n">dist_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">dist_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance image has not been rendered.&quot;</span><span class="p">)</span>
-                <span class="n">distance</span> <span class="o">=</span> <span class="n">_WriterUtility</span><span class="o">.</span><span class="n">load_output_file</span><span class="p">(</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">dist_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">),</span> <span class="n">remove</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">depth</span> <span class="o">=</span> <span class="n">dist2depth</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+            <span class="n">depth</span> <span class="o">=</span> <span class="n">depths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
 
             <span class="c1"># Scale the depth to retain a higher precision (the depth is saved</span>
             <span class="c1"># as a 16-bit PNG image with range 0-65535).</span>
@@ -938,18 +830,123 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">curr_frame_id</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
+        
+
+<div class="viewcode-block" id="_BopWriterUtility._pyrender_init">
+<a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility._pyrender_init">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_pyrender_init</span><span class="p">(</span><span class="n">ren_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ren_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">trimesh_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">trimesh</span><span class="o">.</span><span class="n">Trimesh</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Initializes a worker process for calc_gt_masks and calc_gt_info</span>
+
+<span class="sd">        :param ren_width: The width of the images to render.</span>
+<span class="sd">        :param ren_height: The height of the images to render.</span>
+<span class="sd">        :param trimesh_objects: A dict containing trimesh meshes for each object in the scene</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="c1"># Import pyrender only inside the multiprocesses, otherwise this leads to an opengl error</span>
+        <span class="c1"># https://github.com/mmatl/pyrender/issues/200#issuecomment-1123713055        </span>
+        <span class="kn">import</span> <span class="nn">pyrender</span>
+        <span class="c1"># pylint: enable=import-outside-toplevel</span>
+
+        <span class="k">global</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">renderer_large</span><span class="p">,</span> <span class="n">dataset_objects</span>
+
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Create renderer for calc_gt_masks</span>
+        <span class="n">renderer</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">OffscreenRenderer</span><span class="p">(</span><span class="n">viewport_width</span><span class="o">=</span><span class="n">ren_width</span><span class="p">,</span> <span class="n">viewport_height</span><span class="o">=</span><span class="n">ren_height</span><span class="p">)</span>
+        <span class="c1"># Create renderer for calc_gt_info</span>
+        <span class="n">renderer_large</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">OffscreenRenderer</span><span class="p">(</span><span class="n">viewport_width</span><span class="o">=</span><span class="n">ren_width</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">viewport_height</span><span class="o">=</span><span class="n">ren_height</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># Create pyrender meshes</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">trimesh_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># we need to create a double-sided material to be able to render non-watertight meshes</span>
+            <span class="c1"># the other parameters are defaults, see</span>
+            <span class="c1"># https://github.com/mmatl/pyrender/blob/master/pyrender/mesh.py#L216-L223</span>
+            <span class="n">material</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">MetallicRoughnessMaterial</span><span class="p">(</span><span class="n">alphaMode</span><span class="o">=</span><span class="s1">&#39;BLEND&#39;</span><span class="p">,</span> <span class="n">baseColorFactor</span><span class="o">=</span><span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+                                                          <span class="n">metallicFactor</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">roughnessFactor</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">doubleSided</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">dataset_objects</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Mesh</span><span class="o">.</span><span class="n">from_trimesh</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">trimesh_objects</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">material</span><span class="o">=</span><span class="n">material</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_BopWriterUtility._calc_gt_masks_iteration">
+<a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility._calc_gt_masks_iteration">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calc_gt_masks_iteration</span><span class="p">(</span><span class="n">annotation_scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">K</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">dist_im</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">chunk_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">im_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">gt_data</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; One iteration of calc_gt_masks(), executed inside a worker process.</span>
+
+<span class="sd">        </span>
+<span class="sd">        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the</span>
+<span class="sd">                                 specified format (see `annotation_format` in `write_bop` for further details).</span>
+<span class="sd">        :param K: The camera instrinsics to use.</span>
+<span class="sd">        :param delta: Tolerance used for estimation of the visibility masks.</span>
+<span class="sd">        :param dist_im: The distance image of the frame.</span>
+<span class="sd">        :param chunk_dir: The chunk dir where to store the resulting images.</span>
+<span class="sd">        :param im_id: The id of the current image/frame.</span>
+<span class="sd">        :param gt_data: Containing id of the object whose mask the worker should render</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="c1"># Import pyrender only inside the multiprocesses, otherwise this leads to an opengl error</span>
+        <span class="c1"># https://github.com/mmatl/pyrender/issues/200#issuecomment-1123713055     </span>
+        <span class="kn">import</span> <span class="nn">pyrender</span>
+        <span class="c1"># This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit</span>
+        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">inout</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">visibility</span>
+        <span class="c1"># pylint: enable=import-outside-toplevel</span>
+
+        <span class="k">global</span> <span class="n">renderer</span><span class="p">,</span> <span class="n">dataset_objects</span>
+
+        <span class="n">gt_id</span><span class="p">,</span> <span class="n">gt</span> <span class="o">=</span> <span class="n">gt_data</span>
+
+        <span class="c1"># Init pyrender camera</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">IntrinsicsCamera</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">cy</span><span class="p">,</span> <span class="n">znear</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">zfar</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+        
+        <span class="c1"># create a new scene</span>
+        <span class="n">scene</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Scene</span><span class="p">()</span>
+
+        <span class="c1"># add camera and current object</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">])</span>
+        <span class="c1"># rescale translation depending on initial saving format</span>
+        <span class="n">t</span> <span class="o">/=</span> <span class="n">annotation_scale</span>
+
+        <span class="n">pose</span> <span class="o">=</span> <span class="n">bop_pose_to_pyrender_coordinate_system</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                                                        <span class="n">cam_t_m2c</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">[</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">]],</span> <span class="n">pose</span><span class="o">=</span><span class="n">pose</span><span class="p">)</span>
+
+        <span class="c1"># Render the depth image.</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">depth_gt</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+
+        <span class="c1"># Convert depth image to distance image.</span>
+        <span class="n">dist_gt</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth_gt</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+
+        <span class="c1"># Mask of the full object silhouette.</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">dist_gt</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="c1"># Mask of the visible part of the object silhouette.</span>
+        <span class="n">mask_visib</span> <span class="o">=</span> <span class="n">visibility</span><span class="o">.</span><span class="n">estimate_visib_mask_gt</span><span class="p">(</span>
+            <span class="n">dist_im</span><span class="p">,</span> <span class="n">dist_gt</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">visib_mode</span><span class="o">=</span><span class="s1">&#39;bop19&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Save the calculated masks.</span>
+        <span class="n">mask_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">_</span><span class="si">{gt_id:06d}</span><span class="s1">.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_id</span><span class="o">=</span><span class="n">im_id</span><span class="p">,</span> <span class="n">gt_id</span><span class="o">=</span><span class="n">gt_id</span><span class="p">)</span>
+        <span class="n">inout</span><span class="o">.</span><span class="n">save_im</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+
+        <span class="n">mask_visib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;mask_visib&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">_</span><span class="si">{gt_id:06d}</span><span class="s1">.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_id</span><span class="o">=</span><span class="n">im_id</span><span class="p">,</span> <span class="n">gt_id</span><span class="o">=</span><span class="n">gt_id</span><span class="p">)</span>
+        <span class="n">inout</span><span class="o">.</span><span class="n">save_im</span><span class="p">(</span><span class="n">mask_visib_path</span><span class="p">,</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">mask_visib</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span></div>
+
+
 
 <div class="viewcode-block" id="_BopWriterUtility.calc_gt_masks">
 <a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility.calc_gt_masks">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">calc_gt_masks</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">dataset_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Mesh</span><span class="p">],</span> <span class="n">starting_frame_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">calc_gt_masks</span><span class="p">(</span><span class="n">pool</span><span class="p">:</span> <span class="n">Pool</span><span class="p">,</span> <span class="n">chunk_dirs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">starting_frame_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                       <span class="n">annotation_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Calculates the ground truth masks.</span>
 <span class="sd">        From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth</span>
 <span class="sd">        rendering.</span>
 
+<span class="sd">        :param pool: The pool of worker processes to use for the calculations.</span>
 <span class="sd">        :param chunk_dirs: List of directories to calculate the gt masks for.</span>
-<span class="sd">        :param dataset_objects: Dict containing all objects to save the annotations for.</span>
 <span class="sd">        :param starting_frame_id: The first frame id the writer has written during this run.</span>
 <span class="sd">        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the</span>
 <span class="sd">                                 specified format (see `annotation_format` in `write_bop` for further details).</span>
@@ -957,13 +954,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit</span>
         <span class="c1"># pylint: disable=import-outside-toplevel</span>
-        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">inout</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">visibility</span>
+        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">inout</span><span class="p">,</span> <span class="n">misc</span>
         <span class="c1"># pylint: enable=import-outside-toplevel</span>
-
-        <span class="n">width</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span>
-
-        <span class="n">renderer</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">OffscreenRenderer</span><span class="p">(</span><span class="n">viewport_width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">viewport_height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">dir_counter</span><span class="p">,</span> <span class="n">chunk_dir</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">):</span>
             <span class="n">last_chunk_gt_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;scene_gt.json&#39;</span><span class="p">)</span>
@@ -989,8 +981,6 @@
                     <span class="n">misc</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Calculating GT masks - </span><span class="si">{</span><span class="n">chunk_dir</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">im_counter</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
                 <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scene_camera</span><span class="p">[</span><span class="n">im_id</span><span class="p">][</span><span class="s1">&#39;cam_K&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-                <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-                <span class="n">camera</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">IntrinsicsCamera</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">cy</span><span class="p">,</span> <span class="n">znear</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">zfar</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 
                 <span class="c1"># Load depth image.</span>
                 <span class="n">depth_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -1000,55 +990,133 @@
                 <span class="n">depth_im</span> <span class="o">/=</span> <span class="mf">1000.</span>  <span class="c1"># to [m]</span>
                 <span class="n">dist_im</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth_im</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">gt_id</span><span class="p">,</span> <span class="n">gt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scene_gt</span><span class="p">[</span><span class="n">im_id</span><span class="p">]):</span>
-                    <span class="c1"># create a new scene</span>
-                    <span class="n">scene</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Scene</span><span class="p">()</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">_calc_gt_masks_iteration</span><span class="p">,</span> <span class="n">annotation_scale</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">dist_im</span><span class="p">,</span> <span class="n">chunk_dir</span><span class="p">,</span> <span class="n">im_id</span><span class="p">),</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scene_gt</span><span class="p">[</span><span class="n">im_id</span><span class="p">]))</span></div>
 
-                    <span class="c1"># add camera and current object</span>
-                    <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">])</span>
-                    <span class="c1"># rescale translation depending on initial saving format</span>
-                    <span class="n">t</span> <span class="o">/=</span> <span class="n">annotation_scale</span>
+          
+            
 
-                    <span class="n">pose</span> <span class="o">=</span> <span class="n">bop_pose_to_pyrender_coordinate_system</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-                                                                  <span class="n">cam_t_m2c</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-                    <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">[</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">]],</span> <span class="n">pose</span><span class="o">=</span><span class="n">pose</span><span class="p">)</span>
+<div class="viewcode-block" id="_BopWriterUtility._calc_gt_info_iteration">
+<a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility._calc_gt_info_iteration">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_calc_gt_info_iteration</span><span class="p">(</span><span class="n">annotation_scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ren_cy_offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ren_cx_offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">im_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">im_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">K</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gt</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; One iteration of calc_gt_info(), executed inside a worker process.</span>
+<span class="sd">        </span>
+<span class="sd">        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the</span>
+<span class="sd">                                 specified format (see `annotation_format` in `write_bop` for further details).</span>
+<span class="sd">        :param ren_cy_offset: The y offset for cropping the rendered image.</span>
+<span class="sd">        :param ren_cx_offset: The x offset for cropping the rendered image.</span>
+<span class="sd">        :param im_height: The image height for cropping the rendered image.</span>
+<span class="sd">        :param im_width: The image width for cropping the rendered image.</span>
+<span class="sd">        :param K: The camera instrinsics to use.</span>
+<span class="sd">        :param delta: Tolerance used for estimation of the visibility masks.</span>
+<span class="sd">        :param depth: The depth image of the frame.</span>
+<span class="sd">        :param gt: Containing id of the object whose mask the worker should render</span>
+<span class="sd">        &quot;&quot;&quot;</span>         
+        <span class="c1"># Import pyrender only inside the multiprocesses, otherwise this leads to an opengl error</span>
+        <span class="c1"># https://github.com/mmatl/pyrender/issues/200#issuecomment-1123713055   </span>
+        <span class="c1"># pylint: disable=import-outside-toplevel</span>
+        <span class="kn">import</span> <span class="nn">pyrender</span>
+        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">misc</span><span class="p">,</span> <span class="n">visibility</span>
+        <span class="c1"># pylint: enable=import-outside-toplevel</span>
 
-                    <span class="c1"># Render the depth image.</span>
-                    <span class="n">_</span><span class="p">,</span> <span class="n">depth_gt</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+        <span class="k">global</span> <span class="n">renderer_large</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="p">,</span> <span class="n">renderer</span>
 
-                    <span class="c1"># Convert depth image to distance image.</span>
-                    <span class="n">dist_gt</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth_gt</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+        <span class="c1"># Delete renderer of the previous calc_gt_masks() function, otherwise</span>
+        <span class="c1"># we cannot make use of the same pyrender Meshes</span>
+        <span class="k">if</span> <span class="n">renderer</span><span class="o">.</span><span class="n">_renderer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">renderer</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">renderer</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="kc">None</span>
 
-                    <span class="c1"># Mask of the full object silhouette.</span>
-                    <span class="n">mask</span> <span class="o">=</span> <span class="n">dist_gt</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="c1"># Init pyrender camera</span>
+        <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">im_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">IntrinsicsCamera</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">cx</span><span class="o">+</span><span class="n">ren_cx_offset</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">cy</span><span class="o">+</span><span class="n">ren_cy_offset</span><span class="p">,</span> <span class="n">znear</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                                            <span class="n">zfar</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+        
+        <span class="c1"># create a new scene</span>
+        <span class="n">scene</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Scene</span><span class="p">()</span>
 
-                    <span class="c1"># Mask of the visible part of the object silhouette.</span>
-                    <span class="n">mask_visib</span> <span class="o">=</span> <span class="n">visibility</span><span class="o">.</span><span class="n">estimate_visib_mask_gt</span><span class="p">(</span>
-                        <span class="n">dist_im</span><span class="p">,</span> <span class="n">dist_gt</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">visib_mode</span><span class="o">=</span><span class="s1">&#39;bop19&#39;</span><span class="p">)</span>
+        <span class="c1"># add camera and current object</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">])</span>
+        <span class="c1"># rescale translation depending on initial saving format</span>
+        <span class="n">t</span> <span class="o">/=</span> <span class="n">annotation_scale</span>
+        <span class="n">pose</span> <span class="o">=</span> <span class="n">bop_pose_to_pyrender_coordinate_system</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                                                        <span class="n">cam_t_m2c</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">[</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">]],</span> <span class="n">pose</span><span class="o">=</span><span class="n">pose</span><span class="p">)</span>
 
-                    <span class="c1"># Save the calculated masks.</span>
-                    <span class="n">mask_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">_</span><span class="si">{gt_id:06d}</span><span class="s1">.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_id</span><span class="o">=</span><span class="n">im_id</span><span class="p">,</span> <span class="n">gt_id</span><span class="o">=</span><span class="n">gt_id</span><span class="p">)</span>
-                    <span class="n">inout</span><span class="o">.</span><span class="n">save_im</span><span class="p">(</span><span class="n">mask_path</span><span class="p">,</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span>
+        <span class="c1"># render the depth image</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">depth_gt_large</span> <span class="o">=</span> <span class="n">renderer_large</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
 
-                    <span class="n">mask_visib_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;mask_visib&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">_</span><span class="si">{gt_id:06d}</span><span class="s1">.png&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_id</span><span class="o">=</span><span class="n">im_id</span><span class="p">,</span> <span class="n">gt_id</span><span class="o">=</span><span class="n">gt_id</span><span class="p">)</span>
-                    <span class="n">inout</span><span class="o">.</span><span class="n">save_im</span><span class="p">(</span><span class="n">mask_visib_path</span><span class="p">,</span> <span class="mi">255</span> <span class="o">*</span> <span class="n">mask_visib</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span></div>
+        <span class="n">depth_gt</span> <span class="o">=</span> <span class="n">depth_gt_large</span><span class="p">[</span>
+                    <span class="n">ren_cy_offset</span><span class="p">:(</span><span class="n">ren_cy_offset</span> <span class="o">+</span> <span class="n">im_height</span><span class="p">),</span>
+                    <span class="n">ren_cx_offset</span><span class="p">:(</span><span class="n">ren_cx_offset</span> <span class="o">+</span> <span class="n">im_width</span><span class="p">)]</span>
+
+        <span class="c1"># Convert depth images to distance images.</span>
+        <span class="n">dist_gt</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth_gt</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+        <span class="n">dist_im</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+
+        <span class="c1"># Estimation of the visibility mask.</span>
+        <span class="n">visib_gt</span> <span class="o">=</span> <span class="n">visibility</span><span class="o">.</span><span class="n">estimate_visib_mask_gt</span><span class="p">(</span>
+            <span class="n">dist_im</span><span class="p">,</span> <span class="n">dist_gt</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">visib_mode</span><span class="o">=</span><span class="s1">&#39;bop19&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Mask of the object in the GT pose.</span>
+        <span class="n">obj_mask_gt_large</span> <span class="o">=</span> <span class="n">depth_gt_large</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">obj_mask_gt</span> <span class="o">=</span> <span class="n">dist_gt</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+        <span class="c1"># Number of pixels in the whole object silhouette</span>
+        <span class="c1"># (even in the truncated part).</span>
+        <span class="n">px_count_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">obj_mask_gt_large</span><span class="p">)</span>
+
+        <span class="c1"># Number of pixels in the object silhouette with a valid depth measurement</span>
+        <span class="c1"># (i.e. with a non-zero value in the depth image).</span>
+        <span class="n">px_count_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_im</span><span class="p">[</span><span class="n">obj_mask_gt</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Number of pixels in the visible part of the object silhouette.</span>
+        <span class="n">px_count_visib</span> <span class="o">=</span> <span class="n">visib_gt</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+        <span class="c1"># Visible surface fraction.</span>
+        <span class="k">if</span> <span class="n">px_count_all</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">visib_fract</span> <span class="o">=</span> <span class="n">px_count_visib</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">px_count_all</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">visib_fract</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Bounding box of the whole object silhouette</span>
+        <span class="c1"># (including the truncated part).</span>
+        <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">px_count_visib</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ys</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">obj_mask_gt_large</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+            <span class="n">ys</span> <span class="o">-=</span> <span class="n">ren_cy_offset</span>
+            <span class="n">xs</span> <span class="o">-=</span> <span class="n">ren_cx_offset</span>
+            <span class="n">bbox</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">calc_2d_bbox</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">im_size</span><span class="p">)</span>
+
+        <span class="c1"># Bounding box of the visible surface part.</span>
+        <span class="n">bbox_visib</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">px_count_visib</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ys</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">visib_gt</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
+            <span class="n">bbox_visib</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">calc_2d_bbox</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">im_size</span><span class="p">)</span>
+
+        <span class="c1"># Store the calculated info.</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;px_count_all&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_all</span><span class="p">),</span>
+            <span class="s1">&#39;px_count_valid&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_valid</span><span class="p">),</span>
+            <span class="s1">&#39;px_count_visib&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_visib</span><span class="p">),</span>
+            <span class="s1">&#39;visib_fract&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">visib_fract</span><span class="p">),</span>
+            <span class="s1">&#39;bbox_obj&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bbox</span><span class="p">],</span>
+            <span class="s1">&#39;bbox_visib&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bbox_visib</span><span class="p">]</span>
+        <span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="_BopWriterUtility.calc_gt_info">
 <a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility._BopWriterUtility.calc_gt_info">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">calc_gt_info</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">dataset_objects</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Mesh</span><span class="p">],</span> <span class="n">starting_frame_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">calc_gt_info</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">chunk_dirs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">starting_frame_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
                      <span class="n">annotation_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Calculates the ground truth masks.</span>
 <span class="sd">        From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth</span>
 <span class="sd">        rendering.</span>
 
 <span class="sd">        :param chunk_dirs: List of directories to calculate the gt info for.</span>
-<span class="sd">        :param dataset_objects: Dict containing all objects to save the annotations for.</span>
 <span class="sd">        :param starting_frame_id: The first frame id the writer has written during this run.</span>
 <span class="sd">        :param annotation_scale: The scale factor applied to the calculated annotations (in [m]) to get them into the</span>
 <span class="sd">                                 specified format (see `annotation_format` in `write_bop` for further details).</span>
@@ -1056,13 +1124,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit</span>
         <span class="c1"># pylint: disable=import-outside-toplevel</span>
-        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">inout</span><span class="p">,</span> <span class="n">misc</span><span class="p">,</span> <span class="n">visibility</span>
+        <span class="kn">from</span> <span class="nn">bop_toolkit_lib</span> <span class="kn">import</span> <span class="n">inout</span><span class="p">,</span> <span class="n">misc</span>
         <span class="c1"># pylint: enable=import-outside-toplevel</span>
 
         <span class="n">im_width</span><span class="p">,</span> <span class="n">im_height</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span>
-        <span class="n">ren_width</span><span class="p">,</span> <span class="n">ren_height</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">im_width</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">im_height</span>
         <span class="n">ren_cx_offset</span><span class="p">,</span> <span class="n">ren_cy_offset</span> <span class="o">=</span> <span class="n">im_width</span><span class="p">,</span> <span class="n">im_height</span>
-        <span class="n">renderer</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">OffscreenRenderer</span><span class="p">(</span><span class="n">viewport_width</span><span class="o">=</span><span class="n">ren_width</span><span class="p">,</span> <span class="n">viewport_height</span><span class="o">=</span><span class="n">ren_height</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">dir_counter</span><span class="p">,</span> <span class="n">chunk_dir</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">):</span>
             <span class="n">last_chunk_gt_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;scene_gt.json&#39;</span><span class="p">)</span>
@@ -1096,84 +1162,9 @@
                 <span class="n">depth</span> <span class="o">/=</span> <span class="mf">1000.</span>  <span class="c1"># to [m]</span>
 
                 <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scene_camera</span><span class="p">[</span><span class="n">im_id</span><span class="p">][</span><span class="s1">&#39;cam_K&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-                <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-                <span class="n">im_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">depth</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="n">camera</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">IntrinsicsCamera</span><span class="p">(</span><span class="n">fx</span><span class="o">=</span><span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="o">=</span><span class="n">fy</span><span class="p">,</span> <span class="n">cx</span><span class="o">=</span><span class="n">cx</span><span class="o">+</span><span class="n">ren_cx_offset</span><span class="p">,</span> <span class="n">cy</span><span class="o">=</span><span class="n">cy</span><span class="o">+</span><span class="n">ren_cy_offset</span><span class="p">,</span> <span class="n">znear</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                                                   <span class="n">zfar</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
 
-                <span class="n">scene_gt_info</span><span class="p">[</span><span class="n">im_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="n">gt</span> <span class="ow">in</span> <span class="n">scene_gt</span><span class="p">[</span><span class="n">im_id</span><span class="p">]:</span>
-                    <span class="c1"># create a new scene</span>
-                    <span class="n">scene</span> <span class="o">=</span> <span class="n">pyrender</span><span class="o">.</span><span class="n">Scene</span><span class="p">()</span>
-
-                    <span class="c1"># add camera and current object</span>
-                    <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">camera</span><span class="p">)</span>
-                    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">])</span>
-                    <span class="c1"># rescale translation depending on initial saving format</span>
-                    <span class="n">t</span> <span class="o">/=</span> <span class="n">annotation_scale</span>
-                    <span class="n">pose</span> <span class="o">=</span> <span class="n">bop_pose_to_pyrender_coordinate_system</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-                                                                  <span class="n">cam_t_m2c</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
-                    <span class="n">scene</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">[</span><span class="n">gt</span><span class="p">[</span><span class="s1">&#39;obj_id&#39;</span><span class="p">]],</span> <span class="n">pose</span><span class="o">=</span><span class="n">pose</span><span class="p">)</span>
-
-                    <span class="c1"># render the depth image</span>
-                    <span class="n">_</span><span class="p">,</span> <span class="n">depth_gt_large</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
-                    <span class="n">depth_gt</span> <span class="o">=</span> <span class="n">depth_gt_large</span><span class="p">[</span>
-                               <span class="n">ren_cy_offset</span><span class="p">:(</span><span class="n">ren_cy_offset</span> <span class="o">+</span> <span class="n">im_height</span><span class="p">),</span>
-                               <span class="n">ren_cx_offset</span><span class="p">:(</span><span class="n">ren_cx_offset</span> <span class="o">+</span> <span class="n">im_width</span><span class="p">)]</span>
-
-                    <span class="c1"># Convert depth images to distance images.</span>
-                    <span class="n">dist_gt</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth_gt</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
-                    <span class="n">dist_im</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">depth_im_to_dist_im_fast</span><span class="p">(</span><span class="n">depth</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
-
-                    <span class="c1"># Estimation of the visibility mask.</span>
-                    <span class="n">visib_gt</span> <span class="o">=</span> <span class="n">visibility</span><span class="o">.</span><span class="n">estimate_visib_mask_gt</span><span class="p">(</span>
-                        <span class="n">dist_im</span><span class="p">,</span> <span class="n">dist_gt</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">visib_mode</span><span class="o">=</span><span class="s1">&#39;bop19&#39;</span><span class="p">)</span>
-
-                    <span class="c1"># Mask of the object in the GT pose.</span>
-                    <span class="n">obj_mask_gt_large</span> <span class="o">=</span> <span class="n">depth_gt_large</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="n">obj_mask_gt</span> <span class="o">=</span> <span class="n">dist_gt</span> <span class="o">&gt;</span> <span class="mi">0</span>
-
-                    <span class="c1"># Number of pixels in the whole object silhouette</span>
-                    <span class="c1"># (even in the truncated part).</span>
-                    <span class="n">px_count_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">obj_mask_gt_large</span><span class="p">)</span>
-
-                    <span class="c1"># Number of pixels in the object silhouette with a valid depth measurement</span>
-                    <span class="c1"># (i.e. with a non-zero value in the depth image).</span>
-                    <span class="n">px_count_valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_im</span><span class="p">[</span><span class="n">obj_mask_gt</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-
-                    <span class="c1"># Number of pixels in the visible part of the object silhouette.</span>
-                    <span class="n">px_count_visib</span> <span class="o">=</span> <span class="n">visib_gt</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-                    <span class="c1"># Visible surface fraction.</span>
-                    <span class="k">if</span> <span class="n">px_count_all</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">visib_fract</span> <span class="o">=</span> <span class="n">px_count_visib</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">px_count_all</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">visib_fract</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-                    <span class="c1"># Bounding box of the whole object silhouette</span>
-                    <span class="c1"># (including the truncated part).</span>
-                    <span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">px_count_visib</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">ys</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">obj_mask_gt_large</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
-                        <span class="n">ys</span> <span class="o">-=</span> <span class="n">ren_cy_offset</span>
-                        <span class="n">xs</span> <span class="o">-=</span> <span class="n">ren_cx_offset</span>
-                        <span class="n">bbox</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">calc_2d_bbox</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">im_size</span><span class="p">)</span>
-
-                    <span class="c1"># Bounding box of the visible surface part.</span>
-                    <span class="n">bbox_visib</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">px_count_visib</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">ys</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">visib_gt</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
-                        <span class="n">bbox_visib</span> <span class="o">=</span> <span class="n">misc</span><span class="o">.</span><span class="n">calc_2d_bbox</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">im_size</span><span class="p">)</span>
-
-                    <span class="c1"># Store the calculated info.</span>
-                    <span class="n">scene_gt_info</span><span class="p">[</span><span class="n">im_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                        <span class="s1">&#39;px_count_all&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_all</span><span class="p">),</span>
-                        <span class="s1">&#39;px_count_valid&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_valid</span><span class="p">),</span>
-                        <span class="s1">&#39;px_count_visib&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">px_count_visib</span><span class="p">),</span>
-                        <span class="s1">&#39;visib_fract&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">visib_fract</span><span class="p">),</span>
-                        <span class="s1">&#39;bbox_obj&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bbox</span><span class="p">],</span>
-                        <span class="s1">&#39;bbox_visib&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">bbox_visib</span><span class="p">]</span>
-                    <span class="p">})</span>
+                <span class="n">scene_gt_info</span><span class="p">[</span><span class="n">im_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">_BopWriterUtility</span><span class="o">.</span><span class="n">_calc_gt_info_iteration</span><span class="p">,</span> <span class="n">annotation_scale</span><span class="p">,</span> <span class="n">ren_cy_offset</span><span class="p">,</span> <span class="n">ren_cx_offset</span><span class="p">,</span> <span class="n">im_height</span><span class="p">,</span> <span class="n">im_width</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">depth</span><span class="p">),</span> <span class="n">scene_gt</span><span class="p">[</span><span class="n">im_id</span><span class="p">])</span>
+                    
 
             <span class="c1"># Save the info for the current scene.</span>
             <span class="n">scene_gt_info_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunk_dir</span><span class="p">,</span> <span class="s1">&#39;scene_gt_info.json&#39;</span><span class="p">)</span>

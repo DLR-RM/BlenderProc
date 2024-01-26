@@ -1,8 +1,0 @@
-blenderproc.python.modules.camera.ReplicaCameraSampler module
-=============================================================
-
-.. automodule:: blenderproc.python.modules.camera.ReplicaCameraSampler
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

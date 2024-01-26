@@ -7,7 +7,7 @@ If don't have any data yet, BlenderProc offers download functionality for many d
 * `blenderproc download blenderkit <output_dir>`: Downloads materials and models from blenderkit
 * `blenderproc download cc_textures <output_dir>`: Downloads textures from cc0textures.com.
 * `blenderproc download haven <output_dir>`: Downloads HDRIs, Textures and Models from polyhaven.com.
-* `blenderproc download ikea <output_dir>`: Downloads the IKEA dataset. **(At the moment this dataset is not availabe!)**
+* `blenderproc download ikea <output_dir>`: Downloads the IKEA dataset. **(At the moment this dataset is not availabe! Use pix3d instead, as ikea is a subset of pix3D)**
 * `blenderproc download pix3d <output_dir>`: Downloads the Pix3D dataset.
 * `blenderproc download scenenet <output_dir>`: Downloads the scenenet dataset.
 * `blenderproc download matterport3d <output_dir>`: Downloads the Matterport3D dataset.

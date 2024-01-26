@@ -1,8 +1,0 @@
-blenderproc.python.modules.provider.sampler.PartSphereModule module
-===================================================================
-
-.. automodule:: blenderproc.python.modules.provider.sampler.PartSphereModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

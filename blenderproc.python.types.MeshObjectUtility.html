@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>blenderproc.python.types.MeshObjectUtility module &mdash; BlenderProc 2.6.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+  <title>blenderproc.python.types.MeshObjectUtility module &mdash; BlenderProc 2.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme_overrides.css?v=034b4ec4" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=0a414f3d"></script>
+        <script src="_static/documentation_options.js?v=dfec817d"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -34,7 +36,7 @@
             BlenderProc
           </a>
               <div class="version">
-                2.6.1
+                2.7.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -98,6 +100,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/point_clouds/README.html">point_clouds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/advanced/spotlight/README.html">spotlight</a></li>
@@ -124,7 +127,6 @@
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/matterport3d/README.html">matterport3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
@@ -196,8 +198,10 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.GlobalStorage.html#blenderproc.python.utility.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer._Initializer">_Initializer</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MaterialGetter.html#blenderproc.python.utility.MaterialGetter.MaterialGetter">MaterialGetter</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
@@ -228,99 +232,6 @@
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader._ShapeNetLoader">_ShapeNetLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader._SuncgLoader">_SuncgLoader</a></li>
 <li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader._TextureLoader">_TextureLoader</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.html">bproc.python.modules</a><ul>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.LensDistortion.html#blenderproc.python.modules.postprocessing.LensDistortion.LensDistortion">LensDistortion</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
@@ -394,15 +305,21 @@ different configurations of vertices with faces and edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>texture</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Texture</span></code>) – The texture that will be used to displace the vertices.</p></li>
-<li><p><strong>mid_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Texture value that gives no displacement. Parameter of displace modifier.</p></li>
-<li><p><strong>strength</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Amount to displace geometry. Parameter of displace modifier.</p></li>
-<li><p><strong>min_vertices_for_subdiv</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Checks if a subdivision is necessary. If the vertices of a object are less than
+<li><p><strong>texture</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Texture</span></code></span>) – The texture that will be used to displace the vertices.</p></li>
+<li><p><strong>mid_level</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Texture value that gives no displacement. Parameter of displace modifier.</p></li>
+<li><p><strong>strength</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Amount to displace geometry. Parameter of displace modifier.</p></li>
+<li><p><strong>min_vertices_for_subdiv</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Checks if a subdivision is necessary. If the vertices of a object are less than
 ‘min_vertices_for_subdiv’ a Subdivision modifier will be add to the object.</p></li>
-<li><p><strong>subdiv_level</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.</p></li>
+<li><p><strong>subdiv_level</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.MeshObject.add_geometry_nodes">
+<span class="sig-name descname"><span class="pre">add_geometry_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.add_geometry_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.add_geometry_nodes" title="Link to this definition"></a></dt>
+<dd><p>Adds a new geometry nodes modifier to the object.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -411,7 +328,7 @@ different configurations of vertices with faces and edges.</p>
 <dd><p>Adds a new material to the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>material</strong> (<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to add.</p>
+<dd class="field-odd"><p><strong>material</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></span>) – The material to add.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -423,7 +340,7 @@ different configurations of vertices with faces and edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name/type of the modifier to add.</p></li>
+<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name/type of the modifier to add.</p></li>
 <li><p><strong>kwargs</strong> – Additional attributes that should be set to the modifier.</p></li>
 </ul>
 </dd>
@@ -437,8 +354,8 @@ different configurations of vertices with faces and edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>projection</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The kind of projection to use. Available: [“cube, “cylinder”, “smart”, “sphere”].</p></li>
-<li><p><strong>overwrite</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the uv mapping will be changed, even if the object already has an uv mapping.</p></li>
+<li><p><strong>projection</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The kind of projection to use. Available: [“cube, “cylinder”, “smart”, “sphere”].</p></li>
+<li><p><strong>overwrite</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, the uv mapping will be changed, even if the object already has an uv mapping.</p></li>
 </ul>
 </dd>
 </dl>
@@ -451,9 +368,9 @@ different configurations of vertices with faces and edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vhacd_path</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The directory in which vhacd should be installed or is already installed.</p></li>
-<li><p><strong>temp_dir</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The temp dir to use for storing the object files created by v-hacd.</p></li>
-<li><p><strong>cache_dir</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – If a directory is given, convex decompositions are stored there named after the meshes hash.
+<li><p><strong>vhacd_path</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The directory in which vhacd should be installed or is already installed.</p></li>
+<li><p><strong>temp_dir</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The temp dir to use for storing the object files created by v-hacd.</p></li>
+<li><p><strong>cache_dir</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – If a directory is given, convex decompositions are stored there named after the meshes hash.
 If the same mesh is decomposed a second time, the result is loaded from the cache and the
 actual decomposition is skipped.</p></li>
 </ul>
@@ -473,7 +390,7 @@ actual decomposition is skipped.</p></li>
 <dd><p>Builds a bvh tree based on the object’s mesh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The new bvh tree</p>
@@ -485,23 +402,6 @@ actual decomposition is skipped.</p></li>
 <dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.MeshObject.disable_rigidbody">
 <span class="sig-name descname"><span class="pre">disable_rigidbody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.disable_rigidbody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.disable_rigidbody" title="Link to this definition"></a></dt>
 <dd><p>Disables the rigidbody element of the object</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.MeshObject.duplicate">
-<span class="sig-name descname"><span class="pre">duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duplicate_children</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.duplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.duplicate" title="Link to this definition"></a></dt>
-<dd><p>Duplicates the object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>duplicate_children</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, also all children objects are recursively duplicated.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A new mesh object, which is a duplicate of this object.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -517,22 +417,22 @@ actual decomposition is skipped.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>active</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the object actively participates in the simulation and its key frames are ignored.
+<li><p><strong>active</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If True, the object actively participates in the simulation and its key frames are ignored.
 If False, the object still follows its keyframes and only acts as an obstacle, but is not
 influenced by the simulation.</p></li>
-<li><p><strong>collision_shape</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Collision shape of object in simulation. Default: ‘CONVEX_HULL’. Available: ‘BOX’,
+<li><p><strong>collision_shape</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Collision shape of object in simulation. Default: ‘CONVEX_HULL’. Available: ‘BOX’,
 ‘SPHERE’, ‘CAPSULE’, ‘CYLINDER’, ‘CONE’, ‘CONVEX_HULL’, ‘MESH’, ‘COMPOUND’.</p></li>
-<li><p><strong>collision_margin</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – The margin around objects where collisions are already recognized. Higher values
+<li><p><strong>collision_margin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – The margin around objects where collisions are already recognized. Higher values
 improve stability, but also make objects hover a bit.</p></li>
-<li><p><strong>collision_mesh_source</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Source of the mesh used to create collision shape. Default: ‘FINAL’. Available:
+<li><p><strong>collision_mesh_source</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Source of the mesh used to create collision shape. Default: ‘FINAL’. Available:
 [‘BASE’, ‘DEFORM’, ‘FINAL’].</p></li>
-<li><p><strong>mass</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]) – The mass in kilogram the object should have. If None is given the mass is calculated based on
+<li><p><strong>mass</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</span>) – The mass in kilogram the object should have. If None is given the mass is calculated based on
 its bounding box volume and the given <cite>mass_factor</cite>.</p></li>
-<li><p><strong>mass_factor</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Scaling factor for mass. This is only considered if the given <cite>mass</cite> is None. Defines the
+<li><p><strong>mass_factor</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Scaling factor for mass. This is only considered if the given <cite>mass</cite> is None. Defines the
 linear function mass=bounding_box_volume*mass_factor (defines material density).</p></li>
-<li><p><strong>friction</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Resistance of object to movement.</p></li>
-<li><p><strong>angular_damping</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Amount of angular velocity that is lost over time.</p></li>
-<li><p><strong>linear_damping</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Amount of linear velocity that is lost over time.</p></li>
+<li><p><strong>friction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Resistance of object to movement.</p></li>
+<li><p><strong>angular_damping</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Amount of angular velocity that is lost over time.</p></li>
+<li><p><strong>linear_damping</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Amount of linear velocity that is lost over time.</p></li>
 </ul>
 </dd>
 </dl>
@@ -543,7 +443,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <span class="sig-name descname"><span class="pre">get_bound_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_coords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.get_bound_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.get_bound_box" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>8x3 array describing the object aligned bounding box coordinates in world coordinates</p>
@@ -557,7 +457,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Gets the volume of the object aligned bounding box.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>volume of a bounding box.</p>
@@ -571,7 +471,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Returns the materials used by the mesh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>]]</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>]]</span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of materials.</p>
@@ -585,7 +485,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Returns the blender mesh of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The mesh.</p>
@@ -599,7 +499,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Returns the origin of the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The origin in world coordinates.</p>
@@ -613,7 +513,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Returns the rigid body component</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyObject</span></code>]</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyObject</span></code>]</span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The rigid body component of the object.</p>
@@ -627,7 +527,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Returns True if the object has material slots. This does not necessarily mean any <cite>Material</cite> is assigned to it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the object has material slots.</p>
@@ -641,7 +541,7 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 <dd><p>Checks whether object has rigidbody element enabled</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if object has rigidbody element enabled</p>
@@ -656,17 +556,6 @@ linear function mass=bounding_box_volume*mass_factor (defines material density).
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.MeshObject.hide">
-<span class="sig-name descname"><span class="pre">hide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hide_object</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.hide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.hide" title="Link to this definition"></a></dt>
-<dd><p>Sets the visibility of the object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hide_object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Determines whether the object should be hidden in rendering.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.MeshObject.join_with_other_objects">
 <span class="sig-name descname"><span class="pre">join_with_other_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#MeshObject.join_with_other_objects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.MeshObject.join_with_other_objects" title="Link to this definition"></a></dt>
 <dd><blockquote>
@@ -676,7 +565,7 @@ The given object-references become invalid after the join operation.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>objects</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – List of objects which will be merged with this object</p>
+<dd class="field-odd"><p><strong>objects</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span>) – List of objects which will be merged with this object</p>
 </dd>
 </dl>
 </dd></dl>
@@ -693,7 +582,7 @@ update_from_bmesh().</p>
 blender is returned (the object has to be in edit mode for that).</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The bmesh</p>
@@ -707,7 +596,7 @@ blender is returned (the object has to be in edit mode for that).</p>
 <dd><p>Returns a trimesh.Trimesh instance of the MeshObject.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Trimesh</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Trimesh</span></code></span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The object as trimesh.Trimesh.</p>
@@ -728,10 +617,10 @@ plane, which then makes the placement easier.</p>
 <dd><p>Creates a new material and adds it to the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the new material.</p>
+<dd class="field-odd"><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name of the new material.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -750,9 +639,9 @@ to the mesh and sets them to their init values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>location</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Determines whether the object’s location should be persisted.</p></li>
-<li><p><strong>rotation</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Determines whether the object’s rotation should be persisted.</p></li>
-<li><p><strong>scale</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – Determines whether the object’s scale should be persisted.</p></li>
+<li><p><strong>location</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Determines whether the object’s location should be persisted.</p></li>
+<li><p><strong>rotation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Determines whether the object’s rotation should be persisted.</p></li>
+<li><p><strong>scale</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Determines whether the object’s scale should be persisted.</p></li>
 </ul>
 </dd>
 </dl>
@@ -766,8 +655,8 @@ to the mesh and sets them to their init values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>position</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – The position to check.</p></li>
-<li><p><strong>down_direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – A vector specifying the direction straight down. If None is given, a vector
+<li><p><strong>position</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span>) – The position to check.</p></li>
+<li><p><strong>down_direction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]</span>) – A vector specifying the direction straight down. If None is given, a vector
 into -Z direction is used.</p></li>
 <li><p><strong>check_no_objects_in_between</strong> – If True, it is also checked that no other objects are in between
 position and object.</p></li>
@@ -786,13 +675,13 @@ position and object.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>origin</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Origin of the ray, in object space.</p></li>
-<li><p><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Direction of the ray, in object space.</p></li>
-<li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Maximum distance.</p></li>
+<li><p><strong>origin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span>) – Origin of the ray, in object space.</p></li>
+<li><p><strong>direction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span>) – Direction of the ray, in object space.</p></li>
+<li><p><strong>max_distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Maximum distance.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Whether the ray successfully hit the geometry
@@ -809,7 +698,7 @@ The face index, -1 when original data isn’t available, int in [-inf, inf]</p>
 <dd><p>Replaces all materials of the object with the given new material.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>material</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code>) – A material that should exclusively be used as new material for the object.</p>
+<dd class="field-odd"><p><strong>material</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></span>) – A material that should exclusively be used as new material for the object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -833,8 +722,8 @@ effect of making the texture look smaller on the object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The index to set the material to.</p></li>
-<li><p><strong>material</strong> (<a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to set.</p></li>
+<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – The index to set the material to.</p></li>
+<li><p><strong>material</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material" title="blenderproc.python.types.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a></span>) – The material to set.</p></li>
 </ul>
 </dd>
 </dl>
@@ -849,14 +738,14 @@ transformation applied to the origin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>point</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]) – The point in world coordinates to which the origin should be set. This parameter is only
+<li><p><strong>point</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>]</span>) – The point in world coordinates to which the origin should be set. This parameter is only
 relevant if mode is set to “POINT”.</p></li>
-<li><p><strong>mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The mode specifying how the origin should be set. Available options are: [“POINT”,
+<li><p><strong>mode</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The mode specifying how the origin should be set. Available options are: [“POINT”,
 “CENTER_OF_MASS”, “CENTER_OF_VOLUME”]</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The new origin in world coordinates.</p>
@@ -871,8 +760,8 @@ relevant if mode is set to “POINT”.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mode</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Desired mode of the shading. Available: [“FLAT”, “SMOOTH”, “AUTO”]. Type: str</p></li>
-<li><p><strong>angle_value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Angle in degrees at which flat shading is activated in <cite>AUTO</cite> mode. Type: float</p></li>
+<li><p><strong>mode</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Desired mode of the shading. Available: [“FLAT”, “SMOOTH”, “AUTO”]. Type: str</p></li>
+<li><p><strong>angle_value</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Angle in degrees at which flat shading is activated in <cite>AUTO</cite> mode. Type: float</p></li>
 </ul>
 </dd>
 </dl>
@@ -885,12 +774,12 @@ relevant if mode is set to “POINT”.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code>) – The bmesh to set.</p></li>
+<li><p><strong>bm</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></span>) – The bmesh to set.</p></li>
 <li><p><strong>free_bm_mesh</strong> – If True and the given bmesh is not owned by blender, it will be deleted in the end.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -904,10 +793,10 @@ relevant if mode is set to “POINT”.</p></li>
 that is the closest one to the mean location of the bboxes of the selected objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>objects</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – The list of mesh objects that should be considered.</p>
+<dd class="field-odd"><p><strong>objects</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span>) – The list of mesh objects that should be considered.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Point of interest in the scene.</p>
@@ -921,10 +810,10 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dd><p>Converts the given list of blender objects to mesh objects</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>blender_objects</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – List of blender objects.</p>
+<dd class="field-odd"><p><strong>blender_objects</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></span>) – List of blender objects.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The list of meshes.</p>
@@ -939,10 +828,10 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <p>Such a tree is later used for fast raycasting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mesh_objects</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]) – The list of mesh objects that should be put into the BVH tree.</p>
+<dd class="field-odd"><p><strong>mesh_objects</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span>) – The list of mesh objects that should be put into the BVH tree.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The built BVH tree.</p>
@@ -957,12 +846,36 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>blender_mesh</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code>) – The blender mesh.</p></li>
-<li><p><strong>object_name</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The name of the new object. If None is given, the name of the given mesh is used.</p></li>
+<li><p><strong>blender_mesh</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></span>) – The blender mesh.</p></li>
+<li><p><strong>object_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – The name of the new object. If None is given, the name of the given mesh is used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The new Mesh object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.create_from_point_cloud">
+<span class="sig-prename descclassname"><span class="pre">blenderproc.python.types.MeshObjectUtility.</span></span><span class="sig-name descname"><span class="pre">create_from_point_cloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_geometry_nodes_visualization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#create_from_point_cloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.create_from_point_cloud" title="Link to this definition"></a></dt>
+<dd><p>Create a mesh from a point cloud.</p>
+<p>The mesh’s vertices are filled with the points from the given point cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – The points of the point cloud. Should be in shape [N, 3]</p></li>
+<li><p><strong>object_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name of the new object.</p></li>
+<li><p><strong>add_geometry_nodes_visualization</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – If yes, a geometry nodes modifier is added, 
+which adds a sphere to every point. In this way, 
+the point cloud will appear in renderings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The new Mesh object.</p>
@@ -976,11 +889,11 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dd><p>Creates a new primitive mesh object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>shape</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The name of the primitive to create. Available: [“CUBE”, “CYLINDER”, “CONE”, “PLANE”,
+<dd class="field-odd"><p><strong>shape</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The name of the primitive to create. Available: [“CUBE”, “CYLINDER”, “CONE”, “PLANE”,
 “SPHERE”, “MONKEY”]</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The newly created MeshObject</p>
@@ -992,11 +905,11 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dt class="sig sig-object py" id="blenderproc.python.types.MeshObjectUtility.create_with_empty_mesh">
 <span class="sig-prename descclassname"><span class="pre">blenderproc.python.types.MeshObjectUtility.</span></span><span class="sig-name descname"><span class="pre">create_with_empty_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/blenderproc/python/types/MeshObjectUtility.html#create_with_empty_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#blenderproc.python.types.MeshObjectUtility.create_with_empty_mesh" title="Link to this definition"></a></dt>
 <dd><p>Creates an object with an empty mesh.
-:type object_name: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>
+:type object_name: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
 :param object_name: The name of the new object.
-:type mesh_name: <code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]
+:type mesh_name: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>
 :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
-:rtype: <a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>
+:rtype: <span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></span>
 :return: The new Mesh object.</p>
 </dd></dl>
 
@@ -1012,7 +925,7 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dd><p>Returns all mesh objects in scene</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</span></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of all MeshObjects</p>
@@ -1027,13 +940,13 @@ that is the closest one to the mean location of the bboxes of the selected objec
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>origin</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Origin of the ray, in world space.</p></li>
-<li><p><strong>direction</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]) – Direction of the ray, in world space.</p></li>
-<li><p><strong>max_distance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – Maximum distance.</p></li>
+<li><p><strong>origin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span>) – Origin of the ray, in world space.</p></li>
+<li><p><strong>direction</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span>) – Direction of the ray, in world space.</p></li>
+<li><p><strong>max_distance</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Maximum distance.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <a class="reference internal" href="#blenderproc.python.types.MeshObjectUtility.MeshObject" title="blenderproc.python.types.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Whether the ray successfully hit any geometry

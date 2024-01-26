@@ -1,8 +1,0 @@
-blenderproc.python.modules.main.Pipeline module
-===============================================
-
-.. automodule:: blenderproc.python.modules.main.Pipeline
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

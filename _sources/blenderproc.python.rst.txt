@@ -13,7 +13,6 @@ Subpackages
    blenderproc.python.lighting
    blenderproc.python.loader
    blenderproc.python.material
-   blenderproc.python.modules
    blenderproc.python.object
    blenderproc.python.postprocessing
    blenderproc.python.renderer

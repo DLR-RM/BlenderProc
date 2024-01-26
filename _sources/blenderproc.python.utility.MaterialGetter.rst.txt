@@ -1,0 +1,8 @@
+blenderproc.python.utility.MaterialGetter module
+================================================
+
+.. automodule:: blenderproc.python.utility.MaterialGetter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

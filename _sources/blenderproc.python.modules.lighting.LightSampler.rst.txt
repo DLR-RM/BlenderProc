@@ -1,8 +1,0 @@
-blenderproc.python.modules.lighting.LightSampler module
-=======================================================
-
-.. automodule:: blenderproc.python.modules.lighting.LightSampler
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

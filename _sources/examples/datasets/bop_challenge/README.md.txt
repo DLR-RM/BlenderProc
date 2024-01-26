@@ -92,7 +92,7 @@ blenderproc download cc_textures
 ```
 
 ```
-blenderpoc run examples/datasets/bop_challenge/<config_dataset.yaml> 
+blenderpoc run examples/datasets/bop_challenge/<main_dataset.py> 
               <path_to_bop_data> 
               <bop_dataset_name> 
               <path_to_bop_toolkit> 
@@ -100,7 +100,7 @@ blenderpoc run examples/datasets/bop_challenge/<config_dataset.yaml>
               examples/datasets/bop_challenge/output
 ``` 
 
-* `examples/datasets/bop_challenge/<config_dataset.yaml>`: path to the pipeline configuration file.
+* `examples/datasets/bop_challenge/<main_dataset.py>`: path to the python script file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset.
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.

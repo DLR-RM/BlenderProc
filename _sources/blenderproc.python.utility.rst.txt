@@ -10,9 +10,11 @@ Submodules
    blenderproc.python.utility.BlenderUtility
    blenderproc.python.utility.CollisionUtility
    blenderproc.python.utility.DefaultConfig
+   blenderproc.python.utility.GlobalStorage
    blenderproc.python.utility.Initializer
    blenderproc.python.utility.InstallUtility
    blenderproc.python.utility.LabelIdMapping
+   blenderproc.python.utility.MaterialGetter
    blenderproc.python.utility.MathUtility
    blenderproc.python.utility.PatternUtility
    blenderproc.python.utility.SetupUtility

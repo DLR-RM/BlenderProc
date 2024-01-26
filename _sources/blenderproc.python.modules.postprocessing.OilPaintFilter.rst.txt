@@ -1,8 +1,0 @@
-blenderproc.python.modules.postprocessing.OilPaintFilter module
-===============================================================
-
-.. automodule:: blenderproc.python.modules.postprocessing.OilPaintFilter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

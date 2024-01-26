@@ -1,8 +1,0 @@
-blenderproc.python.modules.renderer.SegMapRenderer module
-=========================================================
-
-.. automodule:: blenderproc.python.modules.renderer.SegMapRenderer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

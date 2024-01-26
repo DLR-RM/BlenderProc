@@ -1,0 +1,8 @@
+blenderproc.python.camera.CameraProjection module
+=================================================
+
+.. automodule:: blenderproc.python.camera.CameraProjection
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

@@ -1,8 +1,0 @@
-blenderproc.python.modules.constructor.RandomRoomConstructorModule module
-=========================================================================
-
-.. automodule:: blenderproc.python.modules.constructor.RandomRoomConstructorModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

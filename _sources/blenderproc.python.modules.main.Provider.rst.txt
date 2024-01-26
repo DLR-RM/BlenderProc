@@ -1,8 +1,0 @@
-blenderproc.python.modules.main.Provider module
-===============================================
-
-.. automodule:: blenderproc.python.modules.main.Provider
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

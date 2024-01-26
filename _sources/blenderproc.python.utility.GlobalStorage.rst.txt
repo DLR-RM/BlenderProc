@@ -1,0 +1,8 @@
+blenderproc.python.utility.GlobalStorage module
+===============================================
+
+.. automodule:: blenderproc.python.utility.GlobalStorage
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :private-members:

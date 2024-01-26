@@ -1,8 +1,0 @@
-blenderproc.python.modules.object.ObjectReplacerModule module
-=============================================================
-
-.. automodule:: blenderproc.python.modules.object.ObjectReplacerModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

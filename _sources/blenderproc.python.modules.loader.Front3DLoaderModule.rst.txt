@@ -1,8 +1,0 @@
-blenderproc.python.modules.loader.Front3DLoaderModule module
-============================================================
-
-.. automodule:: blenderproc.python.modules.loader.Front3DLoaderModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

@@ -1,8 +1,0 @@
-blenderproc.python.modules.provider.sampler.Color module
-========================================================
-
-.. automodule:: blenderproc.python.modules.provider.sampler.Color
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

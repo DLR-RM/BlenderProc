@@ -1,8 +1,0 @@
-blenderproc.python.modules.utility.ItemWriter module
-====================================================
-
-.. automodule:: blenderproc.python.modules.utility.ItemWriter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

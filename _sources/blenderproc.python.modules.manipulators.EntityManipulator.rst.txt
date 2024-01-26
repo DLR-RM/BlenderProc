@@ -1,8 +1,0 @@
-blenderproc.python.modules.manipulators.EntityManipulator module
-================================================================
-
-.. automodule:: blenderproc.python.modules.manipulators.EntityManipulator
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:

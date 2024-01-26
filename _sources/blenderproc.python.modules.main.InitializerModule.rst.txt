@@ -1,8 +1,0 @@
-blenderproc.python.modules.main.InitializerModule module
-========================================================
-
-.. automodule:: blenderproc.python.modules.main.InitializerModule
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
