@@ -80,8 +80,9 @@ def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[i
 
     # Unproject 2D into 3D
     points = np.concatenate((points_2d, np.ones_like(points_2d[:, :1])), -1)
-    points *= depth[:, None]
-    points_cam = (K_inv @ points.T).T
+    with np.errstate(invalid='ignore'):
+        points *= depth[:, None]
+        points_cam = (K_inv @ points.T).T
 
     # Transform into world frame
     points_cam[...,2] *= -1
