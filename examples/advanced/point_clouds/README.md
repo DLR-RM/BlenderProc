@@ -1,8 +1,8 @@
 # Point clouds
 
 <p align="center">
-<img src="../../../images/point_clouds_0.jpg" alt="Front readme image" width=375>
-<img src="../../../images/point_clouds_1.jpg" alt="Front readme image" width=375>
+<img src="../../../images/point_clouds_0.png" alt="Front readme image" width=375>
+<img src="../../../images/point_clouds_1.png" alt="Front readme image" width=375>
 </p>
 
 In this example we demonstrate how to compute a depth map with raytracing and how to unproject it into a point cloud.
