@@ -77,7 +77,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     # Select target objects or objects from the specified dataset or all objects
     if target_objects is not None:
         dataset_objects = target_objects
-        for obj in get_all_mesh_objects():
+        for obj in dataset_objects:
             if obj.is_hidden():
                 print(f"WARNING: The given object {obj.get_name()} is hidden. However, the bop writer will still add "
                       "coco annotations for it. If this is not desired, don't pass the object to the bop writer.")
