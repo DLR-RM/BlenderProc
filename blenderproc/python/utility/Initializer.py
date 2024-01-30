@@ -162,5 +162,5 @@ class _Initializer:
     @staticmethod
     def remove_custom_properties():
         """ Remove all custom properties registered at global entities like the scene. """
-        for key in bpy.context.scene.keys():
+        for key in list(bpy.context.scene.keys()):
             del bpy.context.scene[key]
