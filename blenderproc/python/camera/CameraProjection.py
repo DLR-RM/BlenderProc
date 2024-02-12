@@ -57,8 +57,9 @@ def depth_via_raytracing(bvh_tree: BVHTree, frame: Optional[int] = None, return_
         dists = np.reshape(dists, [resolution_y, resolution_x])
 
         if not return_dist:
-            depth = dist2depth(dists)
-        return depth
+            return dist2depth(dists)
+        else:
+            return dists
 
 def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[int] = None, depth_cut_off: float = 1e6) -> np.ndarray:
     """ Unproject 2D points into 3D
