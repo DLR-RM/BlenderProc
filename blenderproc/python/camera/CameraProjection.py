@@ -22,6 +22,34 @@ def depth_via_raytracing(bvh_tree: BVHTree, frame: Optional[int] = None, return_
     :param return_dist: If True, a distance image instead of a depth image is returned.
     :return: The depth image with shape [H, W].
     """
+    resolution_x = bpy.context.scene.render.resolution_x
+    resolution_y = bpy.context.scene.render.resolution_y
+
+    # Generate 2D coordinates of all pixels
+    y = np.arange(resolution_y)   
+    x = np.arange(resolution_x)
+    points = np.stack(np.meshgrid(x, y), -1).astype(np.float32)
+
+    # Calc depth at points
+    depth = depth_at_points_via_raytracing(bvh_tree, points.reshape(-1, 2), frame, return_dist)
+    
+    # Reshape back into depth image
+    depth = np.reshape(depth, [resolution_y, resolution_x])
+    return depth
+
+
+def depth_at_points_via_raytracing(bvh_tree: BVHTree, points_2d: np.ndarray, frame: Optional[int] = None, return_dist: bool = False) -> np.ndarray:
+    """ Computes the depth values at the given 2D points.
+
+    All points that correspond to rays which do not hit any object are set to inf.
+
+    :param bvh_tree: The BVH tree to use for raytracing.
+    :param points_2d: An array of N 2D points with shape [N, 2].
+    :param frame: The frame number whose assigned camera pose should be used. If None is given, the current frame
+                  is used.
+    :param return_dist: If True, distance values instead of depth are returned.
+    :return: The depth values with shape [N].
+    """
     with KeyFrame(frame):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
@@ -42,25 +70,23 @@ def depth_via_raytracing(bvh_tree: BVHTree, frame: Optional[int] = None, return_
         dists = []
         # Go in discrete grid-like steps over plane
         position = cam2world_matrix.to_translation()
-        for y in range(0, resolution_y):
-            for x in reversed(range(0, resolution_x)):
-                # Compute current point on plane
-                end = frame[0] + vec_x * (x + 0.5) / float(resolution_x) \
-                        + vec_y * (y + 0.5) / float(resolution_y)
-                # Send ray from the camera position through the current point on the plane
-                _, _, _, dist = bvh_tree.ray_cast(position, end - position)
-                if dist is None:
-                    dist = np.inf
+        for p in points_2d:
+            # Compute current point on plane
+            end = frame[0] + vec_x * (resolution_x - (p[0] + 0.5)) / float(resolution_x) \
+                    + vec_y * (p[1] + 0.5) / float(resolution_y)
+            # Send ray from the camera position through the current point on the plane
+            _, _, _, dist = bvh_tree.ray_cast(position, end - position)
+            if dist is None:
+                dist = np.inf
 
-                dists.append(dist)
+            dists.append(dist)
         dists = np.array(dists)
-        dists = np.reshape(dists, [resolution_y, resolution_x])
 
         if not return_dist:
-            return dist2depth(dists)
+            return dist2depth(dists, points_2d)
         else:
             return dists
-
+    
 def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[int] = None, depth_cut_off: float = 1e6) -> np.ndarray:
     """ Unproject 2D points into 3D
 
