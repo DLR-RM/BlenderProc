@@ -170,7 +170,7 @@ class Entity(Struct):
 
         if duplicate_children:
             for child in self.get_children():
-                duplicate_child = child.duplicate(duplicate_children=duplicate_children)
+                duplicate_child = child.duplicate(duplicate_children=duplicate_children, linked=linked)
                 duplicate_child.set_parent(duplicate_obj)
 
                 duplicate_child.blender_obj.matrix_basis = child.blender_obj.matrix_basis.copy()
