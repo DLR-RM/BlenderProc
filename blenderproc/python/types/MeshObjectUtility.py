@@ -27,13 +27,57 @@ class MeshObject(Entity):
     Every instance of this class is a mesh which can be rendered in the scene. It can have multiple materials and
     different configurations of vertices with faces and edges.
     """
+    def materials(self) -> int:
+        """ Returns the number of material slots of the object.
 
-    def get_materials(self) -> List[Optional[Material]]:
-        """ Returns the materials used by the mesh.
+        :return: The number of material slots.
+        """
+        return len(self.blender_obj.material_slots)
 
+    def get_material_slot_link(self, index: int) -> str:
+        """ Returns whether object's or object's data material is used in the material slot.
+
+        :return: "DATA" if the material slot is linked to data material or "OBJECT" otherwise.
+        """
+        return self.blender_obj.material_slots[index].link
+
+    def set_material_slot_link(self, index: int, link: str):
+        """ Sets whether object's or object's data material is used in the material slot.
+        Available: ["DATA", "OBJECT"]. Type: str
+        """
+        self.blender_obj.material_slots[index].link = link
+
+    def get_material(self, index: int, link = "VISIBLE") -> Material:
+        """ Returns the material used by the object.
+
+        :link: The mode specifying whether to get material linked to the object or object's data.
+        Available: ["DATA", "OBJECT", "VISIBLE"]. Type: str
         :return: A list of materials.
         """
-        return MaterialLoaderUtility.convert_to_materials(self.blender_obj.data.materials)
+        link = link.upper()
+        if link == "VISIBLE" and self.get_material_slot_link(index) == "DATA":
+            link = "DATA"
+        link2get = "OBJECT" if link == "VISIBLE" else link
+
+        link2return = self.get_material_slot_link(index)
+        self.set_material_slot_link(index, link2get)
+        material = self.blender_obj.material_slots[index].material
+        self.set_material_slot_link(index, link2return)
+
+        # If there is no material in the `OBJECT` slot then the 'DATA' material is displayed.
+        if material is None and link == "VISIBLE":
+            return self.get_material(index, "DATA")
+        else:
+            return MaterialLoaderUtility.convert_to_material(material)
+
+    def get_materials(self, link = "VISIBLE") -> List[Optional[Material]]:
+        """ Returns the materials used by the object.
+
+        :link: The mode specifying whether to get materials linked to the object or object's data.
+        Available: ["DATA", "OBJECT", "VISIBLE"]. Type: str
+        :return: A list of materials.
+        """
+        return [self.get_material(index, link) for index in range(self.materials())]
 
     def has_materials(self) -> bool:
         """
@@ -41,25 +85,30 @@ class MeshObject(Entity):
 
         :return: True if the object has material slots.
         """
-        return len(self.blender_obj.data.materials) > 0
+        return self.materials() > 0
 
-    def set_material(self, index: int, material: Material):
-        """ Sets the given material at the given index of the objects material list.
+    def set_material(self, index: int, material: Material, link="DATA"):
+        """ Sets the given material at the given index of the object's material list.
 
         :param index: The index to set the material to.
         :param material: The material to set.
+        :link: The mode specifying whether to link material to the object or object's data.
+               Available: ["DATA", "OBJECT"]. Type: str
         """
-        self.blender_obj.data.materials[index] = material.blender_obj
+        keep_link = self.get_material_slot_link(index)
+        self.set_material_slot_link(index, link)
+        self.blender_obj.material_slots[index].material = None if material is None else material.blender_obj
+        self.set_material_slot_link(index, keep_link)
 
     def add_material(self, material: Material):
-        """ Adds a new material to the object.
+        """ Adds a new material to the object's data.
 
         :param material: The material to add.
         """
         self.blender_obj.data.materials.append(material.blender_obj)
 
     def new_material(self, name: str) -> Material:
-        """ Creates a new material and adds it to the object.
+        """ Creates a new material and adds it to the object's data.
 
         :param name: The name of the new material.
         """
@@ -68,11 +117,11 @@ class MeshObject(Entity):
         return new_mat
 
     def clear_materials(self):
-        """ Removes all materials from the object. """
+        """ Removes all materials from the object's data. """
         self.blender_obj.data.materials.clear()
 
     def replace_materials(self, material: bpy.types.Material):
-        """ Replaces all materials of the object with the given new material.
+        """ Replaces all materials of the object's data with the given new material.
 
         :param material: A material that should exclusively be used as new material for the object.
         """
