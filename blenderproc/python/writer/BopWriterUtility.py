@@ -179,6 +179,9 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
 
         _BopWriterUtility.calc_gt_coco(chunk_dirs=chunk_dirs, dataset_objects=dataset_objects,
                                        starting_frame_id=starting_frame_id)
+        
+        pool.close()
+        pool.join()
 
 
 def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.ndarray) -> np.ndarray:
