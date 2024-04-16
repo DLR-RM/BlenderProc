@@ -7,6 +7,17 @@
 
 # Version History
 
+## Version 2.7.1 16th April 2024
+
+- new camera projection helper methods are available: `bproc.camera.depth_via_raytracing()`, `bproc.camera.pointcloud_from_depth()`, `bproc.camera.project_points()`, `bproc.camera.unproject_points()` (#1045, #1075)
+- .blend loader now also supports hair_curves (#1052, thanks @sagoyal2)
+- adds .usd loader (#1043, thanks @freLorbeer)
+- fixes memory leak in bop writer (#1086, thanks @matteomastrogiuseppe)
+- fixes removal of scene properties (#1055)
+- fixes incorrect warnings regarding hidden objects in bop writer (@1058, thanks @saprrow)
+- fixes linking objects when duplicating object hierarchy (@1081, thanks @AndreyYashkin)
+
+
 ## Version 2.7.0 26th January 2024
 
 - upgrades to blender 3.5.1 (#788)
