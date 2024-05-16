@@ -25,7 +25,7 @@ item.set_location([0,-1,7])
 item.set_rotation_euler([1,0,1])
 item.enable_rigidbody(active=True)
 
-# Aktivate the physics simulation
+# Activate the physics simulation
 bproc.object.simulate_physics(
     min_simulation_time=4,
     max_simulation_time=20,
