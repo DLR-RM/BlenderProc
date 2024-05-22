@@ -679,6 +679,8 @@ def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.b
         mesh.transform(Matrix(obj.get_local2world_mat()))
         # Add object mesh to bmesh
         bm.from_mesh(mesh)
+        # Avoid leaving orphan mesh
+        bpy.data.meshes.remove(mesh)
 
     # Create tree from bmesh
     bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
