@@ -43,8 +43,8 @@ class DefaultConfig:
     world_background = [0.05, 0.05, 0.05]
 
     # Setup
-    default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio==2.9.0", "gitpython==3.1.18",
-                            "scikit-image==0.19.2", "pypng==0.0.20", "scipy==1.11.3", "matplotlib==3.5.1",
-                            "pytz==2021.1", "h5py==3.6.0", "Pillow==8.3.2", "opencv-contrib-python==4.5.5.64",
-                            "scikit-learn==1.0.2", "python-dateutil==2.8.2", "rich==12.6.0", "trimesh==3.21.5",
+    default_pip_packages = ["wheel", "pyyaml==6.0.1", "imageio==2.34.1", "gitpython==3.1.43",
+                            "scikit-image==0.23.2", "pypng==0.20220715.0", "scipy==1.13.1", "matplotlib==3.9.0",
+                            "pytz==2024.1", "h5py==3.11.0", "Pillow==10.3.0", "opencv-contrib-python==4.10.0.82",
+                            "scikit-learn==1.5.0", "python-dateutil==2.9.0.post0", "rich==13.7.1", "trimesh==4.4.0",
                             "pyrender==0.1.45"]
