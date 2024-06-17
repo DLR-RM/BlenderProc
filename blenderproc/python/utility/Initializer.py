@@ -163,4 +163,6 @@ class _Initializer:
     def remove_custom_properties():
         """ Remove all custom properties registered at global entities like the scene. """
         for key in list(bpy.context.scene.keys()):
-            del bpy.context.scene[key]
+            # Do not remove blender's internal property "cycles"
+            if key not in ["cycles"]:
+                del bpy.context.scene[key]
