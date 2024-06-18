@@ -145,7 +145,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
     file_ending = file_path[file_path.rfind(".") + 1:].lower()
     if file_ending in ["exr", "png"]:
         try:
-            return imageio.imread(file_path)[:, :, :num_channels]
+            return imageio.v3.imread(file_path, plugin='opencv', flags=cv2.IMREAD_UNCHANGED)[:, :, :num_channels]
         except ValueError:
             print("It seems the freeimage library which is necessary to read .exr files cannot "
                   "be found on your computer.")
@@ -172,7 +172,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
 
             try:
                 # Try again
-                return imageio.imread(file_path)[:, :, :num_channels]
+                return imageio.v3.imread(file_path, plugin='opencv', flags=cv2.IMREAD_UNCHANGED)[:, :, :num_channels]
             except ValueError as e2:
                 error = "The automatic installation of the freeimage library failed, so you need to install " \
                         "the imageio .exr extension manually. This is quite simple: \n"
