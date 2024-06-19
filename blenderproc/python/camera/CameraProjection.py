@@ -28,7 +28,7 @@ def depth_via_raytracing(bvh_tree: BVHTree, frame: Optional[int] = None, return_
     # Generate 2D coordinates of all pixels
     y = np.arange(resolution_y)   
     x = np.arange(resolution_x)
-    points = np.stack(np.meshgrid(x, y), -1).astype(np.float32)
+    points = np.stack(np.meshgrid(x, y), -1).astype(np.float64)
 
     # Calc depth at points
     depth = depth_at_points_via_raytracing(bvh_tree, points.reshape(-1, 2), frame, return_dist)
@@ -61,7 +61,7 @@ def depth_at_points_via_raytracing(bvh_tree: BVHTree, points_2d: np.ndarray, fra
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
-        frame = [cam2world_matrix @ v for v in frame]
+        frame = [(np.array(cam2world_matrix) @ np.append(np.array(v, np.float64), [1]))[:3] for v in frame]
 
         # Compute vectors along both sides of the plane
         vec_x = frame[3] - frame[0]
@@ -160,7 +160,7 @@ def pointcloud_from_depth(depth: np.ndarray, frame: Optional[int] = None, depth_
     # Generate 2D coordinates of all pixels in the given image.
     y = np.arange(depth.shape[0])   
     x = np.arange(depth.shape[1])
-    points = np.stack(np.meshgrid(x, y), -1).astype(np.float32)
+    points = np.stack(np.meshgrid(x, y), -1).astype(np.float64)
     # Unproject the 2D points
     return unproject_points(points.reshape(-1, 2), depth.flatten(), frame, depth_cut_off).reshape(depth.shape[0], depth.shape[1], 3)
 
