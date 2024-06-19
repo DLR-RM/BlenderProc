@@ -8,6 +8,9 @@ from .version import __version__
 if sys.version_info.major < 3:
     raise Exception("BlenderProc requires at least python 3.X to run.")
 
+# exr is now disabled by default (see https://github.com/opencv/opencv/issues/21326)
+os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1" 
+
 # Only import if we are in the blender environment, this environment variable is set by the cli.py script
 if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     # Remove the parent of the blender proc folder, as it might contain other packages
