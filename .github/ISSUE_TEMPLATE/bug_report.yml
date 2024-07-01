@@ -12,11 +12,11 @@ body:
   - type: textarea
     attributes:
       label: Minimal code example
-      description: A *minimal* code example which reproduces this issue, see this [guide](https://stackoverflow.com/help/minimal-reproducible-example). The more reduced the code is, the easier we can understand/reproduce your issue and the faster you will get an answer.
+      description: A *minimal* code example which reproduces this issue, see this [guide](https://stackoverflow.com/help/minimal-reproducible-example). **The more reduced the code is, the easier we can understand/reproduce your issue and the faster you will get an answer.**
       placeholder: Only put python code in here
       render: python
     validations:
-      required: false
+      required: true
   - type: textarea
     attributes:
       label: Files required to run the code
