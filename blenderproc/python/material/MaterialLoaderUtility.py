@@ -34,13 +34,19 @@ def create(name: str) -> Material:
     return Material(new_mat)
 
 
+def convert_to_material(blender_material: bpy.types.Material) -> Material:
+    """ Converts the given blender material to bproc.Material
+    """
+    return None if blender_material is None else Material(blender_material)
+
+
 def convert_to_materials(blender_materials: List[Optional[bpy.types.Material]]) -> List[Optional[Material]]:
     """ Converts the given list of blender materials to bproc.Material(s)
 
     :param blender_materials: List of materials.
     :return: The list of materials.
     """
-    return [(None if obj is None else Material(obj)) for obj in blender_materials]
+    return [convert_to_material(obj) for obj in blender_materials]
 
 
 def find_cc_material_by_name(material_name: str, custom_properties: Dict[str, Any]) -> bpy.types.Material:
