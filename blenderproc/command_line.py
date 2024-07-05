@@ -63,13 +63,13 @@ def cli():
                                        formatter_class=argparse.RawTextHelpFormatter)
     parser_download = subparsers.add_parser('download', help="Download datasets, materials or 3D models to run "
                                                              "examples or your own pipeline. \n"
-                                                             "Options: {', '.join(options['download'])}",
+                                                             f"Options: {', '.join(options['download'])}",
                                             formatter_class=argparse.RawTextHelpFormatter)
     parser_extract = subparsers.add_parser('extract', help="Extract the raw images from generated containers such "
-                                                           "as hdf5. \nOptions: {', '.join(options['extract'])}",
+                                                           f"as hdf5. \nOptions: {', '.join(options['extract'])}",
                                            formatter_class=argparse.RawTextHelpFormatter)
     parser_pip = subparsers.add_parser('pip', help="Can be used to install/uninstall pip packages in the Blender "
-                                                   "python environment. \nOptions: {', '.join(options['pip'])}",
+                                                   f"python environment. \nOptions: {', '.join(options['pip'])}",
                                        formatter_class=argparse.RawTextHelpFormatter)
 
     sub_parser_vis = parser_vis.add_subparsers(dest='vis_mode')
