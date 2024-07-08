@@ -527,6 +527,8 @@ class MeshObject(Entity):
      
      # get vertices 
      verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
+     # re-scale the vertices since scale operations doesn't apply to the mesh data
+     verts *= self.blender_obj.scale
      # get faces   
      faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
 
