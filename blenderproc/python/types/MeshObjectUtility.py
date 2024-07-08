@@ -506,28 +506,31 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         return modifier.node_group
 
-    def mesh_as_trimesh(self) -> Trimesh:
-        """ Returns a trimesh.Trimesh instance of the MeshObject.
+ def mesh_as_trimesh(self) -> Trimesh:
+     """ Returns a trimesh.Trimesh instance of the MeshObject.
 
-        :return: The object as trimesh.Trimesh.
-        """
-        # get mesh data
-        mesh = self.get_mesh()
+     :return: The object as trimesh.Trimesh.
+     """
 
-        # get vertices
-        verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
+     # get mesh data
+     mesh = self.get_mesh()
+     
+     # check if faces are pure tris or quads and triangulate quads if this is not the case
+     if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
+         # Triangulate quads
+         self.select()
+         bpy.ops.object.mode_set(mode='EDIT')
+         bpy.ops.mesh.select_all(action='SELECT')
+         bpy.ops.mesh.quads_convert_to_tris(quad_method='FIXED', ngon_method='BEAUTY') 
+         bpy.ops.object.mode_set(mode='OBJECT')
+         self.deselect()
+     
+     # get vertices 
+     verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
+     # get faces   
+     faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
 
-        # check if faces are pure tris or quads
-        if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
-            raise Exception(f"The mesh {self.get_name()} must have pure triangular or pure quad faces")
-
-        # re-scale the vertices since scale operations doesn't apply to the mesh data
-        verts *= self.blender_obj.scale
-
-        # get faces
-        faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
-
-        return Trimesh(vertices=verts, faces=faces)
+     return Trimesh(vertices=verts, faces=faces)
 
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
