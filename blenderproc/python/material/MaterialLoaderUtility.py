@@ -227,7 +227,7 @@ def add_specular(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, specular_im
     if os.path.exists(specular_image_path):
         specular_texture = create_image_node(nodes, specular_image_path, True,
                                              _x_texture_node, 0)
-        links.new(specular_texture.outputs["Color"], principled_bsdf.inputs["Specular"])
+        links.new(specular_texture.outputs["Color"], principled_bsdf.inputs["Specular IOR Level"])
         return specular_texture
     return None
 
@@ -482,7 +482,7 @@ def change_to_texture_less_render(use_alpha_channel):
     principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
 
     # setting the color values for the shader
-    principled_bsdf.inputs['Specular'].default_value = 0.65  # specular
+    principled_bsdf.inputs['Specular IOR Level'].default_value = 0.65  # specular
     principled_bsdf.inputs['Roughness'].default_value = 0.2  # roughness
 
     for used_object in [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]:

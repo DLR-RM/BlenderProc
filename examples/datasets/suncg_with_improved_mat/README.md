@@ -56,7 +56,7 @@ all_wood_materials = bproc.filter.by_attr(all_materials, "name", "wood.*|laminat
 # now change the used values
 for material in all_wood_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.05, 0.5))
-    material.set_principled_shader_value("Specular", np.random.uniform(0.5, 1.0))
+    material.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.5, 1.0))
     material.set_displacement_from_principled_shader_value("Base Color", np.random.uniform(0.001, 0.15))
 
 all_stone_materials = bproc.filter.by_attr(all_materials, "name", "tile.*|brick.*|stone.*", regex=True)
@@ -64,14 +64,14 @@ all_stone_materials = bproc.filter.by_attr(all_materials, "name", "tile.*|brick.
 # now change the used values
 for material in all_stone_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.2))
-    material.set_principled_shader_value("Specular", np.random.uniform(0.9, 1.0))
+    material.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.9, 1.0))
 
 all_floor_materials = bproc.filter.by_attr(all_materials, "name", "carpet.*|textile.*", regex=True)
 
 # now change the used values
 for material in all_floor_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.5, 1.0))
-    material.set_principled_shader_value("Specular", np.random.uniform(0.1, 0.3))
+    material.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.1, 0.3))
 
 ```
 
@@ -88,7 +88,7 @@ If you want to find out how your materials are named, click on the objects durin
 ```python
 for material in all_wood_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.05, 0.5))
-    material.set_principled_shader_value("Specular", np.random.uniform(0.5, 1.0))
+    material.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.5, 1.0))
     material.set_displacement_from_principled_shader_value("Base Color", np.random.uniform(0.001, 0.15))
 ```
 

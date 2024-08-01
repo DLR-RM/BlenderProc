@@ -78,7 +78,7 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-3.5.1
+            # right now only support blender-4.0.2
             major_version = "4.0"
             minor_version = "2"
             blender_version = f"blender-{major_version}.{minor_version}"

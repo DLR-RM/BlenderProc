@@ -146,7 +146,7 @@ def add_dust(material: Material, strength: float, texture_nodes: List[bpy.types.
     # the used dust color is a grey with a tint in orange
     dust_color.inputs["Base Color"].default_value = [0.8, 0.773, 0.7, 1.0]
     dust_color.inputs["Roughness"].default_value = 1.0
-    dust_color.inputs["Specular"].default_value = 0.0
+    dust_color.inputs["Specular IOR Level"].default_value = 0.0
     links.new(dust_color.outputs["BSDF"], mix_shader.inputs[2])
 
     # create the input and output nodes inside of the group
