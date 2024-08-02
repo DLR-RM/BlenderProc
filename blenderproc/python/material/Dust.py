@@ -156,10 +156,17 @@ def add_dust(material: Material, strength: float, texture_nodes: List[bpy.types.
     group_input.location = (x_pos + x_diff * 7, y_pos - y_diff * 0.5)
 
     # create sockets for the outside of the group match them to the mix shader
-    group.outputs.new(mix_shader.outputs[0].bl_idname, mix_shader.outputs[0].name)
-    group.inputs.new(mix_shader.inputs[1].bl_idname, mix_shader.inputs[1].name)
-    group.inputs.new(multiply_node.inputs[1].bl_idname, "Dust strength")
-    group.inputs.new(mapping_node.inputs["Scale"].bl_idname, "Texture scale")
+    group.interface.new_socket(
+        mix_shader.outputs[0].name, in_out='OUTPUT', socket_type=mix_shader.outputs[0].bl_idname)
+    group.interface.new_socket(
+        mix_shader.inputs[1].name, in_out='INPUT', socket_type=mix_shader.inputs[1].bl_idname)
+    group.interface.new_socket(
+        "Dust strength", in_out='INPUT', socket_type=multiply_node.inputs[1].bl_idname)
+    # We set the socket_type='NodeSocketVector' directly instead of using
+    # 'mapping.node.inputs["Scale"].bl_idname', because the 'Scale' has a specific bl_idname of
+    # 'NodeSocketVectorXYZ', but 'new_socket' expects 'NodeSocketVector'.
+    group.interface.new_socket(
+        "Texture scale", in_out='INPUT', socket_type='NodeSocketVector')
 
     # link the input and output to the mix shader
     links.new(group_input.outputs[0], mix_shader.inputs[1])
