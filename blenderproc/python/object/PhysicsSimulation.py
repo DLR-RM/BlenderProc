@@ -47,7 +47,8 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
         obj_poses_after_sim = _PhysicsSimulation.get_pose()
 
         # Make sure to remove the simulation cache as we are only interested in the final poses
-        bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
+        with bpy.context.temp_override(point_cache=bpy.context.scene.rigidbody_world.point_cache):
+            bpy.ops.ptcache.free_bake()
 
     # Fix the pose of all objects to their pose at the end of the simulation (also revert origin shift)
     for obj in get_all_mesh_objects():
@@ -184,7 +185,8 @@ class _PhysicsSimulation:
             # Simulate current interval
             point_cache.frame_end = current_frame
             with stdout_redirected(enabled=not verbose):
-                bpy.ops.ptcache.bake({"point_cache": point_cache}, bake=True)
+                with bpy.context.temp_override(point_cache=point_cache):
+                    bpy.ops.ptcache.bake(bake=True)
 
             # Go to second last frame and get poses
             bpy.context.scene.frame_set(current_frame - _PhysicsSimulation.seconds_to_frames(1))
@@ -205,7 +207,8 @@ class _PhysicsSimulation:
             else:
                 # Free bake (this will not completely remove the simulation cache, so further simulations can
                 # reuse the already calculated frames)
-                bpy.ops.ptcache.free_bake({"point_cache": point_cache})
+                with bpy.context.temp_override(point_cache=point_cache):
+                    bpy.ops.ptcache.free_bake()
 
     @staticmethod
     def get_pose() -> dict:
