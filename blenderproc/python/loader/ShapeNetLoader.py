@@ -39,7 +39,7 @@ def load_shapenet(data_path: str, used_synset_id: str, used_source_id: str = "",
                                                                       taxonomy_file_path, data_path)
     selected_obj = random.choice(files_with_fitting_synset)
     # with the new version the textures are all wrong
-    loaded_objects = load_obj(selected_obj, use_legacy_obj_import=True)
+    loaded_objects = load_obj(selected_obj)
 
     # In shapenet every .obj file only contains one object, make sure that is the case
     if len(loaded_objects) != 1:
