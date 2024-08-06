@@ -72,11 +72,11 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
                 file.write(new_ply_file_content)
 
             # Load .ply mesh
-            bpy.ops.import_mesh.ply(filepath=tmp_ply_file, **kwargs)
+            bpy.ops.wm.ply_import(filepath=tmp_ply_file, **kwargs)
 
         else:  # If no texture was given
             # load a .ply mesh
-            bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+            bpy.ops.wm.ply_import(filepath=filepath, **kwargs)
             # Create default material
             material = create_material('ply_material')
             material.map_vertex_color()
