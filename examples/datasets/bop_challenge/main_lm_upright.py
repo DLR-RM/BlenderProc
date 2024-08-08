@@ -73,7 +73,7 @@ for i in range(args.num_scenes):
             grey_col = np.random.uniform(0.1, 0.9)   
             mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
         mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
-        mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+        mat.set_principled_shader_value("Specular IOR Level", np.random.uniform(0, 1.0))
         obj.hide(False)
     
     # Sample two light sources

@@ -15,7 +15,7 @@ objs = bproc.loader.load_blend(args.scene)
 # Change specular and roughness factor of all objects, so the shading will be better visible
 for obj in objs:
     for mat in obj.get_materials():
-        mat.set_principled_shader_value("Specular", 1)
+        mat.set_principled_shader_value("Specular IOR Level", 1)
         mat.set_principled_shader_value("Roughness", 0.3)
 
 # Find the object with name "Sphere"

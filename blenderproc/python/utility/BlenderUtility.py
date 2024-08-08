@@ -368,7 +368,7 @@ def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.Shad
     material_outputs = Utility.get_nodes_with_type(group.nodes, "OutputMaterial")
     if len(material_outputs) == 1:
         for input_node in material_outputs[0].inputs:
-            group.outputs.new(input_node.bl_idname, input_node.name)
+            group.interface.new_socket(input_node.name, in_out='OUTPUT', socket_type=input_node.bl_idname)
             for link in input_node.links:
                 group.links.new(link.from_socket, group_output.inputs[input_node.name])
         # remove the material output, the material output should never be inside of a group

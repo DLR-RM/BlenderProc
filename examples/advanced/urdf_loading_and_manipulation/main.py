@@ -21,17 +21,17 @@ for link in robot.links:
             if 'mica' in link.get_name() and not 'drive' in link.get_name():
                 if 'distal' in link.get_name():
                     mat.set_principled_shader_value("Roughness", 0.3)
-                    mat.set_principled_shader_value("Specular", 0.8)
+                    mat.set_principled_shader_value("Specular IOR Level", 0.8)
                     mat.set_principled_shader_value("Base Color", [0.447, 0.3607, 0.3902, 1])
                     link.visuals[0].set_shading_mode('FLAT')
                 else:
                     mat.set_principled_shader_value("Roughness", 0.1)
                     mat.set_principled_shader_value("Metallic", 1.0)
-                    mat.set_principled_shader_value("Specular", 0.6)
+                    mat.set_principled_shader_value("Specular IOR Level", 0.6)
             else:
                 mat.set_principled_shader_value("Metallic", 0.3)
                 mat.set_principled_shader_value("Roughness", 0.4)
-                mat.set_principled_shader_value("Specular", 0.9)
+                mat.set_principled_shader_value("Specular IOR Level", 0.9)
 
 # rotate every joint for 0.1 radians relative to the previous position
 robot.set_rotation_euler_fk(link=None, rotation_euler=0.2, mode='relative', frame=0)

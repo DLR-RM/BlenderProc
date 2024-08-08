@@ -17,7 +17,7 @@ obj.set_cp("category_id", 1)
 
 # Randomly perturbate the material of the object
 mat = obj.get_materials()[0]
-mat.set_principled_shader_value("Specular", random.uniform(0, 1))
+mat.set_principled_shader_value("Specular IOR Level", random.uniform(0, 1))
 mat.set_principled_shader_value("Roughness", random.uniform(0, 1))
 mat.set_principled_shader_value("Base Color", np.random.uniform([0, 0, 0, 1], [1, 1, 1, 1]))
 mat.set_principled_shader_value("Metallic", random.uniform(0, 1))

@@ -299,8 +299,18 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
     output_file.format.file_format = "OPEN_EXR"
     output_file.file_slots.values()[0].path = file_prefix
 
-    # Feed the Z-Buffer output of the render layer to the input of the file IO layer
-    links.new(render_layer_node.outputs["Depth"], output_file.inputs['Image'])
+    # Feed the input through combine RGB node, to create 3 channel RGB grayscale image as a lot of
+    # EXR readers don't support single float channel EXR files and Blender writes depth as a single
+    # channel since version 4.1.0 by default
+    combine_color = tree.nodes.new("CompositorNodeCombineColor")
+    combine_color.mode = "RGB"
+
+    links.new(render_layer_node.outputs["Depth"], combine_color.inputs[0])
+    links.new(render_layer_node.outputs["Depth"], combine_color.inputs[1])
+    links.new(render_layer_node.outputs["Depth"], combine_color.inputs[2])
+    
+    # Feed the Z-Buffer RGB output from the Combine Color node to the input of the file IO layer
+    links.new(combine_color.outputs["Image"], output_file.inputs["Image"])
 
     Utility.add_output_entry({
         "key": output_key,

@@ -368,11 +368,11 @@ class _Front3DLoader:
 
                         # Front3d .mtl files contain emission color which make the object mistakenly emissive
                         # => Reset the emission color
-                        principled_node.inputs["Emission"].default_value[:3] = [0, 0, 0]
+                        principled_node.inputs["Emission Color"].default_value[:3] = [0, 0, 0]
 
                         # Front3d .mtl files use Tf incorrectly, they make all materials fully transmissive
                         # Revert that:
-                        principled_node.inputs["Transmission"].default_value = 0
+                        principled_node.inputs["Transmission Weight"].default_value = 0
 
                         # For each a texture node
                         image_node = mat.new_node('ShaderNodeTexImage')

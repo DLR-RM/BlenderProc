@@ -96,14 +96,11 @@ class MeshObject(Entity):
         """
         if mode.lower() == "flat":
             is_smooth = False
-            self.blender_obj.data.use_auto_smooth = False
         elif mode.lower() == "smooth":
             is_smooth = True
-            self.blender_obj.data.use_auto_smooth = False
         elif mode.lower() == "auto":
             is_smooth = True
-            self.blender_obj.data.use_auto_smooth = True
-            self.blender_obj.data.auto_smooth_angle = np.deg2rad(angle_value)
+            self.add_auto_smooth_modifier(angle=angle_value)
         else:
             raise RuntimeError(f"This shading mode is unknown: {mode}")
 
@@ -145,8 +142,8 @@ class MeshObject(Entity):
         :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
-        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location,
-                                       rotation=rotation, scale=scale)
+        with bpy.context.temp_override(selected_editable_objects=[self.blender_obj]):
+            bpy.ops.object.transform_apply(location=location, rotation=rotation, scale=scale)
 
     def get_origin(self) -> np.ndarray:
         """ Returns the origin of the object.
@@ -167,21 +164,20 @@ class MeshObject(Entity):
                      "CENTER_OF_MASS", "CENTER_OF_VOLUME"]
         :return: The new origin in world coordinates.
         """
-        context = {"selected_editable_objects": [self.blender_obj]}
-
-        if mode == "POINT":
-            if point is None:
-                raise Exception("The parameter point is not given even though the mode is set to POINT.")
-            prev_cursor_location = bpy.context.scene.cursor.location.copy()
-            bpy.context.scene.cursor.location = point
-            bpy.ops.object.origin_set(context, type='ORIGIN_CURSOR')
-            bpy.context.scene.cursor.location = prev_cursor_location.copy()
-        elif mode == "CENTER_OF_MASS":
-            bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_MASS')
-        elif mode == "CENTER_OF_VOLUME":
-            bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_VOLUME')
-        else:
-            raise Exception("No such mode: " + mode)
+        with bpy.context.temp_override(selected_editable_objects=[self.blender_obj]):
+            if mode == "POINT":
+                if point is None:
+                    raise Exception("The parameter point is not given even though the mode is set to POINT.")
+                prev_cursor_location = bpy.context.scene.cursor.location.copy()
+                bpy.context.scene.cursor.location = point
+                bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+                bpy.context.scene.cursor.location = prev_cursor_location.copy()
+            elif mode == "CENTER_OF_MASS":
+                bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+            elif mode == "CENTER_OF_VOLUME":
+                bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME')
+            else:
+                raise Exception("No such mode: " + mode)
 
         return self.get_origin()
 
@@ -208,7 +204,8 @@ class MeshObject(Entity):
         :param linear_damping: Amount of linear velocity that is lost over time.
         """
         # Enable rigid body component
-        bpy.ops.rigidbody.object_add({'object': self.blender_obj})
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.rigidbody.object_add()
         # Sett attributes
         rigid_body = self.blender_obj.rigid_body
         rigid_body.type = "ACTIVE" if active else "PASSIVE"
@@ -254,7 +251,8 @@ class MeshObject(Entity):
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
         if self.has_rigidbody_enabled():
-            bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
+            with bpy.context.temp_override(object=self.blender_obj):
+                bpy.ops.rigidbody.object_remove()
         else:
             warnings.warn(f"MeshObject {self.get_name()} has no rigid_body component enabled")
 
@@ -340,13 +338,14 @@ class MeshObject(Entity):
         :param objects: List of objects which will be merged with this object
         """
         context = {}
-        # save selection
         context["object"] = context["active_object"] = self.blender_obj
+        # save selection
         # select all objects which will be merged with the target
         context["selected_objects"] = context["selected_editable_objects"] = [obj.blender_obj for obj in objects] + \
                                                                              [self.blender_obj]
-        # execute the joining operation
-        bpy.ops.object.join(context)
+        with bpy.context.temp_override(**context):
+            # execute the joining operation
+            bpy.ops.object.join()
 
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
@@ -492,7 +491,9 @@ class MeshObject(Entity):
         :param kwargs: Additional attributes that should be set to the modifier.
         """
         # Create the new modifier
-        bpy.ops.object.modifier_add({"object": self.blender_obj}, type=name)
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.object.modifier_add(type=name)
+
         # Set the attributes
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
@@ -502,9 +503,25 @@ class MeshObject(Entity):
         """ Adds a new geometry nodes modifier to the object.
         """
         # Create the new modifier
-        bpy.ops.node.new_geometry_nodes_modifier({"object": self.blender_obj})
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.node.new_geometry_nodes_modifier()
         modifier = self.blender_obj.modifiers[-1]
         return modifier.node_group
+
+    def add_auto_smooth_modifier(self, angle: float = 30.0):
+        """ Adds the 'Smooth by Angle' geometry nodes modifier.
+        
+        This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
+        """
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.object.modifier_add_node_group(
+                asset_library_type='CUSTOM',
+                asset_library_identifier="assets",
+                relative_asset_identifier="geometry_nodes/smooth_by_angle.blend/NodeTree/Smooth by Angle"
+            )
+
+        modifier = self.blender_obj.modifiers[-1]
+        modifier["Input_1"] = float(angle)
 
     def mesh_as_trimesh(self) -> Trimesh:
          """ Returns a trimesh.Trimesh instance of the MeshObject.

@@ -78,7 +78,7 @@ for i in range(args.num_scenes):
         if obj.get_cp("bop_dataset_name") == 'itodd':  
             mat.set_principled_shader_value("Metallic", np.random.uniform(0.5, 1.0))
         if obj.get_cp("bop_dataset_name") == 'tless':
-            mat.set_principled_shader_value("Specular", np.random.uniform(0.3, 1.0))
+            mat.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.3, 1.0))
             mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))
         obj.enable_rigidbody(True, mass=1.0, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
         obj.hide(False)
