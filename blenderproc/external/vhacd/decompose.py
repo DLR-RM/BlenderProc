@@ -150,7 +150,7 @@ def convex_decomposition(obj: "MeshObject", temp_dir: str, vhacd_path: str, reso
     else:
         out_file_name = os.path.join(cache_dir, str(mesh_hash) + ".obj")
 
-    bpy.ops.import_scene.obj(filepath=out_file_name, axis_forward="Y", axis_up="Z")
+    bpy.ops.wm.obj_import(filepath=out_file_name, forward_axis="Y", up_axis="Z")
     imported = bpy.context.selected_objects
 
     # Name and transform the loaded parts
