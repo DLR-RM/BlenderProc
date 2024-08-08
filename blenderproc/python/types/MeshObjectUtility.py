@@ -96,14 +96,11 @@ class MeshObject(Entity):
         """
         if mode.lower() == "flat":
             is_smooth = False
-            self.blender_obj.data.use_auto_smooth = False
         elif mode.lower() == "smooth":
             is_smooth = True
-            self.blender_obj.data.use_auto_smooth = False
         elif mode.lower() == "auto":
             is_smooth = True
-            self.blender_obj.data.use_auto_smooth = True
-            self.blender_obj.data.auto_smooth_angle = np.deg2rad(angle_value)
+            self.add_auto_smooth_modifier(angle=angle_value)
         else:
             raise RuntimeError(f"This shading mode is unknown: {mode}")
 
@@ -510,6 +507,21 @@ class MeshObject(Entity):
             bpy.ops.node.new_geometry_nodes_modifier()
         modifier = self.blender_obj.modifiers[-1]
         return modifier.node_group
+
+    def add_auto_smooth_modifier(self, angle: float = 30.0):
+        """ Adds the 'Smooth by Angle' geometry nodes modifier.
+        
+        This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
+        """
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.object.modifier_add_node_group(
+                asset_library_type='CUSTOM',
+                asset_library_identifier="assets",
+                relative_asset_identifier="geometry_nodes/smooth_by_angle.blend/NodeTree/Smooth by Angle"
+            )
+
+        modifier = self.blender_obj.modifiers[-1]
+        modifier["Input_1"] = float(angle)
 
     def mesh_as_trimesh(self) -> Trimesh:
          """ Returns a trimesh.Trimesh instance of the MeshObject.
