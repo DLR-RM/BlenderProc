@@ -246,7 +246,7 @@ def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray],
             amount_of_output_channels = input_image.shape[2]
         image_distorted = np.zeros((orig_res_y, orig_res_x, amount_of_output_channels))
         used_dtpye = input_image.dtype
-        data = input_image.astype(np.float)
+        data = input_image.astype(np.float32)
         # Forward mapping in order to distort the undistorted image coordinates
         # and reshape the arrays into the image shape grid.
         # The reference frame for coords is as in DLR CalDe etc. (the upper-left pixel center is at [0,0])
