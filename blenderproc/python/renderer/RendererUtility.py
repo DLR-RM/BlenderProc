@@ -654,6 +654,7 @@ def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: 
 def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
            load_keys: Optional[Set[str]] = None, return_data: bool = True,
            keys_with_alpha_channel: Optional[Set[str]] = None,
+           view_transform: str = "Filmic",
            verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
 
@@ -666,6 +667,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param load_keys: Set of output keys to load when available
     :param return_data: Whether to load and return generated data.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
+    :param view_transform: Determines the view transform to use for rendering.
     :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
     """
@@ -675,6 +677,10 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
         load_keys = {'colors', 'distance', 'normals', 'diffuse', 'depth', 'segmap'}
         keys_with_alpha_channel = {'colors'} if bpy.context.scene.render.film_transparent else None
 
+    if view_transform not in {"AgX", "Standard", "Filmic", "Filmic Log", "False Color", "Raw"}:
+        raise ValueError(f"Unknown view transform {view_transform}")
+    
+    bpy.context.scene.view_settings.view_transform = view_transform
     if output_key is not None:
         Utility.add_output_entry({
             "key": output_key,
