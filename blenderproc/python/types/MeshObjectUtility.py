@@ -515,10 +515,9 @@ class MeshObject(Entity):
         """
         with bpy.context.temp_override(object=self.blender_obj):
             bpy.ops.object.modifier_add_node_group(
-                asset_library_type='CUSTOM',
-                asset_library_identifier="assets",
-                relative_asset_identifier="geometry_nodes/smooth_by_angle.blend/NodeTree/Smooth by Angle"
-            )
+                asset_library_type='ESSENTIALS',
+                asset_library_identifier="",
+                relative_asset_identifier="geometry_nodes/smooth_by_angle.blend/NodeTree/Smooth by Angle")
 
         modifier = self.blender_obj.modifiers[-1]
         modifier["Input_1"] = float(angle)
