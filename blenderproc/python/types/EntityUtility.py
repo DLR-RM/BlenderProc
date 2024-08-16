@@ -41,6 +41,8 @@ class Entity(Struct):
         :param frame: The frame number which the value should be set to. If None is given, the current
                       frame number is used.
         """
+        #Make sure object rotation is set in XYZ-Euler coordinates
+        self.blender_obj.rotation_mode = "XYZ"
         self.blender_obj.rotation_euler = rotation_euler
         Utility.insert_keyframe(self.blender_obj, "rotation_euler", frame)
 
