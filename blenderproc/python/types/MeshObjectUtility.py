@@ -2,6 +2,7 @@
 
 from typing import List, Union, Tuple, Optional
 from sys import platform
+from pathlib import Path
 
 import warnings
 import bpy
@@ -513,13 +514,37 @@ class MeshObject(Entity):
         
         This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
         """
-        with bpy.context.temp_override(object=self.blender_obj):
-            bpy.ops.object.modifier_add_node_group(
-                asset_library_type='ESSENTIALS',
-                asset_library_identifier="",
-                relative_asset_identifier="geometry_nodes/smooth_by_angle.blend/NodeTree/Smooth by Angle")
+        # The bpy.ops.object.modifier_add_node_group doesn't work in background mode :( 
+        # So we load the node group and create the modifier ourselves.
+        # Known issue: https://projects.blender.org/blender/blender/issues/117399
 
-        modifier = self.blender_obj.modifiers[-1]
+        # The datafiles are expected to be in the same folder as the 'blender_binary/version'.
+        path = Path(bpy.app.binary_path).parent / "4.2" / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
+        if not path.exists():
+            raise RuntimeError(f"Could not find the path to the 'ESSENTIALS' asset folder expected at {path}")
+        
+        # Get the node group from the current file (reuse if it exists), otherwise load it from the
+        # precalculated path and append to the current .blend.
+        smooth_by_angle_node_group_name = "Smooth by Angle"
+        existing_node_group = bpy.data.node_groups.get(smooth_by_angle_node_group_name, None)
+        if existing_node_group is None:
+            with bpy.data.libraries.load(str(path), link=False) as (data_from, data_to):
+                data_to.node_groups = [smooth_by_angle_node_group_name]
+            existing_node_group = data_to.node_groups[0]
+
+        # Check if the modifier already exists
+        modifier = None
+        for existing_mod in self.blender_obj.modifiers:
+            if existing_mod.type == 'NODES' and existing_mod.node_group == existing_node_group:
+                modifier = modifier
+                break
+        
+        # Create a new modifier if no existing modifier was found
+        if modifier is None:
+            modifier = self.blender_obj.modifiers.new(name=smooth_by_angle_node_group_name, type='NODES')
+            modifier.node_group = existing_node_group
+
+        modifier = self.blender_obj.modifiers["Smooth by Angle"]
         modifier["Input_1"] = float(angle)
 
     def mesh_as_trimesh(self) -> Trimesh:
