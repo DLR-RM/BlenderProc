@@ -6,6 +6,9 @@ import os
 import bpy
 import numpy as np
 from PIL import Image
+# Make sure we use headless matplotlib
+import matplotlib
+matplotlib.use("agg")
 
 from blenderproc.scripts.visHdf5Files import vis_data
 from blenderproc.python.utility.Utility import Utility
