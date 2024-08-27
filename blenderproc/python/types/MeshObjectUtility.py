@@ -545,7 +545,7 @@ class MeshObject(Entity):
             modifier.node_group = existing_node_group
 
         modifier = self.blender_obj.modifiers["Smooth by Angle"]
-        modifier["Input_1"] = float(angle)
+        modifier["Input_1"] = np.deg2rad(float(angle))
 
     def mesh_as_trimesh(self) -> Trimesh:
          """ Returns a trimesh.Trimesh instance of the MeshObject.
