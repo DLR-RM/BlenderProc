@@ -575,6 +575,12 @@ class MeshObject(Entity):
     
          return Trimesh(vertices=verts, faces=faces)
 
+    def clear_custom_splitnormals(self) -> None:
+        """ Removes custom split normals which might exist after importing the object from file. """
+
+        with bpy.context.temp_override(object=self.blender_obj):
+            bpy.ops.mesh.customdata_custom_splitnormals_clear()
+
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
     """ Creates a new Mesh object using the given blender mesh.
 

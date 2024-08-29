@@ -135,6 +135,9 @@ def load_replica(data_path: str, data_set_name: str, use_smooth_shading: bool = 
     """
     file_path = os.path.join(data_path, data_set_name, 'mesh.ply')
     loaded_objects = load_obj(file_path)
+    # Replica comes with incorrect custom normals, so remove them
+    for obj in loaded_objects:
+        obj.clear_custom_splitnormals()
 
     if use_smooth_shading:
         for obj in loaded_objects:
