@@ -347,7 +347,7 @@ def add_displacement(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, displac
                                                  _y_texture_node * -4)
         displacement_node = nodes.new("ShaderNodeDisplacement")
         displacement_node.inputs["Midlevel"].default_value = 0.5
-        displacement_node.inputs["Scale"].default_value = 0.15
+        displacement_node.inputs["Scale"].default_value = 0.03
         displacement_node.location.x = _x_texture_node * 0.5
         displacement_node.location.y = _y_texture_node * -4
         links.new(displacement_texture.outputs["Color"], displacement_node.inputs["Height"])
