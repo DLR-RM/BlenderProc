@@ -40,8 +40,11 @@ def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]
     # save all selected objects
     previously_selected_objects = bpy.context.selected_objects
     if filepath.endswith(".obj"):
+        # Set validate_meshes to False per default to be backwards compatible
+        if "validate_meshes" not in kwargs:
+            kwargs["validate_meshes"] = False
         # load an .obj file:
-        bpy.ops.wm.obj_import(filepath=filepath, **kwargs, validate_meshes=False)
+        bpy.ops.wm.obj_import(filepath=filepath, **kwargs)
     elif filepath.endswith(".ply"):
         PLY_TEXTURE_FILE_COMMENT = "comment TextureFile "
         model_name = os.path.basename(filepath)
