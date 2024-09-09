@@ -14,7 +14,7 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 
 
 def load_shapenet(data_path: str, used_synset_id: str, used_source_id: str = "",
-                  move_object_origin: bool = True, validate_meshes: bool = True) -> MeshObject:
+                  move_object_origin: bool = True, validate_meshes: bool = False) -> MeshObject:
     """ This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
 
     From these objects one is randomly sampled and loaded.
