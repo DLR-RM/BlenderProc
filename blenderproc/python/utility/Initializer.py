@@ -138,7 +138,8 @@ class _Initializer:
         RendererUtility.set_output_format(DefaultConfig.file_format,
                                           DefaultConfig.color_depth,
                                           DefaultConfig.enable_transparency,
-                                          DefaultConfig.jpg_quality)
+                                          DefaultConfig.jpg_quality,
+                                          DefaultConfig.view_transform)
 
     @staticmethod
     def remove_all_data(remove_camera: bool = True):
