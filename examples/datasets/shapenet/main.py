@@ -9,7 +9,7 @@ args = parser.parse_args()
 bproc.init()
 
 # load the ShapeNet object into the scene
-shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87")
+shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87", validate_meshes=True)
 
 # define a light and set its location and energy level
 light = bproc.types.Light()

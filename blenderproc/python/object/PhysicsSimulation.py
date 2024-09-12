@@ -13,7 +13,7 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
                                          check_object_interval: float = 2.0,
                                          object_stopped_location_threshold: float = 0.01,
                                          object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10,
-                                         solver_iters: int = 10, verbose: bool = False):
+                                         solver_iters: int = 10, verbose: bool = False, use_volume_com: bool = False):
     """ Simulates the current scene and in the end fixes the final poses of all active objects.
 
     The simulation is run for at least `min_simulation_time` seconds and at a maximum `max_simulation_time` seconds.
@@ -36,6 +36,8 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     :param substeps_per_frame: Number of simulation steps taken per frame.
     :param solver_iters: Number of constraint solver iterations made per simulation step.
     :param verbose: If True, more details during the physics simulation are printed.
+    :param use_volume_com: If True, the center of mass will be calculated by using the object volume.
+                           This is more accurate than using the surface area (default), but requires a watertight mesh.
     """
     # Undo changes made in the simulation like origin adjustment and persisting the object's scale
     with UndoAfterExecution():
@@ -43,11 +45,12 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
         obj_poses_before_sim = _PhysicsSimulation.get_pose()
         origin_shifts = simulate_physics(min_simulation_time, max_simulation_time, check_object_interval,
                                          object_stopped_location_threshold, object_stopped_rotation_threshold,
-                                         substeps_per_frame, solver_iters, verbose)
+                                         substeps_per_frame, solver_iters, verbose, use_volume_com)
         obj_poses_after_sim = _PhysicsSimulation.get_pose()
 
         # Make sure to remove the simulation cache as we are only interested in the final poses
-        bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
+        with bpy.context.temp_override(point_cache=bpy.context.scene.rigidbody_world.point_cache):
+            bpy.ops.ptcache.free_bake()
 
     # Fix the pose of all objects to their pose at the end of the simulation (also revert origin shift)
     for obj in get_all_mesh_objects():
@@ -76,7 +79,7 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
 def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
                      check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01,
                      object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10,
-                     solver_iters: int = 10, verbose: bool = False) -> dict:
+                     solver_iters: int = 10, verbose: bool = False, use_volume_com: bool = False) -> dict:
     """ Simulates the current scene.
 
     The simulation is run for at least `min_simulation_time` seconds and at a maximum `max_simulation_time` seconds.
@@ -100,6 +103,8 @@ def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: floa
     :param substeps_per_frame: Number of simulation steps taken per frame.
     :param solver_iters: Number of constraint solver iterations made per simulation step.
     :param verbose: If True, more details during the physics simulation are printed.
+    :param use_volume_com: If True, the center of mass will be calculated by using the object volume.
+                           This is more accurate than using the surface area (default), but requires a watertight mesh.
     :return: A dict containing for every active object the shift that was added to their origins.
     """
     # Shift the origin of all objects to their center of mass to make the simulation more realistic
@@ -107,7 +112,7 @@ def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: floa
     for obj in get_all_mesh_objects():
         if obj.has_rigidbody_enabled():
             prev_origin = obj.get_origin()
-            new_origin = obj.set_origin(mode="CENTER_OF_VOLUME")
+            new_origin = obj.set_origin(mode="ORIGIN_CENTER_OF_VOLUME" if use_volume_com else "CENTER_OF_MASS")
             origin_shift[obj.get_name()] = new_origin - prev_origin
 
             # Persist mesh scaling as having a scale != 1 can make the simulation unstable
@@ -184,7 +189,8 @@ class _PhysicsSimulation:
             # Simulate current interval
             point_cache.frame_end = current_frame
             with stdout_redirected(enabled=not verbose):
-                bpy.ops.ptcache.bake({"point_cache": point_cache}, bake=True)
+                with bpy.context.temp_override(point_cache=point_cache):
+                    bpy.ops.ptcache.bake(bake=True)
 
             # Go to second last frame and get poses
             bpy.context.scene.frame_set(current_frame - _PhysicsSimulation.seconds_to_frames(1))
@@ -205,7 +211,8 @@ class _PhysicsSimulation:
             else:
                 # Free bake (this will not completely remove the simulation cache, so further simulations can
                 # reuse the already calculated frames)
-                bpy.ops.ptcache.free_bake({"point_cache": point_cache})
+                with bpy.context.temp_override(point_cache=point_cache):
+                    bpy.ops.ptcache.free_bake()
 
     @staticmethod
     def get_pose() -> dict:

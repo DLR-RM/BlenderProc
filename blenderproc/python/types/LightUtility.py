@@ -113,7 +113,7 @@ class Light(Entity):
         self.blender_obj.data.use_nodes = True
         self.blender_obj.data.shadow_soft_size = 0
         self.blender_obj.data.spot_size = 3.14159  # 180deg in rad
-        self.blender_obj.data.cycles.cast_shadow = False
+        self.blender_obj.data.use_shadow = False
 
         nodes = self.blender_obj.data.node_tree.nodes
         links = self.blender_obj.data.node_tree.links

@@ -74,6 +74,10 @@ def clean_up(clean_up_camera: bool = False):
     _Initializer.remove_all_data(clean_up_camera)
     _Initializer.remove_custom_properties()
 
+    # Make the default 'LayerCollection' as active, so bpy.context.collection points to it.
+    # This is the 'Scene Collection' in the outliner.
+    bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection
+    
     # Create new world
     new_world = bpy.data.worlds.new("World")
     bpy.context.scene.world = new_world
@@ -134,7 +138,8 @@ class _Initializer:
         RendererUtility.set_output_format(DefaultConfig.file_format,
                                           DefaultConfig.color_depth,
                                           DefaultConfig.enable_transparency,
-                                          DefaultConfig.jpg_quality)
+                                          DefaultConfig.jpg_quality,
+                                          DefaultConfig.view_transform)
 
     @staticmethod
     def remove_all_data(remove_camera: bool = True):

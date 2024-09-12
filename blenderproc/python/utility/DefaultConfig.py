@@ -41,6 +41,7 @@ class DefaultConfig:
     volume_bounces = 0
     antialiasing_distance_max = 10000
     world_background = [0.05, 0.05, 0.05]
+    view_transform = "Filmic"
 
     # Setup
     default_pip_packages = ["wheel", "pyyaml==6.0.1", "imageio==2.34.1", "gitpython==3.1.43",

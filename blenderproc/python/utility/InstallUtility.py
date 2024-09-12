@@ -9,7 +9,7 @@ import shutil
 from sys import platform, version_info
 import ssl
 from platform import machine
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
 
 if version_info.major == 3:
     from urllib.request import urlretrieve, build_opener, install_opener
@@ -47,7 +47,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
 
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str,
+    def make_sure_blender_is_installed(custom_blender_path: Optional[str], blender_install_path: str,
                                        reinstall_blender: bool = False) -> Tuple[str, str]:
         """ Make sure blender is installed.
 
@@ -78,8 +78,8 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-3.5.1
-            major_version = "3.5"
+            # right now only support blender-4.2.1
+            major_version = "4.2"
             minor_version = "1"
             blender_version = f"blender-{major_version}.{minor_version}"
             if platform in ["linux", "linux2"]:

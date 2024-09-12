@@ -72,7 +72,7 @@ for i in range(args.num_scenes):
             mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])      
         mat.set_principled_shader_value("Roughness", np.random.uniform(0, 0.5))
         if obj.get_cp("bop_dataset_name") == 'itodd':  
-            mat.set_principled_shader_value("Specular", np.random.uniform(0.3, 1.0))
+            mat.set_principled_shader_value("Specular IOR Level", np.random.uniform(0.3, 1.0))
             mat.set_principled_shader_value("Metallic", np.random.uniform(0, 1.0))
         if obj.get_cp("bop_dataset_name") == 'tless':
             mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))

@@ -93,7 +93,7 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
         grey_col = np.random.uniform(0.3, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
     mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
-    mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+    mat.set_principled_shader_value("Specular IOR Level", np.random.uniform(0, 1.0))
 ```
 
 * Sample grey colors for T-LESS object's materials using `np.random.uniform(0.3, 0.9)` function.
