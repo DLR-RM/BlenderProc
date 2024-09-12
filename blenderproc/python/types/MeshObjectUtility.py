@@ -17,6 +17,7 @@ from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.material import MaterialLoaderUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 
 if platform != "win32":
     # this is only supported under linux and macOS, the import itself already doesn't work under windows
@@ -520,8 +521,9 @@ class MeshObject(Entity):
         # So we load the node group and create the modifier ourselves.
         # Known issue: https://projects.blender.org/blender/blender/issues/117399
 
-        # The datafiles are expected to be in the same folder as the 'blender_binary/version'.
-        path = Path(bpy.app.binary_path).parent / "4.2" / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
+        # The datafiles are expected to be in the same folder relative to blender's python binary.
+        python_bin = SetupUtility.determine_python_paths(None, None)[0]
+        path = Path(python_bin).parent.parent.parent / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
         if not path.exists():
             raise RuntimeError(f"Could not find the path to the 'ESSENTIALS' asset folder expected at {path}")
         
