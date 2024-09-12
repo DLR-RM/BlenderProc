@@ -513,6 +513,8 @@ class MeshObject(Entity):
         """ Adds the 'Smooth by Angle' geometry nodes modifier.
         
         This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
+
+        :param angle: Maximum angle (in degrees) between face normals that will be considered as smooth.
         """
         # The bpy.ops.object.modifier_add_node_group doesn't work in background mode :( 
         # So we load the node group and create the modifier ourselves.
