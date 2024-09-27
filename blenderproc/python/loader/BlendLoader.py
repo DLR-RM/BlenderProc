@@ -24,7 +24,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                         stored in a .blend file's folders, see Blender's documentation for bpy.types.ID
                         for more info) names.
     :param data_blocks: The data block or a list of data blocks which should be loaded from the given .blend file.
-                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'hair_curves', 'images',
+                        Available options are: ['armatures', 'cameras', 'collections', 'curves', 'hairs', 'hair_curves', 'images',
                         'lights', 'materials', 'meshes', 'objects', 'textures']
     :param link: whether to link instead of append data blocks from .blend file. Linked objects can not be modified.
     :return: The list of loaded mesh objects.
