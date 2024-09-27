@@ -1,17 +1,79 @@
 """Loading the content of .blend files"""
 
 import re
-from typing import List, Union, Optional
+import os
+import collections
+from typing import List, Dict, Tuple, Union, Optional
 
 import bpy
 
 from blenderproc.python.utility.BlenderUtility import collect_all_orphan_data_blocks
 from blenderproc.python.types.EntityUtility import Entity, convert_to_entity_subclass
-from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import Utility, resolve_path
 
+
+def record_hierarchy(path: str) -> Tuple[Dict[str, str], Dict[str, str]]:
+    """
+    Backup already set up scene, open blend file, store it's hierarchy and restore original scene.
+
+    Hierarchy cannot be read by just loading the library, the scene needs to be open to access it.
+    This approach is easier than resetting up already set up scene.
+    :param path: Path to a .blend file.
+    :return: Tuple of two dictionaries, one with collection and list of its children and one with
+    object and list of collections it belongs to.
+    """
+    temp_filepath = os.path.join(Utility.get_temporary_directory(), "temp.blend")
+    bpy.ops.wm.save_as_mainfile(filepath=temp_filepath)
+    bpy.ops.wm.open_mainfile(filepath=path)
+
+    collection_hierarchy = {}
+    object_collections_hierarchy = collections.defaultdict(list)
+
+    for coll in bpy.data.collections:
+        collection_hierarchy[coll.name] = [c.name for c in coll.children]
+        for obj in coll.objects:
+            object_collections_hierarchy[obj.name].append(coll.name)
+
+    bpy.ops.wm.open_mainfile(filepath=temp_filepath)
+    os.remove(temp_filepath)
+
+    return collection_hierarchy, object_collections_hierarchy
+
+def build_collection_hierarchy(collection_hierarchy: Dict[str, List[str]]):
+    """
+    Recreate collection hierarchy from source blend
+
+    :param collection_hierarchy: Dictionary of collection names and list oif their children names
+    """
+
+    root = bpy.context.scene.collection
+    for coll in collection_hierarchy:
+        new_coll = bpy.data.collections.new(coll)
+        root.children.link(new_coll)
+
+    for coll, children in collection_hierarchy.items():
+        for child in children:
+            child_coll = bpy.data.collections.get(child)
+            bpy.data.collections.get(coll).children.link(child_coll)
+            root.children.unlink(child_coll)
+
+def add_obj_to_hierarchy(obj: bpy.types.Object, object_collections_hierarchy: Dict[str, List[str]]):
+    """
+    Add object to collection of same name as the one in source blend
+
+    :param collection_hierarchy: Dictionary of collection names and list oif their children names
+    """
+    collection_parents = object_collections_hierarchy.get(obj.name)
+    if collection_parents is None:
+        bpy.context.collection.objects.link(obj)
+    else:
+        for parent in collection_parents:
+            coll = bpy.data.collections.get(parent)
+            assert coll is not None
+            coll.objects.link(obj)
 
 def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, name_regrex: Optional[str] = None,
-               data_blocks: Union[List[str], str] = "objects", link: bool = False) -> List[Entity]:
+               data_blocks: Union[List[str], str] = "objects", link: bool = False, store_hierarchy: bool = False) -> List[Entity]:
     """
     Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
     bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/data_block.
@@ -27,6 +89,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                         Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'hair_curves', 'images',
                         'lights', 'materials', 'meshes', 'objects', 'textures']
     :param link: whether to link instead of append data blocks from .blend file. Linked objects can not be modified.
+    :param store_hierarchy: Maintain top-level hierarchy from scene provided by path param.
     :return: The list of loaded mesh objects.
     """
     if obj_types is None:
@@ -40,6 +103,9 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
 
     # Remember which orphans existed beforehand
     orphans_before = collect_all_orphan_data_blocks()
+
+    if store_hierarchy:
+        collection_hierarchy, object_collections_hierarchy = record_hierarchy(path)
 
     # Start importing blend file. All objects that should be imported need to be copied from "data_from" to "data_to"
     with bpy.data.libraries.load(path, link=link) as (data_from, data_to):
@@ -57,6 +123,9 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
             else:
                 raise Exception("No such data block: " + data_block)
 
+    if store_hierarchy:
+        build_collection_hierarchy(collection_hierarchy)
+
     # Go over all imported objects again
     loaded_objects: List[Entity] = []
     for data_block in data_blocks:
@@ -65,9 +134,11 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
             for obj in getattr(data_to, data_block):
                 # Check that the object type is desired
                 if obj.type.lower() in obj_types:
-                    # Link objects to the scene
-                    bpy.context.collection.objects.link(obj)
                     loaded_objects.append(convert_to_entity_subclass(obj))
+                    if store_hierarchy:
+                        add_obj_to_hierarchy(obj, object_collections_hierarchy)
+                    else:
+                        bpy.context.collection.objects.link(obj)
 
                     # If a camera was imported
                     if obj.type == 'CAMERA':
