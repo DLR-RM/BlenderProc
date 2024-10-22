@@ -188,7 +188,9 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         if pool is not None:
             pool.close()
             pool.join()
-
+        else:
+            # Make sure the renderer get destroyed
+            _BopWriterUtility._pyrender_cleanup()
 
 
 def bop_pose_to_pyrender_coordinate_system(cam_R_m2c: np.ndarray, cam_t_m2c: np.ndarray) -> np.ndarray:
@@ -553,6 +555,16 @@ class _BopWriterUtility:
                                                           metallicFactor=0.2, roughnessFactor=0.8, doubleSided=True)
             dataset_objects[key] = pyrender.Mesh.from_trimesh(mesh=trimesh_objects[key], material=material)
 
+    @staticmethod
+    def _pyrender_cleanup():
+        """ Cleans up global renderer 
+        
+        This is only necessary when not using multiprocessing,.
+        """
+        global renderer, renderer_large, dataset_objects
+        del renderer
+        del renderer_large
+        del dataset_objects
 
     @staticmethod
     def _calc_gt_masks_iteration(annotation_scale: float, K: np.ndarray, delta: float, dist_im: np.ndarray, chunk_dir: str, im_id: int, gt_data: Tuple[int, Dict[str, int]]):
