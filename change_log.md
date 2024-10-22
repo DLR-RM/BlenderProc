@@ -7,6 +7,10 @@
 
 # Version History
 
+## Version 2.7.2 22th October 2024
+
+- adds option back to use bop writer without multiprocessing (#1154)
+
 ## Version 2.7.1 16th April 2024
 
 - new camera projection helper methods are available: `bproc.camera.depth_via_raytracing()`, `bproc.camera.pointcloud_from_depth()`, `bproc.camera.project_points()`, `bproc.camera.unproject_points()` (#1045, #1075)
