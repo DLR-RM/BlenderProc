@@ -7,6 +7,17 @@
 
 # Version History
 
+## Version 2.8.0 22th October 2024
+
+- upgrades to blender 4.2.1 (#1136, thanks a lot to @Griperis who did the main work in this PR)
+- updates default pip package-versions used inside blenderproc (#1110)
+- adds support for loading collections from .blend files with intact hierarchies (#1149, thanks @johan-apes)
+- adds support of quad faces to mesh_as_trimesh() function (#1127, thanks @MartinSmeyer)
+- fixes memory leak in bvh tree creation (#1098, thanks @rasmushaugaard)
+- fixes bproc.clean_up() to not reset render properties anymore (#1115)
+- fixes CLI help text (#1125, thanks @Griperis)
+- make sure object rotation is set in XYZ-Euler coordinates (#1142, thanks @tomole444)
+
 ## Version 2.7.1 16th April 2024
 
 - new camera projection helper methods are available: `bproc.camera.depth_via_raytracing()`, `bproc.camera.pointcloud_from_depth()`, `bproc.camera.project_points()`, `bproc.camera.unproject_points()` (#1045, #1075)
