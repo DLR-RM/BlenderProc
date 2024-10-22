@@ -34,7 +34,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: Optional[bool] = None, annotation_unit: str = 'mm',
               frames_per_chunk: int = 1000, calc_mask_info_coco: bool = True, delta: float = 0.015,
-              num_worker: Optional[int] = None):
+              num_worker: Optional[int] = 0):
     """Write the BOP data
 
     :param output_dir: Path to the output directory.
@@ -60,6 +60,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     :param calc_mask_info_coco: Whether to calculate gt masks, gt info and gt coco annotations.
     :param delta: Tolerance used for estimation of the visibility masks (in [m]).
     :param num_worker: The number of processes to use to calculate gt_masks and gt_info. If None is given, number of cores is used.
+                       If 0 is given, no multiprocessing at all is used (default).
     """
 
     # Output paths.
@@ -169,7 +170,11 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # Create pool and init each worker
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
-        pool = Pool(num_worker, initializer=_BopWriterUtility._pyrender_init, initargs=[width, height, trimesh_objects])
+        if num_worker == 0:
+            pool = None
+            _BopWriterUtility._pyrender_init(width, height, trimesh_objects)
+        else:
+            pool = Pool(num_worker, initializer=_BopWriterUtility._pyrender_init, initargs=[width, height, trimesh_objects])
 
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
                                         annotation_scale=annotation_scale, delta=delta, pool=pool)
@@ -180,8 +185,9 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         _BopWriterUtility.calc_gt_coco(chunk_dirs=chunk_dirs, dataset_objects=dataset_objects,
                                        starting_frame_id=starting_frame_id)
         
-        pool.close()
-        pool.join()
+        if pool is not None:
+            pool.close()
+            pool.join()
 
 
 
@@ -667,8 +673,8 @@ class _BopWriterUtility:
                 depth_im /= 1000.  # to [m]
                 dist_im = misc.depth_im_to_dist_im_fast(depth_im, K)
 
-                pool.map(partial(_BopWriterUtility._calc_gt_masks_iteration, annotation_scale, K, delta, dist_im, chunk_dir, im_id), enumerate(scene_gt[im_id]))
-          
+                map_fun = map if pool is None else pool.map
+                list(map_fun(partial(_BopWriterUtility._calc_gt_masks_iteration, annotation_scale, K, delta, dist_im, chunk_dir, im_id), enumerate(scene_gt[im_id])))
             
 
     @staticmethod
@@ -834,7 +840,8 @@ class _BopWriterUtility:
 
                 K = np.array(scene_camera[im_id]['cam_K']).reshape(3, 3)
 
-                scene_gt_info[im_id] = pool.map(partial(_BopWriterUtility._calc_gt_info_iteration, annotation_scale, ren_cy_offset, ren_cx_offset, im_height, im_width, K, delta, depth), scene_gt[im_id])
+                map_fun = map if pool is None else pool.map
+                scene_gt_info[im_id] = list(map_fun(partial(_BopWriterUtility._calc_gt_info_iteration, annotation_scale, ren_cy_offset, ren_cx_offset, im_height, im_width, K, delta, depth), scene_gt[im_id]))
                     
 
             # Save the info for the current scene.
