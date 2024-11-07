@@ -3,6 +3,21 @@
 import os
 import sys
 from .version import __version__
+from .python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
+
+# If "USE_EXTERNAL_BPY_MODULE" is set, we expect the bpy module is provided from the outside
+if is_using_external_bpy_module():
+    try:
+        import bpy
+        if bpy.app.version[0] != 4 and bpy.app.version[1] != 2:
+            raise RuntimeError("\n###############\n\tUSE_EXTERNAL_BPY_MODULE is set, but bpy module is not from Blender 4.2.\n###############\n")
+
+        print("BlenderProc is using external 'bpy' module found in the environment.")
+        # If we successfully imported bpy of correct version, we can signal that we are in the internal blender python environment
+        os.environ.setdefault("INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT", "1")
+    except ImportError:
+        raise RuntimeError("\n###############\n\tUSE_EXTERNAL_BPY_MODULE is set, but bpy module could not be imported. Make sure bpy module is present in your python environment.\n###############\n")
+
 
 # check the python version, only python 3.X is allowed:
 if sys.version_info.major < 3:
@@ -19,7 +34,6 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     # Also clean the python path as this might disturb the pip installs
     if "PYTHONPATH" in os.environ:
         del os.environ["PYTHONPATH"]
-    from .python.utility.SetupUtility import SetupUtility
     SetupUtility.setup([])
     from .api import loader
     from .api import utility
@@ -57,8 +71,9 @@ else:
         # check if the name of this file is either blenderproc or if the
         # "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" is set, which is set in the cli.py
         is_correct_startup_command = is_bproc_shell_called or is_module_call
+
     if "OUTSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT_BUT_IN_RUN_SCRIPT" not in os.environ \
-            and not is_correct_startup_command:
+            and not is_correct_startup_command and not is_using_external_bpy_module():
         # pylint: disable=consider-using-f-string
         raise RuntimeError("\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:"
                            "\n\tpython {}\ncall:\n\tblenderproc run {}\n###############".format(sys.argv[0],

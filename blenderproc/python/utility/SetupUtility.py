@@ -17,6 +17,19 @@ import requests
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
 
+def is_using_external_bpy_module():
+    """Returns True if the external bpy module is used, False otherwise.
+    
+    At this point we don't check whether 'bpy' is available, this is handled in the first lines of
+    __init__.py. When using external by module, we assume it's available all the time as the
+    script had to fail before.
+    
+    If using blenderproc's Blender installation, setup goes through the InstallUtility and
+    SetupUtility.  
+    """
+    return os.environ.get("USE_EXTERNAL_BPY_MODULE", "0") == "1"
+
+
 class SetupUtility:
     """
     Setup class, ensures that all necessary pip packages are there
@@ -45,26 +58,32 @@ class SetupUtility:
         :param debug_args: Can be used to overwrite sys.argv in debug mode.
         :return: List of sys.argv after removing blender specific commands
         """
-        packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
 
-        if not SetupUtility.main_setup_called:
-            SetupUtility.main_setup_called = True
-            sys.path.append(packages_path)
-            is_debug_mode = "--background" not in sys.argv
+        if not is_using_external_bpy_module():
+            packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
+            if not SetupUtility.main_setup_called:
+                SetupUtility.main_setup_called = True
+                sys.path.append(packages_path)
+                is_debug_mode = "--background" not in sys.argv
 
-            # Setup temporary directory
-            if is_debug_mode:
-                SetupUtility.setup_utility_paths("examples/debugging/temp")
-            else:
-                SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
+                # Setup temporary directory
+                if is_debug_mode:
+                    SetupUtility.setup_utility_paths("examples/debugging/temp")
+                else:
+                    SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
 
-            # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
-            if not is_debug_mode:
-                # Cut off blender specific arguments
-                sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + \
-                           sys.argv[sys.argv.index("--") + 3:]
-            elif debug_args is not None:
-                sys.argv = ["debug"] + debug_args
+                # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
+                if not is_debug_mode:
+                    # Cut off blender specific arguments
+                    sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + \
+                            sys.argv[sys.argv.index("--") + 3:]
+                elif debug_args is not None:
+                    sys.argv = ["debug"] + debug_args
+        else:
+            SetupUtility.setup_utility_paths("blenderproc_temp")
+            # pylint: disable=import-outside-toplevel,cyclic-import
+            from blenderproc.python.utility.Utility import Utility, resolve_path
+            # pylint: enable=import-outside-toplevel,cyclic-import
 
         return sys.argv
 
@@ -92,7 +111,13 @@ class SetupUtility:
               - The path to the directory containing custom pip packages installed by BlenderProc
               - The path to the directory containing pip packages installed by blender.
         """
-        # If no bleneder path is given, determine it based on sys.executable
+        if is_using_external_bpy_module():
+            python_path = sys.executable
+            # TODO: Are these correct?
+            site_packages = os.path.abspath(os.path.join(python_path, "..", "..", "Lib", "site-packages")) 
+            return (python_path, site_packages, site_packages, site_packages)
+        
+        # If no blender path is given, determine it based on sys.executable
         if blender_path is None:
             blender_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", ".."))
             major_version = os.path.basename(os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..")))
@@ -145,6 +170,11 @@ class SetupUtility:
         :param install_default_packages: If True, general required python packages are made sure to be installed.
         :return: Returns the path to the directory which contains all custom installed pip packages.
         """
+        # TODO: We could use the same code to install using pip and DefaultConfig, if we
+        # return the right paths.
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
+        
         required_packages = []
         # Only install general required packages on first setup_pip call
         if SetupUtility.installed_packages is None and install_default_packages:
@@ -279,6 +309,9 @@ class SetupUtility:
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
         """
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
+        
         # Determine python and packages paths
         python_bin, _, packages_import_path, _ = SetupUtility.determine_python_paths(blender_path, major_version)
 

@@ -11,7 +11,7 @@ repo_root_directory = os.path.join(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(repo_root_directory)
 
 # pylint: disable=wrong-import-position
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 from blenderproc.python.utility.InstallUtility import InstallUtility
 # pylint: enable=wrong-import-position
 
@@ -129,14 +129,6 @@ def cli():
         # pylint: enable=import-outside-toplevel
         print(__version__)
     elif args.mode in ["run", "debug", "quickstart"]:
-
-        # Install blender, if not already done
-        determine_result = InstallUtility.determine_blender_install_path(args)
-        custom_blender_path, blender_install_path = determine_result
-        blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
-                                                                                        blender_install_path,
-                                                                                        args.reinstall_blender)
-
         # Setup script path that should be executed
         if args.mode == "quickstart":
             path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
@@ -154,51 +146,73 @@ def cli():
         # this is done to enable the import of blenderproc inside the blender internal python environment
         used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
 
-        # If pip update is forced, remove pip package cache
-        if args.force_pip_update:
-            SetupUtility.clean_installed_packages_cache(os.path.dirname(blender_run_path), major_version)
-
-        # Run either in debug or in normal mode
-        if args.mode == "debug":
-            # pylint: disable=consider-using-with
-            p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
-                                  os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
-                                  path_src_run, temp_dir] + unknown_args,
-                                 env=used_environment)
-            # pylint: enable=consider-using-with
-        else:
-            # pylint: disable=consider-using-with
-            p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code",
-                                  "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args,
-                                 env=used_environment)
-            # pylint: enable=consider-using-with
-
-        def clean_temp_dir():
-            # If temp dir should not be kept and temp dir still exists => remove it
-            if not args.keep_temp_dir and os.path.exists(temp_dir):
-                print("Cleaning temporary directory")
-                shutil.rmtree(temp_dir)
-
-        # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
-        def handle_sigterm(_signum, _frame):
-            clean_temp_dir()
-            p.terminate()
-
-        signal.signal(signal.SIGTERM, handle_sigterm)
-
-        try:
-            p.wait()
-        except KeyboardInterrupt:
+        # TODO handle the setup the same way as for Blender
+        if is_using_external_bpy_module():
+            # Import the given python script to execute it in blenderproc environment
+            script_directory = os.path.dirname(path_src_run)
             try:
+                sys.path.append(script_directory)
+                import importlib
+                importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
+            except ImportError as e:
+                print(f"Failed to import script for execution: {path_src_run} ")
+                sys.exit(1)
+            finally:
+                sys.path.remove(script_directory)
+        else:
+            # Install blender, if not already done
+            custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
+            blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
+                                                                                            blender_install_path,
+                                                                                            args.reinstall_blender)
+            # If pip update is forced, remove pip package cache
+            if args.force_pip_update:
+                SetupUtility.clean_installed_packages_cache(os.path.dirname(blender_run_path), major_version)
+
+            # Run either in debug or in normal mode
+            if args.mode == "debug":
+                if is_using_external_bpy_module():
+                    raise RuntimeError("Debug mode is not supported when using 'USE_EXTERNAL_BPY_MODULE'.")
+                
+                # pylint: disable=consider-using-with
+                p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
+                                    os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
+                                    path_src_run, temp_dir] + unknown_args,
+                                    env=used_environment)
+                # pylint: enable=consider-using-with
+            else:
+                # pylint: disable=consider-using-with
+                p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code",
+                                    "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args,
+                                    env=used_environment)
+                # pylint: enable=consider-using-with
+
+            def clean_temp_dir():
+                # If temp dir should not be kept and temp dir still exists => remove it
+                if not args.keep_temp_dir and os.path.exists(temp_dir):
+                    print("Cleaning temporary directory")
+                    shutil.rmtree(temp_dir)
+
+            # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
+            def handle_sigterm(_signum, _frame):
+                clean_temp_dir()
                 p.terminate()
-            except OSError:
-                pass
-            p.wait()
 
-        # Clean up
-        clean_temp_dir()
+            signal.signal(signal.SIGTERM, handle_sigterm)
 
-        sys.exit(p.returncode)
+            try:
+                p.wait()
+            except KeyboardInterrupt:
+                try:
+                    p.terminate()
+                except OSError:
+                    pass
+                p.wait()
+
+            # Clean up
+            clean_temp_dir()
+
+            sys.exit(p.returncode)
     # Import the required entry point
     elif args.mode in ["vis", "extract", "download"]:
         # pylint: disable=import-outside-toplevel
