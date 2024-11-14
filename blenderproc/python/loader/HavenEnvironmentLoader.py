@@ -29,6 +29,7 @@ def set_world_background_hdr_img(path_to_hdr_file: str, strength: float = 1.0,
         raise FileNotFoundError(f"The given path does not exists: {path_to_hdr_file}")
 
     world = bpy.context.scene.world
+    world.use_nodes = True
     nodes = world.node_tree.nodes
     links = world.node_tree.links
 
