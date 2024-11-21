@@ -76,6 +76,6 @@ else:
             and not is_correct_startup_command and not is_using_external_bpy_module():
         # pylint: disable=consider-using-f-string
         raise RuntimeError("\n###############\nThis script can only be run by \"blenderproc run\", instead of calling:"
-                           "\n\tpython {}\ncall:\n\tblenderproc run {}\n###############".format(sys.argv[0],
-                                                                                                sys.argv[0]))
+                           "\n\tpython {}\ncall:\n\tblenderproc run {}\n\nor consider using 'USE_EXTERNAL_BPY_MODULE=1'"
+                           "\n###############".format(sys.argv[0], sys.argv[0]))
         # pylint: enable=consider-using-f-string
