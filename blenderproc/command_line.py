@@ -171,7 +171,9 @@ def cli():
                 import importlib
                 importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
             except ImportError:
-                print(f"Failed to import script for execution: {path_src_run}")
+                print(f"Failed to import script {path_src_run} for execution:")
+                import traceback
+                traceback.print_exc()
                 sys.exit(1)
             finally:
                 assert script_directory in sys.path
