@@ -38,7 +38,7 @@ class InstallUtility:
                - The path to where blender should be installed.
         """
         if is_using_external_bpy_module():
-            return None, None
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, no reason to determine the blender install path, it's given by the module.")
         
         custom_blender_path = used_args.custom_blender_path
         blender_install_path = used_args.blender_install_path

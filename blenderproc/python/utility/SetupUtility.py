@@ -103,6 +103,7 @@ class SetupUtility:
     @staticmethod
     def determine_python_paths(blender_path: Optional[str], major_version: Optional[str]) -> Union[str, str, str, str]:
         """ Determines python binary, custom pip packages and the blender pip packages path.
+        Raises a RuntimeError if called when USE_EXTERNAL_BPY_MODULE is set as we can't determine the paths correctly.
 
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
@@ -112,10 +113,7 @@ class SetupUtility:
               - The path to the directory containing pip packages installed by blender.
         """
         if is_using_external_bpy_module():
-            python_path = sys.executable
-            # TODO: Are these correct?
-            site_packages = os.path.abspath(os.path.join(python_path, "..", "..", "Lib", "site-packages")) 
-            return (python_path, site_packages, site_packages, site_packages)
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
         
         # If no blender path is given, determine it based on sys.executable
         if blender_path is None:
@@ -170,11 +168,6 @@ class SetupUtility:
         :param install_default_packages: If True, general required python packages are made sure to be installed.
         :return: Returns the path to the directory which contains all custom installed pip packages.
         """
-        # TODO: We could use the same code to install using pip and DefaultConfig, if we
-        # return the right paths.
-        if is_using_external_bpy_module():
-            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
-        
         required_packages = []
         # Only install general required packages on first setup_pip call
         if SetupUtility.installed_packages is None and install_default_packages:
@@ -185,6 +178,12 @@ class SetupUtility:
         if reinstall_packages:
             raise ValueError("The reinstall package mode is not supported right now!")
 
+        if is_using_external_bpy_module():
+            print(
+                f"USE_EXTERNAL_BPY_MODULE is set, install packages in your environment directly. Run: \n\n"
+                f"pip install --upgrade {' '.join(required_packages)}")
+            return
+        
         result = SetupUtility.determine_python_paths(blender_path, major_version)
         python_bin, packages_path, packages_import_path, pre_python_package_path = result
 
@@ -310,8 +309,11 @@ class SetupUtility:
         :param major_version: The major version string of the blender installation.
         """
         if is_using_external_bpy_module():
-            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
-        
+            print(
+                f"USE_EXTERNAL_BPY_MODULE is set, uninstall packages in your environment directly. Run: \n\n"
+                f"pip uninstall {' '.join(package_names)}")
+            return
+
         # Determine python and packages paths
         python_bin, _, packages_import_path, _ = SetupUtility.determine_python_paths(blender_path, major_version)
 
@@ -381,6 +383,9 @@ class SetupUtility:
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
         """
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, packages are handled in the external environment.")
+        
         _, packages_path, _, _ = SetupUtility.determine_python_paths(blender_path, major_version)
         cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
         if os.path.exists(cache_path):

@@ -146,16 +146,22 @@ def cli():
         # this is done to enable the import of blenderproc inside the blender internal python environment
         used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
 
-        # TODO handle the setup the same way as for Blender
+        # blenderproc has two modes based on the environment based on the USE_EXTERNAL_BPY_MODULE environment variable
+        # If the variable is set, we expect the bpy module and all relevant dependencies to be provided from the outside.
+        # If not set, the script will install blender, setup the environment and run the script inside Blender. 
         if is_using_external_bpy_module():
+            if args.mode == "debug":
+                print("Debug mode is not supported when using external bpy module.")
+                sys.exit(1)
+
             # Import the given python script to execute it in blenderproc environment
             script_directory = os.path.dirname(path_src_run)
             try:
                 sys.path.append(script_directory)
                 import importlib
                 importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
-            except ImportError as e:
-                print(f"Failed to import script for execution: {path_src_run} ")
+            except ImportError:
+                print(f"Failed to import script for execution: {path_src_run}")
                 sys.exit(1)
             finally:
                 sys.path.remove(script_directory)
@@ -171,9 +177,6 @@ def cli():
 
             # Run either in debug or in normal mode
             if args.mode == "debug":
-                if is_using_external_bpy_module():
-                    raise RuntimeError("Debug mode is not supported when using 'USE_EXTERNAL_BPY_MODULE'.")
-                
                 # pylint: disable=consider-using-with
                 p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
                                     os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
@@ -246,11 +249,17 @@ def cli():
         # Call the script
         current_cli()
     elif args.mode == "pip":
-        # Install blender, if not already done
-        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
-        blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
-                                                                                   blender_install_path)
-        blender_path = os.path.dirname(blender_bin)
+        if is_using_external_bpy_module():
+            # In external mode we can't determine the blender_install_path correctly. Populate with
+            # stub values, so the SetupUtility can print the user suggestion in one place.
+            blender_path = None
+            major_version = None
+        else:
+            # Install blender, if not already done
+            custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
+            blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
+                                                                                    blender_install_path)
+            blender_path = os.path.dirname(blender_bin)
 
         if args.pip_mode == "install":
             SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path,

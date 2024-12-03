@@ -12,7 +12,7 @@ if is_using_external_bpy_module():
         if bpy.app.version[0] != 4 and bpy.app.version[1] != 2:
             raise RuntimeError("\n###############\n\tUSE_EXTERNAL_BPY_MODULE is set, but bpy module is not from Blender 4.2.\n###############\n")
 
-        print("BlenderProc is using external 'bpy' module found in the environment.")
+        print(f"BlenderProc is using external 'bpy' ({bpy.app.version_string}) module found in the environment.")
         # If we successfully imported bpy of correct version, we can signal that we are in the internal blender python environment
         os.environ.setdefault("INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT", "1")
     except ImportError:
