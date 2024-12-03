@@ -60,7 +60,7 @@ else:
     stack_summary = traceback.extract_stack()
     file_names_of_stack = [os.path.basename(file_summary.filename) for file_summary in stack_summary]
     # check if blenderproc is called via python3 -m blenderproc ...
-    is_module_call = file_names_of_stack[0] == "runpy.py"
+    is_module_call = file_names_of_stack[0] == "runpy.py" or file_names_of_stack[0] == "blenderproc-script.py"
     if sys.platform == "win32":
         is_bproc_shell_called = file_names_of_stack[2] in ["metadata.py", "__main__.py"]
         is_command_line_script_called = file_names_of_stack[0] == "command_line.py"
