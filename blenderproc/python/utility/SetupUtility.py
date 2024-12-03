@@ -79,11 +79,6 @@ class SetupUtility:
                             sys.argv[sys.argv.index("--") + 3:]
                 elif debug_args is not None:
                     sys.argv = ["debug"] + debug_args
-        else:
-            SetupUtility.setup_utility_paths("blenderproc_temp")
-            # pylint: disable=import-outside-toplevel,cyclic-import
-            from blenderproc.python.utility.Utility import Utility, resolve_path
-            # pylint: enable=import-outside-toplevel,cyclic-import
 
         return sys.argv
 

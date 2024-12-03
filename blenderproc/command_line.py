@@ -141,6 +141,12 @@ def cli():
         # Setup temp dir
         temp_dir = SetupUtility.determine_temp_dir(args.temp_dir)
 
+        def clean_temp_dir():
+            # If temp dir should not be kept and temp dir still exists => remove it
+            if not args.keep_temp_dir and os.path.exists(temp_dir):
+                print("Cleaning temporary directory")
+                shutil.rmtree(temp_dir)
+
         # Setup env vars
         used_environment = dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1")
         # this is done to enable the import of blenderproc inside the blender internal python environment
@@ -154,6 +160,10 @@ def cli():
                 print("Debug mode is not supported when using external bpy module.")
                 sys.exit(1)
 
+            # Setup the temp dir before executing the script. In "normal" mode this is handled by the
+            # Blender process. In external mode we have to do it manually.
+            SetupUtility.setup_utility_paths(temp_dir)
+
             # Import the given python script to execute it in blenderproc environment
             script_directory = os.path.dirname(path_src_run)
             try:
@@ -164,7 +174,9 @@ def cli():
                 print(f"Failed to import script for execution: {path_src_run}")
                 sys.exit(1)
             finally:
+                assert script_directory in sys.path
                 sys.path.remove(script_directory)
+                clean_temp_dir()
         else:
             # Install blender, if not already done
             custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
@@ -189,12 +201,6 @@ def cli():
                                     "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args,
                                     env=used_environment)
                 # pylint: enable=consider-using-with
-
-            def clean_temp_dir():
-                # If temp dir should not be kept and temp dir still exists => remove it
-                if not args.keep_temp_dir and os.path.exists(temp_dir):
-                    print("Cleaning temporary directory")
-                    shutil.rmtree(temp_dir)
 
             # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
             def handle_sigterm(_signum, _frame):
