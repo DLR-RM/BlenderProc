@@ -8,6 +8,7 @@ import bpy
 
 from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
+from blenderproc.python.utility.SetupUtility import is_using_external_bpy_module
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.renderer import RendererUtility
@@ -30,8 +31,8 @@ def init(clean_up_scene: bool = True):
     if clean_up_scene:
         clean_up(clean_up_camera=True)
 
-    # Set language if necessary
-    if bpy.context.preferences.view.language != "en_US":
+    # Set language if necessary if not using external bpy (that has only DEFAULT language)
+    if not is_using_external_bpy_module() and bpy.context.preferences.view.language != "en_US":
         print("Setting blender language settings to english during this run")
         bpy.context.preferences.view.language = "en_US"
 

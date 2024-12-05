@@ -522,8 +522,7 @@ class MeshObject(Entity):
         # Known issue: https://projects.blender.org/blender/blender/issues/117399
 
         # The datafiles are expected to be in the same folder relative to blender's python binary.
-        python_bin = SetupUtility.determine_python_paths(None, None)[0]
-        path = Path(python_bin).parent.parent.parent / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
+        path = Path(bpy.utils.resource_path('LOCAL')) / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
         if not path.exists():
             raise RuntimeError(f"Could not find the path to the 'ESSENTIALS' asset folder expected at {path}")
         
