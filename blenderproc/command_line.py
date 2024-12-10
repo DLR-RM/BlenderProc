@@ -155,30 +155,37 @@ def cli():
         # blenderproc has two modes based on the environment based on the USE_EXTERNAL_BPY_MODULE environment variable
         # If the variable is set, we expect the bpy module and all relevant dependencies to be provided from the outside.
         # If not set, the script will install blender, setup the environment and run the script inside Blender. 
+        # "debug" and "run" modes print a message and exit, as they are not supported in external mode. The
+        # "quickstart" mode is still supported, it just imports the quickstart script.
         if is_using_external_bpy_module():
             if args.mode == "debug":
                 print("Debug mode is not supported when using external bpy module.")
                 sys.exit(1)
-
-            # Setup the temp dir before executing the script. In "normal" mode this is handled by the
-            # Blender process. In external mode we have to do it manually.
-            SetupUtility.setup_utility_paths(temp_dir)
-
-            # Import the given python script to execute it in blenderproc environment
-            script_directory = os.path.dirname(path_src_run)
-            try:
-                sys.path.append(script_directory)
-                import importlib
-                importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
-            except ImportError:
-                print(f"Failed to import script {path_src_run} for execution:")
-                import traceback
-                traceback.print_exc()
+            elif args.mode == "run":
+                print(
+                    "USE_EXTERNAL_BPY_MODULE is set, run the script directly through python:\n\n"
+                      f"python {path_src_run}")
                 sys.exit(1)
-            finally:
-                assert script_directory in sys.path
-                sys.path.remove(script_directory)
-                clean_temp_dir()
+            elif args.mode == "quickstart":
+                # Setup the temp dir before executing the script. In "normal" mode this is handled by the
+                # Blender process. In external mode we have to do it manually.
+                SetupUtility.setup_utility_paths(temp_dir)
+
+                # Import the given python script to execute it in blenderproc environment
+                script_directory = os.path.dirname(path_src_run)
+                try:
+                    sys.path.append(script_directory)
+                    import importlib
+                    importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
+                except ImportError:
+                    print(f"Failed to import script {path_src_run} for execution:")
+                    import traceback
+                    traceback.print_exc()
+                    sys.exit(1)
+                finally:
+                    assert script_directory in sys.path
+                    sys.path.remove(script_directory)
+                    clean_temp_dir()
         else:
             # Install blender, if not already done
             custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
