@@ -2,7 +2,6 @@
 
 import argparse
 import os
-import shutil
 import signal
 import sys
 import subprocess
@@ -13,6 +12,7 @@ sys.path.append(repo_root_directory)
 # pylint: disable=wrong-import-position
 from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 from blenderproc.python.utility.InstallUtility import InstallUtility
+from blenderproc.python.utility.Utility import Utility
 # pylint: enable=wrong-import-position
 
 
@@ -141,12 +141,6 @@ def cli():
         # Setup temp dir
         temp_dir = SetupUtility.determine_temp_dir(args.temp_dir)
 
-        def clean_temp_dir():
-            # If temp dir should not be kept and temp dir still exists => remove it
-            if not args.keep_temp_dir and os.path.exists(temp_dir):
-                print("Cleaning temporary directory")
-                shutil.rmtree(temp_dir)
-
         # Setup env vars
         used_environment = dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1")
         # this is done to enable the import of blenderproc inside the blender internal python environment
@@ -185,7 +179,7 @@ def cli():
                 finally:
                     assert script_directory in sys.path
                     sys.path.remove(script_directory)
-                    clean_temp_dir()
+                    Utility.clean_temp_dir()
         else:
             # Install blender, if not already done
             custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
@@ -213,7 +207,7 @@ def cli():
 
             # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
             def handle_sigterm(_signum, _frame):
-                clean_temp_dir()
+                Utility.clean_temp_dir()
                 p.terminate()
 
             signal.signal(signal.SIGTERM, handle_sigterm)
@@ -228,7 +222,7 @@ def cli():
                 p.wait()
 
             # Clean up
-            clean_temp_dir()
+            Utility.clean_temp_dir()
 
             sys.exit(p.returncode)
     # Import the required entry point

@@ -2,6 +2,7 @@
 
 import os
 import csv
+import shutil
 import sys
 import threading
 from types import TracebackType
@@ -100,6 +101,13 @@ class Utility:
         :return: default temporary directory, shared memory if it exists
         """
         return Utility.temp_dir
+
+    @staticmethod
+    def clean_temp_dir() -> None:
+        """ Removes the temporary directory if it exists. """
+        if os.path.exists(Utility.temp_dir):
+            print("Cleaning temporary directory")
+            shutil.rmtree(Utility.temp_dir)
 
     @staticmethod
     def merge_dicts(source: Dict[Any, Any], destination: Dict[Any, Any]) -> Dict[Any, Any]:
