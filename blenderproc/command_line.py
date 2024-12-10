@@ -159,7 +159,7 @@ def cli():
         # "quickstart" mode is still supported, it just imports the quickstart script.
         if is_using_external_bpy_module():
             if args.mode == "debug":
-                print("Debug mode is not supported when using external bpy module.")
+                print("USE_EXTERNAL_BPY_MODULE is set, debug mode is not supported.")
                 sys.exit(1)
             elif args.mode == "run":
                 print(
