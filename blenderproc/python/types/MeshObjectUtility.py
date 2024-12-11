@@ -609,7 +609,11 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObje
         mesh_name = object_name
     return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
 
-def create_from_point_cloud(points: np.ndarray, object_name: str, add_geometry_nodes_visualization: bool = False) -> "MeshObject":
+def create_from_point_cloud(points: np.ndarray,
+                            object_name: str,
+                            add_geometry_nodes_visualization: bool = False,
+                            point_size: float = 0.015,
+                            point_color: Tuple[float, float, float] = (1, 0, 0)) -> "MeshObject":
     """ Create a mesh from a point cloud.
 
     The mesh's vertices are filled with the points from the given point cloud.
@@ -619,44 +623,35 @@ def create_from_point_cloud(points: np.ndarray, object_name: str, add_geometry_n
     :param add_geometry_nodes_visualization: If yes, a geometry nodes modifier is added, 
                                              which adds a sphere to every point. In this way, 
                                              the point cloud will appear in renderings.
+    :param point_size: The size of the spheres that are added to the points.
+    :param point_color: The color of the spheres that are added to the points.
     :return: The new Mesh object.
-    """    
+    """
+
+    # Create point cloud object and fill it with the given points
     point_cloud = create_with_empty_mesh(object_name)
-
-    # Go into mesh edit mode
-    point_cloud.edit_mode()
-    bm = point_cloud.mesh_as_bmesh()
-
-    # Add a vertex for each point
-    for p, point in enumerate(points):
-        if not np.isnan(point).any():
-            bm.verts.new(point)
-
-    # Persist the changes
-    point_cloud.update_from_bmesh(bm)
-    point_cloud.object_mode()
+    point_cloud.get_mesh().from_pydata(points, [], [])
+    point_cloud.get_mesh().validate()
 
     # If desired, add geometry nodes that add a icosphere instance to every point
     if add_geometry_nodes_visualization:
+        # Make nodes
         geometry_nodes = point_cloud.add_geometry_nodes()
-        # Collect all nodes
+        mesh_to_points_node = geometry_nodes.nodes.new(type='GeometryNodeMeshToPoints')
+        mesh_to_points_node.inputs['Radius'].default_value = point_size
+
+        # Material setup
+        material_node = geometry_nodes.nodes.new("GeometryNodeSetMaterial")
+        mat = point_cloud.new_material("point_cloud_mat")
+        mat.set_principled_shader_value("Base Color", [*point_color, 1])
+        material_node.inputs["Material"].default_value = mat.blender_obj
+
+        # Link nodes
         input_node = Utility.get_the_one_node_with_type(geometry_nodes.nodes, "NodeGroupInput")
         output_node = Utility.get_the_one_node_with_type(geometry_nodes.nodes, "NodeGroupOutput")
-        instances_node = geometry_nodes.nodes.new("GeometryNodeInstanceOnPoints")
-        sphere_node = geometry_nodes.nodes.new("GeometryNodeMeshIcoSphere")
-        material_node = geometry_nodes.nodes.new("GeometryNodeSetMaterial")
-
-        mat = point_cloud.new_material("point_cloud_mat")
-        mat.set_principled_shader_value("Base Color", [1, 0, 0, 1])
-
-        # Link them
-        sphere_node.inputs["Radius"].default_value = 0.015
-        material_node.inputs["Material"].default_value = mat.blender_obj
-        geometry_nodes.links.new(input_node.outputs["Geometry"], instances_node.inputs["Points"])
-        geometry_nodes.links.new(sphere_node.outputs["Mesh"], instances_node.inputs["Instance"])
-        geometry_nodes.links.new(instances_node.outputs["Instances"], material_node.inputs["Geometry"])
-        geometry_nodes.links.new(material_node.outputs["Geometry"], output_node.inputs["Geometry"])
-        
+        geometry_nodes.links.new(input_node.outputs['Geometry'], mesh_to_points_node.inputs['Mesh'])
+        geometry_nodes.links.new(mesh_to_points_node.outputs['Points'], material_node.inputs['Geometry'])
+        geometry_nodes.links.new(material_node.outputs['Geometry'], output_node.inputs['Geometry'])
 
     return point_cloud
 
