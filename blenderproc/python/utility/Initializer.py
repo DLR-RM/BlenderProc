@@ -140,7 +140,10 @@ class _Initializer:
                                           DefaultConfig.color_depth,
                                           DefaultConfig.enable_transparency,
                                           DefaultConfig.jpg_quality,
-                                          DefaultConfig.view_transform)
+                                          DefaultConfig.view_transform,
+                                          DefaultConfig.look,
+                                          DefaultConfig.exposure,
+                                          DefaultConfig.gamma)
 
     @staticmethod
     def remove_all_data(remove_camera: bool = True):
