@@ -4,6 +4,7 @@ import os
 import sys
 import tarfile
 from sys import platform
+import shutil
 import subprocess
 import importlib
 from io import BytesIO
@@ -17,14 +18,14 @@ import requests
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
 
-def is_using_external_bpy_module():
+def is_using_external_bpy_module() -> bool:
     """Returns True if the external bpy module is used, False otherwise.
     
     At this point we don't check whether 'bpy' is available, this is handled in the first lines of
     __init__.py. When using external by module, we assume it's available all the time as the
     script had to fail before.
     
-    If using blenderproc's Blender installation, setup goes through the InstallUtility and
+    If using BlenderProc's Blender installation, setup goes through the InstallUtility and
     SetupUtility.  
     """
     return os.environ.get("USE_EXTERNAL_BPY_MODULE", "0") == "1"
@@ -59,26 +60,28 @@ class SetupUtility:
         :return: List of sys.argv after removing blender specific commands
         """
 
-        if not is_using_external_bpy_module():
-            packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
-            if not SetupUtility.main_setup_called:
-                SetupUtility.main_setup_called = True
-                sys.path.append(packages_path)
-                is_debug_mode = "--background" not in sys.argv
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, calling this is not necessary in external mode.")
+        
+        packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
+        if not SetupUtility.main_setup_called:
+            SetupUtility.main_setup_called = True
+            sys.path.append(packages_path)
+            is_debug_mode = "--background" not in sys.argv
 
-                # Setup temporary directory
-                if is_debug_mode:
-                    SetupUtility.setup_utility_paths("examples/debugging/temp")
-                else:
-                    SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
+            # Setup temporary directory
+            if is_debug_mode:
+                SetupUtility.setup_utility_paths("examples/debugging/temp")
+            else:
+                SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
 
-                # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
-                if not is_debug_mode:
-                    # Cut off blender specific arguments
-                    sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + \
-                            sys.argv[sys.argv.index("--") + 3:]
-                elif debug_args is not None:
-                    sys.argv = ["debug"] + debug_args
+            # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
+            if not is_debug_mode:
+                # Cut off blender specific arguments
+                sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + \
+                        sys.argv[sys.argv.index("--") + 3:]
+            elif debug_args is not None:
+                sys.argv = ["debug"] + debug_args
 
         return sys.argv
 

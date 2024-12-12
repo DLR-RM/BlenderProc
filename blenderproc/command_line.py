@@ -4,6 +4,7 @@ import argparse
 import os
 import signal
 import sys
+import shutil
 import subprocess
 
 repo_root_directory = os.path.join(os.path.dirname(os.path.dirname(__file__)))
@@ -12,7 +13,6 @@ sys.path.append(repo_root_directory)
 # pylint: disable=wrong-import-position
 from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 from blenderproc.python.utility.InstallUtility import InstallUtility
-from blenderproc.python.utility.Utility import Utility
 # pylint: enable=wrong-import-position
 
 
@@ -179,7 +179,7 @@ def cli():
                 finally:
                     assert script_directory in sys.path
                     sys.path.remove(script_directory)
-                    Utility.clean_temp_dir()
+                    clean_temp_dir()
         else:
             # Install blender, if not already done
             custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
@@ -205,9 +205,16 @@ def cli():
                                     env=used_environment)
                 # pylint: enable=consider-using-with
 
+            def clean_temp_dir():
+                # If temp dir should not be kept and temp dir still exists => remove it,
+                # in external bpy mode this is handled in the `Initializer`.
+                if not args.keep_temp_dir and os.path.exists(temp_dir):
+                    print("Cleaning temporary directory")
+                    shutil.rmtree(temp_dir)
+
             # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
             def handle_sigterm(_signum, _frame):
-                Utility.clean_temp_dir()
+                clean_temp_dir()
                 p.terminate()
 
             signal.signal(signal.SIGTERM, handle_sigterm)
@@ -222,7 +229,7 @@ def cli():
                 p.wait()
 
             # Clean up
-            Utility.clean_temp_dir()
+            clean_temp_dir()
 
             sys.exit(p.returncode)
     # Import the required entry point

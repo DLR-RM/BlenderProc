@@ -103,13 +103,6 @@ class Utility:
         return Utility.temp_dir
 
     @staticmethod
-    def clean_temp_dir() -> None:
-        """ Removes the temporary directory if it exists. """
-        if os.path.exists(Utility.temp_dir):
-            print("Cleaning temporary directory")
-            shutil.rmtree(Utility.temp_dir)
-
-    @staticmethod
     def merge_dicts(source: Dict[Any, Any], destination: Dict[Any, Any]) -> Dict[Any, Any]:
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
 

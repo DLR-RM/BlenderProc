@@ -34,7 +34,10 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     # Also clean the python path as this might disturb the pip installs
     if "PYTHONPATH" in os.environ:
         del os.environ["PYTHONPATH"]
-    SetupUtility.setup([])
+    
+    if not is_using_external_bpy_module():
+        SetupUtility.setup([])
+        
     from .api import loader
     from .api import utility
     from .api import sampler

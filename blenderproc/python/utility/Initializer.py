@@ -4,20 +4,31 @@ import atexit
 import os
 import random
 import signal
+import shutil
 
 from numpy import random as np_random
 import bpy
 
 from blenderproc.python.utility.GlobalStorage import GlobalStorage
-from blenderproc.python.utility.Utility import Utility, reset_keyframes
+from blenderproc.python.utility.Utility import reset_keyframes
 from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.renderer import RendererUtility
 
 
+def clean_temp_dir():
+    # pylint: disable=import-outside-toplevel
+    from blenderproc.python.utility.Utility import Utility
+    # pylint: enable=import-outside-toplevel
+    assert is_using_external_bpy_module()
+    if os.path.exists(Utility.temp_dir):
+        print("Cleaning temporary directory")
+        shutil.rmtree(Utility.temp_dir)
+
+
 def handle_sigterm(_signum, _frame):
-    Utility.clean_temp_dir()
+    clean_temp_dir()
 
 
 def init(clean_up_scene: bool = True):
@@ -39,7 +50,7 @@ def init(clean_up_scene: bool = True):
         # this is the only mandatory initialization point and any of the code in command_line.py
         # isn't executed. 
         SetupUtility.setup_utility_paths(SetupUtility.determine_temp_dir(None))
-        atexit.register(Utility.clean_temp_dir)
+        atexit.register(clean_temp_dir)
         signal.signal(signal.SIGTERM, handle_sigterm)
 
     if clean_up_scene:
