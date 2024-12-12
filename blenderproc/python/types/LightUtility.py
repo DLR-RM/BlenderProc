@@ -8,6 +8,7 @@ from mathutils import Color
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, KeyFrame
+from blenderproc.python.utility.BlenderUtility import get_all_blender_light_objects
 
 
 class Light(Entity):
@@ -243,14 +244,6 @@ class Light(Entity):
         """
         with KeyFrame(frame):
             return self.blender_obj.data.type
-
-
-def get_all_blender_light_objects() -> List[bpy.types.Object]:
-    """ Retrieves all light objects in the current Blender scene.
-
-    :return: A list of all light objects in the current scene.
-    """
-    return [obj for obj in bpy.context.scene.objects if obj.type == 'LIGHT']
 
 
 def convert_to_lights(blender_objects: List[bpy.types.Object]) -> List[Light]:
