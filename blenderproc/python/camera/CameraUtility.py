@@ -56,7 +56,8 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
                   is used.
     :return: The 4x4 cam2world transformation matrix.
     """
-    return np.array(get_camera(frame).get_local2world_mat())
+    with KeyFrame(frame):
+        return np.array(get_camera(frame).get_local2world_mat())
 
 
 def get_camera_frustum(clip_start: Optional[float] = None, clip_end: Optional[float] = None,
@@ -146,7 +147,10 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
 
 
 def get_resolution() -> Tuple[int, int]:
-    """ Returns the camera resolution."""
+    """ Returns the render resolution.
+
+    :return: The render width and height in pixels.
+    """
     return bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
 
 
