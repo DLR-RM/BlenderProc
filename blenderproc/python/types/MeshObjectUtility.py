@@ -690,8 +690,7 @@ def create_primitive(shape: Literal["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE
                      **kwargs) -> MeshObject:
     """ Creates a new primitive mesh object.
 
-    :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE",
-                  "SPHERE", "MONKEY"]
+    :param shape: The name of the primitive to create.
     :return: The newly created MeshObject.
     """
     if shape == "CUBE":
