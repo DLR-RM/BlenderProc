@@ -1,6 +1,6 @@
 """ This class allows the creation and management of lights in the scene. """
 
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 import numpy as np
 import bpy
@@ -8,6 +8,7 @@ from mathutils import Color
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, KeyFrame
+from blenderproc.python.utility.BlenderUtility import get_all_blender_light_objects
 
 
 class Light(Entity):
@@ -243,3 +244,20 @@ class Light(Entity):
         """
         with KeyFrame(frame):
             return self.blender_obj.data.type
+
+
+def convert_to_lights(blender_objects: List[bpy.types.Object]) -> List[Light]:
+    """ Converts a list of Blender light objects to a list of BlenderProc light objects.
+
+    :param blender_objects: A list of Blender light objects.
+    :return: A list of BlenderProc light objects.
+    """
+    return [Light(blender_obj=obj) for obj in blender_objects]
+
+
+def get_all_light_objects() -> List[Light]:
+    """ Retrieves all light objects in the current Blender scene and converts them to BlenderProc light objects.
+
+    :return: A list of all light objects in the current scene.
+    """
+    return convert_to_lights(get_all_blender_light_objects())
