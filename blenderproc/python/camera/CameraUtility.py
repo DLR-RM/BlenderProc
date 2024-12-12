@@ -11,6 +11,17 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primit
 from blenderproc.python.utility.Utility import KeyFrame
 
 
+def get_camera(frame: Optional[int] = None) -> Entity:
+    """ Retrieves the active camera in the current Blender scene and frame.
+
+    :param frame: The frame number whose assigned camera should be returned. If None is give, the current frame
+                  is used.
+    :return: The camera entity.
+    """
+    with KeyFrame(frame):
+        return Entity(bpy.context.scene.camera)
+
+
 def add_camera_pose(cam2world_matrix: Union[np.ndarray, Matrix], frame: Optional[int] = None) -> int:
     """ Sets a new camera pose to a new or existing frame
 
@@ -45,8 +56,7 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
                   is used.
     :return: The 4x4 cam2world transformation matrix.
     """
-    with KeyFrame(frame):
-        return np.array(Entity(bpy.context.scene.camera).get_local2world_mat())
+    return np.array(get_camera(frame).get_local2world_mat())
 
 
 def get_camera_frustum(clip_start: Optional[float] = None, clip_end: Optional[float] = None,
@@ -133,6 +143,11 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
     if inplane_rot is not None:
         rotation_matrix @= Euler((0.0, 0.0, inplane_rot)).to_matrix()
     return np.array(rotation_matrix)
+
+
+def get_resolution() -> Tuple[int, int]:
+    """ Returns the camera resolution."""
+    return bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
 
 
 def set_resolution(image_width: int = None, image_height: int = None):
