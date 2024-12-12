@@ -918,3 +918,38 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
             bpy.context.scene.cycles.device = "CPU"
             bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
             print("Using only the CPU for rendering")
+
+
+def enable_ambient_occlusion(distance: float = 1.0, strength: float = 1.0):
+    """ Enables ambient occlusion in the scene. This can improve object part or point separation.
+
+    :param distance: Length of rays, defines how far away other faces give occlusion effect.
+    :param strength: The amount of ambient occlusion effect added to the scene.
+    """
+    bpy.context.scene.view_layers['ViewLayer'].use_pass_ambient_occlusion = True
+    bpy.context.scene.world.light_settings.distance = distance
+    bpy.context.scene.use_nodes = True
+
+    nodes = bpy.context.scene.node_tree.nodes
+    render_layers_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeRLayers')
+    mix_rgb_node = nodes.new('CompositorNodeMixRGB')
+    mix_rgb_node.blend_type = 'MULTIPLY'
+    mix_rgb_node.inputs[0].default_value = strength
+
+    # Insert the mix-rgb node in between denoise and composite node, if a denoise node is present
+    links = bpy.context.scene.node_tree.links
+    try:
+        denoise_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeDenoise')
+        Utility.insert_node_instead_existing_link(links,
+                                                  render_layers_node.outputs['Image'],
+                                                  mix_rgb_node.inputs['Image'],
+                                                  mix_rgb_node.outputs['Image'],
+                                                  denoise_node.inputs['Image'])
+    except RuntimeError:
+        composite_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeComposite')
+        Utility.insert_node_instead_existing_link(links,
+                                                  render_layers_node.outputs['Image'],
+                                                  mix_rgb_node.inputs['Image'],
+                                                  mix_rgb_node.outputs['Image'],
+                                                  composite_node.inputs['Image'])
+    links.new(render_layers_node.outputs['AO'], mix_rgb_node.inputs[2])

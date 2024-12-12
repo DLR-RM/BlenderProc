@@ -551,6 +551,31 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers["Smooth by Angle"]
         modifier["Input_1"] = np.deg2rad(float(angle))
 
+    def add_ambient_occlusion(self, distance: float = 1.0, samples: int = 16, only_local: bool = False):
+        """ Adds an ambient occlusion effect to the object. This can improve object part or point separation.
+
+        :param distance: Length of rays, defines how far away other faces give occlusion effect.
+        :param samples: Number of rays to trace per shader evaluation.
+        :param only_local: Only consider the object itself when computing AO.
+        """
+        for material in self.get_materials():
+            ao_node = material.new_node('ShaderNodeAmbientOcclusion')
+            ao_node.inputs['Distance'].default_value = distance
+            ao_node.samples = samples
+            ao_node.only_local = only_local
+
+            # Insert the ambient occlusion node in between the attribute node and the bsdf node, if present
+            try:
+                attribute_node = material.get_the_one_node_with_type('ShaderNodeAttribute')
+                bsdf_node = material.get_the_one_node_with_type('ShaderNodeBsdfPrincipled')
+                material.insert_node_instead_existing_link(attribute_node.outputs['Color'],
+                                                           ao_node.inputs['Color'],
+                                                           ao_node.outputs['Color'],
+                                                           bsdf_node.inputs['Base Color'])
+            except RuntimeError:
+                ao_node.inputs['Color'].default_value = material.get_principled_shader_value('Base Color')
+                material.set_principled_shader_value('Base Color', ao_node.outputs['Color'])
+
     def mesh_as_trimesh(self) -> Trimesh:
          """ Returns a trimesh.Trimesh instance of the MeshObject.
     
