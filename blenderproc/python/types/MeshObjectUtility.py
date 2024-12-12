@@ -1,6 +1,6 @@
 """ All mesh objects are captured in this class. """
 
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Literal, Dict
 from sys import platform
 from pathlib import Path
 
@@ -467,7 +467,7 @@ class MeshObject(Entity):
             uv_layer.data[loop.index].uv *= factor
 
     def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1,
-                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
+                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2) -> bpy.types.Modifier:
         """ Adds a displace modifier with a texture to an object.
 
         If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.
@@ -479,14 +479,14 @@ class MeshObject(Entity):
                                         'min_vertices_for_subdiv' a Subdivision modifier will be add to the object.
         :param subdiv_level:  Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.
         """
-        # Add a subdivision modifier, if the mesh has too less vertices.
+        # Add a subdivision modifier, if the mesh has too few vertices.
         if not len(self.get_mesh().vertices) > min_vertices_for_subdiv:
             self.add_modifier("SUBSURF", render_levels=subdiv_level)
 
         # Add the displacement modifier
-        self.add_modifier("DISPLACE", texture=texture, mid_level=mid_level, strength=strength)
+        return self.add_modifier("DISPLACE", texture=texture, mid_level=mid_level, strength=strength)
 
-    def add_modifier(self, name: str, **kwargs):
+    def add_modifier(self, name: str, **kwargs) -> bpy.types.Modifier:
         """ Adds a new modifier to the object.
 
         :param name: The name/type of the modifier to add.
@@ -500,8 +500,23 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
             setattr(modifier, key, value)
+        return modifier
 
-    def add_geometry_nodes(self):
+    def get_modifiers(self) -> Dict[str, bpy.types.Modifier] | List[bpy.types.Modifier]:
+        """ Returns all modifiers of the object.
+
+        Note: The actual type is `bpy_prop_collection` but it is not directly accessible in the Blender API.
+        """
+        return self.blender_obj.modifiers
+
+    def get_modifier(self, name: str) -> bpy.types.Modifier:
+        """ Returns the modifier with the given name.
+
+        :param name: The name of the modifier.
+        """
+        return self.get_modifiers().get(name)
+
+    def add_geometry_nodes(self) -> bpy.types.GeometryNodeTree:
         """ Adds a new geometry nodes modifier to the object.
         """
         # Create the new modifier
@@ -510,7 +525,7 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         return modifier.node_group
 
-    def add_auto_smooth_modifier(self, angle: float = 30.0):
+    def add_auto_smooth_modifier(self, angle: float = 30.0) -> bpy.types.Modifier:
         """ Adds the 'Smooth by Angle' geometry nodes modifier.
         
         This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
@@ -538,7 +553,7 @@ class MeshObject(Entity):
 
         # Check if the modifier already exists
         modifier = None
-        for existing_mod in self.blender_obj.modifiers:
+        for existing_mod in self.get_modifiers():
             if existing_mod.type == 'NODES' and existing_mod.node_group == existing_node_group:
                 modifier = modifier
                 break
@@ -548,8 +563,9 @@ class MeshObject(Entity):
             modifier = self.blender_obj.modifiers.new(name=smooth_by_angle_node_group_name, type='NODES')
             modifier.node_group = existing_node_group
 
-        modifier = self.blender_obj.modifiers["Smooth by Angle"]
+        modifier = self.get_modifier("Smooth by Angle")
         modifier["Input_1"] = np.deg2rad(float(angle))
+        return modifier
 
     def mesh_as_trimesh(self) -> Trimesh:
          """ Returns a trimesh.Trimesh instance of the MeshObject.
@@ -656,7 +672,7 @@ def create_from_point_cloud(points: np.ndarray,
     return point_cloud
 
 
-def create_primitive(shape: str, **kwargs) -> "MeshObject":
+def create_primitive(shape: Literal["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "MONKEY"], **kwargs) -> "MeshObject":
     """ Creates a new primitive mesh object.
 
     :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE",
@@ -671,9 +687,11 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
         bpy.ops.mesh.primitive_cone_add(**kwargs)
     elif shape == "PLANE":
         bpy.ops.mesh.primitive_plane_add(**kwargs)
-    elif shape == "SPHERE":
+    elif "SPHERE" in shape:
+        if "ICO" in shape:
+            bpy.ops.mesh.primitive_ico_sphere_add(**kwargs)
         bpy.ops.mesh.primitive_uv_sphere_add(**kwargs)
-    elif shape == "MONKEY":
+    elif shape in ["MONKEY", "SUZANNE"]:
         bpy.ops.mesh.primitive_monkey_add(**kwargs)
     else:
         raise Exception("No such shape: " + shape)
