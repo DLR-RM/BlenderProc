@@ -129,6 +129,24 @@ def cli():
         # pylint: enable=import-outside-toplevel
         print(__version__)
     elif args.mode in ["run", "debug", "quickstart"]:
+        # BlenderProc has two modes based on the environment variable USE_EXTERNAL_BPY_MODULE. If the
+        # variable is set, we expect the bpy module and all relevant dependencies to be provided from the outside.
+        # If not set, the script will install blender, setup the environment and run the script inside Blender. 
+
+        # Any run commands are not supported in this mode and have to be executed directly via python.
+        if is_using_external_bpy_module():
+            if args.mode == "run":
+                print("USE_EXTERNAL_BPY_MODULE is set, run the script directly through python:\n\n"
+                    f"python {args.file}")
+            elif args.mode == "debug":
+                print("USE_EXTERNAL_BPY_MODULE is set, debug mode is not supported.")
+            elif args.mode == "quickstart":
+                path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
+                print(f"USE_EXTERNAL_BPY_MODULE is set, quickstart is not supported, instead run:\n\n"
+                      f"python {os.path.join(path_src_run)}")
+            
+            sys.exit(1)
+
         # Setup script path that should be executed
         if args.mode == "quickstart":
             path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
@@ -146,92 +164,57 @@ def cli():
         # this is done to enable the import of blenderproc inside the blender internal python environment
         used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
 
-        # blenderproc has two modes based on the environment based on the USE_EXTERNAL_BPY_MODULE environment variable
-        # If the variable is set, we expect the bpy module and all relevant dependencies to be provided from the outside.
-        # If not set, the script will install blender, setup the environment and run the script inside Blender. 
-        # "debug" and "run" modes print a message and exit, as they are not supported in external mode. The
-        # "quickstart" mode is still supported, it just imports the quickstart script.
-        if is_using_external_bpy_module():
-            if args.mode == "debug":
-                print("USE_EXTERNAL_BPY_MODULE is set, debug mode is not supported.")
-                sys.exit(1)
-            elif args.mode == "run":
-                print(
-                    "USE_EXTERNAL_BPY_MODULE is set, run the script directly through python:\n\n"
-                      f"python {path_src_run}")
-                sys.exit(1)
-            elif args.mode == "quickstart":
-                # Setup the temp dir before executing the script. In "normal" mode this is handled by the
-                # Blender process. In external mode we have to do it manually.
-                SetupUtility.setup_utility_paths(temp_dir)
+        # Install blender, if not already done
+        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
+        blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
+                                                                                        blender_install_path,
+                                                                                        args.reinstall_blender)
+        # If pip update is forced, remove pip package cache
+        if args.force_pip_update:
+            SetupUtility.clean_installed_packages_cache(os.path.dirname(blender_run_path), major_version)
 
-                # Import the given python script to execute it in blenderproc environment
-                script_directory = os.path.dirname(path_src_run)
-                try:
-                    sys.path.append(script_directory)
-                    import importlib
-                    importlib.import_module(os.path.basename(path_src_run).replace(".py", ""))
-                except ImportError:
-                    print(f"Failed to import script {path_src_run} for execution:")
-                    import traceback
-                    traceback.print_exc()
-                    sys.exit(1)
-                finally:
-                    assert script_directory in sys.path
-                    sys.path.remove(script_directory)
-                    clean_temp_dir()
+        # Run either in debug or in normal mode
+        if args.mode == "debug":
+            # pylint: disable=consider-using-with
+            p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
+                                os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
+                                path_src_run, temp_dir] + unknown_args,
+                                env=used_environment)
+            # pylint: enable=consider-using-with
         else:
-            # Install blender, if not already done
-            custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
-            blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
-                                                                                            blender_install_path,
-                                                                                            args.reinstall_blender)
-            # If pip update is forced, remove pip package cache
-            if args.force_pip_update:
-                SetupUtility.clean_installed_packages_cache(os.path.dirname(blender_run_path), major_version)
+            # pylint: disable=consider-using-with
+            p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code",
+                                "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args,
+                                env=used_environment)
+            # pylint: enable=consider-using-with
 
-            # Run either in debug or in normal mode
-            if args.mode == "debug":
-                # pylint: disable=consider-using-with
-                p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
-                                    os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
-                                    path_src_run, temp_dir] + unknown_args,
-                                    env=used_environment)
-                # pylint: enable=consider-using-with
-            else:
-                # pylint: disable=consider-using-with
-                p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code",
-                                    "2", "--python", path_src_run, "--", args.file, temp_dir] + unknown_args,
-                                    env=used_environment)
-                # pylint: enable=consider-using-with
+        def clean_temp_dir():
+            # If temp dir should not be kept and temp dir still exists => remove it,
+            # in external bpy mode this is handled in the `Initializer`.
+            if not args.keep_temp_dir and os.path.exists(temp_dir):
+                print("Cleaning temporary directory")
+                shutil.rmtree(temp_dir)
 
-            def clean_temp_dir():
-                # If temp dir should not be kept and temp dir still exists => remove it,
-                # in external bpy mode this is handled in the `Initializer`.
-                if not args.keep_temp_dir and os.path.exists(temp_dir):
-                    print("Cleaning temporary directory")
-                    shutil.rmtree(temp_dir)
-
-            # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
-            def handle_sigterm(_signum, _frame):
-                clean_temp_dir()
-                p.terminate()
-
-            signal.signal(signal.SIGTERM, handle_sigterm)
-
-            try:
-                p.wait()
-            except KeyboardInterrupt:
-                try:
-                    p.terminate()
-                except OSError:
-                    pass
-                p.wait()
-
-            # Clean up
+        # Listen for SIGTERM signal, so we can properly clean up and terminate the child process
+        def handle_sigterm(_signum, _frame):
             clean_temp_dir()
+            p.terminate()
 
-            sys.exit(p.returncode)
+        signal.signal(signal.SIGTERM, handle_sigterm)
+
+        try:
+            p.wait()
+        except KeyboardInterrupt:
+            try:
+                p.terminate()
+            except OSError:
+                pass
+            p.wait()
+
+        # Clean up
+        clean_temp_dir()
+
+        sys.exit(p.returncode)
     # Import the required entry point
     elif args.mode in ["vis", "extract", "download"]:
         # pylint: disable=import-outside-toplevel
