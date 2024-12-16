@@ -61,7 +61,7 @@ class SetupUtility:
         """
 
         if is_using_external_bpy_module():
-            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, calling this is not necessary in external mode.")
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, calling bproc.setup() is not necessary in external mode.")
         
         packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
         if not SetupUtility.main_setup_called:
