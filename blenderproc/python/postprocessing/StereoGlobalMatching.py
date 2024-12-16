@@ -124,7 +124,7 @@ class _StereoGlobalMatching:
         disparity = np.float32(np.copy(disparity_to_be_written)) / 16.0
 
         # Triangulation
-        depth = (1.0 / disparity) * baseline * focal_length
+        depth = ((1.0 / disparity) * baseline * focal_length).astype(np.float32)
 
         # Clip from depth map to 25 meters
         depth[depth > depth_max] = depth_max
