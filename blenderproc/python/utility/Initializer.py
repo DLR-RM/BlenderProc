@@ -7,6 +7,7 @@ import signal
 import shutil
 
 from numpy import random as np_random
+from typing import Optional
 import bpy
 
 from blenderproc.python.utility.GlobalStorage import GlobalStorage
@@ -31,7 +32,7 @@ def handle_sigterm(_signum, _frame):
     clean_temp_dir()
 
 
-def init(clean_up_scene: bool = True):
+def init(clean_up_scene: bool = True, temp_dir: Optional[str] = None):
     """ Initializes BlenderProc.
 
     Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and
@@ -39,6 +40,7 @@ def init(clean_up_scene: bool = True):
     use bproc.clean_up()
 
     :param clean_up_scene: Set to False, if you want to keep all scene data.
+    :param temp_dir: The temporary directory to use when using external bpy module. If None a default temporary directory is used. 
     """
     # Check if init has already been run
     if GlobalStorage.is_in_storage("bproc_init_complete") and GlobalStorage.get("bproc_init_complete"):
@@ -49,7 +51,7 @@ def init(clean_up_scene: bool = True):
         # When in external mode we setup the temporary directory, and the cleanup handlers here, as
         # this is the only mandatory initialization point and any of the code in command_line.py
         # isn't executed. 
-        SetupUtility.setup_utility_paths(SetupUtility.determine_temp_dir(None))
+        SetupUtility.setup_utility_paths(SetupUtility.determine_temp_dir(temp_dir))
         atexit.register(clean_temp_dir)
         signal.signal(signal.SIGTERM, handle_sigterm)
 
