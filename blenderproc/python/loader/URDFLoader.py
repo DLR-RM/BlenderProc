@@ -39,11 +39,11 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
                       visualization in blender.
     :return: URDF object instance.
     """
-    # install urdfpy
-    SetupUtility.setup_pip(user_required_packages=["git+https://github.com/wboerdijk/urdfpy.git"])
-    # This import is done inside to avoid having the requirement that BlenderProc depends on urdfpy
+    # install urchin
+    SetupUtility.setup_pip(user_required_packages=["urchin"])
+    # This import is done inside to avoid having the requirement that BlenderProc depends on urchin
     # pylint: disable=import-outside-toplevel
-    from urdfpy import URDF
+    from urchin import URDF
     # pylint: enable=import-outside-toplevel
 
     if fk_offset is None:
@@ -94,22 +94,22 @@ def load_urdf(urdf_file: str, weight_distribution: str = 'rigid',
     return urdf_object
 
 
-def get_joints_which_have_link_as_parent(link_name: str, joint_trees: List["urdfpy.Joint"]) -> List["urdfpy.Joint"]:
+def get_joints_which_have_link_as_parent(link_name: str, joint_trees: List["urchin.Joint"]) -> List["urchin.Joint"]:
     """ Returns a list of joints which have a specific link as parent.
 
     :param link_name: Name of the link.
-    :param joint_trees: List of urdfpy.Joint objects.
-    :return: List of urdfpy.Joint objects.
+    :param joint_trees: List of urchin.Joint objects.
+    :return: List of urchin.Joint objects.
     """
     return [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.parent == link_name]
 
 
-def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfpy.Joint"]) -> Optional["urdfpy.Joint"]:
+def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urchin.Joint"]) -> Optional["urchin.Joint"]:
     """ Returns the joint which is the parent of a specific link.
 
     :param link_name: Name of the link.
-    :param joint_trees: List of urdfpy.Joint objects.
-    :return: List of urdfpy.Joint objects, or None if no joint is defined as parent for the respective link.
+    :param joint_trees: List of urchin.Joint objects.
+    :return: List of urchin.Joint objects, or None if no joint is defined as parent for the respective link.
     """
     valid_joint_trees = [joint_tree for i, joint_tree in enumerate(joint_trees) if joint_tree.child == link_name]
     if not valid_joint_trees:  # happens for the very first link
@@ -121,7 +121,7 @@ def get_joints_which_have_link_as_child(link_name: str, joint_trees: List["urdfp
                               f"{link_name}")
 
 
-def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_joint_trees: List["urdfpy.Joint"],
+def create_bone(armature: bpy.types.Armature, joint_tree: "urchin.Joint", all_joint_trees: List["urchin.Joint"],
                 parent_bone_name: Optional[str] = None, create_recursive: bool = True,
                 parent_origin: Optional[Matrix] = None,
                 fk_offset: Union[List[float], Vector, np.array] = None,
@@ -237,9 +237,9 @@ def create_bone(armature: bpy.types.Armature, joint_tree: "urdfpy.Joint", all_jo
                         parent_origin=origin, fk_offset=fk_offset, ik_offset=ik_offset)
 
 
-def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"], armature: bpy.types.Armature,
+def load_links(link_trees: List["urchin.Link"], joint_trees: List["urchin.Joint"], armature: bpy.types.Armature,
                urdf_path: str) -> List[Link]:
-    """ Loads links and their visual, collision and inertial objects from a list of urdfpy.Link objects.
+    """ Loads links and their visual, collision and inertial objects from a list of urchin.Link objects.
 
     :param link_trees: List of urdf definitions for all links.
     :param joint_trees: List of urdf definitions for all joints.
@@ -288,9 +288,9 @@ def load_links(link_trees: List["urdfpy.Link"], joint_trees: List["urdfpy.Joint"
     return links
 
 
-def propagate_pose(links: List[Link], joint_tree: "urdfpy.Joint", joint_trees: List["urdfpy.Joint"],
+def propagate_pose(links: List[Link], joint_tree: "urchin.Joint", joint_trees: List["urchin.Joint"],
                    armature: bpy.types.Armature, recursive: bool = True):
-    """ Loads links and their visual, collision and inertial objects from a list of urdfpy.Link objects.
+    """ Loads links and their visual, collision and inertial objects from a list of urchin.Link objects.
 
     :param links: List of links.
     :param joint_tree: The urdf definition for the joint.
@@ -320,7 +320,7 @@ def propagate_pose(links: List[Link], joint_tree: "urdfpy.Joint", joint_trees: L
             propagate_pose(links, child_joint_tree, joint_trees, armature, recursive=True)
 
 
-def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = None) -> MeshObject:
+def load_geometry(geometry_tree: "urchin.Geometry", urdf_path: Optional[str] = None) -> MeshObject:
     """ Loads a geometric element from an urdf tree.
 
     :param geometry_tree: The urdf representation of the geometric element.
@@ -355,7 +355,7 @@ def load_geometry(geometry_tree: "urdfpy.Geometry", urdf_path: Optional[str] = N
     return obj
 
 
-def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collision"], name: str,
+def load_visual_collision_obj(viscol_tree: Union["urchin.Visual", "urchin.Collision"], name: str,
                               urdf_path: Optional[str] = None) -> MeshObject:
     """ Loads a visual / collision element from an urdf tree.
 
@@ -423,7 +423,7 @@ def load_visual_collision_obj(viscol_tree: Union["urdfpy.Visual", "urdfpy.Collis
     return obj
 
 
-def load_inertial(inertial_tree: "urdfpy.Inertial", name: str) -> Inertial:
+def load_inertial(inertial_tree: "urchin.Inertial", name: str) -> Inertial:
     """ Loads an inertial element from an urdf tree.
 
     :param inertial_tree: The urdf representation of the inertial element.
@@ -444,7 +444,7 @@ def load_inertial(inertial_tree: "urdfpy.Inertial", name: str) -> Inertial:
     return inertial
 
 
-def get_size_from_geometry(geometry: "urdfpy.Geometry") -> Optional[float]:
+def get_size_from_geometry(geometry: "urchin.Geometry") -> Optional[float]:
     """ Helper to derive the link size from the largest geometric element.
 
     :param geometry: The urdf representation of the geometric element.
