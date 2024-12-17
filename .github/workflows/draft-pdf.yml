@@ -1,4 +1,4 @@
-on: [push]
+on: workflow_dispatch
 
 jobs:
   paper:

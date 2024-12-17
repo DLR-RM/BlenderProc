@@ -110,6 +110,7 @@ def clean_up(clean_up_camera: bool = False):
     new_world = bpy.data.worlds.new("World")
     bpy.context.scene.world = new_world
     new_world["category_id"] = 0
+    new_world.use_nodes = True
 
     if clean_up_camera:
         # Create the camera
@@ -167,7 +168,10 @@ class _Initializer:
                                           DefaultConfig.color_depth,
                                           DefaultConfig.enable_transparency,
                                           DefaultConfig.jpg_quality,
-                                          DefaultConfig.view_transform)
+                                          DefaultConfig.view_transform,
+                                          DefaultConfig.look,
+                                          DefaultConfig.exposure,
+                                          DefaultConfig.gamma)
 
     @staticmethod
     def remove_all_data(remove_camera: bool = True):

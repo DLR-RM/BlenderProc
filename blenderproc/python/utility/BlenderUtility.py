@@ -117,6 +117,14 @@ def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
 
+def get_all_blender_light_objects() -> List[bpy.types.Object]:
+    """
+    Returns a list of all light objects in the scene
+    :return: a list of all light objects
+    """
+    return [obj for obj in bpy.context.scene.objects if obj.type == 'LIGHT']
+
+
 def get_all_materials() -> List[bpy.types.Material]:
     """
     Returns a list of all materials used and unused
