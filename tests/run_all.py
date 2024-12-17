@@ -1,5 +1,6 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
+from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
+if not is_using_external_bpy_module():
+    SetupUtility.setup([])
 
 import os
 import unittest

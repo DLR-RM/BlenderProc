@@ -77,7 +77,7 @@ class _GifWriterUtility:
         def is_image(x: Union[np.ndarray, list, dict]) -> bool:
             """ Checks if the input x is not a string and is not a vector """
             x = np.array(x)
-            return not np.issubdtype(x.dtype, np.string_) and len(x.shape) != 1
+            return not np.issubdtype(x.dtype, np.bytes_) and len(x.shape) != 1
 
         return [key for key, value in output_data_dict.items()
                 if len(value) > 0 and is_image(value[0])]

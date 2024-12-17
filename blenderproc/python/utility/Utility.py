@@ -2,6 +2,7 @@
 
 import os
 import csv
+import shutil
 import sys
 import threading
 from types import TracebackType

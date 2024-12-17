@@ -21,7 +21,7 @@ class URDFObject(Entity):
     This class represents an URDF object, which is comprised of an armature and one or multiple links. Among others, it
     serves as an interface for manipulation of the URDF model.
     """
-    def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urdfpy.URDF"] = None):
+    def __init__(self, armature: bpy.types.Armature, links: List[Link], xml_tree: Optional["urchin.URDF"] = None):
         super().__init__(bpy_object=armature)
 
         object.__setattr__(self, "links", links)
