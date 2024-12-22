@@ -88,7 +88,7 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
                                     f" {len(data_block)} in the given list for key {key}.")
             blender_proc_version = Utility.get_current_version()
             if blender_proc_version is not None:
-                _WriterUtility.write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
+                _WriterUtility.write_to_hdf_file(file, "blender_proc_version", np.bytes_(blender_proc_version))
 
 
 class _WriterUtility:
@@ -353,7 +353,7 @@ class _WriterUtility:
                 # If the data contains one or multiple dicts that contain e.q. object states
                 if isinstance(data, dict) or len(data) > 0 and isinstance(data[0], dict):
                     # Serialize them into json (automatically convert numpy arrays to lists)
-                    data = np.string_(json.dumps(data, cls=NumpyEncoder))
+                    data = np.bytes_(json.dumps(data, cls=NumpyEncoder))
                 data = np.array(data)
             else:
                 raise Exception(
