@@ -215,9 +215,13 @@ class InstallUtility:
 
             # Try to get major version of given blender installation
             major_version = None
-            for sub_dir in os.listdir(blender_path):
+            if platform == "darwin":
+                blender_version_base = os.path.join(blender_path, "Contents", "Resources")
+            else:
+                blender_version_base = blender_path
+            for sub_dir in os.listdir(blender_version_base):
                 # Search for the subdirectory which has the major version as its name
-                if os.path.isdir(os.path.join(blender_path, sub_dir)) and sub_dir.replace(".", "").isdigit():
+                if os.path.isdir(os.path.join(blender_version_base, sub_dir)) and sub_dir.replace(".", "").isdigit():
                     major_version = sub_dir
                     break
 
