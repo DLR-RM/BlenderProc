@@ -9,17 +9,16 @@ import shutil
 from sys import platform, version_info
 import ssl
 from platform import machine
-from typing import List, Union, Tuple
+from typing import Union, Tuple
 
 if version_info.major == 3:
-    from urllib.request import urlretrieve
+    from urllib.request import urlretrieve, build_opener, install_opener
     from urllib.error import URLError
 else:
-    from urllib import urlretrieve
+    from urllib import urlretrieve, build_opener, install_opener
     import contextlib
 
 # pylint: disable=wrong-import-position
-from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 # pylint: enable=wrong-import-position
 
@@ -30,32 +29,21 @@ class InstallUtility:
     """
 
     @staticmethod
-    def determine_blender_install_path(is_config: bool, used_args: "argparse.NameSpace",
-                                       user_args: List[str]) -> Union[str, str]:
+    def determine_blender_install_path(used_args: "argparse.NameSpace") -> Union[str, str]:
         """ Determines the path of the blender installation
 
-        :param is_config: Whether a yaml config file was given instead of a python script.
         :param used_args: The given command line arguments.
-        :param user_args: The arguments that will be forwarded to the users script.
         :return:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.
         """
-        if is_config:
-            config_parser = ConfigParser()
-            # Don't parse placeholder args in batch mode.
-            config = config_parser.parse(used_args.file, user_args, False)
-            setup_config = config["setup"]
-            custom_blender_path = setup_config.get("custom_blender_path", used_args.custom_blender_path)
-            blender_install_path = setup_config.get("blender_install_path", used_args.blender_install_path)
-        else:
-            custom_blender_path = used_args.custom_blender_path
-            blender_install_path = used_args.blender_install_path
+        custom_blender_path = used_args.custom_blender_path
+        blender_install_path = used_args.blender_install_path
 
-            # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
-            if blender_install_path is None:
-                user_name = getpass.getuser()
-                blender_install_path = os.path.join("/home_local", user_name, "blender")
+        # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
+        if blender_install_path is None:
+            user_name = getpass.getuser()
+            blender_install_path = os.path.join("/home_local", user_name, "blender")
         return custom_blender_path, blender_install_path
 
     @staticmethod
@@ -90,8 +78,8 @@ class InstallUtility:
                 blender_install_path = "blender"
 
             # Determine configured version
-            # right new only support blender-3.3.1
-            major_version = "3.3"
+            # right new only support blender-3.5.1
+            major_version = "3.5"
             minor_version = "1"
             blender_version = f"blender-{major_version}.{minor_version}"
             if platform in ["linux", "linux2"]:
@@ -109,7 +97,8 @@ class InstallUtility:
             elif platform == "win32":
                 blender_version += "-windows-x64"
                 blender_install_path = os.path.join(blender_install_path, blender_version)
-                blender_path = blender_install_path
+                # After unpacking there is another subfolder named blender_version
+                blender_path = os.path.join(blender_install_path, blender_version)
             else:
                 raise RuntimeError(f"This system is not supported yet: {platform}")
 
@@ -137,6 +126,12 @@ class InstallUtility:
                     url = used_url + ".zip"
                 else:
                     raise RuntimeError(f"This system is not supported yet: {platform}")
+                
+                # setting the default header, else the server does not allow the download
+                opener = build_opener()
+                opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                install_opener(opener)
+
                 try:
                     try:
                         # pylint: disable=import-outside-toplevel
@@ -230,7 +225,7 @@ class InstallUtility:
         elif platform == "darwin":
             blender_run_path = os.path.join(blender_path, "Contents", "MacOS", "Blender")
         elif platform == "win32":
-            blender_run_path = os.path.join(blender_install_path, blender_version, "blender")
+            blender_run_path = os.path.join(blender_path, "blender")
         else:
             raise RuntimeError(f"This system is not supported yet: {platform}")
 

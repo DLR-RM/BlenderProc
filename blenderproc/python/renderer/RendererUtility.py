@@ -16,7 +16,7 @@ from rich.console import Console
 from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn
 
 from blenderproc.python.camera import CameraUtility
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility, stdout_redirected
@@ -123,6 +123,16 @@ def toggle_stereo(enable: bool):
     if enable:
         bpy.context.scene.render.views_format = "STEREO_3D"
 
+def toggle_light_tree(enable: bool):
+    """ Enables/Disables blender's light tree for rendering.
+
+    Enabling the light tree reduces the noise in scenes with many point lights,
+    however it increases the render time per sample.
+    See https://wiki.blender.org/wiki/Reference/Release_Notes/3.5/Cycles
+
+    :param enable: True, if light tree should be enabled.
+    """
+    bpy.context.scene.cycles.use_light_tree = enable
 
 def set_simplify_subdivision_render(simplify_subdivision_render: int):
     """ Sets global maximum subdivision level during rendering to speedup rendering.
@@ -587,10 +597,13 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
 
         # Continuously read blenders debug messages
         current_line = ""
+        starting_frame_number = bpy.context.scene.frame_start
         while True:
             # Read the next character
-            char = os.read(pipe_out, 1).decode()
-
+            char = os.read(pipe_out, 1)
+            if not char:
+                break
+            char = chr(char[0])
             # If its the ending character, stop
             if not char or "\b" == char:
                 break
@@ -598,10 +611,11 @@ def _progress_bar_thread(pipe_out: int, stdout: IO, total_frames: int, num_sampl
             if char == "\n":
                 # Check if its a line we can use (starts with "Fra:")
                 if current_line.startswith("Fra:"):
-                    # Extract current frame number and set to progress bar
+                    # Extract current frame number and use it to set the progress bar
                     frame_number = int(current_line.split()[0][len("Fra:"):])
-                    progress.update(complete_task, completed=frame_number)
-                    progress.update(complete_task, status=f"Rendering frame {frame_number + 1} of {total_frames}")
+                    frames_completed = frame_number - starting_frame_number
+                    progress.update(complete_task, completed=frames_completed)
+                    progress.update(complete_task, status=f"Rendering frame {frames_completed + 1} of {total_frames}")
 
                     # Split line into columns
                     status_columns = [col.strip() for col in current_line.split("|")]
@@ -667,7 +681,7 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     :param file_prefix: The prefix to use for writing the images.
     :param output_key: The key to use for registering the output.
     :param load_keys: Set of output keys to load when available
-    :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param return_data: Whether to load and return generated data.
     :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
     :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'

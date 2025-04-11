@@ -1,16 +1,17 @@
 """
 Loading the haven materials, which then can be assigned to objects.
 
-Haven textures are stored as a directory with several texture maps .jpgs e.g:
-textures
-|- rock_01
-|  |- rock_01_ao_1k.jpg
-|  |- rock_01_diff_1k.jpg
-|  |- rock_01_disp_1k.jpg
-|  |- rock_01_nor_gl_1k.jpg
-|  |- rock_01_rough_1k.jpg
-|- rock_02
-| ...
+Haven textures are stored as a directory with several texture maps .jpgs e.g::
+
+    textures
+    |- rock_01
+    |  |- rock_01_ao_1k.jpg
+    |  |- rock_01_diff_1k.jpg
+    |  |- rock_01_disp_1k.jpg
+    |  |- rock_01_nor_gl_1k.jpg
+    |  |- rock_01_rough_1k.jpg
+    |- rock_02
+    | ...
 
 The general naming pattern of the texture maps is: {name}_{type}_{resolution}.jpg
 However, the type abbreviation is not consistent for all textures. E.g. for some textures the base color map is
@@ -111,7 +112,7 @@ def load_haven_mat(folder_path: Union[str, Path] = "resources/haven", used_asset
     :param return_random_element: If this is True only a single Material is loaded and returned, if you want to sample
                                   many materials load them all with the preload option, use them and then fill the used
                                   empty materials instead of calling this function multiple times.
-    :return a list of all loaded materials, if preload is active these materials do not contain any textures yet
+    :return: a list of all loaded materials, if preload is active these materials do not contain any textures yet
             and have to be filled before rendering (by calling this function again, there is no need to save the prior
             returned list) or if return_random_element is True only a single Material is returned
     """

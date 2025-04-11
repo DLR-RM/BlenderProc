@@ -6,7 +6,7 @@ import random
 from numpy import random as np_random
 import bpy
 
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
@@ -118,6 +118,8 @@ class _Initializer:
         # cpu thread means GPU-only rendering)
         RendererUtility.set_cpu_threads(0)
         RendererUtility.set_denoiser(DefaultConfig.denoiser)
+        # For now disable the light tree per default, as it seems to increase render time for most of our tests
+        RendererUtility.toggle_light_tree(False)
 
         RendererUtility.set_simplify_subdivision_render(DefaultConfig.simplify_subdivision_render)
 
@@ -160,5 +162,5 @@ class _Initializer:
     @staticmethod
     def remove_custom_properties():
         """ Remove all custom properties registered at global entities like the scene. """
-        for key in bpy.context.scene.keys():
+        for key in list(bpy.context.scene.keys()):
             del bpy.context.scene[key]

@@ -34,6 +34,10 @@ def sample_poses_on_surface(objects_to_sample: List[MeshObject], surface: MeshOb
                                               else only the center of the object has to be above the surface
     :return: The list of placed objects.
     """
+    if len(set(objects_to_sample)) != len(objects_to_sample):
+        raise ValueError("The given list of objects to sample contains duplicates. "
+                         "This leads to complications in the sampling process.")
+
     if up_direction is None:
         up_direction = np.array([0., 0., 1.])
     else:

@@ -1,9 +1,11 @@
+import traceback
 from docutils.parsers.rst import Directive
 from docutils import nodes
 import pdb
 from collections import defaultdict
 from sphinx import addnodes
 from pathlib import Path
+from sphinx import addnodes
 
 class classlist(nodes.General, nodes.Element):
     pass
@@ -29,12 +31,11 @@ def generate_classlist(app, fromdocname, subtree, class_list, prefix, level=2):
         subtree += class_item
 
 def generate_collapsible_classlist(app, fromdocname, classes, container, caption, module_index, label_prefix):
+    container += nodes.title(caption, '', *[nodes.Text(caption)])
     toc = nodes.bullet_list()
-    toc += nodes.caption(caption, '', *[nodes.Text(caption)])
 
     if module_index is not None:
         entries = defaultdict(list)
-        #print("test", classes, fromdocname, caption)
         prefix = ".".join(classes[0][0].split(".")[:module_index]) + "."
         for e in classes:
             module = e[0].split(".")[module_index]
@@ -72,7 +73,7 @@ def generate_tutorials_sidebar(app, fromdocname, container):
         ("Positioning objects via the physics simulator", "physics"),
     ]
 
-    container += nodes.caption("Tutorials", '', *[nodes.Text("Tutorials")])
+    container += nodes.title("Tutorials", '', *[nodes.Text("Tutorials")])
     for tutorial in tutorials:
         toc = nodes.bullet_list()
 
@@ -88,7 +89,7 @@ def generate_tutorials_sidebar(app, fromdocname, container):
 def generate_examples_sidebar(app, fromdocname, container):
     examples = Path(__file__).absolute().parent.parent / "examples"
 
-    container += nodes.caption("Examples", '', *[nodes.Text("Examples")])
+    container += nodes.title("Examples", '', *[nodes.Text("Examples")])
     for example_groups in [examples / group for group in ["basics", "advanced", "datasets"]]:
         if example_groups.is_dir():
             toc = nodes.bullet_list()
@@ -118,29 +119,28 @@ def generate_examples_sidebar(app, fromdocname, container):
 
 def generate_sidebar(app, fromdocname):
     env = app.builder.env
-    container = nodes.compound(classes=['toctree-wrapper'])#addnodes.compact_paragraph('', '', classes=['toctree-wrapper'])
+    #container = nodes.compound(classes=['toctree-wrapper'])#addnodes.compact_paragraph('', '', classes=['toctree-wrapper'])
+    container = addnodes.compact_paragraph()
+    container['toctree'] = True
     py = env.get_domain('py')
     classes = py.get_objects()
     #print("classes", classes, [_[2] for _ in py.get_objects()])
 
-    classes_per_group = {"api": ([], None, "bproc."), "internal": ([], 2, "bproc.python."), "modules (deprecated)": ([], 3, "")}#"modules": ([], 1), "provider": ([], 2),
+    classes_per_group = {"Entities (bproc.types)": ([], None, ""), "api": ([], None, "bproc."), "internal": ([], 2, "bproc.python.")}#, "modules (deprecated)": ([], 3, "")}#"modules": ([], 1), "provider": ([], 2),
     for e in classes:
         if e[2] == 'module' and e[3].startswith("blenderproc.api.") or e[2] == 'class' and not e[3].startswith("blenderproc.api."):
-            #print(e)
             if e[3].startswith("blenderproc.api."):
-                group = "api"
-            elif e[0].startswith("blenderproc.python.modules."):
-                group = "modules (deprecated)"
+                classes_per_group["api"][0].append(e)
             else:
-                group = "internal"
-            #print(group, e)
-
-            classes_per_group[group][0].append(e)
+                if e[3].startswith("blenderproc.python.types"):
+                    classes_per_group["Entities (bproc.types)"][0].append(e)
+                classes_per_group["internal"][0].append(e)
 
     generate_tutorials_sidebar(app, fromdocname, container)
     generate_examples_sidebar(app, fromdocname, container)
     for key, items in classes_per_group.items():
         generate_collapsible_classlist(app, fromdocname, items[0], container, key.capitalize(), items[1], items[2])
+
 
     return container
 
@@ -150,7 +150,7 @@ def process_classlist(app, doctree, fromdocname):
     ctx = app.env.config['html_context']
     ctx['classlist'] = container
     for node in doctree.traverse(classlist):
-        node.replace_self([container])
+        node.replace_self(container)
         continue
 
 
@@ -171,8 +171,13 @@ def html_page_context(app, pagename, templatename, context, doctree):
             fromdocname = "" if "title" not in context else context["title"]
 
         fulltoc = generate_sidebar(app, fromdocname)
-        rendered_toc = app.builder.render_partial(fulltoc)['fragment']
+        try:
+            rendered_toc = app.builder.render_partial(fulltoc)['fragment']
+        except:
+            print(traceback.format_exc())
+
         return rendered_toc
+
 
     context['toctree'] = make_toctree
 

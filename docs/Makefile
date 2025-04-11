@@ -1,11 +1,10 @@
 # Minimal makefile for Sphinx documentation
 #
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXBUILD   = /home/${USER}/blender/blender-2.93.0-linux-x64/blender --background --python cli.py --
-SPHINXPROJ    = BlenderProc
+# You can set these variables from the command line, and also
+# from the environment for the first two.
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= /home_local/${USER}/blender/blender-3.3.1-linux-x64/blender --background --python run.py --
 SOURCEDIR     = source
 BUILDDIR      = build
 

@@ -12,11 +12,13 @@ from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 
 
-def dist2depth(dist: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
+def dist2depth(dist: Union[List[np.ndarray], np.ndarray], points_2d: Optional[np.ndarray] = None) -> Union[List[np.ndarray], np.ndarray]:
     """
-    Maps a distance image to depth image, also works with a list of images.
+    Maps a distance image to depth image, also works with a list of images or a 1-dim array of dist values.
 
     :param dist: The distance data.
+    :param points_2d: Can be used to specify the 2D points corresponding to the given distance values:
+                      Is necessary, if the given distance data is not a full distance image.
     :return: The depth data
     """
 
@@ -28,7 +30,10 @@ def dist2depth(dist: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarr
     K = CameraUtility.get_intrinsics_as_K_matrix()
     f, cx, cy = K[0, 0], K[0, 2], K[1, 2]
 
-    xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
+    if points_2d is None:
+        xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
+    else:
+        xs, ys = points_2d[:, 0], points_2d[:, 1]
 
     # coordinate distances to principal point
     x_opt = np.abs(xs - cx)

@@ -32,7 +32,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     :param forward_flow_output_key: The key which should be used for storing forward optical flow values.
     :param backward_flow_output_file_prefix: The file prefix that should be used when writing backward flow to a file.
     :param backward_flow_output_key: The key which should be used for storing backward optical flow values.
-    :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param return_data: Whether to load and return generated data.
     :param verbose: If True, more details about the rendering process are printed.
     :return: dict of lists of raw renderer outputs. Keys can be 'forward_flow', 'backward_flow'
     """
@@ -59,7 +59,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         temporary_fwd_flow_file_path = os.path.join(temp_dir, 'fwd_flow_')
         temporary_bwd_flow_file_path = os.path.join(temp_dir, 'bwd_flow_')
         print(f"Rendering {bpy.context.scene.frame_end - bpy.context.scene.frame_start} frames of optical flow...")
-        RendererUtility.render(temp_dir, "bwd_flow_", None, load_keys=set(), verbose=verbose)
+        RendererUtility.render(temp_dir, "img_flow_temp_ignore_me_", None, load_keys=set(), verbose=verbose)
 
         # After rendering: convert to optical flow or calculate hsv visualization, if desired
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):

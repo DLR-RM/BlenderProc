@@ -7,7 +7,7 @@ from pathlib import Path
 
 import bpy
 
-from blenderproc.python.modules.provider.getter.Material import Material as MaterialGetter
+from blenderproc.python.utility.MaterialGetter import MaterialGetter
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility
 

@@ -32,6 +32,7 @@ class Light(Entity):
             light_obj = bpy.data.objects.new(name=name, object_data=light_data)
             bpy.context.collection.objects.link(light_obj)
             super().__init__(light_obj)
+            self.set_radius(0.25)
         else:
             super().__init__(blender_obj)
 
@@ -45,6 +46,16 @@ class Light(Entity):
         """
         self.blender_obj.data.energy = energy
         Utility.insert_keyframe(self.blender_obj.data, "energy", frame)
+
+    def set_radius(self, radius: float, frame: Optional[int] = None):
+        """ Sets the radius / shadow_soft_size of the light.
+
+        :param radius: Light size for ray shadow sampling (Raytraced shadows).
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
+        """
+        self.blender_obj.data.shadow_soft_size = radius
+        Utility.insert_keyframe(self.blender_obj.data, "shadow_soft_size", frame)
 
     def set_color(self, color: Union[list, Color], frame: Optional[int] = None):
         """ Sets the color of the light.
@@ -110,6 +121,8 @@ class Light(Entity):
         node_ox = nodes.get('Emission')
 
         image_data = bpy.data.images.new('pattern', width=pattern.shape[1], height=pattern.shape[0], alpha=True)
+        if pattern.dtype == np.uint8:
+            pattern = pattern / 255.0    # manual cast to range [0,1] to avoid integer casting issues below
         image_data.pixels = pattern.ravel()
 
         # Set Up Nodes
@@ -191,6 +204,16 @@ class Light(Entity):
         with KeyFrame(frame):
             return self.blender_obj.data.energy
 
+    def get_radius(self, frame: Optional[int] = None) -> float:
+        """ Returns the radius / shadow_soft_size of the light.
+
+        :param frame: The frame number which the value should be set to. If None is given, the current
+                      frame number is used.
+        :return: The radius at the specified frame.
+        """
+        with KeyFrame(frame):
+            return self.blender_obj.data.shadow_soft_size
+        
     def get_color(self, frame: Optional[int] = None) -> Color:
         """ Returns the RGB color of the light.
 

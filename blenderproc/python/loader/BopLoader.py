@@ -3,6 +3,7 @@
 import os
 from random import choice
 from typing import List, Optional, Tuple
+import warnings
 
 import bpy
 import numpy as np
@@ -16,7 +17,7 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 
 def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional[List[int]] = None,
                   sample_objects: bool = False, num_of_objs_to_sample: Optional[int] = None,
-                  obj_instances_limit: int = -1, mm2m: bool = False,
+                  obj_instances_limit: int = -1, mm2m: Optional[bool] = None, object_model_unit: str = 'm',
                   move_origin_to_x_y_plane: bool = False) -> List[MeshObject]:
     """ Loads all or a subset of 3D models of any BOP dataset
 
@@ -27,7 +28,9 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
     :param num_of_objs_to_sample: Amount of objects to sample from the specified dataset. If this amount is bigger
                                   than the dataset actually contains, then all objects will be loaded.
     :param obj_instances_limit: Limits the amount of object copies when sampling. Default: -1 (no limit).
-    :param mm2m: Specify whether to convert poses and models to meters.
+    :param mm2m: Specify whether to convert poses and models to meters (deprecated).
+    :param object_model_unit: The unit the object model is in. Object model will be scaled to meters. This does not
+                              affect the annotation units. Available: ['m', 'dm', 'cm', 'mm'].
     :param move_origin_to_x_y_plane: Move center of the object to the lower side of the object, this will not work
                                      when used in combination with pose estimation tasks! This is designed for the
                                      use-case where BOP objects are used as filler objects in the background.
@@ -44,7 +47,12 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
 
     model_p = dataset_params.get_model_params(bop_path, bop_dataset_name, model_type=model_type if model_type else None)
 
-    scale = 0.001 if mm2m else 1
+    assert object_model_unit in ['m', 'dm', 'cm', 'mm'], (f"Invalid object model unit: `{object_model_unit}`. "
+                                                          f"Supported are 'm', 'dm', 'cm', 'mm'")
+    scale = {'m': 1., 'dm': 0.1, 'cm': 0.01, 'mm': 0.001}[object_model_unit]
+    if mm2m is not None:
+        warnings.warn("WARNING: `mm2m` is deprecated, please use `object_model_unit='mm'` instead!")
+        scale = 0.001
 
     if obj_ids is None:
         obj_ids = []
@@ -89,7 +97,7 @@ def load_bop_objs(bop_dataset_path: str, model_type: str = "", obj_ids: Optional
 
 def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", cam_type: str = "",
                    split: str = "test", source_frame: Optional[List[str]] = None,
-                   mm2m: bool = False) -> List[MeshObject]:
+                   mm2m: Optional[bool] = None, object_model_unit: str = 'm') -> List[MeshObject]:
     """ Replicate a BOP scene from the given dataset: load scene objects, object poses, camera intrinsics and
         extrinsics
 
@@ -107,7 +115,9 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
                          blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']:
                          Point (1,2,3) will be transformed to (1, -3, 2). Default: ["X", "-Y", "-Z"],
                          Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
-    :param mm2m: Specify whether to convert poses and models to meters.
+    :param mm2m: Specify whether to convert poses and models to meters (deprecated).
+    :param object_model_unit: The unit the object model is in. Object model will be scaled to meters. This does not
+                              affect the annotation units. Available: ['m', 'dm', 'cm', 'mm'].
     :return: The list of loaded mesh objects.
     """
 
@@ -131,7 +141,12 @@ def load_bop_scene(bop_dataset_path: str, scene_id: int, model_type: str = "", c
     sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': scene_id}))
     sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': scene_id}))
 
-    scale = 0.001 if mm2m else 1
+    assert object_model_unit in ['m', 'dm', 'cm', 'mm'], (f"Invalid object model unit: `{object_model_unit}`. "
+                                                          f"Supported are 'm', 'dm', 'cm', 'mm'")
+    scale = {'m': 1., 'dm': 0.1, 'cm': 0.01, 'mm': 0.001}[object_model_unit]
+    if mm2m is not None:
+        warnings.warn("WARNING: `mm2m` is deprecated, please use `object_model_unit='mm'` instead!")
+        scale = 0.001
 
     for i, (cam_id, insts) in enumerate(sc_gt.items()):
         cam_K, cam_H_m2c_ref = _BopLoader.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, scale)

@@ -96,13 +96,12 @@ def cli():
 
     # Setup all common arguments of run and debug mode
     for subparser in [parser_run, parser_debug, parser_quickstart]:
-        subparser.add_argument('file', default=None, nargs='?',
-                               help='The path to a configuration file which describes what the pipeline should do or '
-                                    'a python file which uses BlenderProc via the API.')
+        if subparser != parser_quickstart:
+            subparser.add_argument('file', help='The path to a python file which uses BlenderProc via the API.')
 
         subparser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true',
                                help='If given, the blender installation is deleted and reinstalled. Is ignored, if '
-                                    'a "custom_blender_path" is configured in the configuration file.')
+                                    'a "custom-blender-path" is given.')
         subparser.add_argument('--temp-dir', dest='temp_dir', default=None,
                                help="The path to a directory where all temporary output files should be stored. "
                                     "If it doesn't exist, it is created automatically. Type: string. Default: "
@@ -117,12 +116,10 @@ def cli():
     for subparser in [parser_run, parser_debug, parser_pip, parser_quickstart]:
         subparser.add_argument('--blender-install-path', dest='blender_install_path', default=None,
                                help="Set path where blender should be installed. If None is given, "
-                                    "/home_local/<env:USER>/blender/ is used per default. This argument is ignored "
-                                    "if it is specified in the given YAML config.")
+                                    "/home_local/<env:USER>/blender/ is used per default.")
         subparser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None,
                                help="Set, if you want to use a custom blender installation to run BlenderProc. "
-                                    "If None is given, blender is installed into the configured blender_install_path. "
-                                    "This argument is ignored if it is specified in the given YAML config.")
+                                    "If None is given, blender is installed into the configured blender_install_path. ")
 
     args, unknown_args = parser.parse_known_args()
 
@@ -133,18 +130,8 @@ def cli():
         print(__version__)
     elif args.mode in ["run", "debug", "quickstart"]:
 
-        if args.mode == 'quickstart':
-            is_config = False
-        else:
-            # Make sure a file is given
-            if args.file is None:
-                print(parser.format_help())
-                sys.exit(0)
-            # Check whether it's a python a script or a yaml config
-            is_config = not args.file.endswith(".py")
-
         # Install blender, if not already done
-        determine_result = InstallUtility.determine_blender_install_path(is_config, args, unknown_args)
+        determine_result = InstallUtility.determine_blender_install_path(args)
         custom_blender_path, blender_install_path = determine_result
         blender_run_path, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
                                                                                         blender_install_path,
@@ -155,11 +142,6 @@ def cli():
             path_src_run = os.path.join(repo_root_directory, "blenderproc", "scripts", "quickstart.py")
             args.file = path_src_run
             print(f"'blenderproc quickstart' is an alias for 'blenderproc run {path_src_run}'")
-        elif is_config:
-            print("\033[33m" + "Warning: Running BlenderProc with config.yaml files is deprecated and will be removed "
-                               "in future releases.\nPlease switch to the more intuitive Python API introduced in "
-                               "BlenderProc 2.0. It's easy, you won't regret it." + "\033[0m")
-            path_src_run = os.path.join(repo_root_directory, "blenderproc", "run.py")
         else:
             path_src_run = args.file
             SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
@@ -181,7 +163,7 @@ def cli():
             # pylint: disable=consider-using-with
             p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python",
                                   os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--",
-                                  path_src_run if not is_config else args.file, temp_dir] + unknown_args,
+                                  path_src_run, temp_dir] + unknown_args,
                                  env=used_environment)
             # pylint: enable=consider-using-with
         else:
@@ -251,8 +233,7 @@ def cli():
         current_cli()
     elif args.mode == "pip":
         # Install blender, if not already done
-        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(False, args,
-                                                                                                  unknown_args)
+        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(args)
         blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path,
                                                                                    blender_install_path)
         blender_path = os.path.dirname(blender_bin)

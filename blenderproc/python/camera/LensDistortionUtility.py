@@ -16,7 +16,7 @@ import yaml
 import bpy
 from scipy.ndimage import map_coordinates
 
-from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
+from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
 

@@ -46,7 +46,7 @@ def cli():
                         for download_attr in current_download_dict["zip"]["downloads"]:
                             if "attribute" in download_attr and download_attr["attribute"] == "2K-JPG":
                                 data[asset["assetId"]] = (
-                                    download_attr["fullDownloadPath"], download_attr["zipContent"])
+                                    download_attr["downloadLink"], download_attr["zipContent"])
                     else:
                         print(f"No zip or downloads found for asset: {asset['assetId']}")
                 else:

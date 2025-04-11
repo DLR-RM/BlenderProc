@@ -152,6 +152,32 @@ class Entity(Struct):
         """ Deselects the entity. """
         self.blender_obj.select_set(False)
 
+    def duplicate(self, duplicate_children: bool = True, linked: bool = False) -> "Entity":
+        """ Duplicates the object.
+
+        :param duplicate_children: If True, also all children objects are recursively duplicated.
+        :param linked: If True, object data is not copied.
+        :return: A new mesh object, which is a duplicate of this object.
+        """
+        new_entity = self.blender_obj.copy()
+        if not linked and self.blender_obj.data is not None:
+            new_entity.data = self.blender_obj.data.copy()
+        bpy.context.collection.objects.link(new_entity)
+
+        duplicate_obj = convert_to_entity_subclass(new_entity)
+        if type(duplicate_obj) != type(self):
+            warnings.warn(f"Duplication is only partly supported for {type(self)}")
+
+        if duplicate_children:
+            for child in self.get_children():
+                duplicate_child = child.duplicate(duplicate_children=duplicate_children, linked=linked)
+                duplicate_child.set_parent(duplicate_obj)
+
+                duplicate_child.blender_obj.matrix_basis = child.blender_obj.matrix_basis.copy()
+                duplicate_child.blender_obj.matrix_parent_inverse = child.blender_obj.matrix_parent_inverse.copy()
+
+        return duplicate_obj
+
     def clear_parent(self):
         """ Removes the object's parent and moves the object into the root level of the scene graph. """
         # Remember original object pose
@@ -218,6 +244,20 @@ class Entity(Struct):
         :return: True, if its an empty.
         """
         return self.blender_obj.type == "EMPTY"
+
+    def hide(self, hide_object: bool = True):
+        """ Sets the visibility of the object.
+
+        :param hide_object: Determines whether the object should be hidden in rendering.
+        """
+        self.blender_obj.hide_render = hide_object
+
+    def is_hidden(self) -> bool:
+        """ Returns whether the object is hidden in rendering.
+
+        :return: True, if it is hidden.
+        """
+        return self.blender_obj.hide_render
 
     def __setattr__(self, key, value):
         if key != "blender_obj":

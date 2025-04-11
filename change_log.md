@@ -7,6 +7,73 @@
 
 # Version History
 
+## Version 2.7.2 22th October 2024
+
+- adds option back to use bop writer without multiprocessing (#1154)
+
+## Version 2.7.1 16th April 2024
+
+- new camera projection helper methods are available: `bproc.camera.depth_via_raytracing()`, `bproc.camera.pointcloud_from_depth()`, `bproc.camera.project_points()`, `bproc.camera.unproject_points()` (#1045, #1075)
+- .blend loader now also supports hair_curves (#1052, thanks @sagoyal2)
+- adds .usd loader (#1043, thanks @freLorbeer)
+- fixes memory leak in bop writer (#1086, thanks @matteomastrogiuseppe)
+- fixes removal of scene properties (#1055)
+- fixes incorrect warnings regarding hidden objects in bop writer (@1058, thanks @saprrow)
+- fixes linking objects when duplicating object hierarchy (@1081, thanks @AndreyYashkin)
+
+
+## Version 2.7.0 26th January 2024
+
+- upgrades to blender 3.5.1 (#788)
+- adds helper methods for easy 3D-2D projection/unprojection, including `bproc.camera.depth_via_raytracing()`, `bproc.camera.pointcloud_from_depth()`, `bproc.camera.project_points()`, `bproc.camera.unproject_points()`, see also [point_cloud](https://github.com/DLR-RM/BlenderProc/tree/main/examples/advanced/point_clouds) example (#1045)
+- removes support for obsolete .yaml configuration files (#962)
+- speeds up bop writer for large number of objects - for 300 objects, the bop writer execution time reduces from 60s to 12s with 8 cores (#996)
+- adds warning if hidden objects are given to bop writer (#998)
+- skip transparent cc materials per default (#1004)
+- rework of `duplicate()`: allows linking and keeps parent relative transformation matrix (#1012, thanks @AndreyYashkin)
+- moves `hide()` and `is_hidden()` to Entity class (#1015, thanks @AndreyYashkin)
+- fixes optical flow output key being overwritten by RGB (#963)
+- fixes `--custom-blender-path` on windows (#972)
+- adapts downloading cc_textures to new naming scheme (#976, #993)
+- fixes issue in light projector (#995, thanks @beekama)
+- fixes skipping annotation indices when appending coco annotations (#1024)
+- fixes frame offset in rendering progress bar (#1038, thanks @burcam)
+
+## Version 2.6.2 6th December 2023
+
+- Fixes blender download 
+
+## Version 2.6.1 26th August 2023
+
+- Fixes pyrender usage on windows, EGL / headless rendering is now only used on linux
+
+## Version 2.6.0 17th August 2023
+
+- BOP toolkit is now tightly integrated into the the BOP writer:
+  - Ground truth masks and coco annotations are now directly calculated when calling the BOP writer
+  - Instead of using vispy for renderings the masks, we switched to pyrender which speeds up the process a lot
+- rendering/physics log is now hidded per default and instead a pretty progress bar is shown
+- upgrades to blender 3.3.1
+- its now possible to render segmentation images in stereo mode
+- adds method to MeshObject to convert to trimesh
+- fixes rendering on cpu-only (thanks @muedavid)
+- adds support for loading .glb/.gltf meshes (thanks @woodbridge)
+- adds support for loading .fbx meshes (thanks @HectorAnadon)
+- allows setting rotation for hdri backgrounds (thanks @saprrow)
+- incorporate location changes to urdf local2world matrix calculations
+- allows setting brightness for hdri backgrounds 
+- `bproc.object.sample_poses_on_surface()` now hides objects which could not be placed instead of deleting them
+- removes duplicate categories and fixes segmentation id when writing scene_gt.json annotations in BOP writer (thanks @hansaskov)
+- `get_all_cps()` now returns a proper dictionary (thanks @andrewyguo)
+- replaces deprecated `np.bool` with bool (thanks @NnamdiN)
+- refactoring of haven download script to support multithreading (thanks @hansaskov)
+- fixes loading stl files in urdf files
+- loading a .ply objects automatically sets the materials to its vertex color if no texture file was found.
+- username is now retrieved in a more platform independent way (thanks @YouJiacheng)
+- coco annotations are now nicely formatted (thanks @andrewyguo)
+- object pose sampler now correctly sets rotation if mode on failer was set to `initial_pose`
+
+
 ## Version 2.5.0 20th September 2022
 - segmentations are now done in the same call as any other render call, avoiding the loading of the objects for each pose
 - added the kinect azure noise model, allowing for the creation of more realistic depth images
@@ -24,7 +91,6 @@
 - the duplicate and delete fcts now support duplicating all children as well, we added a `get_children` fct as well
 - renaming `get_rotation` to `get_rotation_euler` and adding functions for setting the rotation matrix
 - fix a bug in the move_origin_to_bottom_mean fct.
-
 
 ## Version 2.4.1 22th July 2022
 - allow writing poses for robot links in the BopWriter

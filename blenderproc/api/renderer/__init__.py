@@ -3,7 +3,7 @@ from blenderproc.python.renderer.RendererUtility import set_denoiser, set_light_
     set_max_amount_of_samples, enable_distance_output, enable_depth_output, enable_normals_output, \
     enable_diffuse_color_output, enable_uv_output, map_file_format_to_file_ending, render, set_output_format, \
     enable_motion_blur, enable_segmentation_output, set_world_background, set_render_devices, \
-    enable_experimental_features
+    enable_experimental_features, toggle_light_tree
 from blenderproc.python.renderer.SegMapRendererUtility import render_segmap
 from blenderproc.python.renderer.FlowRendererUtility import render_optical_flow
 from blenderproc.python.renderer.NOCSRendererUtility import render_nocs
