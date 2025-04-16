@@ -6,6 +6,7 @@
 The example demonstrates using `loader.BlendLoader` to load the .blend files downloaded from [BlenderKit](https://www.blenderkit.com/).
 
 A script to download the .blend files is provided in the [scripts folder](../../../blenderproc/scripts).
+
 You can also use the blenderproc command `blenderproc download blenderkit <output_dir>`
 
 ## Usage
