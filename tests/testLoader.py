@@ -69,3 +69,17 @@ class UnitTestCheckLoader(unittest.TestCase):
         texture = bpy.data.images.load(str(texture_path), check_existing=True)
         material = bproc.material.create_material_from_texture(texture, material_name="new_mat")
         perform_material_checks(material, texture_path)
+
+    def test_load_camera(self):
+        bproc.clean_up(True)
+        resource_folder = os.path.join(os.path.dirname(__file__), "..", "examples", "resources")
+        cameras = bproc.loader.load_blend(
+            os.path.join(resource_folder, "keyframed_camera.blend"),
+            data_blocks=["objects"],
+            name_regrex="Camera",
+            obj_types=["CAMERA"]
+        )
+
+        self.assertEqual(len(cameras), 1)
+        self.assertEqual(bpy.context.scene.frame_end, 101)
+        self.assertEqual(bpy.context.scene.camera, cameras[0].blender_obj)
