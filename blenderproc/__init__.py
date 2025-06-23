@@ -9,14 +9,14 @@ from .python.utility.SetupUtility import SetupUtility, is_using_external_bpy_mod
 if is_using_external_bpy_module():
     try:
         import bpy
-        if bpy.app.version[0] != 4 and bpy.app.version[1] != 2:
-            raise RuntimeError("\n###############\nUSE_EXTERNAL_BPY_MODULE is set, but bpy module is not from Blender 4.2.\n\tpip install bpy==4.2.0\n###############\n")
+        if bpy.app.version[0] != 4 and bpy.app.version[1] != 3:
+            raise RuntimeError("\n###############\nUSE_EXTERNAL_BPY_MODULE is set, but bpy module is not from Blender 4.3.\n\tpip install bpy==4.3.0\n###############\n")
 
         print(f"BlenderProc is using external 'bpy' ({bpy.app.version_string}) module found in the environment.")
         # If we successfully imported bpy of correct version, we can signal that we are in the internal blender python environment
         os.environ.setdefault("INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT", "1")
     except ImportError:
-        raise RuntimeError("\n###############\nUSE_EXTERNAL_BPY_MODULE is set, but bpy module could not be imported. Make sure bpy module is present in your python environment.\n\tpip install bpy==4.2.0\n###############\n")
+        raise RuntimeError("\n###############\nUSE_EXTERNAL_BPY_MODULE is set, but bpy module could not be imported. Make sure bpy module is present in your python environment.\n\tpip install bpy==4.3.0\n###############\n")
 
 
 # check the python version, only python 3.X is allowed:
