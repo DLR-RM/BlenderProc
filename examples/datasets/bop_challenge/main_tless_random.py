@@ -120,7 +120,7 @@ for i in range(args.num_scenes):
     bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(sampled_target_bop_objs + sampled_distractor_bop_objs)
     camera_poses = []
     cam_poses = 0
-    while cam_poses < 1: # TODO: return to 25
+    while cam_poses < 25:
         # Sample location
         location = bproc.sampler.shell(center = [0, 0, 0],
                                 radius_min = 0.65,
