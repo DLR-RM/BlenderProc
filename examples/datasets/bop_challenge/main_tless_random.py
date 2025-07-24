@@ -13,9 +13,6 @@ parser.add_argument('output_dir', help="Path to where the final files will be sa
 parser.add_argument('--num_scenes', type=int, default=2000, help="How many scenes with 25 images each to generate")
 args = parser.parse_args()
 
-for k,v in vars(args).items():
-    print(k, v)
-
 bproc.init()
 
 # load bop objects into the scene
