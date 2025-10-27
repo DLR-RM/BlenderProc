@@ -3,7 +3,7 @@ message: "If you use this software, please cite it as below."
 title: "BlenderProc2"
 version: 2.0.0
 date-released: 2021-10-12
-licence: GNU General Public License v3.0
+license: GNU General Public License v3.0
 authors:
   - family-names: Denninger
     given-names: Maximilian
