@@ -2,6 +2,9 @@ import blenderproc as bproc
 import argparse
 import os
 import numpy as np
+from time import time
+
+start_time = time()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', help="Path to the bop datasets parent directory")
@@ -13,12 +16,12 @@ args = parser.parse_args()
 bproc.init()
 
 # load bop objects into the scene
-target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'), model_type = 'cad', mm2m = True)
+target_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'), model_type = 'cad', object_model_unit='mm')
 
 # load distractor bop objects
-itodd_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'itodd'), mm2m = True)
-ycbv_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'ycbv'), mm2m = True)
-hb_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), mm2m = True)
+itodd_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'itodd'), object_model_unit='mm')
+ycbv_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'ycbv'), object_model_unit='mm')
+hb_dist_bop_objs = bproc.loader.load_bop_objs(bop_dataset_path = os.path.join(args.bop_parent_path, 'hb'), object_model_unit='mm')
 
 # load BOP datset intrinsics
 bproc.loader.load_bop_intrinsics(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'))
@@ -112,7 +115,7 @@ for i in range(args.num_scenes):
 
     # BVH tree used for camera obstacle checks
     bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(sampled_target_bop_objs + sampled_distractor_bop_objs)
-
+    camera_poses = []
     cam_poses = 0
     while cam_poses < 25:
         # Sample location
@@ -132,10 +135,16 @@ for i in range(args.num_scenes):
         if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):
             # Persist camera pose
             bproc.camera.add_camera_pose(cam2world_matrix, frame=cam_poses)
+            camera_poses.append(cam2world_matrix)
             cam_poses += 1
 
     # render the whole pipeline
     data = bproc.renderer.render()
+    
+    # Render only the edges
+    data["edges"] = bproc.renderer.render_edges(
+        target_objects=sampled_target_bop_objs, camera_poses=camera_poses
+    )
 
     # Write data in bop format
     bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
@@ -143,10 +152,19 @@ for i in range(args.num_scenes):
                            dataset = 'tless',
                            depth_scale = 0.1,
                            depths = data["depth"],
-                           colors = data["colors"], 
+                           colors = data["colors"],
+                           edges=data["edges"],
                            color_file_format = "JPEG",
                            ignore_dist_thres = 10)
     
     for obj in (sampled_target_bop_objs + sampled_distractor_bop_objs):      
         obj.disable_rigidbody()
         obj.hide(True)
+        
+runtime = time() - start_time
+# Convert runtime to minutes and seconds format
+minutes = int(runtime // 60)
+seconds = runtime % 60
+
+# Print runtime in minutes and seconds format
+print(f"{'#'*50}\nTook {minutes} minutes and {seconds:.2f} seconds\n{'#'*50}")

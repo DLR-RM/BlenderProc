@@ -1,13 +1,15 @@
-"""Provides functionality to render a color, normal, depth and distance image."""
+"""Provides functionality to render a color, normal, depth, edge and distance image."""
 
 from contextlib import contextmanager
 import os
 import threading
-from typing import IO, Union, Dict, List, Set, Optional, Any
+from typing import IO, Union, Dict, List, Tuple, Set, Optional, Any
 import math
 import sys
 import platform
 import time
+import tempfile
+import cv2
 
 import mathutils
 import bpy
@@ -21,6 +23,7 @@ from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objec
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.utility.Utility import Utility, stdout_redirected
 from blenderproc.python.writer.WriterUtility import _WriterUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 def set_denoiser(denoiser: Optional[str]):
@@ -928,3 +931,303 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
             bpy.context.scene.cycles.device = "CPU"
             bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
             print("Using only the CPU for rendering")
+
+
+def load_edge_render(temp_filepath: str) -> np.ndarray:
+    """
+    Loads an edge render image from a temporary file and appends it to a list.
+
+    :param temp_filepath: Path to the temporary image file to load. Must exist and be readable.
+    :return: An image as numpy array
+    """
+    if not os.path.isfile(temp_filepath):
+        raise FileNotFoundError(
+            "Temporary edge image render not found at: ", temp_filepath
+        )
+
+    if not os.path.isfile(temp_filepath):
+        raise FileExistsError(
+            f"tempfile with edge render does not exist under: {temp_filepath}"
+        )
+    # Read the image back as a NumPy array and append it to the list
+    # Load with alpha channel if present
+    temp_img = cv2.imread(temp_filepath, cv2.IMREAD_UNCHANGED)
+
+    # Remove the temporary file
+    os.remove(temp_filepath)
+
+    return temp_img
+
+
+def freestyle_config(line_thickness: float, crease_angle: float, view_layer: bpy.types.ViewLayer,
+                     scene: bpy.types.Scene) -> None:
+    """
+    Configures Blender Freestyle settings for stylized edge rendering.
+
+    :param line_thickness: Thickness of the rendered lines in pixels.
+    :param crease_angle: Crease angle in degrees used to detect and render sharp edges.
+    :param view_layer: The Blender ViewLayer where Freestyle is configured.
+    :param scene: The Blender Scene associated with the rendering. Used to enable Freestyle globally.
+    """
+    # Enable Freestyle rendering
+    scene.render.use_freestyle = True
+
+    # Get or create a Freestyle settings object
+    freestyle_settings = view_layer.freestyle_settings
+    freestyle_settings.as_render_pass = True  # Output as separate pass
+    freestyle_settings.use_smoothness = False
+    freestyle_settings.use_culling = True  # Enable edge culling to speed up rendering
+    freestyle_settings.crease_angle = np.deg2rad(crease_angle)  # Set the crease angle
+
+    # Ensure a Line Set exists
+    if not freestyle_settings.linesets:
+        line_set = freestyle_settings.linesets.new(name="TargetEdges")
+    else:
+        line_set = freestyle_settings.linesets[0]
+
+    line_set.select_external_contour = False
+    line_set.select_material_boundary = False
+
+    # Ensure a Line Style exists
+    if not line_set.linestyle:
+        linestyle = bpy.data.linestyles.new(name="TargetEdgeStyle")
+        line_set.linestyle = linestyle  # Attach the new linestyle
+    else:
+        linestyle = line_set.linestyle
+
+    # Customize Line Style
+    linestyle.use_chaining = True  # Ensures edges are properly connected
+    linestyle.chaining = "PLAIN"  # Prevents sketchy overlapping
+    linestyle.thickness = line_thickness
+    linestyle.color = (0, 0, 0)  # Black edges
+    linestyle.alpha = 1.0
+    linestyle.use_dashed_line = False  # Avoid unnecessary complexity
+
+    # Set Edge Types: Only render essential edges
+    line_set.select_silhouette = True  # Keeps silhouette edges
+    line_set.select_border = False  # Ignore outer object borders
+    line_set.select_crease = True  # Keep sharp creases
+    line_set.select_contour = True  # Main outlines
+    line_set.select_edge_mark = True  # Removes hidden edges
+    line_set.visibility = "VISIBLE"  # Ensures only visible edges are considered
+
+
+def freestyle_render_config(scene: bpy.types.Scene) -> None:
+    """
+    Sets up the compositor node tree for Freestyle edge rendering output.
+
+    :param scene: The Blender Scene to configure. Enables use of nodes and sets up a node tree
+                  to output the Freestyle render pass as a PNG with RGBA channels.
+    """
+    scene.use_nodes = True
+    tree = scene.node_tree
+    tree.nodes.clear()
+
+    # Check if this setup already exists to avoid duplicates
+    if any(n.name == "FreestyleComposite" for n in tree.nodes):
+        print("Nodes for FreestyleComposite already configured!")
+        return  # Already configured
+
+    scene.render.image_settings.color_mode = "RGBA"
+    scene.render.image_settings.file_format = "PNG"
+
+    # Render Layers (includes all render passes)
+    render_layers = tree.nodes.new(type="CompositorNodeRLayers")
+    render_layers.name = "FreestyleRenderLayers"
+    render_layers.location = (-300, 0)
+
+    # Composite output node
+    composite = tree.nodes.new(type="CompositorNodeComposite")
+    composite.name = "FreestyleComposite"
+    composite.location = (200, 0)
+
+    # Connect Freestyle pass to output
+    tree.links.new(render_layers.outputs["Freestyle"], composite.inputs["Image"])
+
+
+def remap_target_objects_to_scene_by_geometry(original_targets: List[MeshObject], target_scene: bpy.types.Scene,
+                                              location_tol: float = 1e-4, size_tol: float = 1e-4) -> List[MeshObject]:
+    """
+    Attempts to remap a list of mesh objects to equivalent objects in a different scene based on geometry.
+
+    :param original_targets: List of MeshObject instances to remap. These are the original objects to match.
+    :param target_scene: The Blender Scene to search for matching objects.
+    :param location_tol: Tolerance for comparing object world-space locations. Default is 1e-4.
+    :param size_tol: Tolerance for comparing object dimensions. Default is 1e-4.
+    :return: A list of MeshObject instances from the target scene that match the originals by geometry.
+    """
+    remapped_targets = []
+
+    # Create a set of candidate objects in the target scene
+    candidate_objs = list(target_scene.objects)
+
+    for original in original_targets:
+        orig_loc = original.blender_obj.matrix_world.translation
+        orig_size = original.blender_obj.dimensions
+
+        # Find best match by comparing position and size
+        best_match = None
+        for candidate in candidate_objs:
+            cand_loc = candidate.matrix_world.translation
+            cand_size = candidate.dimensions
+
+            loc_diff = (cand_loc - orig_loc).length
+            size_diff = (cand_size - orig_size).length
+
+            if loc_diff < location_tol and size_diff < size_tol:
+                best_match = candidate
+                break  # Found a confident match
+
+        if best_match:
+            new_mesh_obj = MeshObject(best_match)
+            remapped_targets.append(new_mesh_obj)
+        else:
+            print(f"No geometry-based match found for {original.get_name()}")
+
+    return remapped_targets
+
+
+def get_mesh_stats(mesh: MeshObject) -> Tuple[str, int, int, int]:
+    """
+    Returns basic statistics of a mesh object.
+
+    :param mesh: The MeshObject instance to analyze.
+    :return: A tuple containing the mesh name, number of vertices, number of edges, and number of faces.
+    """
+    bpy.ops.object.mode_set(mode="OBJECT")  # Necessary to get stats
+    mesh_data = mesh.blender_obj.data
+    mesh_stats = (
+        mesh.get_name(),
+        len(mesh_data.vertices),
+        len(mesh_data.edges),
+        len(mesh_data.polygons),
+    )
+    bpy.ops.object.mode_set(mode="EDIT")  # Return to edit for selection
+    return mesh_stats
+
+
+def reduce_object_complexity(meshes: List[MeshObject], dissolve_angle: float,
+                             connect_non_planar_angle: float) -> List[MeshObject]:
+    """
+    Reduces mesh complexity by dissolving small-angle geometry and splitting non-planar faces.
+
+    :param meshes: A list of MeshObject instances to simplify.
+    :param dissolve_angle: Angle in degrees used to dissolve limited geometry (e.g., nearly colinear edges).
+    :param connect_non_planar_angle: Angle in degrees used to split non-planar faces into simpler geometry.
+    :return: A list of simplified MeshObject instances, with printed stats on reduction ratios.
+    """
+    if not meshes:
+        print("No meshes -> No mesh optimization")
+        return []
+
+    reduced_meshes = []
+
+    for mesh in meshes:
+        orig_mesh_stats = get_mesh_stats(mesh)
+        # Enter edit mode for the object to perform geometry operations
+        bpy.context.view_layer.objects.active = mesh.blender_obj
+        bpy.ops.object.mode_set(mode="EDIT")
+
+        # Dissolve limited with an angle
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.mesh.dissolve_limited(
+            angle_limit=np.deg2rad(dissolve_angle), use_dissolve_boundaries=False
+        )
+
+        # Split non-planar faces with an angle
+        bpy.ops.mesh.vert_connect_nonplanar(
+            angle_limit=np.deg2rad(connect_non_planar_angle)
+        )
+        bpy.ops.mesh.delete_loose(use_faces=True, use_verts=True, use_edges=True)
+
+        opt_mesh_stats = get_mesh_stats(mesh)
+        opt_ratios = tuple(
+            (e1 / e2) * 100 for e1, e2 in zip(opt_mesh_stats[1:], orig_mesh_stats[1:])
+        )
+        print(
+            f"Optimized {orig_mesh_stats[0]}: vertices by {opt_ratios[0]:.1f}% edges {opt_ratios[1]:.1f}% faces {opt_ratios[2]:.1f}% \n"
+        )
+
+        reduced_meshes.append(mesh)
+
+    return reduced_meshes
+
+
+def render_edges(target_objects: List[bpy.types.Object], camera_poses: List[np.ndarray]) -> List[np.ndarray]:
+    """
+    Renders only the Freestyle edge pass for the given target objects from multiple camera poses.
+
+    :param target_objects: List of Blender objects to render as stylized edges.
+    :param camera_poses: List of 4x4 camera pose matrices (world transforms) to render from.
+    :return: A list of NumPy arrays, each representing a rendered edge image.
+    """
+    if not len(camera_poses) > 0:
+        print("No camera poses passed to render_edges function...")
+        return []
+    if not len(target_objects) > 0:
+        print("No target objects passed to render_edges function...")
+        return []
+
+    # Get current scene and duplicate it
+    original_scene = bpy.context.scene
+    bpy.ops.scene.new(type="FULL_COPY")
+    # Now the active scene is the duplicated one
+    edge_scene = bpy.context.scene
+    edge_scene.name = "Freestyle"
+    edge_view_layer = edge_scene.view_layers[0]  # get the duplicated view layer
+    edge_scene.render.engine = "BLENDER_EEVEE_NEXT"
+
+    freestyle_config(
+        line_thickness=1.0,
+        crease_angle=160,
+        view_layer=edge_view_layer,
+        scene=edge_scene,
+    )
+
+    freestyle_render_config(edge_scene)
+
+    edge_target_objects = remap_target_objects_to_scene_by_geometry(
+        target_objects, edge_scene
+    )
+    edge_target_objects = reduce_object_complexity(
+        edge_target_objects, dissolve_angle=4, connect_non_planar_angle=5
+    )
+
+    edge_images = []  # List to store rendered edge images
+    for pose_id, cam_pose in enumerate(camera_poses):
+        edge_scene.frame_set(pose_id)  # Forces Freestyle to recompute scene
+        # Hide all objects
+        for obj in edge_scene.objects:
+            obj.hide_render = True
+            obj.visible_camera = False
+
+        # Update camera transformation
+        edge_scene.camera.matrix_world = cam_pose
+        edge_view_layer.update()
+
+        for edge_target_object in edge_target_objects:
+            # Enable only the target object for rendering
+            edge_target_object.blender_obj.hide_render = False
+            edge_target_object.blender_obj.visible_camera = True
+
+            # Create a temporary file to store the rendered image
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as temp_file:
+                temp_filepath = temp_file.name
+
+            # Set Blender's output path to the temporary file
+            edge_scene.render.filepath = temp_filepath
+
+            # Render the Freestyle pass for this object
+            bpy.ops.render.render(write_still=True)
+            edge_img = load_edge_render(temp_filepath)
+            edge_images.append(edge_img)
+
+            # Disable the target object again after rendering
+            edge_target_object.blender_obj.hide_render = True
+            edge_target_object.blender_obj.visible_camera = False
+
+    # Switch back to original scene
+    bpy.context.window.scene = original_scene
+    bpy.data.scenes.remove(edge_scene)
+
+    return edge_images  # Return the list of rendered edge images

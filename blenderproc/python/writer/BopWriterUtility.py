@@ -4,6 +4,7 @@ from functools import partial
 import json
 from multiprocessing import Pool
 import os
+from pathlib import Path
 import glob
 import trimesh
 from typing import List, Optional, Dict, Tuple
@@ -29,7 +30,7 @@ if sys.platform in ["linux", "linux2"]:
 
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
-              depths: List[np.ndarray] = None, colors: List[np.ndarray] = None,
+              depths: List[np.ndarray] = None, colors: List[np.ndarray] = None, edges: List[np.ndarray] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: Optional[bool] = None, annotation_unit: str = 'mm',
@@ -42,6 +43,7 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                            from specified dataset
     :param depths: List of depth images in m to save
     :param colors: List of color images to save
+    :param edges: List of edge images to save
     :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
     :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
     :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
@@ -135,6 +137,16 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                                    annotation_scale=annotation_scale, ignore_dist_thres=ignore_dist_thres,
                                    save_world2cam=save_world2cam, depth_scale=depth_scale, jpg_quality=jpg_quality)
 
+    # Determine for which directories mask_info_coco has to be calculated
+    chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, "*")))
+    chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+    chunk_dir_ids = [os.path.basename(d) for d in chunk_dirs]
+    chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}") :]
+    
+    # If any edge images are passed, write them to disk
+    if edges:
+        _BopWriterUtility.write_edges(chunk_dirs=chunk_dirs, edges=edges)
+
     if calc_mask_info_coco:
         # Set up the bop toolkit
         SetupUtility.setup_pip(["git+https://github.com/thodan/bop_toolkit", "PyOpenGL==3.1.0"])
@@ -142,12 +154,6 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         # determine which objects to add to the vsipy renderer
         # for numpy>=1.20, np.float is deprecated: https://numpy.org/doc/stable/release/1.20.0-notes.html#deprecations
         np.float = float
-
-        # Determine for which directories mask_info_coco has to be calculated
-        chunk_dirs = sorted(glob.glob(os.path.join(chunks_dir, '*')))
-        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-        chunk_dir_ids = [d.split('/')[-1] for d in chunk_dirs]
-        chunk_dirs = chunk_dirs[chunk_dir_ids.index(f"{starting_chunk_id:06d}"):]
 
         # convert all objects to trimesh objects
         trimesh_objects = {}
@@ -876,7 +882,7 @@ class _BopWriterUtility:
         # pylint: enable=import-outside-toplevel
 
         for dir_counter, chunk_dir in enumerate(chunk_dirs):
-            dataset_name = chunk_dir.split('/')[-3]
+            dataset_name = Path(chunk_dir).parents[2].name
 
             CATEGORIES = [{'id': obj.get_cp('category_id'), 'name': str(obj.get_cp('category_id')), 'supercategory':
                           dataset_name} for obj in dataset_objects]
@@ -969,3 +975,52 @@ class _BopWriterUtility:
 
             with open(coco_gt_path, 'w', encoding='utf-8') as output_json_file:
                 json.dump(coco_scene_output, output_json_file)
+                
+    @staticmethod
+    def write_edges(chunk_dirs: List[str], edges: List[np.ndarray]) -> None:
+        """Writes rendered edge images to files
+
+        Args:
+            chunk_dirs (List[str]): contains path strings to chunk directories
+            edges (List[np.ndarray]): contains rendered edge images
+        """
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        # pylint: disable=import-outside-toplevel
+        from bop_toolkit_lib import misc
+
+        misc.log("Saving edge renders to disk")
+
+        for chunk_dir in chunk_dirs:
+            os_agnostic_path = os.path.normpath(chunk_dir)
+            edges_dir = os.path.join(os_agnostic_path, "edges")
+            misc.ensure_dir(edges_dir)
+
+            # Load info about the GT poses (e.g. visibility) for the current scene.
+            scene_gt_fpath = os.path.join(os_agnostic_path, "scene_gt.json")
+            scene_gt = _BopWriterUtility.load_json(scene_gt_fpath, keys_to_int=True)
+
+            # Sort by im_id to ensure deterministic order
+            sorted_scene_views = sorted(scene_gt.items(), key=lambda x: int(x[0]))
+
+            edge_counter = 0  # Index in the 'edges' list
+
+            for scene_view_str, inst_list in sorted_scene_views:
+                im_id = int(scene_view_str)
+
+                for idx, _ in enumerate(inst_list):
+                    filename = f"{im_id:06d}_{idx:06d}.png"
+                    filepath = os.path.join(edges_dir, filename)
+
+                    # Skip if file already exists
+                    if os.path.exists(filepath):
+                        continue
+
+                    # Make sure we have a valid edge to write
+                    if edge_counter >= len(edges):
+                        break
+
+                    try:
+                        cv2.imwrite(filepath, edges[edge_counter])
+                    except Exception as e:
+                        print(f"Error writing {filename}: {e}")
+                    edge_counter += 1
