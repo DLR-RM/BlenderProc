@@ -79,8 +79,9 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                         # Find the maximum frame number of its key frames
                         max_keyframe = -1
                         if obj.animation_data is not None:
-                            fcurves = obj.animation_data.action.fcurves
-                            for curve in fcurves:
+                            strip = obj.animation_data.action.layers[0].strips[0]
+                            channelbag = strip.channelbag(obj.animation_data.action_slot, ensure=True)
+                            for curve in channelbag.fcurves:
                                 keyframe_points = curve.keyframe_points
                                 for keyframe in keyframe_points:
                                     max_keyframe = max(max_keyframe, keyframe.co[0])
