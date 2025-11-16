@@ -67,7 +67,7 @@ class SetupUtility:
         if not SetupUtility.main_setup_called:
             SetupUtility.main_setup_called = True
             sys.path.append(packages_path)
-            is_debug_mode = "--background" not in sys.argv
+            is_debug_mode = ("--background" not in sys.argv) or (sys.argv[0] == "debug")
 
             # Setup temporary directory
             if is_debug_mode:
