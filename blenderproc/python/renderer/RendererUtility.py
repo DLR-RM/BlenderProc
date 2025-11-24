@@ -55,10 +55,12 @@ def set_denoiser(denoiser: Optional[str]):
         # Link nodes
         render_layer_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeRLayers')
         composite_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeComposite')
-        Utility.insert_node_instead_existing_link(links,
-                                                  render_layer_node.outputs['Image'],
-                                                  denoise_node.inputs['Image'],
-                                                  denoise_node.outputs['Image'],
+        composite_input = composite_node.inputs['Image']
+        if not composite_input.is_linked or composite_input.links[0].from_node != render_layer_node:
+            raise RuntimeError("Intel denoiser requires Render Layers to be directly linked to the Composite node."
+                               " Configure denoising before enabling ambient occlusion or other compositor nodes.")
+        Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'],
+                                                  denoise_node.inputs['Image'], denoise_node.outputs['Image'],
                                                   composite_node.inputs['Image'])
 
         links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
@@ -67,9 +69,12 @@ def set_denoiser(denoiser: Optional[str]):
         raise Exception("No such denoiser: " + denoiser)
 
 
-def set_light_bounces(diffuse_bounces: Optional[int] = None, glossy_bounces: Optional[int] = None,
-                      ao_bounces_render: Optional[int] = None, max_bounces: Optional[int] = None,
-                      transmission_bounces: Optional[int] = None, transparent_max_bounces: Optional[int] = None,
+def set_light_bounces(diffuse_bounces: Optional[int] = None,
+                      glossy_bounces: Optional[int] = None,
+                      ao_bounces_render: Optional[int] = None,
+                      max_bounces: Optional[int] = None,
+                      transmission_bounces: Optional[int] = None,
+                      transparent_max_bounces: Optional[int] = None,
                       volume_bounces: Optional[int] = None):
     """
     Sets the number of light bounces that should be used by the raytracing renderer.
@@ -123,6 +128,7 @@ def toggle_stereo(enable: bool):
     if enable:
         bpy.context.scene.render.views_format = "STEREO_3D"
 
+
 def toggle_light_tree(enable: bool):
     """ Enables/Disables blender's light tree for rendering.
 
@@ -133,6 +139,7 @@ def toggle_light_tree(enable: bool):
     :param enable: True, if light tree should be enabled.
     """
     bpy.context.scene.cycles.use_light_tree = enable
+
 
 def set_simplify_subdivision_render(simplify_subdivision_render: int):
     """ Sets global maximum subdivision level during rendering to speedup rendering.
@@ -176,9 +183,11 @@ def set_max_amount_of_samples(samples: int):
     bpy.context.scene.cycles.samples = samples
 
 
-def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str] = None,
+def enable_distance_output(activate_antialiasing: bool,
+                           output_dir: Optional[str] = None,
                            file_prefix: str = "distance_",
-                           output_key: str = "distance", antialiasing_distance_max: float = None,
+                           output_key: str = "distance",
+                           antialiasing_distance_max: float = None,
                            convert_to_depth: bool = False):
     """ Enables writing distance images.
 
@@ -243,7 +252,7 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     combine_color = tree.nodes.new("CompositorNodeCombineColor")
     combine_color.mode = "HSV"
     links.new(mapper_node.outputs["Value"], combine_color.inputs[2])
-    
+
     # Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer
     links.new(combine_color.outputs["Image"], output_file.inputs['Image'])
 
@@ -257,8 +266,11 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     return None
 
 
-def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] = None, file_prefix: str = "depth_",
-                        output_key: str = "depth", antialiasing_distance_max: float = None,
+def enable_depth_output(activate_antialiasing: bool,
+                        output_dir: Optional[str] = None,
+                        file_prefix: str = "depth_",
+                        output_key: str = "depth",
+                        antialiasing_distance_max: float = None,
                         convert_to_distance: bool = False):
     """ Enables writing depth images.
 
@@ -274,8 +286,12 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
                                 image to a distance image
     """
     if activate_antialiasing:
-        return enable_distance_output(activate_antialiasing, output_dir, file_prefix, output_key,
-                                      antialiasing_distance_max, convert_to_depth=True)
+        return enable_distance_output(activate_antialiasing,
+                                      output_dir,
+                                      file_prefix,
+                                      output_key,
+                                      antialiasing_distance_max,
+                                      convert_to_depth=True)
     if output_dir is None:
         output_dir = Utility.get_temporary_directory()
 
@@ -311,7 +327,7 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
     combine_color = tree.nodes.new("CompositorNodeCombineColor")
     combine_color.mode = "HSV"
     links.new(render_layer_node.outputs["Depth"], combine_color.inputs[2])
-    
+
     # Feed the Z-Buffer RGB output from the Combine Color node to the input of the file IO layer
     links.new(combine_color.outputs["Image"], output_file.inputs["Image"])
 
@@ -325,8 +341,7 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
     return None
 
 
-def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "normals_",
-                          output_key: str = "normals"):
+def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "normals_", output_key: str = "normals"):
     """ Enables writing normal images.
 
     Normal images will be written in the form of .exr files during the next rendering.
@@ -441,7 +456,8 @@ def enable_segmentation_output(map_by: Union[str, List[str]] = "category_id",
                                default_values: Optional[Dict[str, Any]] = None,
                                pass_alpha_threshold: float = 0.05,
                                output_dir: Optional[str] = None,
-                               file_prefix: str = "segmap_", output_key: str = "segmap"):
+                               file_prefix: str = "segmap_",
+                               output_key: str = "segmap"):
     """ Enables segmentation output by certain keys.
 
     The key instances is used, if a mapping of every object in the scene to an integer is requested. These integers
@@ -501,14 +517,15 @@ def enable_segmentation_output(map_by: Union[str, List[str]] = "category_id",
     combine_color = tree.nodes.new("CompositorNodeCombineColor")
     combine_color.mode = "HSV"
     links.new(render_layer_node.outputs["IndexOB"], combine_color.inputs[2])
-    
+
     links.new(combine_color.outputs["Image"], output_node.inputs["Image"])
 
     # set the threshold low to avoid noise in alpha materials
     bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = pass_alpha_threshold
 
 
-def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: str = "diffuse_",
+def enable_diffuse_color_output(output_dir: Optional[str] = None,
+                                file_prefix: str = "diffuse_",
                                 output_key: str = "diffuse"):
     """ Enables writing diffuse color (albedo) images.
 
@@ -651,8 +668,11 @@ def _render_progress_bar(pipe_out: int, pipe_in: int, stdout: IO, total_frames: 
         yield
 
 
-def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
-           load_keys: Optional[Set[str]] = None, return_data: bool = True,
+def render(output_dir: Optional[str] = None,
+           file_prefix: str = "rgb_",
+           output_key: Optional[str] = "colors",
+           load_keys: Optional[Set[str]] = None,
+           return_data: bool = True,
            keys_with_alpha_channel: Optional[Set[str]] = None,
            verbose: bool = False) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
@@ -677,10 +697,13 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
 
     if output_key is not None:
         Utility.add_output_entry({
-            "key": output_key,
-            "path": os.path.join(output_dir, file_prefix) + "%04d" +
-                    map_file_format_to_file_ending(bpy.context.scene.render.image_settings.file_format),
-            "version": "2.0.0"
+            "key":
+                output_key,
+            "path":
+                os.path.join(output_dir, file_prefix) + "%04d" +
+                map_file_format_to_file_ending(bpy.context.scene.render.image_settings.file_format),
+            "version":
+                "2.0.0"
         })
         load_keys.add(output_key)
 
@@ -729,10 +752,14 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
     return _WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
 
 
-def set_output_format(file_format: Optional[str] = None, color_depth: Optional[int] = None,
-                      enable_transparency: Optional[bool] = None, jpg_quality: Optional[int] = None,
-                      view_transform: Optional[str] = None, look: Optional[str] = None,
-                      exposure: Optional[float] = None, gamma: Optional[float] = None):
+def set_output_format(file_format: Optional[str] = None,
+                      color_depth: Optional[int] = None,
+                      enable_transparency: Optional[bool] = None,
+                      jpg_quality: Optional[int] = None,
+                      view_transform: Optional[str] = None,
+                      look: Optional[str] = None,
+                      exposure: Optional[float] = None,
+                      gamma: Optional[float] = None):
     """ Sets the output format to use for rendering. Default values defined in DefaultConfig.py.
 
     :param file_format: The file format to use, e.q. "PNG", "JPEG" or "OPEN_EXR".
@@ -768,7 +795,8 @@ def set_output_format(file_format: Optional[str] = None, color_depth: Optional[i
         bpy.context.scene.view_settings.gamma = gamma
 
 
-def enable_motion_blur(motion_blur_length: float = 0.5, rolling_shutter_type: str = "NONE",
+def enable_motion_blur(motion_blur_length: float = 0.5,
+                       rolling_shutter_type: str = "NONE",
                        rolling_shutter_length: float = 0.1):
     """ Enables motion blur and sets rolling shutter.
 
@@ -853,7 +881,8 @@ def enable_experimental_features():
     bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
 
 
-def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Union[str, List[str]] = None,
+def set_render_devices(use_only_cpu: bool = False,
+                       desired_gpu_device_type: Union[str, List[str]] = None,
                        desired_gpu_ids: Union[int, List[int]] = None):
     """ Configures the devices to use for rendering.
 
@@ -928,3 +957,31 @@ def set_render_devices(use_only_cpu: bool = False, desired_gpu_device_type: Unio
             bpy.context.scene.cycles.device = "CPU"
             bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "NONE"
             print("Using only the CPU for rendering")
+
+
+def enable_ambient_occlusion(distance: float = 1.0, strength: float = 1.0):
+    """ Enables ambient occlusion in the scene. This can improve object part or point separation.
+
+    :param distance: Length of rays, defines how far away other faces give occlusion effect.
+    :param strength: The amount of ambient occlusion effect added to the scene.
+    """
+    bpy.context.scene.view_layers['ViewLayer'].use_pass_ambient_occlusion = True
+    bpy.context.scene.world.light_settings.distance = distance
+    bpy.context.scene.use_nodes = True
+
+    nodes = bpy.context.scene.node_tree.nodes
+    render_layers_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeRLayers')
+    mix_rgb_node = nodes.new('CompositorNodeMixRGB')
+    mix_rgb_node.blend_type = 'MULTIPLY'
+    mix_rgb_node.inputs[0].default_value = strength
+
+    # Insert the mix-rgb node in between denoise and composite node, if a denoise node is present
+    links = bpy.context.scene.node_tree.links
+    try:
+        target_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeDenoise')
+    except RuntimeError:
+        target_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeComposite')
+
+    Utility.insert_node_instead_existing_link(links, render_layers_node.outputs['Image'], mix_rgb_node.inputs['Image'],
+                                              mix_rgb_node.outputs['Image'], target_node.inputs['Image'])
+    links.new(render_layers_node.outputs['AO'], mix_rgb_node.inputs[2])

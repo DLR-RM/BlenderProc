@@ -15,7 +15,6 @@ class Material(Struct):
     of MeshObjects.
     """
 
-
     def __init__(self, material: bpy.types.Material):
         super().__init__(material)
         if not material.use_nodes:
@@ -98,8 +97,7 @@ class Material(Struct):
 
     def insert_node_instead_existing_link(self, source_socket: bpy.types.NodeSocket,
                                           new_node_dest_socket: bpy.types.NodeSocket,
-                                          new_node_src_socket: bpy.types.NodeSocket,
-                                          dest_socket: bpy.types.NodeSocket):
+                                          new_node_src_socket: bpy.types.NodeSocket, dest_socket: bpy.types.NodeSocket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
         Before: source_socket -> dest_socket
@@ -167,7 +165,10 @@ class Material(Struct):
         for node in self.get_nodes_created_in_func(self.make_emissive.__name__):
             self.remove_node(node)
 
-    def make_emissive(self, emission_strength: float, replace: bool = False, emission_color: List[float] = None,
+    def make_emissive(self,
+                      emission_strength: float,
+                      replace: bool = False,
+                      emission_color: List[float] = None,
                       non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
 
@@ -279,8 +280,13 @@ class Material(Struct):
                 break
         return node_connected_to_the_output, material_output
 
-    def infuse_texture(self, texture: bpy.types.Texture, mode: str = "overlay", connection: str = "Base Color",
-                       texture_scale: float = 0.05, strength: float = 0.5, invert_texture: bool = False):
+    def infuse_texture(self,
+                       texture: bpy.types.Texture,
+                       mode: str = "overlay",
+                       connection: str = "Base Color",
+                       texture_scale: float = 0.05,
+                       strength: float = 0.5,
+                       invert_texture: bool = False):
         """ Overlays the selected material with a texture, this can be either a color texture like for example dirt or
         it can be a texture, which is used as an input to the Principled BSDF of the given material.
 
@@ -364,8 +370,7 @@ class Material(Struct):
 
         # move the copied material inside of a group
         group_node = self.new_node("ShaderNodeGroup")
-        group = BlenderUtility.add_nodes_to_group(material.nodes,
-                                                  f"{used_mode.title()}_{material.get_name()}")
+        group = BlenderUtility.add_nodes_to_group(material.nodes, f"{used_mode.title()}_{material.get_name()}")
         group_node.node_tree = group
         # get the current material output and put the used material in between the last node and the material output
         material_output = self.get_the_one_node_with_type("OutputMaterial")
@@ -425,6 +430,28 @@ class Material(Struct):
         # Connect multiplication node with displacement output
         output = self.get_the_one_node_with_type("OutputMaterial")
         self.link(math_node.outputs["Value"], output.inputs["Displacement"])
+
+    def add_ambient_occlusion(self, distance: float = 1.0, samples: int = 16, only_local: bool = False):
+        """ Adds an ambient occlusion effect to the material.
+
+        :param distance: Length of rays, defines how far away other faces give occlusion effect.
+        :param samples: Number of rays to trace per shader evaluation.
+        :param only_local: Only consider the object itself when computing AO.
+        """
+        ao_node = self.new_node('ShaderNodeAmbientOcclusion')
+        ao_node.inputs['Distance'].default_value = distance
+        ao_node.samples = samples
+        ao_node.only_local = only_local
+
+        # Insert the ambient occlusion node in between the attribute node and the bsdf node, if present
+        try:
+            attribute_node = self.get_the_one_node_with_type('ShaderNodeAttribute')
+            bsdf_node = self.get_the_one_node_with_type('ShaderNodeBsdfPrincipled')
+            self.insert_node_instead_existing_link(attribute_node.outputs['Color'], ao_node.inputs['Color'],
+                                                   ao_node.outputs['Color'], bsdf_node.inputs['Base Color'])
+        except RuntimeError:
+            ao_node.inputs['Color'].default_value = self.get_principled_shader_value('Base Color')
+            self.set_principled_shader_value('Base Color', ao_node.outputs['Color'])
 
     def __setattr__(self, key, value):
         if key not in ["links", "nodes", "blender_obj"]:
