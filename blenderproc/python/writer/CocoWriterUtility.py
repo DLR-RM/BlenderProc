@@ -237,6 +237,10 @@ class _CocoWriterUtility:
             for inst in instances:
                 if inst in instance_2_category_map:
                     inst_attributes = next((item for item in inst_attribute_map if item["idx"] == inst), None)
+                    if inst_attributes:
+                        inst_attributes = {k: v for k, v in inst_attributes.items() if k not in {"idx", "name"}}
+                        if len(inst_attributes) == 0:
+                            inst_attributes = None
                     # Calc object mask
                     binary_inst_mask = np.where(inst_segmap == inst, 1, 0)
                     # Add coco info for object in this image
