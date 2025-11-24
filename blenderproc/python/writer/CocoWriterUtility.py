@@ -14,13 +14,18 @@ import bpy
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 
-def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray],
+def write_coco_annotations(output_dir: str,
+                           instance_segmaps: List[np.ndarray],
                            instance_attribute_maps: List[dict],
-                           colors: List[np.ndarray], color_file_format: str = "PNG",
-                           mask_encoding_format: str = "rle", supercategory: str = "coco_annotations",
+                           colors: List[np.ndarray],
+                           color_file_format: str = "PNG",
+                           mask_encoding_format: str = "rle",
+                           supercategory: str = "coco_annotations",
                            append_to_existing_output: bool = True,
-                           jpg_quality: int = 95, label_mapping: Optional[LabelIdMapping] = None,
-                           file_prefix: str = "", indent: Optional[Union[int, str]] = None):
+                           jpg_quality: int = 95,
+                           label_mapping: Optional[LabelIdMapping] = None,
+                           file_prefix: str = "",
+                           indent: Optional[Union[int, str]] = None):
     """ Writes coco annotations in the following steps:
     1. Locate the seg images
     2. Locate the rgb maps
@@ -90,15 +95,11 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray],
         else:
             raise RuntimeError(f'Unknown color_file_format={color_file_format}. Try "PNG" or "JPEG"')
 
-
         new_coco_image_paths.append(target_base_path)
 
-    coco_output = _CocoWriterUtility.generate_coco_annotations(instance_segmaps,
-                                                               instance_attribute_maps,
-                                                               new_coco_image_paths,
-                                                               supercategory,
-                                                               mask_encoding_format,
-                                                               existing_coco_annotations,
+    coco_output = _CocoWriterUtility.generate_coco_annotations(instance_segmaps, instance_attribute_maps,
+                                                               new_coco_image_paths, supercategory,
+                                                               mask_encoding_format, existing_coco_annotations,
                                                                label_mapping)
 
     print("Writing coco annotations to " + coco_annotations_path)
@@ -144,8 +145,12 @@ def rle_to_binary_mask(rle: Dict[str, List[int]]) -> np.ndarray:
 class _CocoWriterUtility:
 
     @staticmethod
-    def generate_coco_annotations(inst_segmaps, inst_attribute_maps, image_paths, supercategory,
-                                  mask_encoding_format, existing_coco_annotations=None,
+    def generate_coco_annotations(inst_segmaps,
+                                  inst_attribute_maps,
+                                  image_paths,
+                                  supercategory,
+                                  mask_encoding_format,
+                                  existing_coco_annotations=None,
                                   label_mapping: LabelIdMapping = None):
         """Generates coco annotations for images
 
@@ -180,8 +185,10 @@ class _CocoWriterUtility:
 
                     if supercategory in [inst_supercategory, 'coco_annotations']:
                         if int(inst["category_id"]) not in visited_categories:
-                            cat_dict: Dict[str, Union[str, int]] = {'id': int(inst["category_id"]),
-                                                                    'supercategory': inst_supercategory}
+                            cat_dict: Dict[str, Union[str, int]] = {
+                                'id': int(inst["category_id"]),
+                                'supercategory': inst_supercategory
+                            }
                             # Determine name of category based on label_mapping, name or category_id
                             if label_mapping is not None:
                                 cat_dict["name"] = label_mapping.label_from_id(cat_dict['id'])
@@ -212,8 +219,12 @@ class _CocoWriterUtility:
         images: List[Dict[str, Union[str, int]]] = []
         annotations: List[Dict[str, Union[str, int]]] = []
 
-        for inst_segmap, image_path, instance_2_category_map in zip(inst_segmaps, image_paths,
-                                                                    instance_2_category_maps):
+        for inst_segmap, image_path, instance_2_category_map, inst_attribute_map in zip(
+                inst_segmaps,
+                image_paths,
+                instance_2_category_maps,
+                inst_attribute_maps,
+        ):
 
             # Add coco info for image
             image_id = len(images)
@@ -225,14 +236,22 @@ class _CocoWriterUtility:
             instances = np.delete(instances, np.where(instances == 0))
             for inst in instances:
                 if inst in instance_2_category_map:
+                    inst_attributes = next((item for item in inst_attribute_map if item["idx"] == inst), None)
+                    if inst_attributes:
+                        inst_attributes = {k: v for k, v in inst_attributes.items() if k not in {"idx", "name"}}
+                        if len(inst_attributes) == 0:
+                            inst_attributes = None
                     # Calc object mask
                     binary_inst_mask = np.where(inst_segmap == inst, 1, 0)
                     # Add coco info for object in this image
-                    annotation = _CocoWriterUtility.create_annotation_info(len(annotations) + 1,
-                                                                           image_id,
-                                                                           instance_2_category_map[inst],
-                                                                           binary_inst_mask,
-                                                                           mask_encoding_format)
+                    annotation = _CocoWriterUtility.create_annotation_info(
+                        len(annotations) + 1,
+                        image_id,
+                        instance_2_category_map[inst],
+                        binary_inst_mask,
+                        mask_encoding_format,
+                        custom_props=inst_attributes,
+                    )
                     if annotation is not None:
                         annotations.append(annotation)
 
@@ -307,8 +326,13 @@ class _CocoWriterUtility:
         return image_info
 
     @staticmethod
-    def create_annotation_info(annotation_id: int, image_id: int, category_id: int, binary_mask: np.ndarray,
-                               mask_encoding_format: str, tolerance: int = 2) -> Optional[Dict[str, Union[str, int]]]:
+    def create_annotation_info(annotation_id: int,
+                               image_id: int,
+                               category_id: int,
+                               binary_mask: np.ndarray,
+                               mask_encoding_format: str,
+                               tolerance: int = 2,
+                               custom_props: Optional[Dict] = None) -> Optional[Dict[str, Union[str, int]]]:
         """Creates info section of coco annotation
 
         :param annotation_id: integer to uniquly identify the annotation
@@ -317,6 +341,7 @@ class _CocoWriterUtility:
         :param binary_mask: A binary image mask of the object with the shape [H, W].
         :param mask_encoding_format: Encoding format of the mask. Type: string.
         :param tolerance: The tolerance for fitting polygons to the objects mask.
+        :param custom_props: A dictionary of custom properties to add to the annotation.
         """
 
         area = _CocoWriterUtility.calc_binary_mask_area(binary_mask)
@@ -345,6 +370,10 @@ class _CocoWriterUtility:
             "width": binary_mask.shape[1],
             "height": binary_mask.shape[0],
         }
+
+        if custom_props:
+            annotation_info.update(custom_props)
+
         return annotation_info
 
     @staticmethod
