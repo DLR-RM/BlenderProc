@@ -1,19 +1,38 @@
 """ This module provides functions to init a BlenderProc scene. """
 
+import atexit
 import os
 import random
+import signal
+import shutil
 
 from numpy import random as np_random
+from typing import Optional
 import bpy
 
 from blenderproc.python.utility.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Utility import reset_keyframes
+from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 from blenderproc.python.camera import CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 from blenderproc.python.renderer import RendererUtility
 
 
-def init(clean_up_scene: bool = True):
+def clean_temp_dir():
+    # pylint: disable=import-outside-toplevel
+    from blenderproc.python.utility.Utility import Utility
+    # pylint: enable=import-outside-toplevel
+    assert is_using_external_bpy_module()
+    if os.path.exists(Utility.temp_dir):
+        print("Cleaning temporary directory")
+        shutil.rmtree(Utility.temp_dir)
+
+
+def handle_sigterm(_signum, _frame):
+    clean_temp_dir()
+
+
+def init(clean_up_scene: bool = True, temp_dir: Optional[str] = None):
     """ Initializes BlenderProc.
 
     Cleans up the whole scene at first and then initializes basic blender settings, the world, the renderer and
@@ -21,17 +40,26 @@ def init(clean_up_scene: bool = True):
     use bproc.clean_up()
 
     :param clean_up_scene: Set to False, if you want to keep all scene data.
+    :param temp_dir: The temporary directory to use when using external bpy module. If None a default temporary directory is used. 
     """
     # Check if init has already been run
     if GlobalStorage.is_in_storage("bproc_init_complete") and GlobalStorage.get("bproc_init_complete"):
         raise RuntimeError("BlenderProc has already been initialized via bproc.init(), this should not be done twice. "
                            "If you want to clean up the scene, use bproc.clean_up().")
 
+    if is_using_external_bpy_module():
+        # When in external mode we setup the temporary directory, and the cleanup handlers here, as
+        # this is the only mandatory initialization point and any of the code in command_line.py
+        # isn't executed. 
+        SetupUtility.setup_utility_paths(SetupUtility.determine_temp_dir(temp_dir))
+        atexit.register(clean_temp_dir)
+        signal.signal(signal.SIGTERM, handle_sigterm)
+
     if clean_up_scene:
         clean_up(clean_up_camera=True)
 
-    # Set language if necessary
-    if bpy.context.preferences.view.language != "en_US":
+    # Set language if necessary if not using external bpy (that has only DEFAULT language)
+    if not is_using_external_bpy_module() and bpy.context.preferences.view.language != "en_US":
         print("Setting blender language settings to english during this run")
         bpy.context.preferences.view.language = "en_US"
 
@@ -140,7 +168,10 @@ class _Initializer:
                                           DefaultConfig.color_depth,
                                           DefaultConfig.enable_transparency,
                                           DefaultConfig.jpg_quality,
-                                          DefaultConfig.view_transform)
+                                          DefaultConfig.view_transform,
+                                          DefaultConfig.look,
+                                          DefaultConfig.exposure,
+                                          DefaultConfig.gamma)
 
     @staticmethod
     def remove_all_data(remove_camera: bool = True):

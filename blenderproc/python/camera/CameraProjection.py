@@ -102,14 +102,14 @@ def unproject_points(points_2d: np.ndarray, depth: np.ndarray, frame: Optional[i
     K = get_intrinsics_as_K_matrix()
     K_inv = np.linalg.inv(K)
 
-    # Flip y axis
-    points_2d[..., 1] = (bpy.context.scene.render.resolution_y - 1) - points_2d[..., 1]
-
     # Unproject 2D into 3D
     points = np.concatenate((points_2d, np.ones_like(points_2d[:, :1])), -1)
     with np.errstate(invalid='ignore'):
         points *= depth[:, None]
         points_cam = (K_inv @ points.T).T
+
+    # Flip y axis
+    points_cam[...,1] *= -1
 
     # Transform into world frame
     points_cam[...,2] *= -1
@@ -139,13 +139,14 @@ def project_points(points: np.ndarray, frame: Optional[int] = None) -> np.ndarra
     points_cam = (world2cam @ points.T).T
     points_cam[...,2] *= -1
     
+    # Flip y axis
+    points_cam[...,1] *= -1
+
     # Project 3D points into 2D
     points_2d = (K @ points_cam[:, :3].T).T
     points_2d /= points_2d[:, 2:]
     points_2d = points_2d[:, :2]
 
-    # Flip y axis
-    points_2d[..., 1] = (bpy.context.scene.render.resolution_y - 1) - points_2d[..., 1]
     return points_2d
 
 def pointcloud_from_depth(depth: np.ndarray, frame: Optional[int] = None, depth_cut_off: float = 1e6) -> np.ndarray:

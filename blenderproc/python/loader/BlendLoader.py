@@ -86,7 +86,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                                     max_keyframe = max(max_keyframe, keyframe.co[0])
 
                         # Set frame_end to the next free keyframe
-                        bpy.context.scene.frame_end = max_keyframe + 1
+                        bpy.context.scene.frame_end = int(max_keyframe + 1)
                 else:
                     # Remove object again if its type is not desired
                     bpy.data.objects.remove(obj, do_unlink=True)

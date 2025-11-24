@@ -446,7 +446,12 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
                 if "Floor" == used_split_height[1]:
                     floor_obj = created_obj
                 elif "Ceiling" == used_split_height[1]:
-                    ceiling_obj = created_obj
+                    if create_ceiling:
+                        ceiling_obj = created_obj
+                    else:
+                        # delete the created ceiling if it should not be created
+                        created_obj.delete()
+                
     elif create_ceiling:
         # there is no ceiling -> create one
         wall_obj.edit_mode()

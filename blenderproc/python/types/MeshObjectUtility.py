@@ -1,6 +1,6 @@
 """ All mesh objects are captured in this class. """
 
-from typing import List, Union, Tuple, Optional
+from typing import List, Union, Tuple, Optional, Literal, Dict
 from sys import platform
 from pathlib import Path
 
@@ -64,6 +64,7 @@ class MeshObject(Entity):
         """ Creates a new material and adds it to the object.
 
         :param name: The name of the new material.
+        :return: The new material.
         """
         new_mat = MaterialLoaderUtility.create(name)
         self.add_material(new_mat)
@@ -311,7 +312,7 @@ class MeshObject(Entity):
             bm = bmesh.from_edit_mesh(self.get_mesh())
         return bm
 
-    def update_from_bmesh(self, bm: bmesh.types.BMesh, free_bm_mesh=True) -> bmesh.types.BMesh:
+    def update_from_bmesh(self, bm: bmesh.types.BMesh, free_bm_mesh=True):
         """ Updates the object's mesh based on the given bmesh.
 
         :param bm: The bmesh to set.
@@ -377,8 +378,10 @@ class MeshObject(Entity):
         bm.free()
         return bvh_tree
 
-    def position_is_above_object(self, position: Union[Vector, np.ndarray],
-                                 down_direction: Union[Vector, np.ndarray] = None, check_no_objects_in_between=True):
+    def position_is_above_object(self,
+                                 position: Union[Vector, np.ndarray],
+                                 down_direction: Union[Vector, np.ndarray] = None,
+                                 check_no_objects_in_between=True) -> bool:
         """ Make sure the given position is straight above the given object.
 
         If check_no_objects_in_between is True, this also checks that there are no other objects in between.
@@ -404,7 +407,7 @@ class MeshObject(Entity):
                                                  world2local.to_3x3() @ Vector(down_direction))
         return hit
 
-    def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
+    def ray_cast(self,origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
                  max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
 
@@ -442,8 +445,11 @@ class MeshObject(Entity):
                                    f"'smart' or 'sphere'.")
             self.object_mode()
 
-    def has_uv_mapping(self):
-        """ Returns whether the mesh object has a valid uv mapping. """
+    def has_uv_mapping(self) -> bool:
+        """ Returns whether the mesh object has a valid uv mapping.
+
+        :return: True if the object has a valid uv mapping.
+        """
         if len(self.blender_obj.data.uv_layers) > 1:
             raise Exception("This only support objects which only have one uv layer.")
         for layer in self.blender_obj.data.uv_layers:
@@ -467,7 +473,7 @@ class MeshObject(Entity):
             uv_layer.data[loop.index].uv *= factor
 
     def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1,
-                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
+                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2) -> bpy.types.Modifier:
         """ Adds a displace modifier with a texture to an object.
 
         If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.
@@ -478,19 +484,21 @@ class MeshObject(Entity):
         :param min_vertices_for_subdiv: Checks if a subdivision is necessary. If the vertices of a object are less than
                                         'min_vertices_for_subdiv' a Subdivision modifier will be add to the object.
         :param subdiv_level:  Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.
+        :return: The added displace modifier.
         """
-        # Add a subdivision modifier, if the mesh has too less vertices.
+        # Add a subdivision modifier, if the mesh has too few vertices.
         if not len(self.get_mesh().vertices) > min_vertices_for_subdiv:
             self.add_modifier("SUBSURF", render_levels=subdiv_level)
 
         # Add the displacement modifier
-        self.add_modifier("DISPLACE", texture=texture, mid_level=mid_level, strength=strength)
+        return self.add_modifier("DISPLACE", texture=texture, mid_level=mid_level, strength=strength)
 
-    def add_modifier(self, name: str, **kwargs):
+    def add_modifier(self, name: str, **kwargs) -> bpy.types.Modifier:
         """ Adds a new modifier to the object.
 
         :param name: The name/type of the modifier to add.
         :param kwargs: Additional attributes that should be set to the modifier.
+        :return: The added modifier.
         """
         # Create the new modifier
         with bpy.context.temp_override(object=self.blender_obj):
@@ -500,9 +508,29 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
             setattr(modifier, key, value)
+        return modifier
 
-    def add_geometry_nodes(self):
+    def get_modifiers(self) -> Dict[str, bpy.types.Modifier] | List[bpy.types.Modifier]:
+        """ Returns all modifiers of the object.
+
+        Note: The actual type is `bpy_prop_collection` but it is not directly accessible in the Blender API.
+
+        :return: The modifiers of the object.
+        """
+        return self.blender_obj.modifiers
+
+    def get_modifier(self, name: str) -> bpy.types.Modifier:
+        """ Returns the modifier with the given name.
+
+        :param name: The name of the modifier.
+        :return: The modifier.
+        """
+        return self.get_modifiers().get(name)
+
+    def add_geometry_nodes(self) -> bpy.types.GeometryNodeTree:
         """ Adds a new geometry nodes modifier to the object.
+
+        :return: The node group of the added geometry nodes modifier.
         """
         # Create the new modifier
         with bpy.context.temp_override(object=self.blender_obj):
@@ -510,20 +538,20 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         return modifier.node_group
 
-    def add_auto_smooth_modifier(self, angle: float = 30.0):
+    def add_auto_smooth_modifier(self, angle: float = 30.0) -> bpy.types.Modifier:
         """ Adds the 'Smooth by Angle' geometry nodes modifier.
         
         This replaces the 'Auto Smooth' behavior available in Blender before 4.1.
 
         :param angle: Maximum angle (in degrees) between face normals that will be considered as smooth.
+        :return: The added smooth-by-angle modifier.
         """
         # The bpy.ops.object.modifier_add_node_group doesn't work in background mode :( 
         # So we load the node group and create the modifier ourselves.
         # Known issue: https://projects.blender.org/blender/blender/issues/117399
 
         # The datafiles are expected to be in the same folder relative to blender's python binary.
-        python_bin = SetupUtility.determine_python_paths(None, None)[0]
-        path = Path(python_bin).parent.parent.parent / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
+        path = Path(bpy.utils.resource_path('LOCAL')) / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
         if not path.exists():
             raise RuntimeError(f"Could not find the path to the 'ESSENTIALS' asset folder expected at {path}")
         
@@ -538,7 +566,7 @@ class MeshObject(Entity):
 
         # Check if the modifier already exists
         modifier = None
-        for existing_mod in self.blender_obj.modifiers:
+        for existing_mod in self.get_modifiers():
             if existing_mod.type == 'NODES' and existing_mod.node_group == existing_node_group:
                 modifier = modifier
                 break
@@ -548,8 +576,9 @@ class MeshObject(Entity):
             modifier = self.blender_obj.modifiers.new(name=smooth_by_angle_node_group_name, type='NODES')
             modifier.node_group = existing_node_group
 
-        modifier = self.blender_obj.modifiers["Smooth by Angle"]
+        modifier = self.get_modifier("Smooth by Angle")
         modifier["Input_1"] = np.deg2rad(float(angle))
+        return modifier
 
     def add_ambient_occlusion(self, distance: float = 1.0, samples: int = 16, only_local: bool = False):
         """ Adds an ambient occlusion effect to the object. This can improve object part or point separation.
@@ -604,13 +633,13 @@ class MeshObject(Entity):
     
          return Trimesh(vertices=verts, faces=faces)
 
-    def clear_custom_splitnormals(self) -> None:
+    def clear_custom_splitnormals(self):
         """ Removes custom split normals which might exist after importing the object from file. """
 
         with bpy.context.temp_override(object=self.blender_obj):
             bpy.ops.mesh.customdata_custom_splitnormals_clear()
 
-def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
+def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> MeshObject:
     """ Creates a new Mesh object using the given blender mesh.
 
     :param blender_mesh: The blender mesh.
@@ -624,7 +653,7 @@ def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = No
     return MeshObject(obj)
 
 
-def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> MeshObject:
     """ Creates an object with an empty mesh.
     :param object_name: The name of the new object.
     :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
@@ -638,7 +667,7 @@ def create_from_point_cloud(points: np.ndarray,
                             object_name: str,
                             add_geometry_nodes_visualization: bool = False,
                             point_size: float = 0.015,
-                            point_color: Tuple[float, float, float] = (1, 0, 0)) -> "MeshObject":
+                            point_color: Tuple[float, float, float] = (1, 0, 0)) -> MeshObject:
     """ Create a mesh from a point cloud.
 
     The mesh's vertices are filled with the points from the given point cloud.
@@ -681,12 +710,12 @@ def create_from_point_cloud(points: np.ndarray,
     return point_cloud
 
 
-def create_primitive(shape: str, **kwargs) -> "MeshObject":
+def create_primitive(shape: Literal["CUBE", "CYLINDER", "CONE", "PLANE", "SPHERE", "UV_SPHERE", "ICO_SPHERE", "MONKEY"],
+                     **kwargs) -> MeshObject:
     """ Creates a new primitive mesh object.
 
-    :param shape: The name of the primitive to create. Available: ["CUBE", "CYLINDER", "CONE", "PLANE",
-                  "SPHERE", "MONKEY"]
-    :return: The newly created MeshObject
+    :param shape: The name of the primitive to create.
+    :return: The newly created MeshObject.
     """
     if shape == "CUBE":
         bpy.ops.mesh.primitive_cube_add(**kwargs)
@@ -696,9 +725,11 @@ def create_primitive(shape: str, **kwargs) -> "MeshObject":
         bpy.ops.mesh.primitive_cone_add(**kwargs)
     elif shape == "PLANE":
         bpy.ops.mesh.primitive_plane_add(**kwargs)
-    elif shape == "SPHERE":
+    elif shape in ["SPHERE", "UV_SPHERE"]:
         bpy.ops.mesh.primitive_uv_sphere_add(**kwargs)
-    elif shape == "MONKEY":
+    elif shape == "ICO_SPHERE":
+        bpy.ops.mesh.primitive_ico_sphere_add(**kwargs)
+    elif shape in ["MONKEY", "SUZANNE"]:
         bpy.ops.mesh.primitive_monkey_add(**kwargs)
     else:
         raise Exception("No such shape: " + shape)
@@ -789,7 +820,7 @@ def compute_poi(objects: List[MeshObject]) -> np.ndarray:
 
 def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
                    max_distance: float = 1.70141e+38) -> Tuple[
-    bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
+bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
     """ Cast a ray onto all geometry from the scene, in world space.
 
    :param origin: Origin of the ray, in world space.

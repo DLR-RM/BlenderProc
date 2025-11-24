@@ -731,7 +731,8 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
 
 def set_output_format(file_format: Optional[str] = None, color_depth: Optional[int] = None,
                       enable_transparency: Optional[bool] = None, jpg_quality: Optional[int] = None,
-                      view_transform: Optional[str] = None):
+                      view_transform: Optional[str] = None, look: Optional[str] = None,
+                      exposure: Optional[float] = None, gamma: Optional[float] = None):
     """ Sets the output format to use for rendering. Default values defined in DefaultConfig.py.
 
     :param file_format: The file format to use, e.q. "PNG", "JPEG" or "OPEN_EXR".
@@ -739,7 +740,10 @@ def set_output_format(file_format: Optional[str] = None, color_depth: Optional[i
     :param enable_transparency: If true, the output will contain a alpha channel and the background will be
                                 set transparent.
     :param jpg_quality: The quality to use, if file format is set to "JPEG".
-    :param view_transform: View transform of the rendered output.
+    :param view_transform: View transform used when converting image to display space.
+    :param look: Additional transform applied before view transform for artistic needs.
+    :param exposure: Exposure (stops) applied before display transform.
+    :param gamma: Amount of gamma modification applied after display transform.
     """
     if enable_transparency is not None:
         # In case a previous renderer changed these settings
@@ -756,6 +760,12 @@ def set_output_format(file_format: Optional[str] = None, color_depth: Optional[i
         bpy.context.scene.render.image_settings.quality = jpg_quality
     if view_transform is not None:
         bpy.context.scene.view_settings.view_transform = view_transform
+    if look is not None:
+        bpy.context.scene.view_settings.look = look
+    if exposure is not None:
+        bpy.context.scene.view_settings.exposure = exposure
+    if gamma is not None:
+        bpy.context.scene.view_settings.gamma = gamma
 
 
 def enable_motion_blur(motion_blur_length: float = 0.5, rolling_shutter_type: str = "NONE",

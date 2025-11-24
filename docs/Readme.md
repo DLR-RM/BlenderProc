@@ -11,7 +11,7 @@ blenderproc pip install sphinx pygments packaging sphinx-autodoc-typehints sphin
 ```
 
 ```bash
-blenderproc pip install git+https://github.com/abahnasy/smplx git+https://github.com/abahnasy/human_body_prior git+https://github.com/wboerdijk/urdfpy.git git+https://github.com/thodan/bop_toolkit PyOpenGL==3.1.0
+blenderproc pip install git+https://github.com/abahnasy/smplx git+https://github.com/abahnasy/human_body_prior urchin git+https://github.com/thodan/bop_toolkit PyOpenGL==3.1.0
 ```
 
 Now copy markdowns files from examples and main directory:

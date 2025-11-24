@@ -19,7 +19,7 @@ else:
     import contextlib
 
 # pylint: disable=wrong-import-position
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility, is_using_external_bpy_module
 # pylint: enable=wrong-import-position
 
 
@@ -37,6 +37,9 @@ class InstallUtility:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.
         """
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, no reason to determine the blender install path, it's given by the module.")
+        
         custom_blender_path = used_args.custom_blender_path
         blender_install_path = used_args.blender_install_path
 
@@ -59,6 +62,10 @@ class InstallUtility:
                - The path to the blender binary.
                - The major version of the blender installation.
         """
+        if is_using_external_bpy_module():
+            import bpy
+            return None, str(bpy.app.version[0])
+        
         # If blender should be downloaded automatically
         if custom_blender_path is None:
             # Determine path where blender should be installed
@@ -208,9 +215,13 @@ class InstallUtility:
 
             # Try to get major version of given blender installation
             major_version = None
-            for sub_dir in os.listdir(blender_path):
+            if platform == "darwin":
+                blender_version_base = os.path.join(blender_path, "Contents", "Resources")
+            else:
+                blender_version_base = blender_path
+            for sub_dir in os.listdir(blender_version_base):
                 # Search for the subdirectory which has the major version as its name
-                if os.path.isdir(os.path.join(blender_path, sub_dir)) and sub_dir.replace(".", "").isdigit():
+                if os.path.isdir(os.path.join(blender_version_base, sub_dir)) and sub_dir.replace(".", "").isdigit():
                     major_version = sub_dir
                     break
 
