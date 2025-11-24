@@ -184,9 +184,16 @@ class MeshObject(Entity):
 
         return self.get_origin()
 
-    def enable_rigidbody(self, active: bool, collision_shape: str = 'CONVEX_HULL', collision_margin: float = 0.001,
-                         collision_mesh_source: str = "FINAL", mass: Optional[float] = None, mass_factor: float = 1,
-                         friction: float = 0.5, angular_damping: float = 0.1, linear_damping: float = 0.04):
+    def enable_rigidbody(self,
+                         active: bool,
+                         collision_shape: str = 'CONVEX_HULL',
+                         collision_margin: float = 0.001,
+                         collision_mesh_source: str = "FINAL",
+                         mass: Optional[float] = None,
+                         mass_factor: float = 1,
+                         friction: float = 0.5,
+                         angular_damping: float = 0.1,
+                         linear_damping: float = 0.04):
         """ Enables the rigidbody component of the object which makes it participate in physics simulations.
 
         :param active: If True, the object actively participates in the simulation and its key frames are ignored.
@@ -225,7 +232,9 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: Optional[str] = None,
+    def build_convex_decomposition_collision_shape(self,
+                                                   vhacd_path: str,
+                                                   temp_dir: Optional[str] = None,
                                                    cache_dir: str = "blenderproc_resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
@@ -407,7 +416,9 @@ class MeshObject(Entity):
                                                  world2local.to_3x3() @ Vector(down_direction))
         return hit
 
-    def ray_cast(self,origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
+    def ray_cast(self,
+                 origin: Union[Vector, list, np.ndarray],
+                 direction: Union[Vector, list, np.ndarray],
                  max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
 
@@ -419,7 +430,8 @@ class MeshObject(Entity):
                  The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
                  The face index, -1 when original data isn’t available, int in [-inf, inf]
         """
-        result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction),
+        result, location, normal, index = self.blender_obj.ray_cast(Vector(origin),
+                                                                    Vector(direction),
                                                                     distance=max_distance)
         return result, np.array(location), np.array(normal), index
 
@@ -472,8 +484,12 @@ class MeshObject(Entity):
         for loop in mesh.loops:
             uv_layer.data[loop.index].uv *= factor
 
-    def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1,
-                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2) -> bpy.types.Modifier:
+    def add_displace_modifier(self,
+                              texture: bpy.types.Texture,
+                              mid_level: float = 0.5,
+                              strength: float = 0.1,
+                              min_vertices_for_subdiv: int = 10000,
+                              subdiv_level: int = 2) -> bpy.types.Modifier:
         """ Adds a displace modifier with a texture to an object.
 
         If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.
@@ -546,15 +562,16 @@ class MeshObject(Entity):
         :param angle: Maximum angle (in degrees) between face normals that will be considered as smooth.
         :return: The added smooth-by-angle modifier.
         """
-        # The bpy.ops.object.modifier_add_node_group doesn't work in background mode :( 
+        # The bpy.ops.object.modifier_add_node_group doesn't work in background mode :(
         # So we load the node group and create the modifier ourselves.
         # Known issue: https://projects.blender.org/blender/blender/issues/117399
 
         # The datafiles are expected to be in the same folder relative to blender's python binary.
-        path = Path(bpy.utils.resource_path('LOCAL')) / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
+        path = Path(
+            bpy.utils.resource_path('LOCAL')) / "datafiles" / "assets" / "geometry_nodes" / "smooth_by_angle.blend"
         if not path.exists():
             raise RuntimeError(f"Could not find the path to the 'ESSENTIALS' asset folder expected at {path}")
-        
+
         # Get the node group from the current file (reuse if it exists), otherwise load it from the
         # precalculated path and append to the current .blend.
         smooth_by_angle_node_group_name = "Smooth by Angle"
@@ -570,7 +587,7 @@ class MeshObject(Entity):
             if existing_mod.type == 'NODES' and existing_mod.node_group == existing_node_group:
                 modifier = modifier
                 break
-        
+
         # Create a new modifier if no existing modifier was found
         if modifier is None:
             modifier = self.blender_obj.modifiers.new(name=smooth_by_angle_node_group_name, type='NODES')
@@ -588,56 +605,42 @@ class MeshObject(Entity):
         :param only_local: Only consider the object itself when computing AO.
         """
         for material in self.get_materials():
-            ao_node = material.new_node('ShaderNodeAmbientOcclusion')
-            ao_node.inputs['Distance'].default_value = distance
-            ao_node.samples = samples
-            ao_node.only_local = only_local
-
-            # Insert the ambient occlusion node in between the attribute node and the bsdf node, if present
-            try:
-                attribute_node = material.get_the_one_node_with_type('ShaderNodeAttribute')
-                bsdf_node = material.get_the_one_node_with_type('ShaderNodeBsdfPrincipled')
-                material.insert_node_instead_existing_link(attribute_node.outputs['Color'],
-                                                           ao_node.inputs['Color'],
-                                                           ao_node.outputs['Color'],
-                                                           bsdf_node.inputs['Base Color'])
-            except RuntimeError:
-                ao_node.inputs['Color'].default_value = material.get_principled_shader_value('Base Color')
-                material.set_principled_shader_value('Base Color', ao_node.outputs['Color'])
+            material.add_ambient_occlusion(distance, samples, only_local)
 
     def mesh_as_trimesh(self) -> Trimesh:
-         """ Returns a trimesh.Trimesh instance of the MeshObject.
+        """ Returns a trimesh.Trimesh instance of the MeshObject.
     
          :return: The object as trimesh.Trimesh.
          """
-    
-         # get mesh data
-         mesh = self.get_mesh()
-         
-         # check if faces are pure tris or quads and triangulate quads if this is not the case
-         if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
-             # Triangulate quads
-             self.select()
-             bpy.ops.object.mode_set(mode='EDIT')
-             bpy.ops.mesh.select_all(action='SELECT')
-             bpy.ops.mesh.quads_convert_to_tris(quad_method='FIXED', ngon_method='BEAUTY') 
-             bpy.ops.object.mode_set(mode='OBJECT')
-             self.deselect()
-         
-         # get vertices 
-         verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
-         # re-scale the vertices since scale operations doesn't apply to the mesh data
-         verts *= self.blender_obj.scale
-         # get faces   
-         faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
-    
-         return Trimesh(vertices=verts, faces=faces)
+
+        # get mesh data
+        mesh = self.get_mesh()
+
+        # check if faces are pure tris or quads and triangulate quads if this is not the case
+        if not all(len(f.vertices[:]) == len(mesh.polygons[0].vertices[:]) for f in mesh.polygons):
+            # Triangulate quads
+            self.select()
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.mesh.quads_convert_to_tris(quad_method='FIXED', ngon_method='BEAUTY')
+            bpy.ops.object.mode_set(mode='OBJECT')
+            self.deselect()
+
+        # get vertices
+        verts = np.array([[v.co[0], v.co[1], v.co[2]] for v in mesh.vertices])
+        # re-scale the vertices since scale operations doesn't apply to the mesh data
+        verts *= self.blender_obj.scale
+        # get faces
+        faces = np.array([f.vertices[:] for f in mesh.polygons if len(f.vertices[:]) in [3, 4]])
+
+        return Trimesh(vertices=verts, faces=faces)
 
     def clear_custom_splitnormals(self):
         """ Removes custom split normals which might exist after importing the object from file. """
 
         with bpy.context.temp_override(object=self.blender_obj):
             bpy.ops.mesh.customdata_custom_splitnormals_clear()
+
 
 def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> MeshObject:
     """ Creates a new Mesh object using the given blender mesh.
@@ -663,11 +666,13 @@ def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> MeshObjec
         mesh_name = object_name
     return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
 
-def create_from_point_cloud(points: np.ndarray,
-                            object_name: str,
-                            add_geometry_nodes_visualization: bool = False,
-                            point_size: float = 0.015,
-                            point_color: Tuple[float, float, float] = (1, 0, 0)) -> MeshObject:
+
+def create_from_point_cloud(
+    points: np.ndarray,
+    object_name: str,
+    add_geometry_nodes_visualization: bool = False,
+    point_size: float = 0.015,
+    point_color: Tuple[float, float, float] = (1, 0, 0)) -> MeshObject:
     """ Create a mesh from a point cloud.
 
     The mesh's vertices are filled with the points from the given point cloud.
@@ -782,7 +787,7 @@ def create_bvh_tree_multi_objects(mesh_objects: List[MeshObject]) -> mathutils.b
     for obj in mesh_objects:
         # Get a copy of the mesh
         mesh = obj.get_mesh().copy()
-        # Apply world matrix 
+        # Apply world matrix
         mesh.transform(Matrix(obj.get_local2world_mat()))
         # Add object mesh to bmesh
         bm.from_mesh(mesh)
@@ -818,9 +823,10 @@ def compute_poi(objects: List[MeshObject]) -> np.ndarray:
     return poi
 
 
-def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
-                   max_distance: float = 1.70141e+38) -> Tuple[
-bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
+def scene_ray_cast(
+        origin: Union[Vector, list, np.ndarray],
+        direction: Union[Vector, list, np.ndarray],
+        max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
     """ Cast a ray onto all geometry from the scene, in world space.
 
    :param origin: Origin of the ray, in world space.
@@ -834,7 +840,8 @@ bool, np.ndarray, np.ndarray, int, MeshObject, np.ndarray]:
             Some 4x4 matrix.
    """
     hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(),
-                                                                                  Vector(origin), Vector(direction),
+                                                                                  Vector(origin),
+                                                                                  Vector(direction),
                                                                                   distance=max_distance)
     if hit_object is not None:
         hit_object = MeshObject(hit_object)
