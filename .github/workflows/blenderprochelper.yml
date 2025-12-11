@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run BlenderProcHelper
-      run: python /home/$USER/workspace/BlenderProcHelper/github_action.py
+      run: python3 /home/$USER/workspace/BlenderProcHelper/github_action.py
     - name: Archive logs
       uses: actions/upload-artifact@v4
       with:
