@@ -230,7 +230,6 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     mapper_node.inputs['From Max'].default_value = 1.0
     mapper_node.inputs['To Min'].default_value = 0
     mapper_node.inputs['To Max'].default_value = antialiasing_distance_max
-    final_output = mapper_node.outputs['Value']
 
     # Build output node
     output_file = tree.nodes.new("CompositorNodeOutputFile")
@@ -238,8 +237,15 @@ def enable_distance_output(activate_antialiasing: bool, output_dir: Optional[str
     output_file.format.file_format = "OPEN_EXR"
     output_file.file_slots.values()[0].path = file_prefix
 
+    # Feed the output through 'Combine Color' node, to create 3 channel RGB grayscale image as a lot of
+    # EXR readers don't support single float channel EXR files and Blender writes depth as a single
+    # channel since version 4.1.1 by default.
+    combine_color = tree.nodes.new("CompositorNodeCombineColor")
+    combine_color.mode = "HSV"
+    links.new(mapper_node.outputs["Value"], combine_color.inputs[2])
+    
     # Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer
-    links.new(final_output, output_file.inputs['Image'])
+    links.new(combine_color.outputs["Image"], output_file.inputs['Image'])
 
     Utility.add_output_entry({
         "key": output_key,
@@ -299,8 +305,15 @@ def enable_depth_output(activate_antialiasing: bool, output_dir: Optional[str] =
     output_file.format.file_format = "OPEN_EXR"
     output_file.file_slots.values()[0].path = file_prefix
 
-    # Feed the Z-Buffer output of the render layer to the input of the file IO layer
-    links.new(render_layer_node.outputs["Depth"], output_file.inputs['Image'])
+    # Feed the output through 'Combine Color' node, to create 3 channel RGB grayscale image as a lot of
+    # EXR readers don't support single float channel EXR files and Blender writes depth as a single
+    # channel since version 4.1.1 by default
+    combine_color = tree.nodes.new("CompositorNodeCombineColor")
+    combine_color.mode = "HSV"
+    links.new(render_layer_node.outputs["Depth"], combine_color.inputs[2])
+    
+    # Feed the Z-Buffer RGB output from the Combine Color node to the input of the file IO layer
+    links.new(combine_color.outputs["Image"], output_file.inputs["Image"])
 
     Utility.add_output_entry({
         "key": output_key,
@@ -482,7 +495,14 @@ def enable_segmentation_output(map_by: Union[str, List[str]] = "category_id",
         "semantic_segmentation_default_values": default_values
     })
 
-    links.new(render_layer_node.outputs["IndexOB"], output_node.inputs["Image"])
+    # Feed the output through 'Combine Color' node, to create 3 channel RGB grayscale image as a lot of
+    # EXR readers don't support single float channel EXR files and Blender writes depth as a single
+    # channel since version 4.1.1 by default
+    combine_color = tree.nodes.new("CompositorNodeCombineColor")
+    combine_color.mode = "HSV"
+    links.new(render_layer_node.outputs["IndexOB"], combine_color.inputs[2])
+    
+    links.new(combine_color.outputs["Image"], output_node.inputs["Image"])
 
     # set the threshold low to avoid noise in alpha materials
     bpy.context.scene.view_layers["ViewLayer"].pass_alpha_threshold = pass_alpha_threshold
@@ -710,7 +730,9 @@ def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_k
 
 
 def set_output_format(file_format: Optional[str] = None, color_depth: Optional[int] = None,
-                      enable_transparency: Optional[bool] = None, jpg_quality: Optional[int] = None):
+                      enable_transparency: Optional[bool] = None, jpg_quality: Optional[int] = None,
+                      view_transform: Optional[str] = None, look: Optional[str] = None,
+                      exposure: Optional[float] = None, gamma: Optional[float] = None):
     """ Sets the output format to use for rendering. Default values defined in DefaultConfig.py.
 
     :param file_format: The file format to use, e.q. "PNG", "JPEG" or "OPEN_EXR".
@@ -718,6 +740,10 @@ def set_output_format(file_format: Optional[str] = None, color_depth: Optional[i
     :param enable_transparency: If true, the output will contain a alpha channel and the background will be
                                 set transparent.
     :param jpg_quality: The quality to use, if file format is set to "JPEG".
+    :param view_transform: View transform used when converting image to display space.
+    :param look: Additional transform applied before view transform for artistic needs.
+    :param exposure: Exposure (stops) applied before display transform.
+    :param gamma: Amount of gamma modification applied after display transform.
     """
     if enable_transparency is not None:
         # In case a previous renderer changed these settings
@@ -732,6 +758,14 @@ def set_output_format(file_format: Optional[str] = None, color_depth: Optional[i
     if jpg_quality is not None:
         # only influences jpg quality
         bpy.context.scene.render.image_settings.quality = jpg_quality
+    if view_transform is not None:
+        bpy.context.scene.view_settings.view_transform = view_transform
+    if look is not None:
+        bpy.context.scene.view_settings.look = look
+    if exposure is not None:
+        bpy.context.scene.view_settings.exposure = exposure
+    if gamma is not None:
+        bpy.context.scene.view_settings.gamma = gamma
 
 
 def enable_motion_blur(motion_blur_length: float = 0.5, rolling_shutter_type: str = "NONE",

@@ -4,7 +4,7 @@ import os
 from shutil import which
 
 # Add path to custom packages inside the blender main directory
-sys.path.append(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages/lib/python3.10/site-packages/"))
+sys.path.append(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages/python3.11/site-packages/"))
 
 # Determine abs path to sphinx-build
 sphinx_build_bin_path = os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages", "bin", "sphinx-build")

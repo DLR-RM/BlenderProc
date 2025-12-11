@@ -151,7 +151,7 @@ class _CCMaterialLoader:
         base_color = MaterialLoaderUtility.add_base_color(nodes, links, base_image_path, principled_bsdf)
         collection_of_texture_nodes.append(base_color)
 
-        principled_bsdf.inputs["Specular"].default_value = 0.333
+        principled_bsdf.inputs["Specular IOR Level"].default_value = 0.333
 
         ao_node = MaterialLoaderUtility.add_ambient_occlusion(nodes, links, ambient_occlusion_image_path,
                                                               principled_bsdf, base_color)

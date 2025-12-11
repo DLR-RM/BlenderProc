@@ -117,6 +117,14 @@ def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
 
+def get_all_blender_light_objects() -> List[bpy.types.Object]:
+    """
+    Returns a list of all light objects in the scene
+    :return: a list of all light objects
+    """
+    return [obj for obj in bpy.context.scene.objects if obj.type == 'LIGHT']
+
+
 def get_all_materials() -> List[bpy.types.Material]:
     """
     Returns a list of all materials used and unused
@@ -145,7 +153,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
     file_ending = file_path[file_path.rfind(".") + 1:].lower()
     if file_ending in ["exr", "png"]:
         try:
-            return imageio.imread(file_path)[:, :, :num_channels]
+            return imageio.v3.imread(file_path, plugin='opencv', flags=cv2.IMREAD_UNCHANGED)[:, :, :num_channels]
         except ValueError:
             print("It seems the freeimage library which is necessary to read .exr files cannot "
                   "be found on your computer.")
@@ -172,7 +180,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
 
             try:
                 # Try again
-                return imageio.imread(file_path)[:, :, :num_channels]
+                return imageio.v3.imread(file_path, plugin='opencv', flags=cv2.IMREAD_UNCHANGED)[:, :, :num_channels]
             except ValueError as e2:
                 error = "The automatic installation of the freeimage library failed, so you need to install " \
                         "the imageio .exr extension manually. This is quite simple: \n"
@@ -368,7 +376,7 @@ def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.Shad
     material_outputs = Utility.get_nodes_with_type(group.nodes, "OutputMaterial")
     if len(material_outputs) == 1:
         for input_node in material_outputs[0].inputs:
-            group.outputs.new(input_node.bl_idname, input_node.name)
+            group.interface.new_socket(input_node.name, in_out='OUTPUT', socket_type=input_node.bl_idname)
             for link in input_node.links:
                 group.links.new(link.from_socket, group_output.inputs[input_node.name])
         # remove the material output, the material output should never be inside of a group

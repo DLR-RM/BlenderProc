@@ -41,6 +41,8 @@ class Entity(Struct):
         :param frame: The frame number which the value should be set to. If None is given, the current
                       frame number is used.
         """
+        #Make sure object rotation is set in XYZ-Euler coordinates
+        self.blender_obj.rotation_mode = "XYZ"
         self.blender_obj.rotation_euler = rotation_euler
         Utility.insert_keyframe(self.blender_obj, "rotation_euler", frame)
 
@@ -236,7 +238,8 @@ class Entity(Struct):
         selected_objects = [self]
         if remove_all_offspring:
             selected_objects.extend(self.get_children(return_all_offspring=True))
-        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in selected_objects]})
+        with bpy.context.temp_override(selected_objects=[e.blender_obj for e in selected_objects]):
+            bpy.ops.object.delete()
 
     def is_empty(self) -> bool:
         """ Returns whether the entity is from type "EMPTY".
@@ -338,6 +341,8 @@ def delete_multiple(entities: List[Union["Entity"]], remove_all_offspring: bool 
             all_nodes.extend(entity.get_children(return_all_offspring=True))
         # avoid doubles
         all_nodes = set(all_nodes)
-        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in all_nodes]})
+        with bpy.context.temp_override(selected_objects=[e.blender_obj for e in all_nodes]):
+            bpy.ops.object.delete()
     else:
-        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
+        with bpy.context.temp_override(selected_objects=[e.blender_obj for e in entities]):
+            bpy.ops.object.delete()

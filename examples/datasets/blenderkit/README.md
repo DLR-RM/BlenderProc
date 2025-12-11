@@ -5,7 +5,9 @@
 
 The example demonstrates using `loader.BlendLoader` to load the .blend files downloaded from [BlenderKit](https://www.blenderkit.com/).
 
-A script to download the .blend files is provided in the [scripts folder](../../scripts).
+A script to download the .blend files is provided in the [scripts folder](../../../blenderproc/scripts).
+
+You can also use the blenderproc command `blenderproc download blenderkit <output_dir>`
 
 ## Usage
 
@@ -16,7 +18,7 @@ blenderproc run examples/datasets/blenderkit/main.py <PATH_TO_.BLEND_FILE> examp
 ``` 
 
 * `examples/datasets/blenderkit/main.py`: path to the python file with pipeline configuration.
-* `<PATH_TO_.BLEND_FILE>`: path to the downloaded .blend file, see the [scripts folder](../../scripts) for the download script. 
+* `<PATH_TO_.BLEND_FILE>`: path to the downloaded .blend file, see the [scripts folder](../../../blenderproc/scripts) for the download script. 
 * `examples/datasets/blenderkit/output`: path to the output directory.
 
 ## Visualization

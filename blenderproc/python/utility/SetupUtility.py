@@ -4,6 +4,7 @@ import os
 import sys
 import tarfile
 from sys import platform
+import shutil
 import subprocess
 import importlib
 from io import BytesIO
@@ -15,6 +16,19 @@ import json
 import requests
 
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
+
+
+def is_using_external_bpy_module() -> bool:
+    """Returns True if the external bpy module is used, False otherwise.
+    
+    At this point we don't check whether 'bpy' is available, this is handled in the first lines of
+    __init__.py. When using external by module, we assume it's available all the time as the
+    script had to fail before.
+    
+    If using BlenderProc's Blender installation, setup goes through the InstallUtility and
+    SetupUtility.  
+    """
+    return os.environ.get("USE_EXTERNAL_BPY_MODULE", "0") == "1"
 
 
 class SetupUtility:
@@ -45,8 +59,11 @@ class SetupUtility:
         :param debug_args: Can be used to overwrite sys.argv in debug mode.
         :return: List of sys.argv after removing blender specific commands
         """
-        packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
 
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, calling bproc.setup() is not necessary in external mode.")
+        
+        packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
         if not SetupUtility.main_setup_called:
             SetupUtility.main_setup_called = True
             sys.path.append(packages_path)
@@ -62,7 +79,7 @@ class SetupUtility:
             if not is_debug_mode:
                 # Cut off blender specific arguments
                 sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + \
-                           sys.argv[sys.argv.index("--") + 3:]
+                        sys.argv[sys.argv.index("--") + 3:]
             elif debug_args is not None:
                 sys.argv = ["debug"] + debug_args
 
@@ -84,6 +101,7 @@ class SetupUtility:
     @staticmethod
     def determine_python_paths(blender_path: Optional[str], major_version: Optional[str]) -> Union[str, str, str, str]:
         """ Determines python binary, custom pip packages and the blender pip packages path.
+        Raises a RuntimeError if called when USE_EXTERNAL_BPY_MODULE is set as we can't determine the paths correctly.
 
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
@@ -92,13 +110,16 @@ class SetupUtility:
               - The path to the directory containing custom pip packages installed by BlenderProc
               - The path to the directory containing pip packages installed by blender.
         """
-        # If no bleneder path is given, determine it based on sys.executable
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, work with packages in the external environment directly.")
+        
+        # If no blender path is given, determine it based on sys.executable
         if blender_path is None:
             blender_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", ".."))
             major_version = os.path.basename(os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..")))
 
         # Based on the OS determined the three paths
-        current_python_version = "python3.10"
+        current_python_version = "python3.11"
         if platform in ["linux", "linux2"]:
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, current_python_version)
@@ -155,6 +176,12 @@ class SetupUtility:
         if reinstall_packages:
             raise ValueError("The reinstall package mode is not supported right now!")
 
+        if is_using_external_bpy_module():
+            print(
+                f"USE_EXTERNAL_BPY_MODULE is set, install packages in your environment directly. Run: \n\n"
+                f"pip install --upgrade {' '.join(required_packages)}")
+            return
+        
         result = SetupUtility.determine_python_paths(blender_path, major_version)
         python_bin, packages_path, packages_import_path, pre_python_package_path = result
 
@@ -279,6 +306,12 @@ class SetupUtility:
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
         """
+        if is_using_external_bpy_module():
+            print(
+                f"USE_EXTERNAL_BPY_MODULE is set, uninstall packages in your environment directly. Run: \n\n"
+                f"pip uninstall {' '.join(package_names)}")
+            return
+
         # Determine python and packages paths
         python_bin, _, packages_import_path, _ = SetupUtility.determine_python_paths(blender_path, major_version)
 
@@ -348,6 +381,9 @@ class SetupUtility:
         :param blender_path: The path to the blender main folder.
         :param major_version: The major version string of the blender installation.
         """
+        if is_using_external_bpy_module():
+            raise RuntimeError("USE_EXTERNAL_BPY_MODULE is set, packages are handled in the external environment.")
+        
         _, packages_path, _, _ = SetupUtility.determine_python_paths(blender_path, major_version)
         cache_path = os.path.join(packages_path, "installed_packages_cache_v2.json")
         if os.path.exists(cache_path):

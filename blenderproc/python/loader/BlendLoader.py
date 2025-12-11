@@ -24,7 +24,7 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                         stored in a .blend file's folders, see Blender's documentation for bpy.types.ID
                         for more info) names.
     :param data_blocks: The data block or a list of data blocks which should be loaded from the given .blend file.
-                        Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'hair_curves', 'images',
+                        Available options are: ['armatures', 'cameras', 'collections', 'curves', 'hairs', 'hair_curves', 'images',
                         'lights', 'materials', 'meshes', 'objects', 'textures']
     :param link: whether to link instead of append data blocks from .blend file. Linked objects can not be modified.
     :return: The list of loaded mesh objects.
@@ -65,8 +65,10 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
             for obj in getattr(data_to, data_block):
                 # Check that the object type is desired
                 if obj.type.lower() in obj_types:
-                    # Link objects to the scene
-                    bpy.context.collection.objects.link(obj)
+                    # If object does not yet belong to a imported collection
+                    if len(obj.users_collection) == 0:
+                        # Link objects to the scene collection
+                        bpy.context.collection.objects.link(obj)
                     loaded_objects.append(convert_to_entity_subclass(obj))
 
                     # If a camera was imported
@@ -84,11 +86,22 @@ def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, nam
                                     max_keyframe = max(max_keyframe, keyframe.co[0])
 
                         # Set frame_end to the next free keyframe
-                        bpy.context.scene.frame_end = max_keyframe + 1
+                        bpy.context.scene.frame_end = int(max_keyframe + 1)
                 else:
                     # Remove object again if its type is not desired
                     bpy.data.objects.remove(obj, do_unlink=True)
             print("Selected " + str(len(loaded_objects)) + " of the loaded objects by type")
+        elif data_block == "collections":
+            # Build up mapping of possible parent-child collection relationships
+            collection_parents = {}
+            for collection in getattr(data_to, data_block):
+                for child in collection.children:
+                    collection_parents[child.name] = collection
+                    
+            # Add all collections to scene collection which do not yet belong to any other collection
+            for collection in getattr(data_to, data_block):
+                if collection.name not in collection_parents:
+                    bpy.context.collection.children.link(collection)
         else:
             loaded_objects.extend(getattr(data_to, data_block))
 
