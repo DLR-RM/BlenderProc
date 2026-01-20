@@ -1,27 +1,27 @@
 """Allows rendering the content of the scene in the bop file format."""
 
-from functools import partial
-import json
-from multiprocessing import Pool
-import os
-import glob
-import trimesh
-from typing import List, Optional, Dict, Tuple
-import warnings
 import datetime
+import glob
+import json
+import os
+import sys
+import warnings
+from functools import partial
+from multiprocessing import Pool
+from typing import Any, Dict, List, Optional, Tuple
 
+import bpy
+import cv2
 import numpy as np
 import png
-import cv2
-import bpy
+import trimesh
 from mathutils import Matrix
-import sys
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
-from blenderproc.python.writer.WriterUtility import _WriterUtility
 from blenderproc.python.types.LinkUtility import Link
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 from blenderproc.python.utility.MathUtility import change_target_coordinate_frame_of_transformation_matrix
+from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.writer.WriterUtility import _WriterUtility
 
 # EGL is not available under windows
 if sys.platform in ["linux", "linux2"]:
@@ -30,6 +30,7 @@ if sys.platform in ["linux", "linux2"]:
 
 def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None,
               depths: List[np.ndarray] = None, colors: List[np.ndarray] = None,
+              instance_segmaps: List[np.ndarray] = None, instance_attribute_maps: List[Dict[str, Any]] = None,
               color_file_format: str = "PNG", dataset: str = "", append_to_existing_output: bool = True,
               depth_scale: float = 1.0, jpg_quality: int = 95, save_world2cam: bool = True,
               ignore_dist_thres: float = 100., m2mm: Optional[bool] = None, annotation_unit: str = 'mm',
@@ -42,6 +43,8 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
                            from specified dataset
     :param depths: List of depth images in m to save
     :param colors: List of color images to save
+    :param instance_segmaps: List of instance segmentation maps corresponding to the color/depth images.
+    :param instance_attribute_maps: List of dictionaries containing instance attribute maps corresponding to the color/depth images.
     :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
     :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
     :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
@@ -130,7 +133,9 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
     if m2mm is not None:
         warnings.warn("WARNING: `m2mm` is deprecated, please use `annotation_scale='mm'` instead!")
         annotation_scale = 1000.
+
     _BopWriterUtility.write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
+                                   instance_segmaps=instance_segmaps, instance_attribute_maps=instance_attribute_maps,
                                    color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
                                    annotation_scale=annotation_scale, ignore_dist_thres=ignore_dist_thres,
                                    save_world2cam=save_world2cam, depth_scale=depth_scale, jpg_quality=jpg_quality)
@@ -176,8 +181,15 @@ def write_bop(output_dir: str, target_objects: Optional[List[MeshObject]] = None
         else:
             pool = Pool(num_worker, initializer=_BopWriterUtility._pyrender_init, initargs=[width, height, trimesh_objects])
 
+        # If instance segmaps and attribute maps are given, we can use them to save better annotations
+        save_mask_visib_pyrender = False
+        if instance_segmaps is None or instance_attribute_maps is None:
+            save_mask_visib_pyrender = True
+            print("[INFO] You are using legacy `mask_visib` calculation with pyrender.")            
+            
+
         _BopWriterUtility.calc_gt_masks(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
-                                        annotation_scale=annotation_scale, delta=delta, pool=pool)
+                                        annotation_scale=annotation_scale, delta=delta, save_mask_visib=save_mask_visib_pyrender, pool=pool)
          
         _BopWriterUtility.calc_gt_info(chunk_dirs=chunk_dirs, starting_frame_id=starting_frame_id,
                                        annotation_scale=annotation_scale, delta=delta, pool=pool)
@@ -398,7 +410,8 @@ class _BopWriterUtility:
 
     @staticmethod
     def write_frames(chunks_dir: str, dataset_objects: list, depths: List[np.ndarray],
-                     colors: List[np.ndarray], color_file_format: str = "PNG",
+                     colors: List[np.ndarray], instance_segmaps: List[np.ndarray] = None,
+                     instance_attribute_maps: List[Dict[str, Any]] = None, color_file_format: str = "PNG",                     
                      depth_scale: float = 1.0, frames_per_chunk: int = 1000, annotation_scale: float = 1000.,
                      ignore_dist_thres: float = 100., save_world2cam: bool = True, jpg_quality: int = 95):
         """Write each frame's ground truth into chunk directory in BOP format
@@ -419,11 +432,15 @@ class _BopWriterUtility:
         :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
         """
 
+        # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
+        from bop_toolkit_lib import inout
+
         # Format of the depth images.
         depth_ext = '.png'
 
         rgb_tpath = os.path.join(chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + '{im_type}')
         depth_tpath = os.path.join(chunks_dir, '{chunk_id:06d}', 'depth', '{im_id:06d}' + depth_ext)
+        mask_visib_tpath = os.path.join(chunks_dir, "{chunk_id:06d}", "mask_visib", "{im_id:06d}_{inst_id:06d}.png")
         chunk_camera_tpath = os.path.join(chunks_dir, '{chunk_id:06d}', 'scene_camera.json')
         chunk_gt_tpath = os.path.join(chunks_dir, '{chunk_id:06d}', 'scene_gt.json')
 
@@ -480,6 +497,8 @@ class _BopWriterUtility:
                     rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0, im_type='PNG')))
                 os.makedirs(os.path.dirname(
                     depth_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
+                os.makedirs(os.path.dirname(mask_visib_tpath.format(chunk_id=curr_chunk_id, im_id=0, inst_id=0)))
+
 
             # Get GT annotations and camera info for the current frame.
             chunk_gt[curr_frame_id] = _BopWriterUtility.get_frame_gt(dataset_objects, annotation_scale,
@@ -507,6 +526,19 @@ class _BopWriterUtility:
             # Save the scaled depth image.
             depth_fpath = depth_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id)
             _BopWriterUtility.save_depth(depth_fpath, depth_mm_scaled)
+
+            # Save the visible/modal masks for each object based on Blender rendered instance segmentation
+            if instance_segmaps is not None and instance_attribute_maps is not None:
+                segmap = instance_segmaps[frame_id]
+                attributes = {a["name"]: a for a in instance_attribute_maps[frame_id]}
+                for inst_id, obj in enumerate(dataset_objects):
+                    mask_visib = np.zeros_like(segmap)
+                    if obj.get_name() in attributes:
+                        unique_id = attributes[obj.get_name()]["idx"]
+                        mask_visib = segmap == unique_id
+                    mask_visib_fpath = mask_visib_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, inst_id=inst_id)
+                    inout.save_im(mask_visib_fpath, 255 * mask_visib.astype(np.uint8))
+
 
             # Save the chunk info if we are at the end of a chunk or at the last new frame.
             if ((curr_frame_id + 1) % frames_per_chunk == 0) or \
@@ -567,7 +599,7 @@ class _BopWriterUtility:
         del dataset_objects
 
     @staticmethod
-    def _calc_gt_masks_iteration(annotation_scale: float, K: np.ndarray, delta: float, dist_im: np.ndarray, chunk_dir: str, im_id: int, gt_data: Tuple[int, Dict[str, int]]):
+    def _calc_gt_masks_iteration(annotation_scale: float, K: np.ndarray, delta: float, save_mask_visib: bool, dist_im: np.ndarray, chunk_dir: str, im_id: int, gt_data: Tuple[int, Dict[str, int]]):
         """ One iteration of calc_gt_masks(), executed inside a worker process.
 
         
@@ -584,6 +616,7 @@ class _BopWriterUtility:
         # Import pyrender only inside the multiprocesses, otherwise this leads to an opengl error
         # https://github.com/mmatl/pyrender/issues/200#issuecomment-1123713055     
         import pyrender
+
         # This import is done inside to avoid having the requirement that BlenderProc depends on the bop_toolkit
         from bop_toolkit_lib import inout, misc, visibility
         # pylint: enable=import-outside-toplevel
@@ -618,14 +651,17 @@ class _BopWriterUtility:
         # Mask of the full object silhouette.
         mask = dist_gt > 0
 
-        # Mask of the visible part of the object silhouette.
-        mask_visib = visibility.estimate_visib_mask_gt(
-            dist_im, dist_gt, delta, visib_mode='bop19')
-
         # Save the calculated masks.
         mask_path = os.path.join(
             chunk_dir, 'mask', '{im_id:06d}_{gt_id:06d}.png').format(im_id=im_id, gt_id=gt_id)
         inout.save_im(mask_path, 255 * mask.astype(np.uint8))
+
+        if not save_mask_visib:
+            return
+        
+        # Mask of the visible part of the object silhouette.
+        mask_visib = visibility.estimate_visib_mask_gt(
+            dist_im, dist_gt, delta, visib_mode='bop19')
 
         mask_visib_path = os.path.join(
             chunk_dir, 'mask_visib',
@@ -635,7 +671,7 @@ class _BopWriterUtility:
 
     @staticmethod
     def calc_gt_masks(pool: Pool, chunk_dirs: List[str], starting_frame_id: int = 0,
-                      annotation_scale: float = 1000., delta: float = 0.015):
+                      annotation_scale: float = 1000., delta: float = 0.015, save_mask_visib: bool = True):
         """ Calculates the ground truth masks.
         From the BOP toolkit (https://github.com/thodan/bop_toolkit), with the difference of using pyrender for depth
         rendering.
@@ -686,7 +722,7 @@ class _BopWriterUtility:
                 dist_im = misc.depth_im_to_dist_im_fast(depth_im, K)
 
                 map_fun = map if pool is None else pool.map
-                list(map_fun(partial(_BopWriterUtility._calc_gt_masks_iteration, annotation_scale, K, delta, dist_im, chunk_dir, im_id), enumerate(scene_gt[im_id])))
+                list(map_fun(partial(_BopWriterUtility._calc_gt_masks_iteration, annotation_scale, K, delta, save_mask_visib, dist_im, chunk_dir, im_id), enumerate(scene_gt[im_id])))
             
 
     @staticmethod
