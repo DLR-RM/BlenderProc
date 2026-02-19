@@ -131,6 +131,17 @@ class SetupUtility:
             python_bin_folder = os.path.join(blender_path, "..", "Resources", major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, current_python_version)
             packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+            # On macOS, the default path may be inside a code-signed .app bundle, which is
+            # read-only. If the directory doesn't already exist and we can't write to its
+            # parent, relocate outside the bundle. This preserves backward compatibility for
+            # users who have already granted Full Disk Access to their terminal.
+            if not os.path.exists(packages_path) and not os.access(os.path.dirname(packages_path), os.W_OK):
+                _path = os.path.abspath(blender_path)
+                while _path != os.path.dirname(_path):
+                    if _path.endswith('.app'):
+                        packages_path = os.path.join(os.path.dirname(_path), "custom-python-packages")
+                        break
+                    _path = os.path.dirname(_path)
             packages_import_path = os.path.join(packages_path, "lib", current_python_version, "site-packages")
             pre_python_package_path = os.path.join(blender_path, "..", "Resources", major_version, "python",
                                                    "lib", current_python_version, "site-packages")
@@ -348,9 +359,19 @@ class SetupUtility:
             SetupUtility.installed_packages = {}
             # pylint: disable=consider-using-with
             subprocess.Popen([python_bin, "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH="")).wait()
-            # Make sure pip is up-to-date
+            # Make sure pip is up-to-date. On macOS, Blender's site-packages lives inside a
+            # code-signed .app bundle and may be read-only. A failed upgrade can destroy pip
+            # entirely (uninstalls old version, fails to install new one, no rollback).
+            # Check if pip works after upgrade; if not, warn and continue with the bundled version.
             subprocess.Popen([python_bin, "-m", "pip", "install", "--upgrade", "pip"],
                              env=dict(os.environ, PYTHONPATH="")).wait()
+            pip_check = subprocess.Popen([python_bin, "-m", "pip", "--version"],
+                                         env=dict(os.environ, PYTHONPATH=""),
+                                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).wait()
+            if pip_check != 0:
+                print("Warning: pip upgrade failed (likely macOS .app code-signing restrictions). "
+                      "Re-running ensurepip to restore bundled pip.")
+                subprocess.Popen([python_bin, "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH="")).wait()
             # pylint: enable=consider-using-with
 
             # Make sure to not install into the default site-packages path, as this would overwrite
