@@ -27,7 +27,7 @@ class CollisionUtility:
         :param obj: Object which should be checked. Type: :class:`bpy.types.Object`
         :param bvh_cache: Dict of all the bvh trees, removes the `obj` from the cache before adding it again. \
                           Type: :class:`dict`
-        :param objects_to_check_against: List of objects which the object is checked again \
+        :param objects_to_check_against: List of objects which the object is checked against \
                                          Type: :class:`list`
         :param list_of_objects_with_no_inside_check: List of objects on which no inside check is performed. \
                                                      This check is only done for the objects in \

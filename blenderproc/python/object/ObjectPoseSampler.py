@@ -10,8 +10,11 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_
 
 
 def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable[[MeshObject], None],
-                 objects_to_check_collisions: List[MeshObject] = None, max_tries: int = 1000,
-                 mode_on_failure: str = "last_pose") -> Dict[Entity, Tuple[int, bool]]:
+                 objects_to_check_collisions: List[MeshObject] = None,
+                 list_of_objects_with_no_inside_check: List[MeshObject] = [],
+                 max_tries: int = 1000,
+                 mode_on_failure: str = "last_pose",
+                 verbose: bool = True) -> Dict[Entity, Tuple[int, bool]]:
     """
     Samples positions and rotations of selected object inside the sampling volume while performing mesh and
     bounding box collision checks.
@@ -20,10 +23,14 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
     :param objects_to_sample: A list of mesh objects whose poses are sampled based on the given function.
     :param sample_pose_func: The function to use for sampling the pose of a given object.
     :param objects_to_check_collisions: A list of mesh objects who should not be considered when checking for
-                                        collisions.
+                                        collisions, or `None` to use all meshes in scene.
+    :param list_of_objects_with_no_inside_check: List of objects on which no inside check is performed.
+                                        This check is only done for the objects in
+                                        `objects_to_check_collisions`.
     :param max_tries: Amount of tries before giving up on an object and moving to the next one.
     :param mode_on_failure: Define final state of objects that could not be placed without collisions within max_tries
                             attempts. Options: 'last_pose', 'initial_pose'
+    :param verbose: Whether to print verbose output.
 
     :return: A dict with the objects to sample as keys and a Tuple with the number of executed attempts to place the
              object as first element, and a bool whether it has been successfully placed without collisions.
@@ -73,7 +80,7 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
             if obj.get_name() in bvh_cache:
                 del bvh_cache[obj.get_name()]
 
-            no_collision = CollisionUtility.check_intersections(obj, bvh_cache, cur_objects_to_check_collisions, [])
+            no_collision = CollisionUtility.check_intersections(obj, bvh_cache, cur_objects_to_check_collisions, list_of_objects_with_no_inside_check)
 
             # If no collision then keep the position
             if no_collision:
@@ -84,7 +91,7 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
         cur_objects_to_check_collisions.append(obj)
 
         if no_collision:
-            print(f"It took {amount_of_tries_done + 1} tries to place {obj.get_name()}")
+            if verbose: print(f"It took {amount_of_tries_done + 1} tries to place {obj.get_name()}")
         else:
             amount_of_tries_done = max_tries
             print(f"Could not place {obj.get_name()} without a collision.")
