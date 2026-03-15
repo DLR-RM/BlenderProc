@@ -63,7 +63,7 @@ def reset_keyframes() -> None:
     """ Removes registered keyframes from all objects and resets frame_start and frame_end """
     bpy.context.scene.frame_start = 0
     bpy.context.scene.frame_end = 0
-    for a in bpy.data.actions:
+    for a in list(bpy.data.actions):
         bpy.data.actions.remove(a)
 
 
